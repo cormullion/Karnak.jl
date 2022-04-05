@@ -1,4 +1,4 @@
-using Karnak, Luxor, Graphs, Colors, NetworkLayout
+using Karnak, Graphs, Colors, NetworkLayout
 
 function test1()
     Drawing(600, 600, :png)
@@ -159,7 +159,7 @@ function test4()
     end 600 600
 end
 
-#test1()
+test1()
 #test2()
 #test3()
-test4()
+#test4()

@@ -1,21 +1,25 @@
-using Documenter, Karkak
+using Documenter, Karnak
 
 makedocs(
-    modules = [Karkak],
-    sitename = "Karkak",
+    modules = [Karnak],
+    sitename = "Karnak",
     format = Documenter.HTML(
         prettyurls = get(ENV, "CI", nothing) == "true",
-        assets = ["assets/karnak-docs.css"],
         warn_outdated = true,
         collapselevel=1,
         ),
     pages    = [
-        "Introduction to Karkak"            =>  "index.md",
+        "Introduction to Karnak"  =>  "index.md",
+        "Basic graphs"            =>  "basics.md",
+        "Reference" => [
+            "Alphabetical function list"   =>  "reference/functionindex.md"
+            "Function reference"           =>  "reference/api.md"
+            ],
         ]
     )
 
 deploydocs(
-    repo = "github.com/cormullion/Karkak.jl.git",
+    repo = "github.com/cormullion/Karnak.jl.git",
     target = "build",
     forcepush = true
 )

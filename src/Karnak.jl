@@ -1,15 +1,13 @@
 module Karnak
 
-using Luxor, Graphs, Colors, NetworkLayout
+using Reexport
+using Graphs
+using Colors
+using NetworkLayout
 
-export drawgraph
+@reexport using Luxor
 
-# notes
-
-# use none for no fill, no stroke ?
-# spectral layout must be 2D!
-# how to specify default size of grid squares and circles
-# font options?
+export drawgraph, drawedge, drawvertex
 
 function _normalize_layout_coordinates(rawcoordinates, boundingbox, margin)
     if length(rawcoordinates[1]) == 3
@@ -40,7 +38,7 @@ function _drawedge(from, to;
         if digraph && straight
             # digraph and straight
             midpt = midpoint(from, to)
-            circle(midpt, 5.5, :fill)
+            circle(midpt, get_fontsize()/2, :fill)
             arrow(midpt, between(midpt, to, 0.9),   )
             arrow(midpt, between(midpt, from, 0.9), )
         elseif digraph && !straight
@@ -53,15 +51,27 @@ function _drawedge(from, to;
     end
 end
 
+"""
+    drawedge(from::Point, to::Point;
+        graph::AbstractGraph=nothing,
+        edgenumber=1,
+        edgefunction=nothing,
+        edgelabels=nothing,
+        edgeshapes=nothing,
+        edgestrokecolors=nothing,
+        edgetextcolors=nothing,
+        edgestrokeweights=nothing,
+        )
+"""
 function drawedge(from::Point, to::Point;
-    graph::AbstractGraph=nothing,
-    edgenumber=1,
-    edgefunction=nothing,
-    edgelabels=nothing,
-    edgeshapes=nothing,
-    edgestrokecolors=nothing,
-    edgetextcolors=nothing,
-    edgestrokeweights=nothing,
+    graph::AbstractGraph,
+    edgenumber,
+    edgefunction,
+    edgelabels,
+    edgeshapes,
+    edgestrokecolors,
+    edgetextcolors,
+    edgestrokeweights,
     )
 
     strokecolor = Luxor.get_current_color()
@@ -109,7 +119,6 @@ function drawedge(from::Point, to::Point;
     elseif edgestrokecolors == :none
         strokecolor = :none
     end
-
 
     # is completely specified by function?
 
@@ -196,8 +205,22 @@ function drawedge(from::Point, to::Point;
 end
 
 """
+    drawvertex(vertex, coordinates;
+        vertexfunction,
+        vertexlabels,
+        vertexshapes,
+        vertexshapesizes,
+        vertexstrokecolors,
+        vertexstrokeweights,
+        vertexfillcolors,
+        vertextextcolors,
+        vertexlabelfontsizes
+        )
+
+Draw a vertex with vertex number `vertex`. The coordinates
+of all the vertices are in `coordinates`.
 """
-function drawvertex(vertex, coordinates;
+function drawvertex(vertex, coordinates::Array{Point, 1};
     vertexfunction=nothing,
     vertexlabels=nothing,
     vertexshapes=nothing,
@@ -205,7 +228,8 @@ function drawvertex(vertex, coordinates;
     vertexstrokecolors=nothing,
     vertexstrokeweights=nothing,
     vertexfillcolors=nothing,
-    vertextextcolors=nothing)
+    vertextextcolors=nothing,
+    vertexlabelfontsizes=nothing)
 
     pt = coordinates[vertex]
 
@@ -225,7 +249,7 @@ function drawvertex(vertex, coordinates;
         textcolor = vertextextcolors[mod1(vertex, end)]
     elseif vertextextcolors isa Colorant
         textcolor = vertextextcolors
-    elseif vertexttextcolors == :none
+    elseif vertextextcolors == :none
         textcolor = :none
     end
 
@@ -299,8 +323,8 @@ function drawvertex(vertex, coordinates;
 
     # set shape sizes
     if isnothing(vertexshapesizes)
-        # by default, 10 units
-        vertexshapesize = 10
+        # by default, the same as the current fontsize
+        vertexshapesize = get_fontsize()
     elseif vertexshapesizes isa Function
         vertexshapesizes(vertex, coordinates)
     elseif vertexshapesizes isa Array
@@ -398,6 +422,28 @@ function drawvertex(vertex, coordinates;
         end
     end
 
+    # set font size
+    if isnothing(vertexlabelfontsizes)
+        # by default, no labels
+    elseif vertexlabelfontsizes isa Function
+        if textcolor != :none
+            sethue(textcolor)
+        end
+        # of course, this function can override colors....
+        vertexlabelfontsizes(vertex, coordinates)
+    elseif vertexlabelfontsizes isa Array
+        if !isempty(vertexlabelfontsizes)
+            if vertexlabelfontsizes[mod1(vertex, end)] != :none
+                fontsize(vertexlabelfontsizes[mod1(vertex, end)])
+            end
+        end
+    elseif vertexlabelfontsizes isa AbstractRange
+        fontsize(vertexlabelfontsizes[mod1(vertex, end)])
+    elseif vertexlabelfontsizes isa Real
+        fontsize(vertexlabelfontsizes[mod1(vertex, end)])
+    elseif vertexlabelfontsizes == :none
+    end
+
     # draw vertex text labels
     if isnothing(vertexlabels)
         # by default, no labels
@@ -421,30 +467,59 @@ function drawvertex(vertex, coordinates;
             sethue(textcolor)
             label(string(vertexlabels[mod1(vertex, end)]), slope(O, pt), pt, offset=10)
         end
+    elseif vertexlabels isa AbstractString
+        if textcolor != :none
+            sethue(textcolor)
+            label(vertexlabels, slope(O, pt), pt, offset=10)
+        end
     elseif vertexlabels == :none
     end
 end
 
 """
+    drawgraph(g::AbstractGraph;
+        boundingbox::BoundingBox,
+        layout,
+        margin::Real,
+        vertexfunction,
+        vertexlabels,
+        vertexshapes,
+        vertexshapesizes,
+        vertexstrokecolors,
+        vertexstrokeweights,
+        vertexfillcolors,
+        vertextextcolors,
+        edgefunction,
+        edgelabels,
+        edgeshapes,
+        edgestrokecolors,
+        edgetextcolors,
+        edgestrokeweights,
+        )
+
+Draw a graph `g` using coordinates in `layout` to fit in a Luxor `boundingbox`.
+
+The appearance can be fully specified using functions `vertexfunction(vertex, coordinates)`, and `edgefunction(from, to)`.
 """
 function drawgraph(g::AbstractGraph;
-    boundingbox::BoundingBox=BoundingBox(),
-    layout=nothing,
-    margin::Real=20,
-    vertexfunction=nothing,
-    vertexlabels=nothing,
-    vertexshapes=nothing,
-    vertexshapesizes=nothing,
-    vertexstrokecolors=nothing,
-    vertexstrokeweights=nothing,
-    vertexfillcolors=nothing,
-    vertextextcolors=nothing,
-    edgefunction=nothing,
-    edgelabels=nothing,
-    edgeshapes=nothing,
-    edgestrokecolors=nothing,
-    edgestrokeweights=nothing,
-)
+        boundingbox::BoundingBox=BoundingBox(),
+        layout=nothing,
+        margin::Real=20,
+        vertexfunction=nothing,
+        vertexlabels=nothing,
+        vertexshapes=nothing,
+        vertexshapesizes=nothing,
+        vertexstrokecolors=nothing,
+        vertexstrokeweights=nothing,
+        vertexfillcolors=nothing,
+        vertextextcolors=nothing,
+        vertexlabelfontsizes=nothing,
+        edgefunction=nothing,
+        edgelabels=nothing,
+        edgeshapes=nothing,
+        edgestrokecolors=nothing,
+        edgestrokeweights=nothing,
+        edgetextcolors=nothing,)
 
     # so, do we need some coordinates for the vertices?
         # do we have a layout function to call?
@@ -468,6 +543,7 @@ function drawgraph(g::AbstractGraph;
             edgenumber=n,
             edgeshapes=edgeshapes,
             edgestrokecolors=edgestrokecolors,
+            edgetextcolors=edgetextcolors,
             edgestrokeweights=edgestrokeweights,
             )
     end
@@ -483,6 +559,7 @@ function drawgraph(g::AbstractGraph;
             vertexstrokeweights=vertexstrokeweights,
             vertexfillcolors=vertexfillcolors,
             vertextextcolors=vertextextcolors,
+            vertexlabelfontsizes=vertexlabelfontsizes,
         )
     end
 end
