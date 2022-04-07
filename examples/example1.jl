@@ -16,7 +16,7 @@ function test1()
             if n == 1
                 g = complete_graph(5)
                 box(bb, :stroke)
-                drawgraph(g, layout=shell, boundingbox=bb, edgeshapes=(from, to) -> begin
+                drawgraph(g, layout=shell, boundingbox=bb, edgelines=(from, to) -> begin
                     randomhue()
                     setline(rand() * 5)
                     line(from, to, :stroke)

@@ -6,8 +6,13 @@
 | [![][docs-development-img]][docs-development-url] | [![Build Status][appvey-img]][appvey-url] |                                 |
 
 Karnak.jl is a small extension for the Luxor.jl package to
-help with drawing some graph-style diagrams. The focus is
-more on decorative and aesthetic uses.
+help with drawing some graph-style diagrams.
+
+Karnak relies Graphs.jl for graph construction, and
+NetworkLayout.jl for graph layout.
+
+The focus here, unlike other graph visualization packaegs,
+is more on decorative and aesthetic uses.
 
 ## Warning
 

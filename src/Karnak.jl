@@ -31,80 +31,45 @@ function _normalize_layout_coordinates(rawcoordinates, boundingbox, margin)
     return [-offset + sf * (Point(first(p), last(p))) for p in rawcoordinates]
 end
 
-function _drawedge(from, to;
-        digraph=false,
-        straight = true)
-    @layer begin
-        if digraph && straight
-            # digraph and straight
-            midpt = midpoint(from, to)
-            circle(midpt, get_fontsize()/2, :fill)
-            arrow(midpt, between(midpt, to, 0.9),   )
-            arrow(midpt, between(midpt, from, 0.9), )
-        elseif digraph && !straight
-            # digraph and curvey lines
-            arrow(between(from, to, 0.1), between(from, to, 0.9), [10, 10])
-        else
-            # straight, no digraph
-            line(from, to, :stroke)
-        end
-    end
-end
-
-"""
-    drawedge(from::Point, to::Point;
-        graph::AbstractGraph=nothing,
+function _drawedgelines(from, to;
         edgenumber=1,
-        edgefunction=nothing,
-        edgelabels=nothing,
-        edgeshapes=nothing,
+        edgelines=nothing,
         edgestrokecolors=nothing,
-        edgetextcolors=nothing,
         edgestrokeweights=nothing,
-        )
-"""
-function drawedge(from::Point, to::Point;
-    graph::AbstractGraph,
-    edgenumber,
-    edgefunction,
-    edgelabels,
-    edgeshapes,
-    edgestrokecolors,
-    edgetextcolors,
-    edgestrokeweights,
-    )
+        digraph=false,
+        edgecurvature=0.0)
+
+    # decide whether or not to draw this edge
+
+    edgeline = nothing
+
+    if edgelines isa Vector
+        # only draw edges that are in the vector
+        if edgenumber in edgelines
+            edgeline = true
+        end
+    elseif edgelines isa AbstractRange
+        if edgenumber in edgelines
+            edgeline = true
+        end
+    elseif edgelines isa Int
+        if edgenumber == edgelines
+            edgeline = true
+        end
+    elseif edgelines == :none
+
+    elseif edgelines isa Function
+        # an edgeline function is f(from, to)
+            edgeline = edgelines(from, to)
+    else
+        edgeline = true
+    end
 
     strokecolor = Luxor.get_current_color()
-    textcolor = Luxor.get_current_color()
-
-    # set edge text color
-
-    if isnothing(edgetextcolors)
-        # default - use current color
-    elseif edgetextcolors isa Function
-        @layer begin
-            edgetextcolors(edge, coordinates)
-        end
-    elseif edgetextcolors isa Array
-        textcolor = edgetextcolors[mod1(edge, end)]
-    elseif edgetextcolors isa Colorant
-        textcolor = edgetextcolors
-    elseif edgetextcolors == :none
-        textcolor = :none
-    end
-
     # set edge stroke color
 
     if isnothing(edgestrokecolors)
         # default - use current color
-    elseif edgestrokecolors isa Function
-        @layer begin
-            if strokecolor != :none
-                sethue(strokecolor)
-            end
-            # function can override colors
-            edgestrokecolors(edge, coordinates)
-        end
     elseif edgestrokecolors isa Array && !isempty(edgestrokecolors)
         if edgestrokecolors[mod1(edgenumber, end)] isa Colorant
             strokecolor = edgestrokecolors[mod1(edgenumber, end)]
@@ -113,34 +78,96 @@ function drawedge(from::Point, to::Point;
                 strokecolor = :none
             end
         end
-
     elseif edgestrokecolors isa Colorant
         strokecolor = edgestrokecolors
     elseif edgestrokecolors == :none
         strokecolor = :none
     end
 
-    # is completely specified by function?
-
-    if edgefunction isa Function
-        if strokecolor != :none
-            sethue(strokecolor)
+    # set the stroke weight
+    # default to Luxor default
+    linewidth = 2
+    if isnothing(edgestrokeweights)
+        # by default, do nothing
+    elseif edgestrokeweights isa Array
+        if !isempty(edgestrokeweights)
+            if edgestrokeweights[mod1(edgenumber, end)] != :none
+                linewidth = edgestrokeweights[mod1(edgenumber, end)]
+            else
+                linewidth = 0
+            end
         end
-        # function can override
-        edgefunction(from, to)
+    elseif edgestrokeweights isa AbstractRange
+        linewidth = edgestrokeweights[mod1(edgenumber, end)]
+    elseif edgestrokeweights isa Real
+        linewidth = edgestrokeweights
+    elseif edgestrokeweights == :none
+        # do nothing
     end
+
+    # finally time to draw the edge
+    # edgeline = nothing | true | function
+    @layer begin
+        setline(linewidth)
+        sethue(strokecolor)
+
+        # use fontsize as a reasonable basis for the gap
+        # between vertex center and arrow tip
+
+        d = distance(from, to)
+        f = get_fontsize()
+        if edgeline isa Function
+            edgeline(from, to)
+        elseif edgeline == true
+            if digraph == true && abs(edgecurvature) > 0.0
+                # digraph and curvey lines
+                if abs(edgecurvature) > 0.0
+                    arrow(between(from, to, f/d), between(from, to, 1 - f/d), [edgecurvature, edgecurvature], linewidth=linewidth)
+                else
+                    arrow(between(from, to, f/d), between(from, to, 1 - f/d), [12, 12], linewidth=linewidth)
+                end
+            elseif digraph == false && abs(edgecurvature) > 0.0
+                arrow(between(from, to, f/d), between(from, to, 1 - f/d), [edgecurvature, edgecurvature], linewidth=linewidth)
+            elseif digraph == true && isapprox(edgecurvature, 0.0)
+                midpt = midpoint(from, to)
+                circle(midpt, get_fontsize() / 2, :fill)
+                arrow(midpt, between(midpt, to, 1 - f/d), linewidth=linewidth)
+                arrow(midpt, between(midpt, from, 1 - f/d), linewidth=linewidth)
+            else
+                # straight, no digraph
+                line(from, to, :stroke)
+            end
+        else
+        end
+    end
+end
+
+function _drawedgelabels(from, to;
+        edgenumber=1,
+        digraph=false,
+        straight=true,
+        edgelabels=nothing,
+        edgelabeltextcolors=nothing,
+        edgelabelfontsizes=nothing,
+        edgelabelfontfaces=nothing)
 
     # edge labels
 
-    if edgelabels isa Function
-        @layer begin
-            if textcolor != :none
-                sethue(textcolor)
-            end
-            # function can override this color
-            edgelabels(edgenumber, from, to)
-        end
-    elseif edgelabels isa Vector && !isempty(edgelabels) || edgelabels isa AbstractRange
+    textcolor = Luxor.get_current_color()
+
+    # set edge text color
+
+    if isnothing(edgelabeltextcolors)
+        # default - use current color
+    elseif edgelabeltextcolors isa Array
+        textcolor = edgelabeltextcolors[mod1(edge, end)]
+    elseif edgelabeltextcolors isa Colorant
+        textcolor = edgelabeltextcolors
+    elseif edgelabeltextcolors == :none
+        textcolor = :none
+    end
+
+    if edgelabels isa Vector && !isempty(edgelabels) || edgelabels isa AbstractRange
         @layer begin
             if edgelabels[mod1(edgenumber, end)] == :none
             else
@@ -157,141 +184,73 @@ function drawedge(from::Point, to::Point;
         # default is do nothing
     end
 
-    if edgeshapes isa Function
-        @layer begin
-            if strokecolor != :none
-                sethue(strokecolor)
-            end
-            # function cen override stroke color
-            edgeshapes(from, to)
-        end
-    elseif edgeshapes isa Vector
-        @layer begin
-            if strokecolor != :none
-                sethue(strokecolor)
-                edgeshapes(from, to)
-            end
-        end
-    else
-        # default, draw some edges
-        @layer begin
-            if strokecolor != :none
-                sethue(strokecolor)
-                _drawedge(from, to, digraph=graph isa DiGraph, straight=false)
-            end
-        end
-    end
-
-    # set the stroke weight
-    # default to Luxor default
-
-    if isnothing(edgestrokeweights)
-        # by default, do nothing
-    elseif edgestrokeweights isa Function
-        edgestrokeweights(from, to)
-    elseif edgestrokeweights isa Array
-        if !isempty(edgestrokeweights)
-            if edgestrokeweights[mod1(edgenumber, end)] != :none
-                setline(edgestrokeweights[mod1(edgenumber, end)])
-            end
-        end
-    elseif edgestrokeweights isa AbstractRange
-        setline(edgestrokeweights[mod1(edgenumber, end)])
-    elseif edgestrokeweights == :none
-        # do nothing
-    end
-
-
 end
 
-"""
-    drawvertex(vertex, coordinates;
-        vertexfunction,
-        vertexlabels,
-        vertexshapes,
-        vertexshapesizes,
-        vertexstrokecolors,
-        vertexstrokeweights,
-        vertexfillcolors,
-        vertextextcolors,
-        vertexlabelfontsizes
-        )
-
-Draw a vertex with vertex number `vertex`. The coordinates
-of all the vertices are in `coordinates`.
-"""
-function drawvertex(vertex, coordinates::Array{Point, 1};
-    vertexfunction=nothing,
-    vertexlabels=nothing,
-    vertexshapes=nothing,
-    vertexshapesizes=nothing,
-    vertexstrokecolors=nothing,
-    vertexstrokeweights=nothing,
-    vertexfillcolors=nothing,
-    vertextextcolors=nothing,
-    vertexlabelfontsizes=nothing)
-
-    pt = coordinates[vertex]
-
-    strokecolor = Luxor.get_current_color()
-    fillcolor = Luxor.get_current_color()
-    textcolor = Luxor.get_current_color()
-
-    # set the colors for all labels
-
-    if isnothing(vertextextcolors)
-        # default - use current color
-    elseif vertextextcolors isa Function
-        @layer begin
-            vertextextcolors(vertex, coordinates)
+function _drawvertexshapes(vertex, coordinates::Array{Point,1};
+        vertexshapes=nothing,
+        vertexshapesizes=nothing,
+        vertexstrokecolors=nothing,
+        vertexfillcolors=nothing,
+        vertexstrokeweights=nothing)
+    # decide whether or not to draw this vertex
+    vertexshape = nothing
+    if vertexshapes isa Array
+        if vertexshapes[mod1(vertex, end)] == :square
+            vertexshape = :square
+        elseif vertexshapes[mod1(vertex, end)] == :circle
+            vertexshape = :circle
+        elseif vertex in vertexshapes
+            vertexshape = true
         end
-    elseif vertextextcolors isa Array
-        textcolor = vertextextcolors[mod1(vertex, end)]
-    elseif vertextextcolors isa Colorant
-        textcolor = vertextextcolors
-    elseif vertextextcolors == :none
-        textcolor = :none
+    elseif vertexshapes isa Function
+        # a vertexshapes function  is f(v, c) ->
+        vertexshape = vertexshapes
+    elseif vertexshapes isa AbstractRange
+        if vertex in vertexshapes
+            vertexshape = true
+        end
+    elseif vertexshapes == :circle
+        vertexshape = :circle
+    elseif vertexshapes == :square
+        vertexshape = :square
+    elseif vertexshapes isa Int64
+        if vertexshapes == vertex
+            vertexshape = true
+        end
     end
 
-    # set the fill color
+    if isnothing(vertexshape)
+        return
+    end
 
-    if isnothing(vertexfillcolors)
-        # default - use current color
-    elseif vertexfillcolors isa Function
-        @layer begin
-            if strokecolor != :none
-                sethue(strokecolor)
-            end
-            if fillcolor != :none
-                sethue(fillcolor)
-            end
-            # this function can override those colors
-            vertexfillcolors(vertex, coordinates)
-        end
-    elseif vertexfillcolors isa Array && !isempty(vertexfillcolors)
+    # so we can draw this vertex
+    # vertexshape is one of true, square, circle, or can be function
+
+    # work out fill and stroke colors
+    # set the fill color
+    # if :none, don't draw it (will override other specs)
+
+    if vertexfillcolors isa Array && !isempty(vertexfillcolors)
         if vertexfillcolors[mod1(vertex, end)] isa Colorant
             fillcolor = vertexfillcolors[mod1(vertex, end)]
+        else
+            fillcolor = :none
         end
     elseif vertexfillcolors isa Colorant
         fillcolor = vertexfillcolors
     elseif vertexfillcolors == :none
         fillcolor = :none
+    else
+        # default - use current color
+        fillcolor = Luxor.get_current_color()
     end
 
     # set the stroke color
+    strokecolor = :none
 
     if isnothing(vertexstrokecolors)
         # default - use current color
-    elseif vertexstrokecolors isa Function
-        @layer begin
-            if strokecolor != :none
-                sethue(strokecolor)
-            end
-            if fillcolor != :none
-                sethue(fillcolor)
-            end
-            vertexstrokecolors(vertex, coordinates)
-        end
+        strokecolor = Luxor.get_current_color()
     elseif vertexstrokecolors isa Array && !isempty(vertexstrokecolors)
         if vertexstrokecolors[mod1(vertex, end)] isa Colorant
             strokecolor = vertexstrokecolors[mod1(vertex, end)]
@@ -300,39 +259,39 @@ function drawvertex(vertex, coordinates::Array{Point, 1};
         strokecolor = vertexstrokecolors
     elseif vertexstrokecolors == :none
         strokecolor = :none
+    else
+        strokecolor = Luxor.get_current_color()
     end
 
     # set the stroke weight
     # default to Luxor default
+    linewidth = 2
 
     if isnothing(vertexstrokeweights)
         # by default, do nothing
-    elseif vertexstrokeweights isa Function
-        vertexstrokeweights(vertex, coordinates)
     elseif vertexstrokeweights isa Array
-            if !isempty(vertexstrokeweights)
-                if vertexstrokeweights[mod1(vertex, end)] != :none
-                    setline(vertexstrokeweights[mod1(vertex, end)])
-                end
+        if !isempty(vertexstrokeweights)
+            if vertexstrokeweights[mod1(vertex, end)] != :none
+                linewidth = vertexstrokeweights[mod1(vertex, end)]
             end
+        end
     elseif vertexstrokeweights isa AbstractRange
-            setline(vertexstrokeweights[mod1(vertex, end)])
+        linewidth = vertexstrokeweights[mod1(vertex, end)]
     elseif vertexstrokeweights == :none
         # do nothing
     end
 
     # set shape sizes
+    # vertexshape size is a radius rather than diameter
+
     if isnothing(vertexshapesizes)
-        # by default, the same as the current fontsize
-        vertexshapesize = get_fontsize()
-    elseif vertexshapesizes isa Function
-        vertexshapesizes(vertex, coordinates)
+        vertexshapesize = 6
     elseif vertexshapesizes isa Array
-            if !isempty(vertexshapesizes)
-                if vertexshapesizes[mod1(vertex, end)] != :none
-                    vertexshapesize = vertexshapesizes[mod1(vertex, end)]
-                end
+        if !isempty(vertexshapesizes)
+            if vertexshapesizes[mod1(vertex, end)] != :none
+                vertexshapesize = vertexshapesizes[mod1(vertex, end)]
             end
+        end
     elseif vertexshapesizes isa AbstractRange
         vertexshapesize = vertexshapesizes[mod1(vertex, end)]
     elseif vertexshapesizes isa Real
@@ -341,165 +300,257 @@ function drawvertex(vertex, coordinates::Array{Point, 1};
         # don't draw it
     end
 
-    # is completely specified by function?
-    if vertexfunction isa Function
-        vertexfunction(vertex, coordinates)
-        return
+    # finally do some drawing
+    # vertexshape is one of true, square, circle, function
+
+    if fillcolor != :none
+        @layer begin
+            setline(linewidth)
+            if vertexshape isa Function
+                sethue(fillcolor)
+                vertexshape(vertex, coordinates)
+            elseif vertexshape == :circle
+                sethue(fillcolor)
+                circle(coordinates[vertex], vertexshapesize, :fill)
+                sethue(strokecolor)
+                circle(coordinates[vertex], vertexshapesize, :stroke)
+            elseif vertexshape == :square
+                sethue(fillcolor)
+                box(coordinates[vertex], vertexshapesize, vertexshapesize, :fill)
+                sethue(strokecolor)
+                box(coordinates[vertex], vertexshapesize, vertexshapesize, :stroke)
+            else # default is a circle
+                sethue(fillcolor)
+                circle(coordinates[vertex], vertexshapesize, :fill)
+                sethue(strokecolor)
+                circle(coordinates[vertex], vertexshapesize, :stroke)
+            end
+        end
     end
+end
 
-    # no, it's specified by individual argument/functions
+function _drawvertexlabels(vertex, coordinates::Array{Point,1};
+        vertexlabels=nothing,
+        vertextextcolors=nothing,
+        vertexlabelfontsizes=nothing,
+        vertexlabelfontfaces=nothing)
 
-    # draw the vertex shape
+    # decide whether to draw this vertex
 
-    if vertexshapes isa Function
-        @layer begin
-            if strokecolor != :none
-                sethue(strokecolor)
-            end
-            if fillcolor != :none
-                sethue(fillcolor)
-            end
-            # of course, this function could override these colors....
-            vertexshapes(vertex, coordinates)
+    vertexlabel = nothing
+    if isnothing(vertexlabels)
+        # by default, no labels
+    elseif vertexlabels isa Array
+        if vertexlabels[mod1(vertex, end)] != :none
+            vertexlabel = string(vertexlabels[mod1(vertex, end)])
         end
-    elseif vertexshapes isa Array
-        # array of :circle :square
-        @layer begin
-            if vertexshapes[mod1(vertex, end)] == :square
-                if strokecolor != :none
-                    sethue(strokecolor)
-                    box(pt, vertexshapesize, vertexshapesize, :stroke)
-                end
-                if fillcolor != :none
-                    sethue(fillcolor)
-                    box(pt, vertexshapesize, vertexshapesize, :fill)
-                end
-            elseif vertexshapes[mod1(vertex, end)] == :circle
-                if strokecolor != :none
-                    sethue(strokecolor)
-                    circle(pt, vertexshapesize, :stroke)
-                end
-                if fillcolor != :none
-                    sethue(fillcolor)
-                    circle(pt, vertexshapesize, :fill)
-                end
-            end
-        end
-    elseif vertexshapes == :circle
-        @layer begin
-            if strokecolor != :none
-                sethue(strokecolor)
-                circle(pt, vertexshapesize, :stroke)
-            end
-            if fillcolor != :none
-                sethue(fillcolor)
-                circle(pt, vertexshapesize, :fill)
-            end
-        end
-    elseif vertexshapes == :square
-        @layer begin
-            if strokecolor != :none
-                sethue(strokecolor)
-                box(pt, vertexshapesize, vertexshapesize, :stroke)
-            end
-            if fillcolor != :none
-                sethue(fillcolor)
-                box(pt, vertexshapesize, vertexshapesize, :fill)
-            end
-        end
-    else
-        # default vertex shape
-        pt = coordinates[vertex]
-        @layer begin
-            if fillcolor != :none
-                sethue(fillcolor)
-                circle(pt, vertexshapesize, :fill)
-            end
-            if strokecolor != :none
-                sethue(strokecolor)
-                circle(pt, vertexshapesize, :stroke)
-            end
-        end
+    elseif vertexlabels isa AbstractRange
+        vertexlabel = string(vertexlabels[mod1(vertex, end)])
+    elseif vertexlabels isa AbstractString
+            vertexlabel = vertexlabels
+    elseif vertexlabels == :none
+        # er
     end
 
     # set font size
+    font_size = 0
     if isnothing(vertexlabelfontsizes)
-        # by default, no labels
-    elseif vertexlabelfontsizes isa Function
-        if textcolor != :none
-            sethue(textcolor)
-        end
-        # of course, this function can override colors....
-        vertexlabelfontsizes(vertex, coordinates)
+        # use default fontsize
+        font_size = get_fontsize()
     elseif vertexlabelfontsizes isa Array
         if !isempty(vertexlabelfontsizes)
             if vertexlabelfontsizes[mod1(vertex, end)] != :none
-                fontsize(vertexlabelfontsizes[mod1(vertex, end)])
+                font_size = vertexlabelfontsizes[mod1(vertex, end)]
             end
         end
     elseif vertexlabelfontsizes isa AbstractRange
-        fontsize(vertexlabelfontsizes[mod1(vertex, end)])
+        font_size = vertexlabelfontsizes[mod1(vertex, end)]
     elseif vertexlabelfontsizes isa Real
-        fontsize(vertexlabelfontsizes[mod1(vertex, end)])
+        font_size = vertexlabelfontsizes[mod1(vertex, end)]
     elseif vertexlabelfontsizes == :none
     end
 
-    # draw vertex text labels
-    if isnothing(vertexlabels)
-        # by default, no labels
-    elseif vertexlabels isa Function
-        if textcolor != :none
-            sethue(textcolor)
-        end
-        # of course, this function can override colors....
-        vertexlabels(vertex, coordinates)
-    elseif vertexlabels isa Array
-        if textcolor != :none
-            sethue(textcolor)
-            if !isempty(vertexlabels)
-                if vertexlabels[mod1(vertex, end)] != :none
-                    label(string(vertexlabels[mod1(vertex, end)]), slope(O, pt), pt, offset=10)
-                end
+    # set font face
+    font_face = ""
+    if isnothing(vertexlabelfontfaces)
+        # use default fontsize
+    elseif vertexlabelfontfaces isa Array
+        if !isempty(vertexlabelfontfaces)
+            if vertexlabelfontfaces[mod1(vertex, end)] != :none
+                font_face = vertexlabelfontfaces[mod1(vertex, end)]
             end
         end
-    elseif vertexlabels isa AbstractRange
-        if textcolor != :none
+    elseif vertexlabelfontfaces isa AbstractRange
+        font_face = vertexlabelfontfaces[mod1(vertex, end)]
+    elseif vertexlabelfontfaces isa String
+        font_face = vertexlabelfontfaces
+    elseif vertexlabelfontfaces == :none
+    end
+
+    # set the colors for all labels
+    textcolor = Luxor.get_current_color()
+    if isnothing(vertextextcolors)
+        # default - use current color
+    elseif vertextextcolors isa Array
+        textcolor = vertextextcolors[mod1(vertex, end)]
+    elseif vertextextcolors isa Colorant
+        textcolor = vertextextcolors
+    elseif vertextextcolors == :none
+        textcolor = :none
+    end
+
+    # draw the label
+    if !isnothing(vertexlabel)
+        @layer begin
+            pt = coordinates[vertex]
             sethue(textcolor)
-            label(string(vertexlabels[mod1(vertex, end)]), slope(O, pt), pt, offset=10)
+            fontsize(font_size)
+            fontface(font_face)
+            label(vertexlabel, slope(O, pt), pt, offset=10)
         end
-    elseif vertexlabels isa AbstractString
-        if textcolor != :none
-            sethue(textcolor)
-            label(vertexlabels, slope(O, pt), pt, offset=10)
-        end
-    elseif vertexlabels == :none
+    end
+end
+
+function drawedge(from::Point, to::Point;
+        graph::AbstractGraph,
+        edgenumber::Int64,
+        edgefunction=nothing,
+        edgelabels=nothing,
+        edgelines=nothing,
+        edgecurvature=nothing,
+        edgestrokecolors=nothing,
+        edgelabeltextcolors=nothing,
+        edgelabelfontsizes=nothing,
+        edgelabelfontfaces=nothing,
+        edgestrokeweights=nothing)
+
+    # is completely specified by function?
+    if edgefunction isa Function
+        edgefunction(from, to)
+    else
+        _drawedgelines(from, to;
+            edgenumber,
+            edgelines,
+            edgestrokecolors,
+            edgestrokeweights,
+            digraph=graph isa DiGraph,
+            edgecurvature=edgecurvature)
+        _drawedgelabels(from, to;
+            edgenumber,
+            edgelabels,
+            edgelabeltextcolors,
+            edgelabelfontsizes,
+            edgelabelfontfaces)
+    end
+end
+
+function drawvertex(vertex, coordinates::Array{Point,1};
+        vertexfunction=nothing,
+        vertexlabels=nothing,
+        vertexshapes=nothing,
+        vertexshapesizes=nothing,
+        vertexstrokecolors=nothing,
+        vertexstrokeweights=nothing,
+        vertexfillcolors=nothing,
+        vertextextcolors=nothing,
+        vertexlabelfontsizes=nothing,
+        vertexlabelfontfaces=nothing)
+
+    # is completely specified by function?
+    if vertexfunction isa Function
+        vertexfunction(vertex, coordinates)
+    else
+        _drawvertexshapes(vertex, coordinates::Array{Point,1};
+            vertexshapes,
+            vertexshapesizes,
+            vertexstrokecolors,
+            vertexstrokeweights,
+            vertexfillcolors)
+        _drawvertexlabels(vertex, coordinates::Array{Point,1};
+            vertexlabels,
+            vertextextcolors,
+            vertexlabelfontsizes,
+            vertexlabelfontfaces
+        )
     end
 end
 
 """
-    drawgraph(g::AbstractGraph;
-        boundingbox::BoundingBox,
-        layout,
-        margin::Real,
-        vertexfunction,
-        vertexlabels,
-        vertexshapes,
-        vertexshapesizes,
-        vertexstrokecolors,
-        vertexstrokeweights,
-        vertexfillcolors,
-        vertextextcolors,
-        edgefunction,
-        edgelabels,
-        edgeshapes,
-        edgestrokecolors,
-        edgetextcolors,
-        edgestrokeweights,
-        )
+Draw a graph `g` using coordinates in `layout` to fit in a
+Luxor `boundingbox`.
 
-Draw a graph `g` using coordinates in `layout` to fit in a Luxor `boundingbox`.
+## Keyword arguments
 
-The appearance can be fully specified using functions `vertexfunction(vertex, coordinates)`, and `edgefunction(from, to)`.
+`g`
+- the graph to be drawn
+
+`boundingbox`
+- the drawing fits in this BoundingBox
+
+`layout`
+- the layout method or coordinates to be used. Examples:
+    layout = squaregrid
+    layout = shell
+    layout = vcat(
+        between.(O + (-W/2, H), O + (W/2, H), range(0, 1, length=N)),
+        between.(O + (-W/2, -H), O + (W/2, -H), range(0, 1, length=N)))
+    layout = stress
+    layout = (g) -> spectral(adjacency_matrix(g), dim=2)
+    layout = spectrallayout
+    layout = shell ∘ adjacency_matrix
+    layout = (g) -> sfdp(g, Ptype=Float64, dim=2, tol=0.05, C=0.4, K=2)
+    layout = Shell(nlist=[6:10,])
+
+    Refer to the NetworkLayout.jl documentation for more.
+
+`margin = 20`
+- a margin added to the graph diagram before fitting to boundingbox
+
+`vertexfunction`
+- a function `vertexfunction(vertex, coordinates)` that
+  completely specifies the appearance of every vertex. None
+  of the other vertex- keyword arguments will be used. Exmple:
+
+    vertexfunction = (v, c) -> ngon(c[v], 30, 6, 0, :fill)
+
+`edgefunction`
+- a function `edgefunction(from, to)` that
+  completely specifies the appearance of every vertex. None
+  of the other edge- keyword arguments are used.
+
+`vertexlabels`
+- the text labels for each vertex
+
+`vertexshapes`
+- the shape of each vertex; can be :circle :square
+
+`vertexshapesizes`
+- the size of each vertex shape for :circle :square...
+
+`vertexstrokecolors`
+
+`vertexstrokeweights`
+
+`vertexfillcolors`
+
+`vertextextcolors`
+
+`vertexlabelfontsizes`
+
+`vertexlabelfontfaces`
+
+`edgelabels`
+
+`edgelines`
+
+`edgecurvature=0.0`
+
+`edgestrokecolors`
+
+`edgestrokeweights`
+
+`edgelabeltextcolors`
+
 """
 function drawgraph(g::AbstractGraph;
         boundingbox::BoundingBox=BoundingBox(),
@@ -514,24 +565,28 @@ function drawgraph(g::AbstractGraph;
         vertexfillcolors=nothing,
         vertextextcolors=nothing,
         vertexlabelfontsizes=nothing,
+        vertexlabelfontfaces=nothing,
         edgefunction=nothing,
         edgelabels=nothing,
-        edgeshapes=nothing,
+        edgelines=nothing,
+        edgecurvature=0.0,
         edgestrokecolors=nothing,
         edgestrokeweights=nothing,
-        edgetextcolors=nothing,)
+        edgelabeltextcolors=nothing)
 
     # so, do we need some coordinates for the vertices?
-        # do we have a layout function to call?
-        if isnothing(layout)
-            # no, make some random points up, a circle should do
-            coordinates = [polar(min(boxwidth(boundingbox - margin), boxheight(boundingbox - margin)) / 2, θ) for θ in range(0, step=2π / nv(g), length=nv(g))]
-        else
-            # great, let's run layout function
-            rawpts = layout(g)
-            # convert to Luxor Points and resize to fit boundingbox
-            coordinates = _normalize_layout_coordinates(rawpts, boundingbox, margin)
-        end
+    # do we have a layout function to call?
+    if isnothing(layout)
+        # no, make some random points up, a circle should do
+        coordinates = [polar(min(boxwidth(boundingbox - margin), boxheight(boundingbox - margin)) / 2, θ) for θ in range(0, step=2π / nv(g), length=nv(g))]
+    elseif layout isa Array{Point,1}
+        coordinates = layout
+    else
+        # great, let's run layout function
+        rawpts = layout(g)
+        # convert to Luxor Points and resize to fit boundingbox
+        coordinates = _normalize_layout_coordinates(rawpts, boundingbox, margin)
+    end
     for (n, edge) in enumerate(edges(g))
         s, d = src(edge), dst(edge)
         drawedge(
@@ -541,16 +596,15 @@ function drawgraph(g::AbstractGraph;
             edgefunction=edgefunction,
             edgelabels=edgelabels,
             edgenumber=n,
-            edgeshapes=edgeshapes,
+            edgelines=edgelines,
+            edgecurvature=edgecurvature,
             edgestrokecolors=edgestrokecolors,
-            edgetextcolors=edgetextcolors,
             edgestrokeweights=edgestrokeweights,
-            )
+            edgelabeltextcolors=edgelabeltextcolors,
+        )
     end
     for vertex in vertices(g)
-        drawvertex(
-            vertex,
-            coordinates,
+        drawvertex(vertex, coordinates,
             vertexfunction=vertexfunction,
             vertexlabels=vertexlabels,
             vertexshapes=vertexshapes,
@@ -560,6 +614,7 @@ function drawgraph(g::AbstractGraph;
             vertexfillcolors=vertexfillcolors,
             vertextextcolors=vertextextcolors,
             vertexlabelfontsizes=vertexlabelfontsizes,
+            vertexlabelfontfaces=vertexlabelfontfaces,
         )
     end
 end

@@ -1,5 +1,5 @@
 ```@setup graphsection
-using Karnak, Luxor, Graphs
+using Karnak, Luxor, Graphs, NetworkLayout
 
 # these bright colors work on both white and dark backgrounds
 #  "fuchsia" "magenta" "magenta1" "brown1" "firebrick1"
@@ -39,7 +39,7 @@ The `Graph()` function creates a new empty graph and stores it in `g`. Let's add
 add_vertex!(g)
 ```
 
-You can use `SimpleGraph()` as well as `Graph()`.
+(You can use `SimpleGraph()` as well as `Graph()`.)
 
 We can easily add a number of new vertices:
 
@@ -47,7 +47,9 @@ We can easily add a number of new vertices:
 add_vertices!(g, 3)
 ```
 
-Now we'll join pairs of vertices with an edge. The four vertices we've made can be referred to with `1`, `2`, `3`, and `4`:
+Now we'll join pairs of vertices with an edge. The four
+vertices we've made can be referred to with `1`, `2`, `3`,
+and `4`:
 
 ```julia
 add_edge!(g, 1, 2)  # join vertex 1 with vertex 2
@@ -56,8 +58,9 @@ add_edge!(g, 2, 3)
 add_edge!(g, 1, 4)
 ```
 
-`g` is now a `{{4, 1} undirected simple Int64 graph}`.
-It's time to see some kind of visual representation of the graph we've made.
+`g` is now a `{{4, 1} undirected simple Int64 graph}`. It's
+time to see some kind of visual representation of the graph
+we've made.
 
 ```@example graphsection
 g = Graph() # hide
@@ -73,13 +76,13 @@ drawgraph(g, vertexlabels = [1, 2, 3, 4])
 end # hide
 ```
 
-This is just one way of representing a graph. The coordinates of the vertices when drawn here are **not** part of the graph's definition, and have been assigned randomly by the layout algorithm.
+This is one of the many ways this graph can be represented visually. The coordinates of the vertices when drawn here are _not_ part of the graph's definition, and have been assigned randomly by the layout algorithm.
 
 ## Undirected and directed graphs
 
-There are two main types of graph, **undirected** and **directed**. In our undirected graph `g`, vertex 1 and vertex 2 are connected, but there's no way to specify or see a direction for that connection. For example, if the graph was modelling people making financial transactions, we couldn't tell whether the person at vertex 1 sent money to the person at vertex 2, or received money from them.
+There are two main types of graph, **undirected** and **directed**. In our undirected graph `g` above, vertex 1 and vertex 2 are connected, but there's no way to specify or see a direction for that connection. For example, if the graph was modelling people making financial transactions, we couldn't tell whether the person at vertex 1 sent money to the person at vertex 2, or received money from them.
 
-In Graphs.jl we create undirected graphs with `Graph()` (also `SimpleGraph()`), and directed graphs with `DiGraph()` (`SimpleDiGraph()`).
+In Graphs.jl we can create directed graphs with `DiGraph()` (also `SimpleDiGraph()`).
 
 ```julia
 gd = DiGraph()
@@ -100,30 +103,191 @@ add_edge!(gd, 2, 3) # hide
 add_edge!(gd, 1, 4) # hide
 add_edge!(gd, 4, 1) # hide
 @drawsvg begin # hide
-    drawgraph(gd, vertexlabels = [1, 2, 3, 4])
+sethue("fuchsia") # hide
+drawgraph(gd, vertexlabels = [1, 2, 3, 4])
 end # hide
 ```
 
-In the representation of our directed graph `gd`, we can now see the direction of the edges joining vertices. Notice how vertices 1 and 4 are doubly connected, because there's one edge for each direction.
+In is representation of our directed graph `gd`, we can now see the direction of the edges joining vertices. Notice how vertices 1 and 4 are doubly connected, because there's one edge for each direction.
 
 ## Simpler simple graphs
 
-Creating graphs like this is hard work, so you might prefer to use the `SimpleGraph` and `SimpleDiGraph` constructors:
-
-```julia
-g = SimpleGraph(10, 5) # 10 vertices, 5 edges
-gd = SimpleDiGraph(5, 3) # 5 vertices, 3, edges
-```
-
-There are many other functions that create well-known graphs, far too many to include here, but you might want to try and draw a few, such as `complete_bipartite_graph(m, n)`, `complete_graph(n)`, `grid((m, n))`, `binary_tree(n)`, `star_graph(n)`, or `wheel_graph(n)`.
-
-There are probably as many graphs as there possible games of chess, but in both fields, the more commonly seen patterns have been studied extensively. These well-known graphs are provided by the `smallgraph()` function. Supply a symbol, such as  `:bull`, `:diamond`,  `:dodecahedral`, `:house`, `:icosahedral`,  `:pappus`,  `:petersen`,  `:sedgewickmaze`, or `:truncatedcube`, to name a few.
-
-Here's a Petersen graph (named after Julius Petersen, who first described in 1898).
+Creating graphs by typing the connections manually isn't always convenient, so you might prefer to use the `Graph/SimpleGraph` and `DiGraph/SimpleDiGraph` constructors:
 
 ```@example graphsection
+g = Graph(10, 5) # 10 vertices, 5 edges
+gd = SimpleDiGraph(5, 3) # 5 vertices, 3, edges
+d1 = @drawsvg begin
+    sethue("fuchsia")
+    drawgraph(g, vertexlabels = 1:nv(g))
+end 400 400
+
+d2 = @drawsvg begin
+setline(0.5)
+sethue("firebrick1")
+drawgraph(gd, vertexlabels = 1:nv(g))
+end 400 400
+hcat(d1, d2) # hide
+```
+
+## Well-known graphs
+
+Graphs have been studied for a few centuries, so there are many familar and well-known graphs and types of graph.
+
+In a **complete graph**, every vertex is connected to every other vertex.
+
+```@example graphsection
+N = 10
+g = complete_graph(N)
+d1 = @drawsvg begin
+setline(0.5)
+sethue("fuchsia")
+drawgraph(g, vertexlabels = 1:nv(g))
+end
+```
+
+There's also a `complete_digraph()` function.
+
+```@example graphsection
+N = 7
+g = complete_digraph(N)
+d1 = @drawsvg begin
+setline(0.5)
+sethue("fuchsia")
+drawgraph(g, vertexlabels = 1:nv(g))
+end
+```
+
+In a **bi-partite graph**, every vertex belongs to one of two groups. Every vertex in the first group is connected to one or more edges in the second group. This illustration shows a **complete** bi-partite graph. The word "complete" here means that each vertex is connected to every other vertex.
+
+```@example graphsection
+N = 10
+g = complete_bipartite_graph(N, N)
+H = 200
+W = 400
+d1 = @drawsvg begin # hide
+pts = vcat(
+    between.(O + (-W/2, H), O + (W/2, H), range(0, 1, length=N)),
+    between.(O + (-W/2, -H), O + (W/2, -H), range(0, 1, length=N)))
+sethue("fuchsia")
+drawgraph(g, vertexlabels = 1:nv(g), layout = pts)
+end # hide
+```
+
+A **grid** graph doesn't need much explanation:
+
+```@example graphsection
+M = 4
+N = 5
+g = Graphs.grid([M, N]) # grid((m, n))
+d1 = @drawsvg begin # hide
+setline(0.5)
+sethue("fuchsia")
+drawgraph(g, vertexlabels = 1:nv(g), layout=stress)
+end # hide
+```
+Star graphs (`star_graph(n)`) and wheel graphs (`wheel_graph(n)`) are usefully named:
+
+
+```@example graphsection
+g = star_graph(12)
+d1 = @drawsvg begin
+    sethue("fuchsia")
+    drawgraph(g, vertexlabels=1:nv(g), layout=stress)
+end
+```
+
+```@example graphsection
+g = wheel_graph(12)
+d1 = @drawsvg begin
+    sethue("fuchsia")
+    drawgraph(g, vertexlabels=1:nv(g), layout=stress)
+end
+```
+
+### Even more well-known graphs
+
+There are probably as many graphs as there possible games of chess, but in both fields, the more commonly seen patterns have been studied extensively.
+
+These well-known graphs are provided by the `smallgraph()` function. Supply a symbol, such as `:bull`, or `:house`.
+
+```@setup smallgraphs
+using Karnak, Luxor, Graphs, NetworkLayout
+smallgraphs = (
+(:bull, "bull"),
+(:chvatal, "Chvátal"),
+(:cubical, "Platonic cubical "),
+(:desargues, "Desarguesgraph"),
+(:diamond, "diamond"),
+(:dodecahedral, "Platonic dodecahedral"),
+(:frucht, "Frucht"),
+(:heawood, "Heawood"),
+(:house, "house"),
+(:housex, "house + two edges"),
+(:icosahedral, "Platonic icosahedral"),
+(:karate, "Zachary's karate club"),
+(:krackhardtkite, "Krackhardt-Kite"),
+(:moebiuskantor, "Möbius-Kantor"),
+(:octahedral, "Platonic octahedral"),
+(:pappus, "Pappus"),
+(:petersen, "Petersen"),
+(:sedgewickmaze, "Sedgewick maze"),
+(:tetrahedral, "Platonic tetrahedral"),
+(:truncatedcube, "truncated cube"),
+(:truncatedtetrahedron, "truncated tetrahedron"),
+(:truncatedtetrahedron_dir, "truncated tetrahedron"),
+(:tutte, "Tutte"))
+
+colors = ["fuchsia", "brown1", "firebrick1",
+"blue", "red", "purple1", "royalblue1",
+"orangered", "orangered1", "deeppink", "deeppink1", "maroon1",
+"darkorchid1", "dodgerblue", "dodgerblue1", "blue2",
+"purple2", "royalblue2", "dodgerblue2", "slateblue2",
+"mediumslateblue", "darkorchid2", "violetred2", "maroon2",
+"orangered2", "brown2"]
+smallgraphs = @drawsvg begin
+sethue("fuchsia")
+ng = length(smallgraphs)
+N = convert(Int, ceil(sqrt(ng)))
+tiles = Tiler(800, 800, N, N)
+setline(0.5)
+for (pos, n) in tiles
+@layer begin
+n > ng && break
+translate(pos)
+sethue(colors[mod1(n, end)])
+bbox = BoundingBox(box(O, tiles.tilewidth, tiles.tileheight))
+g = smallgraph(first(smallgraphs[n]))
+drawgraph(g, boundingbox=bbox, vertexshapesizes = 2, layout = stress)
+text(string(last(smallgraphs[n])), halign=:center, boxbottomcenter(bbox))
+end
+end
+end 800 800
+```
+
+```@example smallgraphs
+smallgraphs # hide
+```
+
+You will have no trouble finding out more about these well-known graphs on the Wikipedia.
+Some of the graphs in this illustration would benefit from some careful adjustment of the layout parameters.
+
+Here's a larger view of the Petersen graph (named after Julius Petersen, who first described in 1898).
+
+```@example graphsection
+@drawsvg begin # hide
 pg = smallgraph(:petersen)
-@drawsvg drawgraph(pg, vertexlabels = collect(1:length(nv(pg))))
+sethue("fuchsia")
+drawgraph(pg, vertexlabels = 1:nv(pg), layout = Shell(nlist=[6:10,]))
+end  # hide
+```
+
+```@example graphsection
+@drawsvg begin  # hide
+g = smallgraph(:cubical)
+sethue("fuchsia")
+drawgraph(g, layout = Spring(Ptype=Float64))
+end  # hide
 ```
 
 ## Getting some information about the graph
@@ -228,6 +392,14 @@ julia> adjacency_matrix(pg)
  1  ⋅  ⋅  ⋅  1  ⋅  1  1  ⋅  ⋅
 ```
 
+```@example graphsection
+@drawsvg begin # hide
+pg = smallgraph(:petersen)
+sethue("fuchsia")
+drawgraph(pg, vertexlabels = 1:nv(pg), layout = Shell(nlist=[6:10,]))
+end 600 400  # hide
+```
+
 Notice that this matrix, for a Petersen graph, is symmetrical about the top-left/bottom-right diagonal, because, in an undirected graph, a connection from vertex 4 to vertex 5 is also a connection from vertex 5 to 4. The vertical sum of each column (and the horizontal sum of each row) is the number of edges shared by that vertex, which is sometimes called the **degree** of the vertex.
 
 We can provide an adjacency matrix to the graph construction functions to create a graph. For example, this matrix recreates the House graph from its adjacency matrix:
@@ -239,8 +411,11 @@ m = [0 1 1 0 0;
      0 1 1 0 1;
      0 0 1 1 0]
 
+@drawsvg begin # hide
 hg = Graph(m)
-drawgraph(hg, vertexlabels = collect(1:length(nv(hg))))
+sethue("fuchsia") # hide
+drawgraph(hg, vertexlabels=1:nv(hg), layout=stress)
+end 800 400 # hide
 ```
 
 ### Incidence matrix
@@ -293,7 +468,7 @@ Another way of representing a graph is by using an array of arrays in the form o
 
 For example, this adjacency list:
 
-```
+```julia
 [
     [2, 5, 6, 10],  # row 1 = vertex 1 connects with 2, 5, 6, and 10
     [1, 3, 7],
@@ -333,7 +508,10 @@ g = Graph(30, [
 [14, 18, 20],
 [6, 16, 19]])
 
-@drawsvg drawgraph(g)
+@drawsvg begin # hide
+sethue("fuchsia")
+drawgraph(g, layout=stress)
+end # hide
 ```
 
 Graphs.jl uses adjacency lists internally. If we peek inside a graph and look at its fields, we'll see something like this, for a Directed Graph:
@@ -351,11 +529,17 @@ Graphs help us answer questions about connectivity and relationships. For exampl
 
 Graphs.jl has many features for traversing graphs and finding paths. We can look at just a few of them here.
 
+!!! note
+
+    The study of graphs uses a lot of terminology, and many of the terms also have informal and familiar definitions. Usually the informal definitions are sufficiently accurate and appropriate, but note that they also have more precise definitions in the literature.
+
 ### Paths and cycles
 
-A path is a sequence of edges between some start vertex and some end vertex, such that a continuous unbroken route is available. A cycle is a path where the start and end vertices are the same.
+A path is a sequence of edges between some start vertex and some end vertex, such that a continuous unbroken route is available.
 
-You can find all the cycles in a graph (at least, a basis, which is a minimal collection of cycles that can be added to make all cycles) with `cycle_basis()`), with the `cycle_basis()` function. The result is an array of arrays of vertex numbers.
+A cycle is a path where the start and end vertices are the same - a closed path. These are also called **circuits** in some sources.
+
+You can find all the cycles in a graph (at least, you can find a **basis**, which is a minimal collection of cycles that can be added to make all the cycles) with the `cycle_basis()` function. The result is an array of arrays of vertex numbers.
 
 ```
 cycles = cycle_basis(g)
@@ -374,6 +558,10 @@ cycles = cycle_basis(g)
  [11, 12, 19, 20, 1]
 ```
 
+```@example graphsection
+
+
+```
 ### Shortest paths
 
 One way to find the shortest path between two vertices is to use the `a_star()` function, and provide the graph, the start vertex, and the end vertex. The function returns a list of edges.
