@@ -454,12 +454,16 @@ Here, values of 1 and -1 are used to indicate directions, so the first column,`-
 
 An incidence matrix is another useful way of quickly defining a graph. That's why we can pass an incidence matrix to the `Graph()` and `DiGraph()` functions to create new graphs.
 
-```julia
-Graph([1 0 1;   
-       0 1 1;
-       1 1 0])
+```@example graphsection
+g = Graph([1 0 1 0;   
+           0 1 1 1;
+           1 1 0 0;
+		   0 1 0 0])
 
-{3, 4} undirected simple Int64 graph
+@drawsvg begin # hide
+sethue("fuchsia")
+drawgraph(g, vertexlabels=1:4, edgecurvature=10, layout=shell)
+end 300 300 # hide
 ```
 
 ### Adjacency list
@@ -470,16 +474,26 @@ For example, this adjacency list:
 
 ```julia
 [
-    [2, 5, 6, 10],  # row 1 = vertex 1 connects with 2, 5, 6, and 10
-    [1, 3, 7],
-    [2, 4, 8],
-    [3, 5, 9],
-    [1, 4, 10],
-    [1, 8, 9],
-    [2, 9, 10],
-    [3, 6, 10],
-    [4, 6, 7],
-    [1, 5, 7, 8]
+    [2, 5, 7],  # row 1: vertex 1 connects with 2, 5, and 7
+    [1, 3, 9],
+    [2, 4, 11],
+    [3, 5, 13],
+    [1, 4, 15],
+    [7, 15, 20],
+    [1, 6, 8],
+    [7, 9, 16],
+    [2, 8, 10],
+    [9, 11, 17],
+    [3, 10, 12],
+    [11, 13, 18],
+    [4, 12, 14],
+    [13, 15, 19],
+    [5, 6, 14],
+    [8, 17, 20],
+    [10, 16, 18],
+    [12, 17, 19],
+    [14, 18, 20],
+    [6, 16, 19]
 ]
 ```
 

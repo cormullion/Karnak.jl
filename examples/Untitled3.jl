@@ -15,3 +15,13 @@ using NetworkLayout
 	fontsize(50)
 	drawgraph(gd, vertexlabels = [1, 2, 3, 4])
 end
+
+g = Graph([1 0 1 0;
+           0 1 1 1;
+           1 1 0 0;
+		   0 1 0 0])
+
+@drawsvg begin # hide
+	sethue("fuchsia")
+	drawgraph(g, vertexlabels=1:4, edgecurvature=10, layout=shell)
+end 300 300 # hide

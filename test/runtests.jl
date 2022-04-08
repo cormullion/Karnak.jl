@@ -71,7 +71,7 @@ using Colors
                 end)
             elseif n == 10
                 g = path_graph(6)
-                drawgraph(g, boundingbox=bb, vertextextcolors=["red", "blue"], vertexfillcolors=["green", :none, "blue"], vertexshapes=[:circle, :square], vertexlabels=1:6, layout=shell)
+                drawgraph(g, boundingbox=bb, vertexlabeltextcolors=["red", "blue"], vertexfillcolors=["green", :none, "blue"], vertexshapes=[:circle, :square], vertexlabels=1:6, layout=shell)
             else
                 g = path_graph(12)
                 drawgraph(g, margin=20, boundingbox=bb, layout=shell)

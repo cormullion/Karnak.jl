@@ -65,7 +65,7 @@ function test1()
                         end)
             elseif n == 10
                 g = path_graph(6)
-                drawgraph(g, boundingbox=bb, vertextextcolors=["red", "blue"], vertexfillcolors=["green", :none, "blue"], vertexshapes=[:circle, :square], vertexlabels=1:6, layout=shell)
+                drawgraph(g, boundingbox=bb, vertexlabeltextcolors=["red", "blue"], vertexfillcolors=["green", :none, "blue"], vertexshapes=[:circle, :square], vertexlabels=1:6, layout=shell)
             else
                 g = path_graph(12)
                 drawgraph(g, margin=20, boundingbox=bb, layout=shell)
@@ -100,9 +100,9 @@ function test2()
             #vertexfillcolors = :none, # colorant"blue",
             vertexfillcolors=colorant"orange",
             vertexstrokecolors=[colorant"red", :none, colorant"cyan"],
-            #vertextextcolors = [colorant"red", :none, colorant"cyan"],
+            #vertexlabeltextcolors = [colorant"red", :none, colorant"cyan"],
             #vertexlabels = 1:10,
-            #vertextextcolors = [colorant"red", :none],
+            #vertexlabeltextcolors = [colorant"red", :none],
             #vertexlabels = 1:10,
             vertexlabels=1:nv(g),
             vertexstrokeweights = [0.3, 20, :none],
@@ -118,9 +118,9 @@ function test2()
         #	drawgraph(g, vertexlabels = 1:nv(g), layout=shell)
         #	drawgraph(g, vertexlabels = ["A", "B", "C", "P", "Q"], layout=shell)
 
-        # 	drawgraph(g, vertexlabels = (v, c) -> (text(string(v), c[v])), vertextextcolors=["red", "blue"], layout=shell)
+        # 	drawgraph(g, vertexlabels = (v, c) -> (text(string(v), c[v])), vertexlabeltextcolors=["red", "blue"], layout=shell)
 
-        #drawgraph(g, vertextextcolors=["red", "blue"], vertexfillcolors=["green", "blue"], vertexshapes = [:circle, :square], vertexlabels = 1:6, layout=shell)
+        #drawgraph(g, vertexlabeltextcolors=["red", "blue"], vertexfillcolors=["green", "blue"], vertexshapes = [:circle, :square], vertexlabels = 1:6, layout=shell)
 
         #drawgraph(g, vertexlabels = (v, c) -> (fontsize(30); sethue(get(ColorSchemes.leonardo, rand())); text(string(nv(g), v), c[v])), edgelabels = 1:10, layout=stress)
 
