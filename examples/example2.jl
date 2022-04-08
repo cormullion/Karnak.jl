@@ -2,6 +2,9 @@ println("starting execution\n\n\n")
 using Graphs
 println("using graphs")
 
+using Luxor
+println("using Luxor")
+
 using Karnak
 println("using Karnak")
 
