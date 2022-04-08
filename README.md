@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 ![karnak splash image](docs/src/assets/figures/karnak-social-media-preview.png)
 
 | **Documentation**                       | **Build Status**                          | **Code Coverage**               |
@@ -46,7 +45,3 @@ rather than this one.
 
 [ci-img]: https://github.com/cormullion/Karnak.jl/workflows/CI/badge.svg
 [ci-url]: https://github.com/cormullion/Karnak.jl/actions?query=workflow%3ACI
-=======
-# Karnak.jl
-Luxor.jl extension
->>>>>>> c19fb2edb1f35b51c3927dc65f8be1ae7558e38c
