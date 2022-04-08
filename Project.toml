@@ -12,6 +12,7 @@ Reexport = "189a3867-3050-52da-a836-e630ba90ab69"
 
 [compat]
 Graphs = "1"
+NetworkLayout = "0.4"
 Reexport = "0.2, 1.0"
 julia = "1"
 
