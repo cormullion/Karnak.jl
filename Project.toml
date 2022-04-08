@@ -11,6 +11,7 @@ NetworkLayout = "46757867-2c16-5918-afeb-47bfcb05e46a"
 Reexport = "189a3867-3050-52da-a836-e630ba90ab69"
 
 [compat]
+Colors = "0.12"
 Luxor = "3"
 Graphs = "1"
 NetworkLayout = "0.4"
