@@ -54,16 +54,16 @@ using Colors
                 drawgraph(g, vertexshapes=:square, boundingbox=bb, margin=10, layout=(g) -> spectral(adjacency_matrix(g), dim=3))
             elseif n == 7
                 g = complete_digraph(5)
-                drawgraph(g, margin=10, vertexshapes=(vertex, coordinates) -> begin
+                drawgraph(g, margin=10, vertexshapes=(v) -> begin
                     for i in 1:5:30
                         randomhue()
-                        circle(coordinates[vertex], i, :stroke)
+                        circle(O, i, :stroke)
                     end
                 end, boundingbox=bb, layout=(g) -> spectral(adjacency_matrix(g), dim=2))
             elseif n == 8
                 g = complete_digraph(15)
                 drawgraph(g, layout=shell, margin=0, boundingbox=bb,
-                edgelabels=(n, f, t) ->
+                edgelabels=(n, src, dst, f, t) ->
                 begin
                     randomhue()
                     label(string(n), :n, midpoint(f, t) + Point(isodd(n) ? -10 : 20, 0), offset=20)

@@ -11,6 +11,7 @@ makedocs(
     pages    = [
         "Introduction to Karnak"  =>  "index.md",
         "Basic graphs"            =>  "basics.md",
+        "Kwarg madness"           =>  "syntax.md",
         "Reference" => [
             "Alphabetical function list"   =>  "reference/functionindex.md"
             "Function reference"           =>  "reference/api.md"

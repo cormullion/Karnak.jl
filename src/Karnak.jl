@@ -1,12 +1,13 @@
 module Karnak
 
-#using Reexport
+using Reexport
 using Graphs
 using Colors
 using NetworkLayout
 using Luxor
 
 #@reexport using Luxor
+@reexport using NetworkLayout
 
 export drawgraph
 
@@ -299,13 +300,15 @@ function _drawvertexshapes(vertex, coordinates::Array{Point,1};
         vertexshape = :circle
     elseif vertexshapes == :square
         vertexshape = :square
+    elseif vertexshapes == :none
+        vertexshape = :square
     elseif vertexshapes isa Int64
         if vertexshapes == vertex
             vertexshape = true
         end
     end
 
-    if isnothing(vertexshape)
+    if vertexshape == :none
         return
     end
 
@@ -448,7 +451,10 @@ function _drawvertexlabels(vertex, coordinates::Array{Point,1};
         vertexlabeltextcolors=nothing,
         vertexlabelfontsizes=nothing,
         vertexlabelfontfaces=nothing,
-        vertexlabelrotations=nothing)
+        vertexlabelrotations=nothing,
+        vertexlabeloffsetangles=nothing,
+        vertexlabeloffsetdistances=nothing,
+        )
 
     # decide whether to draw this vertex
 
@@ -533,15 +539,51 @@ function _drawvertexlabels(vertex, coordinates::Array{Point,1};
         # do nothing
     end
 
+    # set label offsets
+    # set label offset angles
+
+    textoffsetangle = 0
+    if isnothing(vertexlabeloffsetangles)
+        # by default, 0 is ok
+    elseif vertexlabeloffsetangles isa Array
+        if !isempty(vertexlabeloffsetangles)
+            if vertexlabeloffsetangles[mod1(vertex, end)] != :none
+                textoffsetangle = vertexlabeloffsetangles[mod1(vertex, end)]
+            end
+        end
+    elseif vertexlabeloffsetangles isa AbstractRange
+        textoffsetangle = vertexlabeloffsetangles[mod1(vertex, end)]
+    elseif vertexlabeloffsetangles isa Real
+        textoffsetangle = vertexlabeloffsetangles
+    end
+
+    # set label offset distances
+
+    textoffsetdistance = 0
+    if isnothing(vertexlabeloffsetdistances)
+        # by default, 0 is ok
+    elseif vertexlabeloffsetdistances isa Array
+        if !isempty(vertexlabeloffsetdistances)
+            if vertexlabeloffsetdistances[mod1(vertex, end)] != :none
+                textoffsetdistance = vertexlabeloffsetdistances[mod1(vertex, end)]
+            end
+        end
+    elseif vertexlabeloffsetdistances isa AbstractRange
+        textoffsetdistance = vertexlabeloffsetdistances[mod1(vertex, end)]
+    elseif vertexlabeloffsetdistances isa Real
+        textoffsetdistance = vertexlabeloffsetdistances
+    end
+
     # draw the label
     if !isnothing(vertexlabel)
         @layer begin
             pt = coordinates[vertex]
+            translate(pt)
+            rotate(textrotation)
             sethue(textcolor)
             fontsize(font_size)
             fontface(font_face)
-            label(vertexlabel, slope(O, pt), pt, offset=Luxor.get_fontsize())
-            # text(vertexlabel, pt, angle = textrotation, halign=:center, valign=:middle)
+            text(vertexlabel, halign=:center, valign=:middle, O + polar(textoffsetdistance, textoffsetangle))
         end
     end
 end
@@ -600,7 +642,10 @@ function drawvertex(vertex, coordinates::Array{Point,1};
         vertexlabeltextcolors=nothing,
         vertexlabelfontsizes=nothing,
         vertexlabelfontfaces=nothing,
-        vertexlabelrotations=nothing)
+        vertexlabelrotations=nothing,
+        vertexlabeloffsetangles=nothing,
+        vertexlabeloffsetdistances=nothing,
+        )
 
     # is completely specified by function?
     if vertexfunction isa Function
@@ -618,7 +663,10 @@ function drawvertex(vertex, coordinates::Array{Point,1};
             vertexlabeltextcolors,
             vertexlabelfontsizes,
             vertexlabelfontfaces,
-            vertexlabelrotations)
+            vertexlabelrotations,
+            vertexlabeloffsetangles,
+            vertexlabeloffsetdistances,
+            )
     end
 end
 
@@ -647,8 +695,6 @@ Luxor `boundingbox`.
     layout = stress
 
     layout = (g) -> spectral(adjacency_matrix(g), dim=2)
-
-    layout = spectrallayout
 
     layout = shell ∘ adjacency_matrix
 
@@ -682,6 +728,7 @@ Luxor `boundingbox`.
    `vertex` is vertex number, using current vertex rotation
    (`vertextshaperotations`) The function can override
    rotations and colors.
+   default is ?
 
 `vertexshapesizes`
 - the size of each vertex shape for :circle :square...
@@ -712,6 +759,10 @@ Luxor `boundingbox`.
 
 `vertexlabelrotations`
 -
+
+- `vertexlabeloffsetangles`
+
+- `vertexlabeldistances`
 
 `edgelabels`
 - can be function: `edgelabels(edgenumber, edgesrc, edgedest, from::Point, to::Point)`
@@ -745,7 +796,7 @@ Luxor `boundingbox`.
 function drawgraph(g::AbstractGraph;
         boundingbox::BoundingBox=BoundingBox(),
         layout=nothing,
-        margin::Real=20,
+        margin::Real=30,
         vertexfunction=nothing,
         vertexlabels=nothing,
         vertexshapes=nothing,
@@ -758,6 +809,8 @@ function drawgraph(g::AbstractGraph;
         vertexlabelfontsizes=nothing,
         vertexlabelfontfaces=nothing,
         vertexlabelrotations=nothing,
+        vertexlabeloffsetangles=nothing,
+        vertexlabeloffsetdistances=nothing,
         edgefunction=nothing,
         edgelabels=nothing,
         edgelines=nothing,
@@ -814,7 +867,9 @@ function drawgraph(g::AbstractGraph;
             vertexlabeltextcolors=vertexlabeltextcolors,
             vertexlabelfontsizes=vertexlabelfontsizes,
             vertexlabelfontfaces=vertexlabelfontfaces,
-            vertexlabelrotations=vertexlabelrotations
+            vertexlabelrotations=vertexlabelrotations,
+            vertexlabeloffsetangles=vertexlabeloffsetangles,
+            vertexlabeloffsetdistances=vertexlabeloffsetdistances,
         )
     end
 end
