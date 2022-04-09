@@ -71,6 +71,7 @@ add_edge!(g, 2, 3) # hide
 add_edge!(g, 1, 4) # hide
 
 @drawsvg begin # hide
+background("grey10")
 sethue("fuchsia")
 drawgraph(g, vertexlabels = [1, 2, 3, 4])
 end # hide
@@ -103,6 +104,7 @@ add_edge!(gd, 2, 3) # hide
 add_edge!(gd, 1, 4) # hide
 add_edge!(gd, 4, 1) # hide
 @drawsvg begin # hide
+background("grey10") # hide
 sethue("fuchsia") # hide
 drawgraph(gd, vertexlabels = [1, 2, 3, 4])
 end # hide
@@ -118,11 +120,13 @@ Creating graphs by typing the connections manually isn't always convenient, so y
 g = Graph(10, 5) # 10 vertices, 5 edges
 gd = SimpleDiGraph(5, 3) # 5 vertices, 3, edges
 d1 = @drawsvg begin
+    background("grey10")
     sethue("fuchsia")
     drawgraph(g, vertexlabels = 1:nv(g))
 end 400 400
 
 d2 = @drawsvg begin
+background("grey10")
 setline(0.5)
 sethue("firebrick1")
 drawgraph(gd, vertexlabels = 1:nv(g))
@@ -140,6 +144,7 @@ In a **complete graph**, every vertex is connected to every other vertex.
 N = 10
 g = complete_graph(N)
 d1 = @drawsvg begin
+background("grey10")
 setline(0.5)
 sethue("fuchsia")
 drawgraph(g, vertexlabels = 1:nv(g))
@@ -152,6 +157,7 @@ There's also a `complete_digraph()` function.
 N = 7
 g = complete_digraph(N)
 d1 = @drawsvg begin
+background("grey10")
 setline(0.5)
 sethue("fuchsia")
 drawgraph(g, vertexlabels = 1:nv(g))
@@ -166,6 +172,7 @@ g = complete_bipartite_graph(N, N)
 H = 200
 W = 400
 d1 = @drawsvg begin # hide
+background("grey10")
 pts = vcat(
     between.(O + (-W/2, H), O + (W/2, H), range(0, 1, length=N)),
     between.(O + (-W/2, -H), O + (W/2, -H), range(0, 1, length=N)))
@@ -181,6 +188,7 @@ M = 4
 N = 5
 g = Graphs.grid([M, N]) # grid((m, n))
 d1 = @drawsvg begin # hide
+background("grey10")
 setline(0.5)
 sethue("fuchsia")
 drawgraph(g, vertexlabels = 1:nv(g), layout=stress)
@@ -192,6 +200,7 @@ Star graphs (`star_graph(n)`) and wheel graphs (`wheel_graph(n)`) are usefully n
 ```@example graphsection
 g = star_graph(12)
 d1 = @drawsvg begin
+    background("grey10")
     sethue("fuchsia")
     drawgraph(g, vertexlabels=1:nv(g), layout=stress)
 end
@@ -200,6 +209,7 @@ end
 ```@example graphsection
 g = wheel_graph(12)
 d1 = @drawsvg begin
+    background("grey10")
     sethue("fuchsia")
     drawgraph(g, vertexlabels=1:nv(g), layout=stress)
 end
@@ -276,6 +286,7 @@ Here's a larger view of the Petersen graph (named after Julius Petersen, who fir
 
 ```@example graphsection
 @drawsvg begin # hide
+background("grey10")
 pg = smallgraph(:petersen)
 sethue("fuchsia")
 drawgraph(pg, vertexlabels = 1:nv(pg), layout = Shell(nlist=[6:10,]))
@@ -284,6 +295,7 @@ end  # hide
 
 ```@example graphsection
 @drawsvg begin  # hide
+background("grey10")
 g = smallgraph(:cubical)
 sethue("fuchsia")
 drawgraph(g, layout = Spring(Ptype=Float64))
@@ -394,6 +406,7 @@ julia> adjacency_matrix(pg)
 
 ```@example graphsection
 @drawsvg begin # hide
+background("grey10")
 pg = smallgraph(:petersen)
 sethue("fuchsia")
 drawgraph(pg, vertexlabels = 1:nv(pg), layout = Shell(nlist=[6:10,]))
@@ -412,6 +425,7 @@ m = [0 1 1 0 0;
      0 0 1 1 0]
 
 @drawsvg begin # hide
+background("grey10")
 hg = Graph(m)
 sethue("fuchsia") # hide
 drawgraph(hg, vertexlabels=1:nv(hg), layout=stress)
@@ -458,9 +472,10 @@ An incidence matrix is another useful way of quickly defining a graph. That's wh
 g = Graph([1 0 1 0;   
            0 1 1 1;
            1 1 0 0;
-		   0 1 0 0])
+           0 1 0 0])
 
 @drawsvg begin # hide
+background("grey10")
 sethue("fuchsia")
 drawgraph(g, vertexlabels=1:4, edgecurvature=10, layout=shell)
 end 300 300 # hide
@@ -523,6 +538,7 @@ g = Graph(30, [
 [6, 16, 19]])
 
 @drawsvg begin # hide
+background("grey10")
 sethue("fuchsia")
 drawgraph(g, layout=stress)
 end # hide
@@ -545,7 +561,11 @@ Graphs.jl has many features for traversing graphs and finding paths. We can look
 
 !!! note
 
-    The study of graphs uses a lot of terminology, and many of the terms also have informal and familiar definitions. Usually the informal definitions are sufficiently accurate and appropriate, but note that they also have more precise definitions in the literature.
+    The study of graphs uses a lot of terminology, and many
+    of the terms also have informal and familiar
+    definitions. Usually the informal definitions are
+    reasonably accurate and appropriate, but note that they
+    also have precise definitions in the literature.
 
 ### Paths and cycles
 

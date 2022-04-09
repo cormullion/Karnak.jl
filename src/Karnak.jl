@@ -468,7 +468,11 @@ function _drawvertexlabels(vertex, coordinates::Array{Point,1};
     elseif vertexlabels isa AbstractRange
         vertexlabel = string(vertexlabels[mod1(vertex, end)])
     elseif vertexlabels isa AbstractString
-            vertexlabel = vertexlabels
+        vertexlabel = vertexlabels
+    elseif vertexlabels isa Function
+        # function to choose vertex, but
+        # should return a string
+        vertexlabel = vertexlabels(vertex)
     elseif vertexlabels == :none
         # er
     end
@@ -509,9 +513,17 @@ function _drawvertexlabels(vertex, coordinates::Array{Point,1};
     end
 
     # set the colors for all labels
-    textcolor = Luxor.get_current_color()
+    # default to inverse of current color
+
+    gamma = 2.2
+    r, g, b, alpha = getfield.(Luxor.get_current_color(), (:r, :g, :b, :alpha))
+    luminance = 0.2126 * r^gamma + 0.7152 * g^gamma + 0.0722 * b^gamma
+    (luminance > 0.5^gamma) ? textcolor = colorant"black" : textcolor=colorant"white"
+
+    # textcolor = Luxor.get_current_color()
+
     if isnothing(vertexlabeltextcolors)
-        # default - use current color
+        # default
     elseif vertexlabeltextcolors isa Array
         textcolor = vertexlabeltextcolors[mod1(vertex, end)]
     elseif vertexlabeltextcolors isa Colorant
@@ -575,7 +587,8 @@ function _drawvertexlabels(vertex, coordinates::Array{Point,1};
     end
 
     # draw the label
-    if !isnothing(vertexlabel)
+
+    if vertexlabel isa String # && !isnothing(vertexlabel)
         @layer begin
             pt = coordinates[vertex]
             translate(pt)
