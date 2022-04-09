@@ -1,13 +1,13 @@
 # Introduction to Karnak
 
 Karnak.jl is a small extension for the Luxor.jl package to
-help with drawing some graph-style diagrams.
+help with constructing graph-style drawings.
 
-Karnak relies Graphs.jl for graph construction, and
-NetworkLayout.jl for graph layout.
+Karnak relies on [Graphs.jl](https://juliagraphs.org/Graphs.jl/) for graph construction, and
+on [NetworkLayout.jl](https://juliagraphs.org/NetworkLayout.jl/) for graph layout.
 
-The focus here, unlike other graph visualization packaegs,
-is more on decorative and aesthetic uses.
+The focus in Karnak, unlike other graph visualization packages,
+is on decorative and aesthetic uses, for use in design and generative art.
 
 !!! warning
 

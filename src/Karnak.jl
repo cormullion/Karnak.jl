@@ -386,7 +386,7 @@ function _drawvertexshapes(vertex, coordinates::Array{Point,1};
 
     # set shape sizes
     # vertexshape size is going to be a radius rather than a diameter
-
+    vertexshapesize = 0
     if isnothing(vertexshapesizes)
         vertexshapesize = 6
     elseif vertexshapesizes isa Array
@@ -687,7 +687,39 @@ end
 Draw a graph `g` using coordinates in `layout` to fit in a
 Luxor `boundingbox`.
 
-## Keyword arguments
+Arguments
+
+```
+g::AbstractGraph;
+    boundingbox
+    layout
+    margin,
+    vertexfunction
+    vertexlabels
+    vertexshapes
+    vertexshapesizes
+    vertexshaperotations
+    vertexstrokecolors
+    vertexstrokeweights
+    vertexfillcolors
+    vertexlabeltextcolors
+    vertexlabelfontsizes
+    vertexlabelfontfaces
+    vertexlabelrotations
+    vertexlabeloffsetangles
+    vertexlabeloffsetdistances
+    edgefunction
+    edgelabels
+    edgelines
+    edgecurvature
+    edgestrokecolors
+    edgestrokeweights
+    edgedashpatterns
+    edgelabelcolors
+    edgelabelrotations
+```
+
+## Extended help
 
 `g`
 - the graph to be drawn

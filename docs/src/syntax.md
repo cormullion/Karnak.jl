@@ -119,15 +119,22 @@ edgefunction = my_edgefunction(from::Point, to::Point)
 
 These allow you to place graphics at `coordinates[vertex]`, and to draw edges from `from` to `to`, using any available tools for drawing.
 
-In the next example, the vertices are marked using a function that places clipped PNG images, and the edges are drawn with sine curves. Refer to the Luxor documentation for more than you could possibly want to know about putting colored things on drawings.
+In the following picture, the vertex positions were passed to a function that places clipped PNG images on the drawing (using `Luxor.readpng()` and `Luxor.placeimage()`), and the edges are drawn with sine curves. Refer to the Luxor documentation for more than you could possibly want to know about putting colored things on drawings.
 
 ![image vertices](assets/figures/karnakmap.png)
+
+Another possible use for this function is to extract the calculated coordinates into a vector for later vector fun.
+
+
+
 
 ## Vertex labels and shapes
 
 ### vertexlabels
 
-Use `vertexlabels` to choose the labels to draw. Supply a range, array of strings or numbers, or a string.
+Use `vertexlabels` to choose the text to associate with each vertex. Supply a range, array of strings or numbers, or a string.
+
+This example draws all vertices, and numbers them from 1 to 6.
 
 ```@example graphsection
 @drawsvg begin
@@ -202,6 +209,20 @@ drawgraph(g, layout=stress,
 end 600 300
 ```
 
+To show every other vertex, you could use something like:
+
+```@example graphsection
+@drawsvg begin
+background("grey10")
+g = smallgraph(:truncatedcube)
+sethue("slateblue")
+drawgraph(g, layout=stress,
+	vertexlabels  = ["1", ""],
+  vertexshapesizes = [10, 0],
+	)
+end 600 300
+```
+
 ### vertexshaperotations
 
 ```@example graphsection
@@ -249,20 +270,37 @@ drawgraph(g, layout=spring,
 	)
 end 600 300
 ```
+By now, I think you get the general idea. Try playing  the following keyword arguments:
 
-### vertexstrokeweights
+- `vertexstrokeweights`
 
-### vertexlabeltextcolors
+- `vertexlabeltextcolors`
 
-### vertexlabelfontsizes
+- `vertexlabelfontsizes`
 
-### vertexlabelfontfaces
+- `vertexlabelfontfaces`
 
-### vertexlabelrotations
+- `vertexlabelrotations`
 
-### vertexlabeloffsetangles
+- `vertexlabeloffsetangles`
 
-### vertexlabeloffsetdistances
+- `vertexlabeloffsetdistances`
+
+Being able to specify the font faces for vertex labels is of course very important, but hard to demonstrate in documentation built on strange machines.
+
+```@example graphsection
+@drawsvg begin
+	background("grey10")
+	g = smallgraph(:pappus)
+	sethue("slateblue")
+	drawgraph(g,
+		vertexlabels = 1:nv(g),
+		vertexshapes = 0,
+		vertexlabelfontfaces = ["Times-Roman", "Courier", "Helvetica-Bold"],
+		vertexlabelfontsizes = 60
+	)
+end 600 600
+```
 
 ## Edge options
 
