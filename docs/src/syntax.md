@@ -1,5 +1,5 @@
 ```@setup graphsection
-using Karnak, Luxor, Graphs, NetworkLayout, Colors
+using Karnak, Luxor, Graphs, NetworkLayout, Colors, SimpleWeightedGraphs
 
 # these bright colors work on both white and dark backgrounds
 #  "fuchsia" "magenta" "magenta1" "brown1" "firebrick1"
@@ -455,5 +455,23 @@ end 600 500
 ```
 
 ### `edgestrokeweights`
+
+One possible use for varying the stroke weight of the edges might be to indicate
+the weight of a weighted graph's edge:
+
+```@example graphsection
+wg = SimpleWeightedDiGraph(Graph(5, 10), 1.0)
+for e in edges(wg)
+    add_edge!(wg, src(e), dst(e), rand(1:20))
+end    
+@drawsvg begin
+    sethue("gold")
+    drawgraph(wg,
+        edgecurvature=20,
+        vertexlabels = 1:nv(wg),
+        edgestrokeweights = [get_weight(wg, src(e), dst(e)) for e in edges(wg)]
+    )
+end
+```
 
 ### `edgedashpatterns`

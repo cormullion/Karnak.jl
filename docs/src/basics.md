@@ -1,5 +1,5 @@
 ```@setup graphsection
-using Karnak, Luxor, Graphs, NetworkLayout
+using Karnak, Luxor, Graphs, NetworkLayout, Colors, SimpleWeightedGraphs
 
 # these bright colors work on both white and dark backgrounds
 #  "fuchsia" "magenta" "magenta1" "brown1" "firebrick1"
@@ -622,17 +622,13 @@ To create a new weighted graph:
 using Graphs, SimpleWeightedGraphs
 
 wg = SimpleWeightedGraph()
-
 ```
 
 This creates a new empty weighted undirected graph, or we can pass an existing graph to this function:
 
 ```julia
-wg = SimpleWeightedGraph(dodecg)
-swg =SimpleWeightedGraph(Graph(4, 6), 4.0) # assigns weight of 4.0 everywhere
+wg = SimpleWeightedGraph(Graph(6, 15), 4.0)
 ```
-
-If you look inside the graph, you can see that each edge has been assigned the default weight - 1.
 
 To get the weights of a vertex, use:
 
@@ -640,33 +636,41 @@ To get the weights of a vertex, use:
 get_weight(wg, 1, 2)
 ```
 
-You can change the weight with
-
+You can change the weight of an edge with:
 
 ```
 add_edge!(graph, from, to, weight)
 ```
 
-Can make it with this:
+In this example, we set the default weight of every edge to 4.0 when the graph is created, and changed just one edge's weight:
 
-```
-sources = [1,2,1]
-destinations = [2,3,3]
-weights = [0.5, 0.8, 2.0]
-g = SimpleWeightedGraph(sources, destinations, weights)
+```@example graphsection
+wg = SimpleWeightedGraph(Graph(6, 15), 4.0)
+add_edge!(wg, 1, 2, 10_000_000)
+@drawsvg begin
+    sethue("gold")
+    drawgraph(wg, edgecurvature=10,
+    vertexlabels = 1:nv(wg),
+    edgelabelcolors = colorant"yellow",
+    edgelabels=[get_weight(wg, src(e), dst(e)) for e in edges(wg)]
+    )
+end
 ```
 
 If you look at the graph's adjacency matrix, you'll see that the weights have replaced the 1s:
 
 ```
-adjacency_matrix(swg)
-4×4 SparseArrays.SparseMatrixCSC{Float64, Int64} with 12 stored entries:
-  ⋅   4.0  4.0  4.0
- 4.0   ⋅   4.0  4.0
- 4.0  4.0   ⋅   4.0
- 4.0  4.0  4.0   ⋅
+adjacency_matrix(wg)
+6×6 SparseArrays.SparseMatrixCSC{Float64, Int64} with 30 stored entries:
+  ⋅     1.0e7  4.0  4.0  4.0  4.0
+ 1.0e7   ⋅     4.0  4.0  4.0  4.0
+ 4.0    4.0     ⋅   4.0  4.0  4.0
+ 4.0    4.0    4.0   ⋅   4.0  4.0
+ 4.0    4.0    4.0  4.0   ⋅   4.0
+ 4.0    4.0    4.0  4.0  4.0   ⋅
 ```
 
 For a directed graph, each edge can have two weights, one from src to dst, the other from dst to src.     
+
 
 a_star() doesnt work with weighted graphs yet.
