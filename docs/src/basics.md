@@ -29,7 +29,7 @@ Graph theory is used for analysing networks and relationships. A typical graph c
 The Graphs.jl package provides many ways to create graphs. We'll start off with this basic approach:
 
 ```julia
-using Graphs # hide
+using Graphs
 g = Graph()
 ```
 
@@ -63,18 +63,18 @@ time to see some kind of visual representation of the graph
 we've made.
 
 ```@example graphsection
-g = Graph() # hide
-add_vertices!(g, 4) # hide
-add_edge!(g, 1, 2) # hide
-add_edge!(g, 1, 3) # hide
-add_edge!(g, 2, 3) # hide
-add_edge!(g, 1, 4) # hide
+g = Graph()
+add_vertices!(g, 4)
+add_edge!(g, 1, 2)
+add_edge!(g, 1, 3)
+add_edge!(g, 2, 3)
+add_edge!(g, 1, 4)
 
-@drawsvg begin # hide
-background("grey10")
-sethue("fuchsia")
-drawgraph(g, vertexlabels = [1, 2, 3, 4])
-end # hide
+@drawsvg begin
+ background("grey10")
+ sethue("fuchsia")
+ drawgraph(g, vertexlabels = [1, 2, 3, 4])
+end 600 300
 ```
 
 This is one of the many ways this graph can be represented visually. The coordinates of the vertices when drawn here are _not_ part of the graph's definition, and have been assigned randomly by the layout algorithm.
@@ -96,18 +96,18 @@ add_edge!(gd, 4, 1) # vertex 4 to vertex 1
 ```
 
 ```@example graphsection
-gd = DiGraph() # hide
-add_vertices!(gd, 4) # hide
-add_edge!(gd, 1, 2) # hide
-add_edge!(gd, 1, 3) # hide
-add_edge!(gd, 2, 3) # hide
-add_edge!(gd, 1, 4) # hide
-add_edge!(gd, 4, 1) # hide
-@drawsvg begin # hide
-background("grey10") # hide
-sethue("fuchsia") # hide
+gd = DiGraph()
+add_vertices!(gd, 4)
+add_edge!(gd, 1, 2)
+add_edge!(gd, 1, 3)
+add_edge!(gd, 2, 3)
+add_edge!(gd, 1, 4)
+add_edge!(gd, 4, 1)
+@drawsvg begin
+background("grey10")
+sethue("slateblue")
 drawgraph(gd, vertexlabels = [1, 2, 3, 4])
-end # hide
+end 600 300
 ```
 
 In is representation of our directed graph `gd`, we can now see the direction of the edges joining vertices. Notice how vertices 1 and 4 are doubly connected, because there's one edge for each direction.
@@ -121,17 +121,17 @@ g = Graph(10, 5) # 10 vertices, 5 edges
 gd = SimpleDiGraph(5, 3) # 5 vertices, 3, edges
 d1 = @drawsvg begin
     background("grey10")
-    sethue("fuchsia")
+    sethue("gold")
     drawgraph(g, vertexlabels = 1:nv(g))
-end 400 400
+end 400 300
 
 d2 = @drawsvg begin
 background("grey10")
 setline(0.5)
-sethue("firebrick1")
+sethue("firebrick")
 drawgraph(gd, vertexlabels = 1:nv(g))
-end 400 400
-hcat(d1, d2) # hide
+end 400 300
+hcat(d1, d2)
 ```
 
 ## Well-known graphs
@@ -146,9 +146,9 @@ g = complete_graph(N)
 d1 = @drawsvg begin
 background("grey10")
 setline(0.5)
-sethue("fuchsia")
+sethue("maroon")
 drawgraph(g, vertexlabels = 1:nv(g))
-end
+end 600 300
 ```
 
 There's also a `complete_digraph()` function.
@@ -161,7 +161,7 @@ background("grey10")
 setline(0.5)
 sethue("fuchsia")
 drawgraph(g, vertexlabels = 1:nv(g))
-end
+end 600 300
 ```
 
 In a **bi-partite graph**, every vertex belongs to one of two groups. Every vertex in the first group is connected to one or more edges in the second group. This illustration shows a **complete** bi-partite graph. The word "complete" here means that each vertex is connected to every other vertex.
@@ -169,16 +169,16 @@ In a **bi-partite graph**, every vertex belongs to one of two groups. Every vert
 ```@example graphsection
 N = 10
 g = complete_bipartite_graph(N, N)
-H = 200
-W = 400
-d1 = @drawsvg begin # hide
+H = 300
+W = 550
+d1 = @drawsvg begin
 background("grey10")
 pts = vcat(
-    between.(O + (-W/2, H), O + (W/2, H), range(0, 1, length=N)),
-    between.(O + (-W/2, -H), O + (W/2, -H), range(0, 1, length=N)))
-sethue("fuchsia")
-drawgraph(g, vertexlabels = 1:nv(g), layout = pts)
-end # hide
+    between.(O + (-W/2, H/2), O + (W/2, H/2), range(0, 1, length=N)),
+    between.(O + (-W/2, -H/2), O + (W/2, -H/2), range(0, 1, length=N)))
+sethue("gold3")
+drawgraph(g, vertexlabels = 1:nv(g), layout = pts, edgestrokeweights=0.5)
+end 600 400
 ```
 
 A **grid** graph doesn't need much explanation:
@@ -187,12 +187,12 @@ A **grid** graph doesn't need much explanation:
 M = 4
 N = 5
 g = Graphs.grid([M, N]) # grid((m, n))
-d1 = @drawsvg begin # hide
+d1 = @drawsvg begin
 background("grey10")
 setline(0.5)
 sethue("fuchsia")
 drawgraph(g, vertexlabels = 1:nv(g), layout=stress)
-end # hide
+end 600 300
 ```
 Star graphs (`star_graph(n)`) and wheel graphs (`wheel_graph(n)`) are usefully named:
 
@@ -203,7 +203,7 @@ d1 = @drawsvg begin
     background("grey10")
     sethue("fuchsia")
     drawgraph(g, vertexlabels=1:nv(g), layout=stress)
-end
+end 600 300
 ```
 
 ```@example graphsection
@@ -212,7 +212,7 @@ d1 = @drawsvg begin
     background("grey10")
     sethue("fuchsia")
     drawgraph(g, vertexlabels=1:nv(g), layout=stress)
-end
+end 600 300
 ```
 
 ### Even more well-known graphs
@@ -285,21 +285,21 @@ Some of the graphs in this illustration would benefit from some careful adjustme
 Here's a larger view of the Petersen graph (named after Julius Petersen, who first described in 1898).
 
 ```@example graphsection
-@drawsvg begin # hide
+@drawsvg begin
 background("grey10")
 pg = smallgraph(:petersen)
 sethue("fuchsia")
 drawgraph(pg, vertexlabels = 1:nv(pg), layout = Shell(nlist=[6:10,]))
-end  # hide
+end 600 300
 ```
 
 ```@example graphsection
-@drawsvg begin  # hide
+@drawsvg begin
 background("grey10")
 g = smallgraph(:cubical)
 sethue("fuchsia")
 drawgraph(g, layout = Spring(Ptype=Float64))
-end  # hide
+end 600 300
 ```
 
 ## Getting some information about the graph
@@ -405,12 +405,12 @@ julia> adjacency_matrix(pg)
 ```
 
 ```@example graphsection
-@drawsvg begin # hide
+@drawsvg begin
 background("grey10")
 pg = smallgraph(:petersen)
 sethue("fuchsia")
 drawgraph(pg, vertexlabels = 1:nv(pg), layout = Shell(nlist=[6:10,]))
-end 600 400  # hide
+end 600 400
 ```
 
 Notice that this matrix, for a Petersen graph, is symmetrical about the top-left/bottom-right diagonal, because, in an undirected graph, a connection from vertex 4 to vertex 5 is also a connection from vertex 5 to 4. The vertical sum of each column (and the horizontal sum of each row) is the number of edges shared by that vertex, which is sometimes called the **degree** of the vertex.
@@ -424,12 +424,12 @@ m = [0 1 1 0 0;
      0 1 1 0 1;
      0 0 1 1 0]
 
-@drawsvg begin # hide
+@drawsvg begin
 background("grey10")
 hg = Graph(m)
-sethue("fuchsia") # hide
+sethue("fuchsia")
 drawgraph(hg, vertexlabels=1:nv(hg), layout=stress)
-end 800 400 # hide
+end 800 400
 ```
 
 ### Incidence matrix
@@ -474,11 +474,11 @@ g = Graph([1 0 1 0;
            1 1 0 0;
            0 1 0 0])
 
-@drawsvg begin # hide
+@drawsvg begin
 background("grey10")
 sethue("fuchsia")
 drawgraph(g, vertexlabels=1:4, edgecurvature=10, layout=shell)
-end 300 300 # hide
+end 600 300
 ```
 
 ### Adjacency list
@@ -537,11 +537,11 @@ g = Graph(30, [
 [14, 18, 20],
 [6, 16, 19]])
 
-@drawsvg begin # hide
+@drawsvg begin
 background("grey10")
 sethue("fuchsia")
 drawgraph(g, layout=stress)
-end # hide
+end 600 300
 ```
 
 Graphs.jl uses adjacency lists internally. If we peek inside a graph and look at its fields, we'll see something like this, for a Directed Graph:
@@ -607,7 +607,6 @@ The function finds the shortest path and returns an array of edges that define t
 ### Spanning trees
 
 A spanning tree is a set of edges that connect all the vertices of a graph together.
-
 
 ## Weighted graphs
 

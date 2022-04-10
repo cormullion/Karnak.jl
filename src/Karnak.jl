@@ -85,7 +85,6 @@ function _drawedgelines(from, to;
     elseif edgestrokecolors isa Colorant
         strokecolor = edgestrokecolors
     elseif edgestrokecolors isa Function
-        # (from, to)
         strokecolor = edgestrokecolors(edgenumber, from, to)
     elseif edgestrokecolors == :none
         strokecolor = :none
@@ -113,6 +112,7 @@ function _drawedgelines(from, to;
     end
 
     # set dash pattern
+
     dashpattern = Float64[]
     if isnothing(edgedashpatterns)
         # by default, do nothing
@@ -129,10 +129,11 @@ function _drawedgelines(from, to;
     # edgeline = nothing | true | function
     @layer begin
         setline(linewidth)
+        setlinecap("round")
         if strokecolor isa Function
             strokecolor(edgenumber, from, to)
         else
-            sethue(strokecolor)
+            setcolor(strokecolor)
         end
         if !isempty(dashpattern)
             setdash(dashpattern)
@@ -225,8 +226,8 @@ function _drawedgelabels(from, to;
             else
                 str = string(collect(edgelabels)[mod1(edgenumber, end)])
                 if textcolor != :none
-                    sethue(textcolor)
-                    text(str, midpoint(from, to), angle = textrotation)
+                    setcolor(textcolor)
+                    text(str, midpoint(from, to), halign=:center, angle = textrotation)
                 end
             end
         end
@@ -238,10 +239,10 @@ function _drawedgelabels(from, to;
             edgelabel = string(edgelabels[(edgesrc, edgedest)])
             # TODO don't repeat this code!!!
             @layer begin
-            if textcolor != :none
-                sethue(textcolor)
-                text(edgelabel, midpoint(from, to), angle = textrotation)
-            end
+                if textcolor != :none
+                    setcolor(textcolor)
+                    text(edgelabel, midpoint(from, to), halign=:center, angle = textrotation)
+                end
             end
         end
     elseif edgelabels == :none
@@ -301,7 +302,7 @@ function _drawvertexshapes(vertex, coordinates::Array{Point,1};
     elseif vertexshapes == :square
         vertexshape = :square
     elseif vertexshapes == :none
-        vertexshape = :square
+        vertexshape = :none
     elseif vertexshapes isa Int64
         if vertexshapes == vertex
             vertexshape = true
@@ -422,28 +423,28 @@ function _drawvertexshapes(vertex, coordinates::Array{Point,1};
         setline(linewidth)
         if vertexshape isa Function
             # we just doing fill color or stroke color priority?
-            strokecolor != :none && sethue(strokecolor)
-            fillcolor != :none && sethue(fillcolor)
+            strokecolor != :none && setcolor(strokecolor)
+            fillcolor != :none && setcolor(fillcolor)
             vertexshape(vertex)
         elseif vertexshape == :circle
-            fillcolor != :none && sethue(fillcolor)
+            fillcolor != :none && setcolor(fillcolor)
             circle(O, vertexshapesize, :fill)
-            strokecolor != :none && sethue(strokecolor)
+            strokecolor != :none && setcolor(strokecolor)
             circle(O, vertexshapesize, :stroke)
         elseif vertexshape == :square
-            fillcolor != :none && sethue(fillcolor)
+            fillcolor != :none && setcolor(fillcolor)
             box(O, vertexshapesize, vertexshapesize, :fill)
-            strokecolor != :none && sethue(strokecolor)
+            strokecolor != :none && setcolor(strokecolor)
             box(O, vertexshapesize, vertexshapesize, :stroke)
         else # default is a circle
-            fillcolor != :none && sethue(fillcolor)
+            fillcolor != :none && setcolor(fillcolor)
             circle(O, vertexshapesize, :fill)
-            strokecolor != :none && sethue(strokecolor)
+            strokecolor != :none && setcolor(strokecolor)
             circle(O, vertexshapesize, :stroke)
         end
     end
     # restore previous color - I don't know why this is needed
-    sethue(previouscolor)
+    #setcolor(previouscolor)
 end
 
 function _drawvertexlabels(vertex, coordinates::Array{Point,1};
@@ -593,7 +594,7 @@ function _drawvertexlabels(vertex, coordinates::Array{Point,1};
             pt = coordinates[vertex]
             translate(pt)
             rotate(textrotation)
-            sethue(textcolor)
+            setcolor(textcolor)
             fontsize(font_size)
             fontface(font_face)
             text(vertexlabel, halign=:center, valign=:middle, O + polar(textoffsetdistance, textoffsetangle))
@@ -623,6 +624,7 @@ function drawedge(from::Point, to::Point;
     if edgefunction isa Function
         edgefunction(from, to)
     else
+        # draw all edges
         _drawedgelines(from, to;
             edgenumber,
             edgelines,
@@ -711,6 +713,7 @@ g::AbstractGraph;
     edgefunction
     edgelabels
     edgelines
+    edgelist
     edgecurvature
     edgestrokecolors
     edgestrokeweights
@@ -719,7 +722,22 @@ g::AbstractGraph;
     edgelabelrotations
 ```
 
-## Extended help
+## Functions
+
+`vertexfunction(vertex, coordinates)` ->
+`edgefunction(from, to)` ->
+
+`edgelabels(edgenumber, edgesrc, edgedest, from, to)` ->
+`edgeline(from, to)` ->
+`edgelines(from, to)` ->
+`edgestrokecolors(edgenumber, from, to)` ->
+`vertexfillcolors(vertex)` ->
+`vertexlabels(vertex)` -> string
+`vertexshape(vertex)` ->
+`vertexstrokecolors(vertex)` ->
+`vertexstrokecolors(vertex)` ->
+
+# Extended help
 
 `g`
 - the graph to be drawn
@@ -765,7 +783,8 @@ g::AbstractGraph;
   of the other edge- keyword arguments are used.
 
 `vertexlabels`
-- the text labels for each vertex. Vertex labels are not drawn by default.
+- can be function `vertexlabels(vertex)` -> string
+  the text labels for each vertex. Vertex labels are not drawn by default.
 
 `vertexshapes`
 - the shape of each vertex; can be :circle :square, or a function
@@ -816,8 +835,11 @@ g::AbstractGraph;
    can be a range
    not drawn by default, nust be specified
 
+`edgelist`
+- list of edges
+
 `edgelines`
--  can be function
+-  can be function `edgeline(from, to)`
 
 `edgecurvature=0.0`
 
@@ -856,14 +878,17 @@ function drawgraph(g::AbstractGraph;
         vertexlabelrotations=nothing,
         vertexlabeloffsetangles=nothing,
         vertexlabeloffsetdistances=nothing,
+        edgelist = nothing,
         edgefunction=nothing,
         edgelabels=nothing,
         edgelines=nothing,
         edgecurvature=0.0,
         edgestrokecolors=nothing,
+        edgelabelcolors=nothing,
+        edgelabelfontsizes=nothing,
+        edgelabelfontfaces=nothing,
         edgestrokeweights=nothing,
         edgedashpatterns=nothing,
-        edgelabelcolors=nothing,
         edgelabelrotations=nothing)
 
     # so, do we need some coordinates for the vertices?
@@ -879,23 +904,32 @@ function drawgraph(g::AbstractGraph;
         # convert to Luxor Points and resize to fit boundingbox
         coordinates = _normalize_layout_coordinates(rawpts, boundingbox, margin)
     end
-    for (n, edge) in enumerate(edges(g))
+
+    if !isnothing(edgelist)
+        # only some edges to be drawn
+        edgestodraw = edgelist
+    else
+        edgestodraw = edges(g)
+    end
+    for (n, edge) in enumerate(edgestodraw)
         s, d = src(edge), dst(edge)
         drawedge(
             coordinates[s],
             coordinates[d],
             graph=g,
-            edgefunction=edgefunction,
-            edgelabels=edgelabels,
             edgenumber=n,
             edgesrc=s,
             edgedest=d,
+            edgefunction=edgefunction,
+            edgelabels=edgelabels,
             edgelines=edgelines,
+            edgedashpatterns=edgedashpatterns,
             edgecurvature=edgecurvature,
             edgestrokecolors=edgestrokecolors,
-            edgestrokeweights=edgestrokeweights,
-            edgedashpatterns= edgedashpatterns,
             edgelabelcolors=edgelabelcolors,
+            edgelabelfontsizes=edgelabelfontsizes,
+            edgelabelfontfaces=edgelabelfontfaces,
+            edgestrokeweights=edgestrokeweights,
             edgelabelrotations=edgelabelrotations
         )
     end
