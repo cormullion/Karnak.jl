@@ -16,8 +16,7 @@ relationships between things. A typical graph consists of:
 
 - vertices, which represent the things or entities
 
-- edges, which describe how these things or entities connect
-- and relate to each other
+- edges, which describe how these things or entities connect and relate to each other
 
 The Graphs.jl package provides many ways to create graphs.
 We'll start off with this basic approach:
@@ -64,6 +63,8 @@ add_edge!(g, 1, 3)
 add_edge!(g, 2, 3)
 add_edge!(g, 1, 4)
 
+# using Karnak, Luxor, Graphs, NetworkLayout, Colors, SimpleWeightedGraphs
+
 @drawsvg begin
  background("grey10")
  sethue("orange")
@@ -87,6 +88,7 @@ add_edge!(gd, 1, 3)
 add_edge!(gd, 2, 3)
 add_edge!(gd, 1, 4) # vertex 1 to vertex 4
 add_edge!(gd, 4, 1) # vertex 4 to vertex 1
+
 @drawsvg begin
 background("grey10")
 sethue("slateblue")
@@ -94,7 +96,7 @@ drawgraph(gd, vertexlabels = [1, 2, 3, 4])
 end 600 300
 ```
 
-In is representation of our directed graph `gd`, we can now see the direction of the edges joining vertices. Notice how vertices 1 and 4 are doubly connected, because there's one edge for each direction.
+In this representation of our directed graph `gd`, we can now see the direction of the edges joining vertices. Notice how vertices 1 and 4 are doubly connected, because there's one edge for each direction.
 
 Neither of these graphs is **connected**. In a connected graph, every vertex is connected to every other via some path, a sequence of edges.
 
@@ -125,7 +127,7 @@ hcat(d1, d2)
 
 ## Well-known graphs
 
-Graphs have been studied for a few centuries, so there are many familar and well-known graphs and types of graph.
+Graphs have been studied for a few centuries, so there are many familiar and well-known graphs and types of graph.
 
 In a **complete graph**, every vertex is connected to every other vertex.
 
@@ -205,36 +207,36 @@ end 600 300
 
 ### Even more well-known graphs
 
-There are probably as many graphs as there are possible games of chess. In both fields, the more commonly seen patterns have been studied extensively by enthusiasts.
+There are probably as many graphs as there are possible games of chess. In both fields, the more commonly-seen patterns have been studied extensively by enthusiasts for years.
 
-Many well-known graphs are provided by the `smallgraph()` function. Supply a symbol, such as `:bull`, or `:house`.
+Many well-known graphs are provided by the `smallgraph()` function. Supply one of the available symbols, such as `:bull`, or `:house`.
 
 ```@setup smallgraphs
 using Karnak, Luxor, Graphs, NetworkLayout
 smallgraphs = (
 (:bull, "bull"),
-(:chvatal, "Chvátal"),
-(:cubical, "Platonic cubical "),
-(:desargues, "Desarguesgraph"),
+(:chvatal, "chvatal"),
+(:cubical, "(Platonic) cubical "),
+(:desargues, "desarguesg"),
 (:diamond, "diamond"),
-(:dodecahedral, "Platonic dodecahedral"),
-(:frucht, "Frucht"),
-(:heawood, "Heawood"),
+(:dodecahedral, "(Platonic) dodecahedral"),
+(:frucht, "frucht"),
+(:heawood, "heawood"),
 (:house, "house"),
-(:housex, "house + two edges"),
-(:icosahedral, "Platonic icosahedral"),
-(:karate, "Zachary's karate club"),
-(:krackhardtkite, "Krackhardt-Kite"),
-(:moebiuskantor, "Möbius-Kantor"),
-(:octahedral, "Platonic octahedral"),
-(:pappus, "Pappus"),
-(:petersen, "Petersen"),
-(:sedgewickmaze, "Sedgewick maze"),
-(:tetrahedral, "Platonic tetrahedral"),
-(:truncatedcube, "truncated cube"),
-(:truncatedtetrahedron, "truncated tetrahedron"),
-(:truncatedtetrahedron_dir, "truncated tetrahedron"),
-(:tutte, "Tutte"))
+(:housex, "housex "),
+(:icosahedral, "(Platonic) icosahedral"),
+(:karate, "karate"),
+(:krackhardtkite, "krackhardtkite"),
+(:moebiuskantor, "moebiusantor"),
+(:octahedral, "(platonic) octahedral"),
+(:pappus, "pappus"),
+(:petersen, "petersen"),
+(:sedgewickmaze, "sedgewick"),
+(:tetrahedral, "(Platonic) tetrahedral"),
+(:truncatedcube, "truncatedcube"),
+(:truncatedtetrahedron, "truncatedtetrahedron"),
+(:truncatedtetrahedron_dir, "truncatedtetrahedron"),
+(:tutte, "tutte"))
 
 colors = ["orange", "brown1", "firebrick1",
 "blue", "red", "purple1", "royalblue1",
@@ -381,17 +383,17 @@ pg = smallgraph(:petersen)
 vertexofinterest = 10
 E = []
 for (n, e) in enumerate(edges(pg))
-	if dst(e) == vertexofinterest || src(e) == vertexofinterest
-		push!(E, n)
-	end
+    if dst(e) == vertexofinterest || src(e) == vertexofinterest
+        push!(E, n)
+    end
 end
 
 drawgraph(pg,
-	vertexlabels = 1:nv(pg),
-	layout = Shell(nlist=[6:10,]),
-	vertexfillcolors = (v) -> ((v == vertexofinterest) || v ∈ neighbors(pg, vertexofinterest)) && sethue(colorant"blue"),
-	vertexshapesizes = [v == vertexofinterest ? 20 : 10 for v in 1:nv(pg)],
-	edgestrokecolors = (e, f, t) -> (e ∈ E) ? colorant"red" : colorant"blue")
+    vertexlabels = 1:nv(pg),
+    layout = Shell(nlist=[6:10,]),
+    vertexfillcolors = (v) -> ((v == vertexofinterest) || v ∈ neighbors(pg, vertexofinterest)) && sethue(colorant"blue"),
+    vertexshapesizes = [v == vertexofinterest ? 20 : 10 for v in 1:nv(pg)],
+    edgestrokecolors = (e, f, t) -> (e ∈ E) ? colorant"red" : colorant"blue")
 end 600 300
 ```
 
@@ -407,8 +409,8 @@ A graph `G` with `n` vertices can be represented by a square matrix `A` with `n`
 
 ```julia
 julia> adjacency_matrix(pg)
-10×10 SparseArrays.SparseMatrixCSC{Int64, Int64} with 32 stored entries:
- ⋅  1  ⋅  ⋅  1  1  ⋅  ⋅  ⋅  1
+10×10 SparseArrays.SparseMatrixCSC{Int64, Int64} with 30 stored entries:
+ ⋅  1  ⋅  ⋅  1  1  ⋅  ⋅  ⋅  ⋅
  1  ⋅  1  ⋅  ⋅  ⋅  1  ⋅  ⋅  ⋅
  ⋅  1  ⋅  1  ⋅  ⋅  ⋅  1  ⋅  ⋅
  ⋅  ⋅  1  ⋅  1  ⋅  ⋅  ⋅  1  ⋅
@@ -417,7 +419,7 @@ julia> adjacency_matrix(pg)
  ⋅  1  ⋅  ⋅  ⋅  ⋅  ⋅  ⋅  1  1
  ⋅  ⋅  1  ⋅  ⋅  1  ⋅  ⋅  ⋅  1
  ⋅  ⋅  ⋅  1  ⋅  1  1  ⋅  ⋅  ⋅
- 1  ⋅  ⋅  ⋅  1  ⋅  1  1  ⋅  ⋅
+ ⋅  ⋅  ⋅  ⋅  1  ⋅  1  1  ⋅  ⋅
 ```
 
 ```@example graphsection
@@ -429,7 +431,7 @@ drawgraph(pg, vertexlabels = 1:nv(pg), layout = Shell(nlist=[6:10,]))
 end 600 400
 ```
 
-Notice that this matrix, for a Petersen graph, is symmetrical about the top-left/bottom-right diagonal, because, in an undirected graph, a connection from vertex 4 to vertex 5 is also a connection from vertex 5 to 4. The vertical sum of each column (and the horizontal sum of each row) is the number of edges shared by that vertex, which is sometimes called the **degree** of the vertex.
+Notice that this matrix, for a Petersen graph, is symmetrical about the top-left/bottom-right diagonal, because, in an undirected graph, a connection from vertex 4 to vertex 5 is also a connection from vertex 5 to 4. The vertical sum of each column (and the horizontal sum of each row) is the number of edges shared by that vertex, which is usually called the **degree** of the vertex.
 
 We can provide an adjacency matrix to the graph construction functions to create a graph. For example, this matrix recreates the House graph from its adjacency matrix:
 
@@ -450,7 +452,7 @@ end 800 400
 
 ### Incidence matrix
 
-We can also represent a graph G with a matrix M consisting of 1s, -1s, and 0s in which the rows are vertices and the columns are edges. M is an **incidence matrix**.
+We can also represent a graph G with a matrix M consisting of 1s, -1s, and 0s in which the rows are vertices and the columns are edges. M is called an **incidence matrix**.
 
 ```julia
 julia> incidence_matrix(pg)
@@ -467,6 +469,8 @@ julia> incidence_matrix(pg)
  ⋅  ⋅  ⋅  ⋅  ⋅  ⋅  ⋅  ⋅  ⋅  1  ⋅  ⋅  ⋅  1  1
 ```
 
+The first column of this matrix is an edge between vertex 1 and vertex 2, whereas the first column of the adjacency matrix defines the vertices that are connected with vertex 1.
+
 For a directed graph:
 
 ```julia
@@ -480,11 +484,11 @@ incidence_matrix(dg)
   ⋅   ⋅  -1
 ```
 
-Here, values of 1 and -1 are used to indicate directions, so the first column,`-1 1 0`, specifies the first edge goes **from** 2 to 1.
+Here, negative values are used, so 1 and -1 are used to indicate directions. The first column,`-1 1 0`, specifies the first edge goes **from** 2 to 1.
 
 An incidence matrix is another useful way of quickly defining a graph. That's why we can pass an incidence matrix to the `Graph()` and `DiGraph()` functions to create new graphs.
 
-Here's a vaguely familiar image:
+For example, here's a vaguely familiar image:
 
 ```@example graphsection
 g = [0 1 1;
@@ -494,7 +498,7 @@ g = [0 1 1;
 @drawsvg begin
 background("grey20")
 drawgraph(Graph(g),
-    layout = ngon(O, 120, 3, π/6, vertices=true),
+    layout = ngon(O + (0, 10), 120, 3, π/6, vertices=true),
     vertexshapes = :circle,
     vertexshapesizes = 70,
     edgestrokeweights = 25,

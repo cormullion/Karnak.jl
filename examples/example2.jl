@@ -14,11 +14,10 @@ println("using NetworkLayout")
 using Colors
 println("using Colors")
 
-g = barbell_graph(8, 8)
+#g = barbell_graph(8, 8)
 
 g = complete_graph(12)
 
-cycles = cycle_basis(g)
 
 @draw begin # hide
     background("black")
@@ -27,14 +26,16 @@ cycles = cycle_basis(g)
     #drawgraph(g, edgestrokeweights=1.5, layout = stress, boundingbox = BoundingBox()/1.2)
     fontsize(40)
     drawgraph(g,
-            layout = stress,
+            layout = squaregrid,
             boundingbox = BoundingBox()/1.2,
-            vertexshapes = 2:13,
-            vertexshapesizes = 30,
-            vertexlabels = 1:ne(g),
-            vertexfillcolors=[colorant"cyan", colorant"purple"],
-            edgelines  = :none, #range(1, ne(g), step=1),
-            # vertexfillcolors = (v, c) -> begin
+            vertexshapes = (v) -> star(O, 80, 6, 0.5, 0, :stroke),
+            #vertexshapesizes = 44,
+            #vertexlabels = 1:ne(g),
+            #vertexfillcolors=[colorant"cyan", colorant"purple"],
+            #edgelist  = [Edge(2=>8)],
+            edgelines = 1:100, #:none, #range(1, ne(g), step=1),
+            edgelabels = ["GRID"],# vertexfillcolors = (v, c) -> begin
+            #edgelabels = 1:89,
             #     sethue(rand(), rand(), rand())
             #     circle(c[v], 6, :fill)
             #     end,
@@ -42,9 +43,8 @@ cycles = cycle_basis(g)
             #     sethue(rand(), rand(), rand())
             #     circle(c[v], 20, :fill)
             #     end,
-            #edgestrokecolors=[colorant"cyan", colorant"red", colorant"blue"],
-            #edgestrokeweights=[2, 1],
-            #edgetextcolors=colorant"cyan",
-            #edgelabels = 1:89,
+            #edgestrokecolors=[colorant"cyan", colorant"red"],
+            #edgestrokeweights=[1, 2.5],
+            edgelabelcolors=colorant"cyan",
             )
 end 1000 1000 # hide
