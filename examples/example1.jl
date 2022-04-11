@@ -8,6 +8,7 @@ function test1()
     tiles = Tiler(600, 600, 4, 4)
 
     for (pos, n) in tiles
+        println(n)
         @layer begin
             randomhue()
             translate(pos)
@@ -48,27 +49,61 @@ function test1()
                 drawgraph(g, vertexshapes=:square, boundingbox=bb, margin=10, layout=(g) -> spectral(adjacency_matrix(g), dim=3))
             elseif n == 7
                 g = complete_digraph(5)
-                drawgraph(g, margin=10, vertexshapes=(vertex, coordinates) -> begin
+                drawgraph(g, margin=10, vertexshapes=(vertex) -> begin
                         for i in 1:5:30
                             randomhue()
-                            circle(coordinates[vertex], i, :stroke)
+                            circle(O, i, :stroke)
                         end
-                    end, boundingbox=bb, layout=(g) -> spectral(adjacency_matrix(g), dim=2))
+                    end, boundingbox=bb,
+                    # layout=(g) -> spectral(adjacency_matrix(g), dim=2)
+                    )
             elseif n == 8
                 g = complete_digraph(15)
                 drawgraph(g, layout=shell, margin=0, boundingbox=bb,
-                    edgelabels=(n, f, t) ->
+                    edgelabels=(n, s, d, f, t) ->
                         begin
                             randomhue()
                             label(string(n), :n, midpoint(f, t) + Point(isodd(n) ? -10 : 20, 0), offset=20)
                             line(f, t, :stroke)
                         end)
             elseif n == 10
-                g = path_graph(6)
-                drawgraph(g, boundingbox=bb, vertexlabeltextcolors=["red", "blue"], vertexfillcolors=["green", :none, "blue"], vertexshapes=[:circle, :square], vertexlabels=1:6, layout=shell)
+                g = clique_graph(4, 10)
+                drawgraph(g,
+                    boundingbox=bb,
+                    vertexlabeltextcolors=["red", "blue"],
+                    vertexfillcolors=["green", :none, "blue"],
+                    vertexshapes=[:circle, :square],
+                    vertexlabels=1:nv(g),
+                    layout=shell)
+            elseif n == 11
+                g = barbell_graph(5, 5)
+                drawgraph(g,
+                    boundingbox=bb,
+                    vertexlabeltextcolors=["red", "blue"],
+                    vertexfillcolors=["green", :none, "blue"],
+                    vertexshapes=[:circle, :square],
+                    vertexlabels=1:nv(g),
+                    layout=stress)
+            elseif n == 12
+                g = ladder_graph(7)
+                drawgraph(g,
+                    boundingbox=bb,
+                    vertexlabeltextcolors=["red", "blue"],
+                    vertexfillcolors=["green", :none, "blue"],
+                    vertexshapes=[:circle, :square],
+                    vertexlabels=1:nv(g),
+                    layout=squaregrid)
+            elseif n == 13
+                g, dists = euclidean_graph(5, 2)
+                drawgraph(g,
+                    boundingbox=bb,
+                    vertexlabels=1:nv(g),
+                    layout=stress)
+
+
             else
-                g = path_graph(12)
-                drawgraph(g, margin=20, boundingbox=bb, layout=shell)
+                g = lollipop_graph(12, 3)
+                drawgraph(g, margin=20, boundingbox=bb, layout=stress)
             end
         end
     end

@@ -404,6 +404,34 @@ end
 end 600 400
 ```
 
+The more code you're prepared to write, the more elaborate your labels can be:
+
+```@example graphsection
+sources      = [1,2,1]
+destinations = [2,3,3]
+weights      = [0.5, 0.8, 2.0]
+g = SimpleWeightedGraph(sources, destinations, weights)
+@drawsvg begin
+	background("grey10")
+	sethue("gold")
+	drawgraph(g,
+		vertexlabels = 1:nv(g),
+		vertexshapesizes = 20,
+		vertexlabelfontsizes = 30,
+		edgelabels = (edgenumber, edgesrc, edgedest, from, to) -> begin
+			@layer begin
+				sethue("black")
+				box(midpoint(from, to), 50, 30, :fill)
+			end
+			box(midpoint(from, to), 50, 30, :stroke)
+			text(string(get_weight(g, edgesrc, edgedest)),
+				midpoint(from, to),
+				halign=:center,
+				valign=:middle)
+		end)
+end 600 300
+```
+
 ### `edgelist`
 
 This example draws the graph twice; once with all the edges, and once with only the edges in `edgelist`. Here, `edgelist` is the path from vertex 15 to vertex 17, drawn in a sickly translucent yellow.
@@ -433,8 +461,6 @@ end 600 600
 ### `edgecurvature`
 
 ### `edgestrokecolors`
-
-TODO: bug in color setting code
 
 ```@example graphsection
 g = barbell_graph(3, 3)

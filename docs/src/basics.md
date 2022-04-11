@@ -1,14 +1,5 @@
 ```@setup graphsection
 using Karnak, Luxor, Graphs, NetworkLayout, Colors, SimpleWeightedGraphs
-
-# these bright colors work on both white and dark backgrounds
-#  "fuchsia" "magenta" "magenta1" "brown1" "firebrick1"
-#  "blue" "blue1" "red" "red1" "purple1" "royalblue1"
-#  "orangered" "orangered1" "deeppink" "deeppink1" "maroon1"
-#  "darkorchid1" "dodgerblue" "dodgerblue1" "blue2"
-#  "purple2" "royalblue2" "dodgerblue2" "slateblue2"
-#  "mediumslateblue" "darkorchid2" "violetred2" "maroon2"
-#  "orangered2" "brown2"
 ```
 
 # Tutorial
@@ -20,26 +11,29 @@ of Julia programming.
 
 ## Graphs, vertices, and edges
 
-Graph theory is used for analysing networks and relationships. A typical graph consists of:
+Graph theory is used for analysing networks and
+relationships between things. A typical graph consists of:
 
 - vertices, which represent the things or entities
 
-- edges, which describe how these things or entities connect and relate to each other
+- edges, which describe how these things or entities connect
+- and relate to each other
 
-The Graphs.jl package provides many ways to create graphs. We'll start off with this basic approach:
+The Graphs.jl package provides many ways to create graphs.
+We'll start off with this basic approach:
 
 ```julia
 using Graphs
 g = Graph()
 ```
 
-The `Graph()` function creates a new empty graph and stores it in `g`. Let's add a single vertex:
+The `Graph()` function creates a new empty graph and stores it in `g`.
+(You can use `SimpleGraph()` as well as `Graph()`.)
+Let's add a single vertex:
 
 ```julia
 add_vertex!(g)
 ```
-
-(You can use `SimpleGraph()` as well as `Graph()`.)
 
 We can easily add a number of new vertices:
 
@@ -72,7 +66,7 @@ add_edge!(g, 1, 4)
 
 @drawsvg begin
  background("grey10")
- sethue("fuchsia")
+ sethue("orange")
  drawgraph(g, vertexlabels = [1, 2, 3, 4])
 end 600 300
 ```
@@ -81,19 +75,9 @@ This is one of the many ways this graph can be represented visually. The coordin
 
 ## Undirected and directed graphs
 
-There are two main types of graph, **undirected** and **directed**. In our undirected graph `g` above, vertex 1 and vertex 2 are connected, but there's no way to specify or see a direction for that connection. For example, if the graph was modelling people making financial transactions, we couldn't tell whether the person at vertex 1 sent money to the person at vertex 2, or received money from them.
+We'll meet two main types of graph, **undirected** and **directed**. In our undirected graph `g` above, vertex 1 and vertex 2 are neighbors, connected by an edge, but there's no way to specify or see a direction for that connection. For example, if the graph was modelling people making financial transactions, we couldn't tell whether the person at vertex 1 sent money to the person at vertex 2, or received money from them.
 
 In Graphs.jl we can create directed graphs with `DiGraph()` (also `SimpleDiGraph()`).
-
-```julia
-gd = DiGraph()
-add_vertices!(gd, 4)
-add_edge!(gd, 1, 2)
-add_edge!(gd, 1, 3)
-add_edge!(gd, 2, 3)
-add_edge!(gd, 1, 4) # vertex 1 to vertex 4
-add_edge!(gd, 4, 1) # vertex 4 to vertex 1
-```
 
 ```@example graphsection
 gd = DiGraph()
@@ -101,8 +85,8 @@ add_vertices!(gd, 4)
 add_edge!(gd, 1, 2)
 add_edge!(gd, 1, 3)
 add_edge!(gd, 2, 3)
-add_edge!(gd, 1, 4)
-add_edge!(gd, 4, 1)
+add_edge!(gd, 1, 4) # vertex 1 to vertex 4
+add_edge!(gd, 4, 1) # vertex 4 to vertex 1
 @drawsvg begin
 background("grey10")
 sethue("slateblue")
@@ -112,18 +96,22 @@ end 600 300
 
 In is representation of our directed graph `gd`, we can now see the direction of the edges joining vertices. Notice how vertices 1 and 4 are doubly connected, because there's one edge for each direction.
 
-## Simpler simple graphs
+Neither of these graphs is **connected**. In a connected graph, every vertex is connected to every other via some path, a sequence of edges.
 
-Creating graphs by typing the connections manually isn't always convenient, so you might prefer to use the `Graph/SimpleGraph` and `DiGraph/SimpleDiGraph` constructors:
+## Very simple graphs
+
+Creating graphs by typing the connections manually is tedious, so you might prefer to use the `Graph/SimpleGraph` and `DiGraph/SimpleDiGraph` constructors:
 
 ```@example graphsection
 g = Graph(10, 5) # 10 vertices, 5 edges
-gd = SimpleDiGraph(5, 3) # 5 vertices, 3, edges
+
 d1 = @drawsvg begin
-    background("grey10")
-    sethue("gold")
-    drawgraph(g, vertexlabels = 1:nv(g))
+background("grey10")
+sethue("gold")
+drawgraph(g, vertexlabels = 1:nv(g))
 end 400 300
+
+gd = SimpleDiGraph(5, 3) # 5 vertices, 3, edges
 
 d2 = @drawsvg begin
 background("grey10")
@@ -131,6 +119,7 @@ setline(0.5)
 sethue("firebrick")
 drawgraph(gd, vertexlabels = 1:nv(g))
 end 400 300
+
 hcat(d1, d2)
 ```
 
@@ -159,7 +148,7 @@ g = complete_digraph(N)
 d1 = @drawsvg begin
 background("grey10")
 setline(0.5)
-sethue("fuchsia")
+sethue("orange")
 drawgraph(g, vertexlabels = 1:nv(g))
 end 600 300
 ```
@@ -190,18 +179,17 @@ g = Graphs.grid([M, N]) # grid((m, n))
 d1 = @drawsvg begin
 background("grey10")
 setline(0.5)
-sethue("fuchsia")
+sethue("orange")
 drawgraph(g, vertexlabels = 1:nv(g), layout=stress)
 end 600 300
 ```
-Star graphs (`star_graph(n)`) and wheel graphs (`wheel_graph(n)`) are usefully named:
-
+Star graphs (`star_graph(n)`) and wheel graphs (`wheel_graph(n)`) deliver what their names promise.
 
 ```@example graphsection
 g = star_graph(12)
 d1 = @drawsvg begin
     background("grey10")
-    sethue("fuchsia")
+    sethue("orange")
     drawgraph(g, vertexlabels=1:nv(g), layout=stress)
 end 600 300
 ```
@@ -210,16 +198,16 @@ end 600 300
 g = wheel_graph(12)
 d1 = @drawsvg begin
     background("grey10")
-    sethue("fuchsia")
+    sethue("orange")
     drawgraph(g, vertexlabels=1:nv(g), layout=stress)
 end 600 300
 ```
 
 ### Even more well-known graphs
 
-There are probably as many graphs as there possible games of chess, but in both fields, the more commonly seen patterns have been studied extensively.
+There are probably as many graphs as there are possible games of chess. In both fields, the more commonly seen patterns have been studied extensively by enthusiasts.
 
-These well-known graphs are provided by the `smallgraph()` function. Supply a symbol, such as `:bull`, or `:house`.
+Many well-known graphs are provided by the `smallgraph()` function. Supply a symbol, such as `:bull`, or `:house`.
 
 ```@setup smallgraphs
 using Karnak, Luxor, Graphs, NetworkLayout
@@ -248,15 +236,17 @@ smallgraphs = (
 (:truncatedtetrahedron_dir, "truncated tetrahedron"),
 (:tutte, "Tutte"))
 
-colors = ["fuchsia", "brown1", "firebrick1",
+colors = ["orange", "brown1", "firebrick1",
 "blue", "red", "purple1", "royalblue1",
 "orangered", "orangered1", "deeppink", "deeppink1", "maroon1",
 "darkorchid1", "dodgerblue", "dodgerblue1", "blue2",
 "purple2", "royalblue2", "dodgerblue2", "slateblue2",
 "mediumslateblue", "darkorchid2", "violetred2", "maroon2",
 "orangered2", "brown2"]
+
 smallgraphs = @drawsvg begin
-sethue("fuchsia")
+background("grey10")
+sethue("orange")
 ng = length(smallgraphs)
 N = convert(Int, ceil(sqrt(ng)))
 tiles = Tiler(800, 800, N, N)
@@ -269,6 +259,7 @@ sethue(colors[mod1(n, end)])
 bbox = BoundingBox(box(O, tiles.tilewidth, tiles.tileheight))
 g = smallgraph(first(smallgraphs[n]))
 drawgraph(g, boundingbox=bbox, vertexshapesizes = 2, layout = stress)
+sethue("cyan")
 text(string(last(smallgraphs[n])), halign=:center, boxbottomcenter(bbox))
 end
 end
@@ -279,16 +270,16 @@ end 800 800
 smallgraphs # hide
 ```
 
-You will have no trouble finding out more about these well-known graphs on the Wikipedia.
-Some of the graphs in this illustration would benefit from some careful adjustment of the layout parameters.
+You will have no trouble finding out more about these well-known graphs online, such as on the wikipedia.
+Some of the graphs in this illustration would benefit from attentive ‘tuning’ of the various layout parameters.
 
-Here's a larger view of the Petersen graph (named after Julius Petersen, who first described in 1898).
+Here's a larger view of a Petersen graph (named after Julius Petersen, who first described it in 1898).
 
 ```@example graphsection
 @drawsvg begin
 background("grey10")
 pg = smallgraph(:petersen)
-sethue("fuchsia")
+sethue("orange")
 drawgraph(pg, vertexlabels = 1:nv(pg), layout = Shell(nlist=[6:10,]))
 end 600 300
 ```
@@ -297,7 +288,7 @@ end 600 300
 @drawsvg begin
 background("grey10")
 g = smallgraph(:cubical)
-sethue("fuchsia")
+sethue("orange")
 drawgraph(g, layout = Spring(Ptype=Float64))
 end 600 300
 ```
@@ -332,6 +323,7 @@ julia> neighbors(pg, 1)
  6
 ```
 
+
 We can iterate over vertices and edges.
 
 To step through each vertex:
@@ -352,7 +344,7 @@ end
 Iterating over edges will give a value of type `Edge`, and the `src()` and
 and `dst()` functions applied to an edge argument return the numbers of the source and destination vertices respectively.
 
-```
+```julia
 for e in edges(pg)
     println(src(e), " => ", dst(e))
 end
@@ -375,11 +367,35 @@ end
 
 To add an edge, do:
 
-```
+```julia
 add_edge!(df, 1, 2) # from vertex 1 to 2
 ```
 
-Others: has_vertex(g, v) has_edge(g, s, d)
+It's sometimes useful to be able to see these relationships between neighbors visually.
+
+```@example graphsection
+@drawsvg begin
+background("grey10")
+pg = smallgraph(:petersen)
+
+vertexofinterest = 10
+E = []
+for (n, e) in enumerate(edges(pg))
+	if dst(e) == vertexofinterest || src(e) == vertexofinterest
+		push!(E, n)
+	end
+end
+
+drawgraph(pg,
+	vertexlabels = 1:nv(pg),
+	layout = Shell(nlist=[6:10,]),
+	vertexfillcolors = (v) -> ((v == vertexofinterest) || v ∈ neighbors(pg, vertexofinterest)) && sethue(colorant"blue"),
+	vertexshapesizes = [v == vertexofinterest ? 20 : 10 for v in 1:nv(pg)],
+	edgestrokecolors = (e, f, t) -> (e ∈ E) ? colorant"red" : colorant"blue")
+end 600 300
+```
+
+Other useful functions in Graphs.jl include `has_vertex(g, v)` and `has_edge(g, s, d)`.
 
 ## Graphs as matrices
 
@@ -408,7 +424,7 @@ julia> adjacency_matrix(pg)
 @drawsvg begin
 background("grey10")
 pg = smallgraph(:petersen)
-sethue("fuchsia")
+sethue("orange")
 drawgraph(pg, vertexlabels = 1:nv(pg), layout = Shell(nlist=[6:10,]))
 end 600 400
 ```
@@ -427,7 +443,7 @@ m = [0 1 1 0 0;
 @drawsvg begin
 background("grey10")
 hg = Graph(m)
-sethue("fuchsia")
+sethue("orange")
 drawgraph(hg, vertexlabels=1:nv(hg), layout=stress)
 end 800 400
 ```
@@ -469,16 +485,20 @@ Here, values of 1 and -1 are used to indicate directions, so the first column,`-
 An incidence matrix is another useful way of quickly defining a graph. That's why we can pass an incidence matrix to the `Graph()` and `DiGraph()` functions to create new graphs.
 
 ```@example graphsection
-g = Graph([1 0 1 0;   
-           0 1 1 1;
-           1 1 0 0;
-           0 1 0 0])
+g = [0 1 1;
+     1 0 1;
+     1 1 0]
 
 @drawsvg begin
-background("grey10")
-sethue("fuchsia")
-drawgraph(g, vertexlabels=1:4, edgecurvature=10, layout=shell)
-end 600 300
+background("grey20")
+drawgraph(Graph(g),
+    layout = ngon(O, 120, 3, π/6, vertices=true),
+    vertexshapes = :circle,
+    vertexshapesizes = 70,
+    edgestrokeweights = 25,
+    edgestrokecolors = colorant"gold",
+    vertexfillcolors = [colorant"#CB3C33", colorant"#389826", colorant"#9558B2"])
+end 600 400
 ```
 
 ### Adjacency list
@@ -539,7 +559,7 @@ g = Graph(30, [
 
 @drawsvg begin
 background("grey10")
-sethue("fuchsia")
+sethue("orange")
 drawgraph(g, layout=stress)
 end 600 300
 ```
@@ -563,9 +583,9 @@ Graphs.jl has many features for traversing graphs and finding paths. We can look
 
     The study of graphs uses a lot of terminology, and many
     of the terms also have informal and familiar
-    definitions. Usually the informal definitions are
-    reasonably accurate and appropriate, but note that they
-    also have precise definitions in the literature.
+    meanings. Usually the informal meanings are
+    reasonably accurate and appropriate, but note that the
+    words also have more precise definitions in the literature.
 
 ### Paths and cycles
 
@@ -650,10 +670,9 @@ add_edge!(wg, 1, 2, 10_000_000)
 @drawsvg begin
     sethue("gold")
     drawgraph(wg, edgecurvature=10,
-    vertexlabels = 1:nv(wg),
-    edgelabelcolors = colorant"yellow",
-    edgelabels=[get_weight(wg, src(e), dst(e)) for e in edges(wg)]
-    )
+        vertexlabels = 1:nv(wg),
+        edgelabels = [get_weight(wg, src(e), dst(e)) for e in edges(wg)],
+        edgelabelcolors = [get_weight(wg, src(e), dst(e)) > 10 ? colorant"red" : colorant"green" for e in edges(wg)])
 end
 ```
 

@@ -1,4 +1,4 @@
-using  Graphs, Karnak, NetworkLayout
+using  Graphs, Luxor, Karnak
 m = [0 1 1 0 0;
      1 0 0 1 0;
      1 0 0 1 1;
@@ -9,5 +9,5 @@ m = [0 1 1 0 0;
 hg = Graph(m)
 #translate(boxbottomleft())
 sethue("fuchsia")
-drawgraph(hg, margin=20, layout=squaregrid, vertexlabels = 1:nv(hg))
+drawgraph(hg, layout=squaregrid, vertexlabels = 1:nv(hg))
 end 900 500
