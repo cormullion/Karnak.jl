@@ -16,7 +16,7 @@ function _normalize_layout_coordinates(rawcoordinates, boundingbox, margin)
         @warn "3D coordinates returned by layout function"
     end
 
-    bb = BoundingBox(map(p -> Point(p[1], p[2]), rawcoordinates))
+    bb = BoundingBox(map(p -> Point(p[1], -p[2]), rawcoordinates))
     BB = boundingbox - margin
     offset = boxmiddlecenter(BB) - boxmiddlecenter(bb)
 
@@ -24,16 +24,19 @@ function _normalize_layout_coordinates(rawcoordinates, boundingbox, margin)
     H = boxheight(BB)
     w = boxwidth(bb)
     h = boxheight(bb)
-    if w <= h && W <= H
-        sf = H/h
-    elseif w < h && W > H
+    if  w > h && W > H
+#        @show "case 1, W $W H $H w $w h $h"
         sf = H/h
     elseif w > h && W <= H
+#        @show "case 2, W $W H $H w $w h $h"
         sf = W/w
-    else w > h && W > H
-        sf = H/w
+    elseif w <= h && W > H
+#        @show "case 3, W $W H $H w $w h $h"
+        sf = H/h
+    elseif w <= h && W <= H
+#        @show "case 4, W $W H $H w $w h $h"
+        sf = H/h
     end
-
     # looks like networklayout uses y at top increasing downwards convention
     # fix it by using top edge of bounding box
     return [(sf * offset) + (sf * (Point(first(p), -last(p)))) for p in rawcoordinates]
