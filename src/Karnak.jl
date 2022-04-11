@@ -31,13 +31,14 @@ function _normalize_layout_coordinates(rawcoordinates, boundingbox, margin)
     elseif w > h && W <= H
         sf = W/w
     else w > h && W > H
-        sf = H/h
+        sf = H/w
     end
 
-    # TODO looks like networklayout uses y at top increasing downwards convention
-    # fix it here?
-    return [(sf * offset) + sf * (Point(first(p), last(p))) for p in rawcoordinates]
+    # looks like networklayout uses y at top increasing downwards convention
+    # fix it by using top edge of bounding box
+    return [(sf * offset) + (sf * (Point(first(p), -last(p)))) for p in rawcoordinates]
 end
+
 
 function _drawedgelines(from, to;
     edgenumber = 1,

@@ -103,7 +103,7 @@ pts = vcat(
 circle.(pts, 1, :fill)
 drawgraph(g, vertexlabels = 1:nv(g), layout = pts,
     edgestrokeweights = 0.5,
-	edgestrokecolors = (n, f, t) -> sethue(HSB(rescale(n, 1, ne(g), 0, 360), 0.6, 0.9)))
+	edgestrokecolors = (n, f, t) -> HSB(rescale(n, 1, ne(g), 0, 360), 0.6, 0.9))
 end 600 300
 ```
 
@@ -475,7 +475,7 @@ g = barbell_graph(3, 3)
         edgestrokeweights = 2 * (1:ne(g)),
         edgelabelcolors = colorant"white",
         edgestrokecolors=(edgenumber, from, to) ->
-            sethue(HSB(rescale(edgenumber, 1, ne(g), 0, 359), .8, .8))
+            HSB(rescale(edgenumber, 1, ne(g), 0, 359), .8, .8)
           )
 end 600 500
 ```

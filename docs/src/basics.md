@@ -484,6 +484,8 @@ Here, values of 1 and -1 are used to indicate directions, so the first column,`-
 
 An incidence matrix is another useful way of quickly defining a graph. That's why we can pass an incidence matrix to the `Graph()` and `DiGraph()` functions to create new graphs.
 
+Here's a vaguely familiar image:
+
 ```@example graphsection
 g = [0 1 1;
      1 0 1;
