@@ -391,9 +391,10 @@ end
 drawgraph(pg,
     vertexlabels = 1:nv(pg),
     layout = Shell(nlist=[6:10,]),
-    vertexfillcolors = (v) -> ((v == vertexofinterest) || v ∈ neighbors(pg, vertexofinterest)) && sethue(colorant"blue"),
+    vertexfillcolors = (v) -> ((v == vertexofinterest) || v ∈ neighbors(pg, vertexofinterest)) && colorant"blue",
     vertexshapesizes = [v == vertexofinterest ? 20 : 10 for v in 1:nv(pg)],
-    edgestrokecolors = (e, f, t) -> (e ∈ E) ? colorant"red" : colorant"blue")
+    edgestrokecolors = (e, f, t) -> (e ∈ E) ? colorant"red" : colorant"blue"
+    )
 end 600 300
 ```
 
@@ -622,7 +623,7 @@ cycles = cycle_basis(g)
 
 
 ```
-### Shortest paths
+### Shortest paths: the A* algorithm
 
 One way to find the shortest path between two vertices is to use the `a_star()` function, and provide the graph, the start vertex, and the end vertex. The function returns a list of edges.
 
@@ -630,9 +631,58 @@ One way to find the shortest path between two vertices is to use the `a_star()` 
 
 The function finds the shortest path and returns an array of edges that define the path.
 
-### Spanning trees
+```@example graphsection
+@drawsvg begin
+background("grey20")
 
-A spanning tree is a set of edges that connect all the vertices of a graph together.
+sethue("lemon chiffon")
+g = binary_tree(5)
+dirg = SimpleDiGraph(collect(edges(g)))
+
+astar = a_star(dirg, 1, 24)
+
+drawgraph(dirg, layout=buchheim)
+
+drawgraph(dirg, layout=buchheim,
+    vertexlabels = 1:nv(g),
+    vertexshapes = (vtx) -> box(O, 30, 20, :fill),
+    vertexlabelfontsizes = 16,
+    vertexfillcolors = (vtx) -> (vtx ∈ src.(astar) || vtx ∈ dst.(astar))  && colorant"red",
+    edgelist = astar)
+end 800 400
+```
+
+The A* algorithm is useful for finding paths through mazes. A grid graph is subjected to some random vandalism, removing  a fair number of edges, the route through the maze was easily found by `a_star()`.
+
+```@example graphsection
+using  Random
+
+Random.seed!(67)
+@drawsvg begin
+background("grey50")
+
+W, H = 30, 30
+g = grid((W, H))
+
+let
+    c = 0
+    while c < 500
+        v = rand(1:W*H)
+        rem_edge!(g, v, [v-1, v+1, v-W, v+H][rand(1:end)]) && (c += 1)
+    end
+end
+
+sethue("grey10")
+drawgraph(g, vertexshapes= :none, layout=squaregrid)
+
+astar = a_star(g, 1, W * H)
+
+sethue("orange")
+
+drawgraph(g, vertexshapes= :none, layout=squaregrid, edgelist=astar, edgestrokeweights=10)
+
+end 600 600
+```
 
 ## Weighted graphs
 
@@ -650,7 +700,7 @@ using Graphs, SimpleWeightedGraphs
 wg = SimpleWeightedGraph()
 ```
 
-This creates a new empty weighted undirected graph, or we can pass an existing graph to this function:
+This creates a new, empty, weighted, undirected, graph. Or we can pass an existing graph to this function:
 
 ```julia
 wg = SimpleWeightedGraph(Graph(6, 15), 4.0)
@@ -678,8 +728,10 @@ add_edge!(wg, 1, 2, 10_000_000)
     drawgraph(wg, edgecurvature=10,
         vertexlabels = 1:nv(wg),
         edgelabels = [get_weight(wg, src(e), dst(e)) for e in edges(wg)],
-        edgelabelcolors = [get_weight(wg, src(e), dst(e)) > 10 ? colorant"red" : colorant"green" for e in edges(wg)])
-end
+        edgelabelcolors =
+            [get_weight(wg, src(e), dst(e)) > 10 ?
+                colorant"red" : colorant"green" for e in edges(wg)])
+end 600 300
 ```
 
 If you look at the graph's adjacency matrix, you'll see that the weights have replaced the 1s:
@@ -697,5 +749,84 @@ adjacency_matrix(wg)
 
 For a directed graph, each edge can have two weights, one from src to dst, the other from dst to src.     
 
+Note that `a_star()` doesn't work with weighted graphs yet.
 
-a_star() doesnt work with weighted graphs yet.
+### Spanning trees
+
+A spanning tree is a set of edges that connect all the vertices of a graph together, without forming any cycles. There are various functions for finding spanning trees in Graphs.jl, including algorithms by Otakar Borůvka (`boruvka_mst()`), Joseph Kruskal (`kruskal_mst()`), and Robert Prim (`prim_mst()`). (Immortality can be attained by inventing a new graph-spanning algorithm.)
+
+When used on a weighted graph, these functions find the minimum possible tree - the tree that scores the lowest when the weights of the edges are added up. (Some of them can also find the highest-scoring trees.)
+
+```@example graphsection
+@drawsvg begin
+background("grey20")
+
+g = SimpleWeightedGraph(smallgraph(:octahedral))
+
+for e in edges(g)
+    add_edge!(g, src(e), dst(e), rand(1:10))
+end
+add_edge!(g, 1, 4, 200)
+
+sethue("grey50")
+drawgraph(g, layout=spring, vertexshapesizes = 20, edgestrokeweights = 3,
+    edgelabels = (k, src, dest, f, t) ->
+    (sethue("cyan"); label(string(get_weight(g, src, dest)), :nw, midpoint(f, t))))
+
+mst, weights = boruvka_mst(g)
+sethue("gold")
+drawgraph(g, vertexshapes = :none, layout=spring, edgelist = mst, edgestrokeweights = 15)
+
+mst = kruskal_mst(g)
+sethue("green")
+drawgraph(g, layout=spring, vertexshapes = :none, edgelist = mst, edgestrokeweights = 10)
+
+mst = prim_mst(g)
+sethue("red")
+drawgraph(g, layout=spring, vertexshapes = :none, edgelist = mst, edgestrokeweights = 3)
+
+sethue("black")
+drawgraph(g, layout=spring, vertexlabels = 1:nv(g), edgelines=:none)
+
+end 600 400
+```
+
+Notice how all the spanning trees found avoid the edge joining 1 and 4, which has been given a weight of 200.0.
+
+Here's `boruka_mst()` looking for the maximum spanning tree; `Edge(1 => 4)` is always included now.
+
+```@example graphsection
+@drawsvg begin
+background("grey20")
+
+g = SimpleWeightedGraph(smallgraph(:octahedral))
+
+for e in edges(g)
+    add_edge!(g, src(e), dst(e), rand(1:10))
+end
+add_edge!(g, 1, 4, 200)
+
+sethue("grey50")
+drawgraph(g, layout=spring,
+    vertexshapesizes = 20,
+    edgestrokeweights = 3,
+    edgelabels = (k, src, dest, f, t) ->
+        begin
+            sethue("orange")
+            label(string(get_weight(g, src, dest)), :nw, midpoint(f, t))
+        end)
+
+mst, weights = boruvka_mst(g, minimize=false)
+sethue("gold")
+drawgraph(g, layout=spring,
+        vertexshapes = :none,
+        edgelist = mst,
+        edgestrokeweights = 15)
+
+sethue("black")
+drawgraph(g, layout=spring,
+    vertexlabels = 1:nv(g),
+    edgelines=:none)
+
+end 600 400
+```

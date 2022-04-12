@@ -44,7 +44,7 @@ sethue("purple")
 g = smallgraph(:karate)
 drawgraph(g, layout=stress,
 	vertexshapes = [:square, :circle],
-	vertexfillcolors = (v) -> if v ∈ (1, 3, 6) sethue("red") end,
+	vertexfillcolors = (v) -> v ∈ (1, 3, 6) ? colorant"red" : colorant"grey40",
 	vertexstrokecolors = colorant"orange",
 	vertexstrokeweights = range(0.5, 4, length=nv(g)),
 	vertexshapesizes = 2 .* [Graphs.outdegree(g, v) for v in Graphs.vertices(g)],
@@ -225,10 +225,11 @@ background("grey10")
 g = smallgraph(:karate)
 sethue("slateblue")
 drawgraph(g, layout=stress,
-    vertexfillcolors = (v) -> if v ∈ (1, 3, 6) sethue("red") end,
+    vertexfillcolors = (v) -> v ∈ (1, 3, 6) && colorant"red",
     vertexlabels  = 1:nv(g),
     vertexlabelfontsizes=[Graphs.outdegree(g, v) for v in Graphs.vertices(g)],
     vertexshapesizes=[Graphs.outdegree(g, v) for v in Graphs.vertices(g)])
+
 end 600 300
 ```
 
@@ -243,6 +244,37 @@ drawgraph(g, layout=stress,
     vertexlabels  = ["1", ""],
     vertexshapesizes = [10, 0])
 end 600 300
+```
+
+```@example graphsection
+function whiten(col::Color, f=0.5)
+    hsl = convert(HSL, col)
+    h, s, l = hsl.h, hsl.s, hsl.l
+    return convert(RGB, HSL(h, s, f))
+end
+
+function drawball(pos, ballradius, col::Color;
+    	fromlum=0.2,
+    	tolum=1.0)
+    gsave()
+    translate(pos)
+    for i in ballradius:-0.25:1
+        sethue(whiten(col, rescale(i, ballradius, 0.5, fromlum, tolum)))
+        offset = rescale(i, ballradius, 0.5, 0, -ballradius/2)
+        circle(O + (offset, offset), i, :fill)
+    end
+    grestore()
+end
+
+@drawsvg begin
+background("grey4")
+g = grid((10, 10))
+drawgraph(g,
+	layout = squaregrid,
+	edgelines = 0,
+	vertexshapes = (v) -> drawball(O, 25, RGB([Luxor.julia_red,Luxor.julia_purple, Luxor.julia_green][rand(1:end)]...))
+)
+end 600 600
 ```
 
 ### `vertexshaperotations`
@@ -277,7 +309,7 @@ drawgraph(g, layout=stress,
 end 600 300
 ```
 
-This function should set the current Luxor color:
+This function should return a Colorant:
 
 ```@example graphsection
 @drawsvg begin
@@ -287,10 +319,21 @@ sethue("darkorange")
 drawgraph(g, layout=spring,
     vertexshapes = :square,
     vertexshapesizes =  20,
-    vertexfillcolors = (v) -> sethue(HSB(rescale(v, 1, nv(g), 0, 359), 1, 1)))
+    vertexfillcolors = (v) -> HSB(rescale(v, 1, nv(g), 0, 359), 1, 1))
 end 600 300
 ```
 
+```@example graphsection
+@drawsvg begin
+background("grey30")
+sethue("orange")
+g = grid((20, 20))
+drawgraph(g,
+	layout = squaregrid,
+	vertexfillcolors =
+		[RGB(rand(), rand(), rand()) for i in  1:nv(g)])
+end 600 600
+```
 By now, I think you get the general idea. Try playing with the following keyword arguments:
 
 - `vertexstrokeweights`
@@ -434,7 +477,7 @@ end 600 300
 
 ### `edgelist`
 
-This example draws the graph twice; once with all the edges, and once with only the edges in `edgelist`. Here, `edgelist` is the path from vertex 15 to vertex 17, drawn in a sickly translucent yellow.
+This example draws the graph more than once; once with all the edges, and once with only the edges in `edgelist`, where `edgelist` is the path from vertex 15 to vertex 17, drawn in a sickly translucent yellow. The path is marked with X marks the spot cyan-colored shapes.
 
 ```@example graphsection
 @drawsvg begin
@@ -453,6 +496,12 @@ This example draws the graph twice; once with all the edges, and once with only 
 		edgelist = astar,
 		edgestrokecolors=RGBA(1, 1, 0, 0.35),
 		edgestrokeweights=20)
+	drawgraph(g,
+		layout=stress,
+		edgelines=0,
+		vertexshapes = (v) -> v ∈ src.(astar) && polycross(O, 20, 4, 0.5, π/4, :fill),
+	 	vertexfillcolors = (v) -> v ∈ src.(astar) && colorant"cyan"
+		)
 end 600 600
 ```
 
