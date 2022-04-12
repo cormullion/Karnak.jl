@@ -1,21 +1,22 @@
 <!DOCTYPE html>
-<html lang="en"><head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/><title>Basic graphs · Karnak</title><script data-outdated-warner src="assets/warner.js"></script><link href="https://cdnjs.cloudflare.com/ajax/libs/lato-font/3.0.0/css/lato-font.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/juliamono/0.039/juliamono-regular.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/fontawesome.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/solid.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/brands.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.13.11/katex.min.css" rel="stylesheet" type="text/css"/><script>documenterBaseURL="."</script><script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js" data-main="assets/documenter.js"></script><script src="siteinfo.js"></script><script src="../versions.js"></script><link class="docs-theme-link" rel="stylesheet" type="text/css" href="assets/themes/documenter-dark.css" data-theme-name="documenter-dark" data-theme-primary-dark/><link class="docs-theme-link" rel="stylesheet" type="text/css" href="assets/themes/documenter-light.css" data-theme-name="documenter-light" data-theme-primary/><script src="assets/themeswap.js"></script></head><body><div id="documenter"><nav class="docs-sidebar"><a class="docs-logo" href="index.html"><img src="assets/logo.svg" alt="Karnak logo"/></a><div class="docs-package-name"><span class="docs-autofit"><a href="index.html">Karnak</a></span></div><form class="docs-search" action="search.html"><input class="docs-search-query" id="documenter-search-query" name="q" type="text" placeholder="Search docs"/></form><ul class="docs-menu"><li><a class="tocitem" href="index.html">Introduction to Karnak</a></li><li class="is-active"><a class="tocitem" href="basics.html">Basic graphs</a><ul class="internal"><li><a class="tocitem" href="#Graphs,-vertices,-and-edges"><span>Graphs, vertices, and edges</span></a></li><li><a class="tocitem" href="#Undirected-and-directed-graphs"><span>Undirected and directed graphs</span></a></li><li><a class="tocitem" href="#Very-simple-graphs"><span>Very simple graphs</span></a></li><li><a class="tocitem" href="#Well-known-graphs"><span>Well-known graphs</span></a></li><li><a class="tocitem" href="#Getting-some-information-about-the-graph"><span>Getting some information about the graph</span></a></li><li><a class="tocitem" href="#Graphs-as-matrices"><span>Graphs as matrices</span></a></li><li><a class="tocitem" href="#Paths,-cycles,-routes,-and-traversals"><span>Paths, cycles, routes, and traversals</span></a></li><li><a class="tocitem" href="#Weighted-graphs"><span>Weighted graphs</span></a></li></ul></li><li><a class="tocitem" href="syntax.html">Kwarg madness</a></li><li><input class="collapse-toggle" id="menuitem-4" type="checkbox"/><label class="tocitem" for="menuitem-4"><span class="docs-label">Reference</span><i class="docs-chevron"></i></label><ul class="collapsed"><li><a class="tocitem" href="reference/functionindex.html">Alphabetical function list</a></li><li><a class="tocitem" href="reference/api.html">Function reference</a></li></ul></li></ul><div class="docs-version-selector field has-addons"><div class="control"><span class="docs-label button is-static is-size-7">Version</span></div><div class="docs-selector control is-expanded"><div class="select is-fullwidth is-size-7"><select id="documenter-version-selector"></select></div></div></div></nav><div class="docs-main"><header class="docs-navbar"><nav class="breadcrumb"><ul class="is-hidden-mobile"><li class="is-active"><a href="basics.html">Basic graphs</a></li></ul><ul class="is-hidden-tablet"><li class="is-active"><a href="basics.html">Basic graphs</a></li></ul></nav><div class="docs-right"><a class="docs-edit-link" href="https://github.com/cormullion/Karnak.jl/blob/master/docs/src/basics.md" title="Edit on GitHub"><span class="docs-icon fab"></span><span class="docs-label is-hidden-touch">Edit on GitHub</span></a><a class="docs-settings-button fas fa-cog" id="documenter-settings-button" href="#" title="Settings"></a><a class="docs-sidebar-button fa fa-bars is-hidden-desktop" id="documenter-sidebar-button" href="#"></a></div></header><article class="content" id="documenter-page"><h1 id="Tutorial"><a class="docs-heading-anchor" href="#Tutorial">Tutorial</a><a id="Tutorial-1"></a><a class="docs-heading-anchor-permalink" href="#Tutorial" title="Permalink"></a></h1><p>This section contains an introduction to basic graph theory using the Graphs.jl package. You don&#39;t need any prior knowledge of graphs, but you should be familiar with the basics of Julia programming.</p><h2 id="Graphs,-vertices,-and-edges"><a class="docs-heading-anchor" href="#Graphs,-vertices,-and-edges">Graphs, vertices, and edges</a><a id="Graphs,-vertices,-and-edges-1"></a><a class="docs-heading-anchor-permalink" href="#Graphs,-vertices,-and-edges" title="Permalink"></a></h2><p>Graph theory is used for analysing networks and relationships between things. A typical graph consists of:</p><ul><li><p>vertices, which represent the things or entities</p></li><li><p>edges, which describe how these things or entities connect and relate to each other</p></li></ul><p>The Graphs.jl package provides many ways to create graphs. We&#39;ll start off with this basic approach:</p><pre><code class="language-julia hljs">using Graphs
+<html lang="en"><head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/><title>Basic graphs · Karnak</title><script data-outdated-warner src="assets/warner.js"></script><link href="https://cdnjs.cloudflare.com/ajax/libs/lato-font/3.0.0/css/lato-font.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/juliamono/0.039/juliamono-regular.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/fontawesome.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/solid.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/brands.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.13.11/katex.min.css" rel="stylesheet" type="text/css"/><script>documenterBaseURL="."</script><script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js" data-main="assets/documenter.js"></script><script src="siteinfo.js"></script><script src="../versions.js"></script><link class="docs-theme-link" rel="stylesheet" type="text/css" href="assets/themes/documenter-dark.css" data-theme-name="documenter-dark" data-theme-primary-dark/><link class="docs-theme-link" rel="stylesheet" type="text/css" href="assets/themes/documenter-light.css" data-theme-name="documenter-light" data-theme-primary/><script src="assets/themeswap.js"></script></head><body><div id="documenter"><nav class="docs-sidebar"><a class="docs-logo" href="index.html"><img src="assets/logo.svg" alt="Karnak logo"/></a><div class="docs-package-name"><span class="docs-autofit"><a href="index.html">Karnak</a></span></div><form class="docs-search" action="search.html"><input class="docs-search-query" id="documenter-search-query" name="q" type="text" placeholder="Search docs"/></form><ul class="docs-menu"><li><a class="tocitem" href="index.html">Introduction to Karnak</a></li><li class="is-active"><a class="tocitem" href="basics.html">Basic graphs</a><ul class="internal"><li><a class="tocitem" href="#Graphs,-vertices,-and-edges"><span>Graphs, vertices, and edges</span></a></li><li><a class="tocitem" href="#Undirected-and-directed-graphs"><span>Undirected and directed graphs</span></a></li><li><a class="tocitem" href="#Very-simple-graphs"><span>Very simple graphs</span></a></li><li><a class="tocitem" href="#Well-known-graphs"><span>Well-known graphs</span></a></li><li><a class="tocitem" href="#Getting-some-information-about-the-graph"><span>Getting some information about the graph</span></a></li><li><a class="tocitem" href="#Graphs-as-matrices"><span>Graphs as matrices</span></a></li><li><a class="tocitem" href="#Paths,-cycles,-routes,-and-traversals"><span>Paths, cycles, routes, and traversals</span></a></li><li><a class="tocitem" href="#Weighted-graphs"><span>Weighted graphs</span></a></li></ul></li><li><a class="tocitem" href="syntax.html">Kwarg madness</a></li><li><input class="collapse-toggle" id="menuitem-4" type="checkbox"/><label class="tocitem" for="menuitem-4"><span class="docs-label">Reference</span><i class="docs-chevron"></i></label><ul class="collapsed"><li><a class="tocitem" href="reference/functionindex.html">Alphabetical function list</a></li><li><a class="tocitem" href="reference/api.html">Function reference</a></li></ul></li></ul><div class="docs-version-selector field has-addons"><div class="control"><span class="docs-label button is-static is-size-7">Version</span></div><div class="docs-selector control is-expanded"><div class="select is-fullwidth is-size-7"><select id="documenter-version-selector"></select></div></div></div></nav><div class="docs-main"><header class="docs-navbar"><nav class="breadcrumb"><ul class="is-hidden-mobile"><li class="is-active"><a href="basics.html">Basic graphs</a></li></ul><ul class="is-hidden-tablet"><li class="is-active"><a href="basics.html">Basic graphs</a></li></ul></nav><div class="docs-right"><a class="docs-edit-link" href="https://github.com/cormullion/Karnak.jl/blob/master/docs/src/basics.md" title="Edit on GitHub"><span class="docs-icon fab"></span><span class="docs-label is-hidden-touch">Edit on GitHub</span></a><a class="docs-settings-button fas fa-cog" id="documenter-settings-button" href="#" title="Settings"></a><a class="docs-sidebar-button fa fa-bars is-hidden-desktop" id="documenter-sidebar-button" href="#"></a></div></header><article class="content" id="documenter-page"><h1 id="Tutorial"><a class="docs-heading-anchor" href="#Tutorial">Tutorial</a><a id="Tutorial-1"></a><a class="docs-heading-anchor-permalink" href="#Tutorial" title="Permalink"></a></h1><p>This section contains an introduction to basic graph theory using the Graphs.jl package. You don&#39;t need any prior knowledge of graphs, but you should be familiar with the basics of programming in Julia.</p><h2 id="Graphs,-vertices,-and-edges"><a class="docs-heading-anchor" href="#Graphs,-vertices,-and-edges">Graphs, vertices, and edges</a><a id="Graphs,-vertices,-and-edges-1"></a><a class="docs-heading-anchor-permalink" href="#Graphs,-vertices,-and-edges" title="Permalink"></a></h2><p>Graph theory is used for analysing networks and the relationships between things. A typical graph consists of:</p><ul><li><p>vertices, which represent the things or entities, and</p></li><li><p>edges, which describe how these things or entities connect and relate to each other</p></li></ul><p>The Graphs.jl package provides many ways to create graphs. We&#39;ll start off with this basic approach:</p><pre><code class="language-julia hljs">using Graphs
 g = Graph()</code></pre><p>The <code>Graph()</code> function creates a new empty graph and stores it in <code>g</code>. (You can use <code>SimpleGraph()</code> as well as <code>Graph()</code>.) Let&#39;s add a single vertex:</p><pre><code class="language-julia hljs">add_vertex!(g)</code></pre><p>We can easily add a number of new vertices:</p><pre><code class="language-julia hljs">add_vertices!(g, 3)</code></pre><p>Now we&#39;ll join pairs of vertices with an edge. The four vertices we&#39;ve made can be referred to with <code>1</code>, <code>2</code>, <code>3</code>, and <code>4</code>:</p><pre><code class="language-julia hljs">add_edge!(g, 1, 2)  # join vertex 1 with vertex 2
 add_edge!(g, 1, 3)
 add_edge!(g, 2, 3)
-add_edge!(g, 1, 4)</code></pre><p><code>g</code> is now a <code>{{4, 1} undirected simple Int64 graph}</code>. It&#39;s time to see some kind of visual representation of the graph we&#39;ve made.</p><pre><code class="language-julia hljs">g = Graph()
+add_edge!(g, 1, 4)</code></pre><p><code>g</code> is now a <code>{{4, 1} undirected simple Int64 graph}</code>. It&#39;s time to see some kind of visual representation of the graph we&#39;ve made.</p><pre><code class="language-julia hljs"># packages to load:
+# using Karnak, Luxor, Graphs, NetworkLayout, Colors, SimpleWeightedGraphs
+
+g = Graph()
 add_vertices!(g, 4)
 add_edge!(g, 1, 2)
 add_edge!(g, 1, 3)
 add_edge!(g, 2, 3)
 add_edge!(g, 1, 4)
 
-# using Karnak, Luxor, Graphs, NetworkLayout, Colors, SimpleWeightedGraphs
-
 @drawsvg begin
- background(&quot;grey10&quot;)
- sethue(&quot;orange&quot;)
- drawgraph(g, vertexlabels = [1, 2, 3, 4])
+    background(&quot;grey10&quot;)
+    sethue(&quot;orange&quot;)
+    drawgraph(g, vertexlabels = [1, 2, 3, 4])
 end 600 300</code></pre><img src='data:image/svg+xml;utf-8,<?xml version="1.0" encoding="UTF-8"?>
 <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="600pt" height="300pt" viewBox="0 0 600 300" version="1.1">
 <defs>
@@ -37,7 +38,7 @@ end 600 300</code></pre><img src='data:image/svg+xml;utf-8,<?xml version="1.0" e
 </symbol>
 </g>
 </defs>
-<g id="surface1014">
+<g id="surface1028">
 <rect x="0" y="0" width="600" height="300" style="fill:rgb(10.196078%25,10.196078%25,10.196078%25);fill-opacity:1;stroke:none;"/>
 <path style="fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:miter;stroke:rgb(100%25,64.705882%25,0%25);stroke-opacity:1;stroke-miterlimit:10;" d="M 420 150 L 300 270 "/>
 <path style="fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:miter;stroke:rgb(100%25,64.705882%25,0%25);stroke-opacity:1;stroke-miterlimit:10;" d="M 420 150 L 180 150 "/>
@@ -61,7 +62,7 @@ end 600 300</code></pre><img src='data:image/svg+xml;utf-8,<?xml version="1.0" e
 </g>
 </g>
 </svg>
-'/><p>This is one of the many ways this graph can be represented visually. The coordinates of the vertices when drawn here are <em>not</em> part of the graph&#39;s definition, and have been assigned randomly by the layout algorithm.</p><h2 id="Undirected-and-directed-graphs"><a class="docs-heading-anchor" href="#Undirected-and-directed-graphs">Undirected and directed graphs</a><a id="Undirected-and-directed-graphs-1"></a><a class="docs-heading-anchor-permalink" href="#Undirected-and-directed-graphs" title="Permalink"></a></h2><p>We&#39;ll meet two main types of graph, <strong>undirected</strong> and <strong>directed</strong>. In our undirected graph <code>g</code> above, vertex 1 and vertex 2 are neighbors, connected by an edge, but there&#39;s no way to specify or see a direction for that connection. For example, if the graph was modelling people making financial transactions, we couldn&#39;t tell whether the person at vertex 1 sent money to the person at vertex 2, or received money from them.</p><p>In Graphs.jl we can create directed graphs with <code>DiGraph()</code> (also <code>SimpleDiGraph()</code>).</p><pre><code class="language-julia hljs">gd = DiGraph()
+'/><p>This is one of the many ways this graph can be represented visually. The coordinates of the vertices when drawn here are <em>not</em> part of the graph&#39;s definition, and have been assigned randomly by the layout algorithm.</p><h2 id="Undirected-and-directed-graphs"><a class="docs-heading-anchor" href="#Undirected-and-directed-graphs">Undirected and directed graphs</a><a id="Undirected-and-directed-graphs-1"></a><a class="docs-heading-anchor-permalink" href="#Undirected-and-directed-graphs" title="Permalink"></a></h2><p>We&#39;ll meet two main types of graph, <strong>undirected</strong> and <strong>directed</strong>. In our undirected graph <code>g</code> above, vertex 1 and vertex 2 are neighbors, connected by an edge, but there&#39;s no way to specify or see a direction for that connection. For example, if the graph was modelling people making financial transactions, we couldn&#39;t tell whether the person at vertex 1 sent money to the person at vertex 2, or received money from them.</p><p>In Graphs.jl, we can create directed graphs with <code>DiGraph()</code> (also <code>SimpleDiGraph()</code>).</p><pre><code class="language-julia hljs">gd = DiGraph()
 add_vertices!(gd, 4)
 add_edge!(gd, 1, 2)
 add_edge!(gd, 1, 3)
@@ -94,7 +95,7 @@ end 600 300</code></pre><img src='data:image/svg+xml;utf-8,<?xml version="1.0" e
 </symbol>
 </g>
 </defs>
-<g id="surface1019">
+<g id="surface1033">
 <rect x="0" y="0" width="600" height="300" style="fill:rgb(10.196078%25,10.196078%25,10.196078%25);fill-opacity:1;stroke:none;"/>
 <path style=" stroke:none;fill-rule:nonzero;fill:rgb(41.568627%25,35.294118%25,80.392157%25);fill-opacity:1;" d="M 364 210 C 364 215.332031 356 215.332031 356 210 C 356 204.667969 364 204.667969 364 210 "/>
 <path style="fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:miter;stroke:rgb(41.568627%25,35.294118%25,80.392157%25);stroke-opacity:1;stroke-miterlimit:10;" d="M 360 210 L 310.066406 259.933594 "/>
@@ -139,7 +140,7 @@ end 600 300</code></pre><img src='data:image/svg+xml;utf-8,<?xml version="1.0" e
 </g>
 </g>
 </svg>
-'/><p>In this representation of our directed graph <code>gd</code>, we can now see the direction of the edges joining vertices. Notice how vertices 1 and 4 are doubly connected, because there&#39;s one edge for each direction.</p><p>Neither of these graphs is <strong>connected</strong>. In a connected graph, every vertex is connected to every other via some path, a sequence of edges.</p><h2 id="Very-simple-graphs"><a class="docs-heading-anchor" href="#Very-simple-graphs">Very simple graphs</a><a id="Very-simple-graphs-1"></a><a class="docs-heading-anchor-permalink" href="#Very-simple-graphs" title="Permalink"></a></h2><p>Creating graphs by typing the connections manually is tedious, so you might prefer to use the <code>Graph/SimpleGraph</code> and <code>DiGraph/SimpleDiGraph</code> constructors:</p><pre><code class="language-julia hljs">g = Graph(10, 5) # 10 vertices, 5 edges
+'/><p>In this representation of our directed graph <code>gd</code>, we can now see the direction of the edges joining vertices. Notice how vertices 1 and 4 are doubly connected, because there&#39;s one edge for each direction.</p><p>Neither of these graphs is <strong>connected</strong>. In a connected graph, every vertex is connected to every other via some path, a sequence of edges.</p><h2 id="Very-simple-graphs"><a class="docs-heading-anchor" href="#Very-simple-graphs">Very simple graphs</a><a id="Very-simple-graphs-1"></a><a class="docs-heading-anchor-permalink" href="#Very-simple-graphs" title="Permalink"></a></h2><p>Creating graphs by typing the connections manually is tedious, so we usually use the <code>Graph/SimpleGraph</code> and <code>DiGraph/SimpleDiGraph</code> constructors:</p><pre><code class="language-julia hljs">g = Graph(10, 5) # 10 vertices, 5 edges
 
 d1 = @drawsvg begin
 background(&quot;grey10&quot;)
@@ -158,12 +159,12 @@ end 400 300
 
 hcat(d1, d2)</code></pre><img src='data:image/svg+xml;utf-8,<?xml version="1.0" encoding="UTF-8"?>
 <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="800pt" height="300pt" viewBox="0 0 800 300" version="1.1">
-<g id="surface1034">
+<g id="surface1048">
 <path style=" stroke:none;fill-rule:nonzero;fill:rgb(10.196079%25,10.196079%25,10.196079%25);fill-opacity:1;" d="M 0 0 L 400 0 L 400 300 L 0 300 Z M 0 0 "/>
-<path style="fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:miter;stroke:rgb(100%25,84.313726%25,0%25);stroke-opacity:1;stroke-miterlimit:10;" d="M 320 150 L 162.917969 264.125 "/>
-<path style="fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:miter;stroke:rgb(100%25,84.313726%25,0%25);stroke-opacity:1;stroke-miterlimit:10;" d="M 320 150 L 102.917969 79.464844 "/>
+<path style="fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:miter;stroke:rgb(100%25,84.313726%25,0%25);stroke-opacity:1;stroke-miterlimit:10;" d="M 297.082031 220.535156 L 297.082031 79.464844 "/>
+<path style="fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:miter;stroke:rgb(100%25,84.313726%25,0%25);stroke-opacity:1;stroke-miterlimit:10;" d="M 237.082031 264.125 L 162.917969 35.875 "/>
 <path style="fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:miter;stroke:rgb(100%25,84.313726%25,0%25);stroke-opacity:1;stroke-miterlimit:10;" d="M 102.917969 220.535156 L 80 150 "/>
-<path style="fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:miter;stroke:rgb(100%25,84.313726%25,0%25);stroke-opacity:1;stroke-miterlimit:10;" d="M 102.917969 79.464844 L 237.082031 35.875 "/>
+<path style="fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:miter;stroke:rgb(100%25,84.313726%25,0%25);stroke-opacity:1;stroke-miterlimit:10;" d="M 80 150 L 237.082031 35.875 "/>
 <path style="fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:miter;stroke:rgb(100%25,84.313726%25,0%25);stroke-opacity:1;stroke-miterlimit:10;" d="M 162.917969 35.875 L 297.082031 79.464844 "/>
 <path style="fill-rule:nonzero;fill:rgb(100%25,84.313726%25,0%25);fill-opacity:1;stroke-width:2;stroke-linecap:butt;stroke-linejoin:miter;stroke:rgb(100%25,84.313726%25,0%25);stroke-opacity:1;stroke-miterlimit:10;" d="M 326 150 C 326 153.3125 323.3125 156 320 156 C 316.6875 156 314 153.3125 314 150 C 314 146.6875 316.6875 144 320 144 C 323.3125 144 326 146.6875 326 150 "/>
 <path style=" stroke:none;fill-rule:nonzero;fill:rgb(0%25,0%25,0%25);fill-opacity:1;" d="M 318.175781 148.527344 L 318.175781 147.855469 C 318.8125 147.792969 319.253906 147.691406 319.503906 147.546875 C 319.753906 147.402344 319.941406 147.058594 320.066406 146.519531 L 320.757812 146.519531 L 320.757812 153.480469 L 319.820312 153.480469 L 319.820312 148.527344 Z M 318.175781 148.527344 "/>
@@ -187,21 +188,21 @@ hcat(d1, d2)</code></pre><img src='data:image/svg+xml;utf-8,<?xml version="1.0" 
 <path style=" stroke:none;fill-rule:nonzero;fill:rgb(0%25,0%25,0%25);fill-opacity:1;" d="M 292.476562 78.007812 L 292.476562 77.335938 C 293.113281 77.273438 293.554688 77.171875 293.804688 77.027344 C 294.054688 76.882812 294.242188 76.539062 294.367188 76 L 295.058594 76 L 295.058594 82.960938 L 294.121094 82.960938 L 294.121094 78.007812 Z M 292.476562 78.007812 "/>
 <path style=" stroke:none;fill-rule:nonzero;fill:rgb(0%25,0%25,0%25);fill-opacity:1;" d="M 299.785156 75.96875 C 300.691406 75.96875 301.347656 76.339844 301.75 77.085938 C 302.0625 77.664062 302.21875 78.453125 302.21875 79.453125 C 302.21875 80.40625 302.078125 81.191406 301.792969 81.8125 C 301.382812 82.703125 300.714844 83.152344 299.78125 83.152344 C 298.941406 83.152344 298.316406 82.785156 297.90625 82.058594 C 297.566406 81.449219 297.394531 80.632812 297.394531 79.605469 C 297.394531 78.8125 297.496094 78.128906 297.703125 77.5625 C 298.085938 76.5 298.78125 75.96875 299.785156 75.96875 Z M 299.777344 82.351562 C 300.234375 82.351562 300.597656 82.148438 300.867188 81.746094 C 301.136719 81.34375 301.269531 80.589844 301.269531 79.488281 C 301.269531 78.695312 301.175781 78.042969 300.980469 77.527344 C 300.785156 77.015625 300.402344 76.757812 299.839844 76.757812 C 299.324219 76.757812 298.945312 77.003906 298.707031 77.488281 C 298.464844 77.976562 298.347656 78.695312 298.347656 79.640625 C 298.347656 80.351562 298.421875 80.925781 298.574219 81.359375 C 298.808594 82.019531 299.210938 82.351562 299.777344 82.351562 Z M 299.777344 82.351562 "/>
 <path style=" stroke:none;fill-rule:nonzero;fill:rgb(10.196079%25,10.196079%25,10.196079%25);fill-opacity:1;" d="M 400 0 L 800 0 L 800 300 L 400 300 Z M 400 0 "/>
+<path style=" stroke:none;fill-rule:nonzero;fill:rgb(69.803923%25,13.333334%25,13.333334%25);fill-opacity:1;" d="M 682.542969 207.0625 C 682.542969 212.398438 674.542969 212.398438 674.542969 207.0625 C 674.542969 201.730469 682.542969 201.730469 682.542969 207.0625 "/>
+<path style="fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:miter;stroke:rgb(69.803923%25,13.333334%25,13.333334%25);stroke-opacity:1;stroke-miterlimit:10;" d="M 278.542969 207.0625 L 311.628906 161.519531 " transform="matrix(1,0,0,1,400,0)"/>
+<path style=" stroke:none;fill-rule:nonzero;fill:rgb(69.803923%25,13.333334%25,13.333334%25);fill-opacity:1;" d="M 708.535156 159.269531 L 717.0625 154.046875 L 714.726562 163.769531 "/>
+<path style="fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:miter;stroke:rgb(69.803923%25,13.333334%25,13.333334%25);stroke-opacity:1;stroke-miterlimit:10;" d="M 278.542969 207.0625 L 245.453125 252.605469 " transform="matrix(1,0,0,1,400,0)"/>
+<path style=" stroke:none;fill-rule:nonzero;fill:rgb(69.803923%25,13.333334%25,13.333334%25);fill-opacity:1;" d="M 648.546875 254.855469 L 640.019531 260.082031 L 642.355469 250.359375 "/>
 <path style=" stroke:none;fill-rule:nonzero;fill:rgb(69.803923%25,13.333334%25,13.333334%25);fill-opacity:1;" d="M 615.457031 185.265625 C 615.457031 190.601562 607.457031 190.601562 607.457031 185.265625 C 607.457031 179.933594 615.457031 179.933594 615.457031 185.265625 "/>
-<path style="fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:miter;stroke:rgb(69.803923%25,13.333334%25,13.333334%25);stroke-opacity:1;stroke-miterlimit:10;" d="M 211.457031 185.265625 L 116.460938 216.132812 " transform="matrix(1,0,0,1,400,0)"/>
-<path style=" stroke:none;fill-rule:nonzero;fill:rgb(69.803923%25,13.333334%25,13.333334%25);fill-opacity:1;" d="M 517.640625 219.773438 L 507.671875 218.988281 L 515.277344 212.496094 "/>
 <path style="fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:miter;stroke:rgb(69.803923%25,13.333334%25,13.333334%25);stroke-opacity:1;stroke-miterlimit:10;" d="M 211.457031 185.265625 L 306.457031 154.398438 " transform="matrix(1,0,0,1,400,0)"/>
 <path style=" stroke:none;fill-rule:nonzero;fill:rgb(69.803923%25,13.333334%25,13.333334%25);fill-opacity:1;" d="M 705.277344 150.761719 L 715.246094 151.546875 L 707.640625 158.039062 "/>
-<path style=" stroke:none;fill-rule:nonzero;fill:rgb(69.803923%25,13.333334%25,13.333334%25);fill-opacity:1;" d="M 574 128.203125 C 574 133.535156 566 133.535156 566 128.203125 C 566 122.871094 574 122.871094 574 128.203125 "/>
-<path style="fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:miter;stroke:rgb(69.803923%25,13.333334%25,13.333334%25);stroke-opacity:1;stroke-miterlimit:10;" d="M 170 128.203125 L 228.710938 47.394531 " transform="matrix(1,0,0,1,400,0)"/>
-<path style=" stroke:none;fill-rule:nonzero;fill:rgb(69.803923%25,13.333334%25,13.333334%25);fill-opacity:1;" d="M 625.617188 45.144531 L 634.144531 39.917969 L 631.808594 49.640625 "/>
-<path style="fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:miter;stroke:rgb(69.803923%25,13.333334%25,13.333334%25);stroke-opacity:1;stroke-miterlimit:10;" d="M 170 128.203125 L 111.289062 209.015625 " transform="matrix(1,0,0,1,400,0)"/>
-<path style=" stroke:none;fill-rule:nonzero;fill:rgb(69.803923%25,13.333334%25,13.333334%25);fill-opacity:1;" d="M 514.382812 211.265625 L 505.855469 216.488281 L 508.191406 206.765625 "/>
-<path style=" stroke:none;fill-rule:nonzero;fill:rgb(69.803923%25,13.333334%25,13.333334%25);fill-opacity:1;" d="M 574 171.796875 C 574 177.128906 566 177.128906 566 171.796875 C 566 166.464844 574 166.464844 574 171.796875 "/>
-<path style="fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:miter;stroke:rgb(69.803923%25,13.333334%25,13.333334%25);stroke-opacity:1;stroke-miterlimit:10;" d="M 170 171.796875 L 228.710938 252.605469 " transform="matrix(1,0,0,1,400,0)"/>
-<path style=" stroke:none;fill-rule:nonzero;fill:rgb(69.803923%25,13.333334%25,13.333334%25);fill-opacity:1;" d="M 631.808594 250.359375 L 634.144531 260.082031 L 625.617188 254.855469 "/>
-<path style="fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:miter;stroke:rgb(69.803923%25,13.333334%25,13.333334%25);stroke-opacity:1;stroke-miterlimit:10;" d="M 170 171.796875 L 111.289062 90.984375 " transform="matrix(1,0,0,1,400,0)"/>
-<path style=" stroke:none;fill-rule:nonzero;fill:rgb(69.803923%25,13.333334%25,13.333334%25);fill-opacity:1;" d="M 508.191406 93.234375 L 505.855469 83.511719 L 514.382812 88.734375 "/>
+<path style="fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:miter;stroke:rgb(69.803923%25,13.333334%25,13.333334%25);stroke-opacity:1;stroke-miterlimit:10;" d="M 211.457031 185.265625 L 116.460938 216.132812 " transform="matrix(1,0,0,1,400,0)"/>
+<path style=" stroke:none;fill-rule:nonzero;fill:rgb(69.803923%25,13.333334%25,13.333334%25);fill-opacity:1;" d="M 517.640625 219.773438 L 507.671875 218.988281 L 515.277344 212.496094 "/>
+<path style=" stroke:none;fill-rule:nonzero;fill:rgb(69.803923%25,13.333334%25,13.333334%25);fill-opacity:1;" d="M 574 57.667969 C 574 63.003906 566 63.003906 566 57.667969 C 566 52.335938 574 52.335938 574 57.667969 "/>
+<path style="fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:miter;stroke:rgb(69.803923%25,13.333334%25,13.333334%25);stroke-opacity:1;stroke-miterlimit:10;" d="M 170 57.667969 L 116.460938 75.066406 " transform="matrix(1,0,0,1,400,0)"/>
+<path style=" stroke:none;fill-rule:nonzero;fill:rgb(69.803923%25,13.333334%25,13.333334%25);fill-opacity:1;" d="M 517.640625 78.707031 L 507.671875 77.921875 L 515.277344 71.425781 "/>
+<path style="fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:miter;stroke:rgb(69.803923%25,13.333334%25,13.333334%25);stroke-opacity:1;stroke-miterlimit:10;" d="M 170 57.667969 L 223.539062 40.273438 " transform="matrix(1,0,0,1,400,0)"/>
+<path style=" stroke:none;fill-rule:nonzero;fill:rgb(69.803923%25,13.333334%25,13.333334%25);fill-opacity:1;" d="M 622.359375 36.632812 L 632.328125 37.417969 L 624.722656 43.914062 "/>
 <path style="fill-rule:nonzero;fill:rgb(69.803923%25,13.333334%25,13.333334%25);fill-opacity:1;stroke-width:2;stroke-linecap:butt;stroke-linejoin:miter;stroke:rgb(69.803923%25,13.333334%25,13.333334%25);stroke-opacity:1;stroke-miterlimit:10;" d="M 326 150 C 326 153.3125 323.3125 156 320 156 C 316.6875 156 314 153.3125 314 150 C 314 146.6875 316.6875 144 320 144 C 323.3125 144 326 146.6875 326 150 " transform="matrix(1,0,0,1,400,0)"/>
 <path style=" stroke:none;fill-rule:nonzero;fill:rgb(100%25,100%25,100%25);fill-opacity:1;" d="M 718.175781 148.527344 L 718.175781 147.855469 C 718.8125 147.792969 719.253906 147.691406 719.503906 147.546875 C 719.753906 147.402344 719.941406 147.058594 720.066406 146.519531 L 720.757812 146.519531 L 720.757812 153.480469 L 719.820312 153.480469 L 719.820312 148.527344 Z M 718.175781 148.527344 "/>
 <path style="fill-rule:nonzero;fill:rgb(69.803923%25,13.333334%25,13.333334%25);fill-opacity:1;stroke-width:2;stroke-linecap:butt;stroke-linejoin:miter;stroke:rgb(69.803923%25,13.333334%25,13.333334%25);stroke-opacity:1;stroke-miterlimit:10;" d="M 243.082031 264.125 C 243.082031 267.441406 240.394531 270.125 237.082031 270.125 C 233.769531 270.125 231.082031 267.441406 231.082031 264.125 C 231.082031 260.8125 233.769531 258.125 237.082031 258.125 C 240.394531 258.125 243.082031 260.8125 243.082031 264.125 " transform="matrix(1,0,0,1,400,0)"/>
@@ -260,7 +261,7 @@ end 600 300</code></pre><img src='data:image/svg+xml;utf-8,<?xml version="1.0" e
 </symbol>
 </g>
 </defs>
-<g id="surface1039">
+<g id="surface1053">
 <rect x="0" y="0" width="600" height="300" style="fill:rgb(10.196078%25,10.196078%25,10.196078%25);fill-opacity:1;stroke:none;"/>
 <path style="fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:miter;stroke:rgb(50.196078%25,0%25,0%25);stroke-opacity:1;stroke-miterlimit:10;" d="M 420 150 L 397.082031 220.535156 "/>
 <path style="fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:miter;stroke:rgb(50.196078%25,0%25,0%25);stroke-opacity:1;stroke-miterlimit:10;" d="M 420 150 L 337.082031 264.125 "/>
@@ -387,7 +388,7 @@ end 600 300</code></pre><img src='data:image/svg+xml;utf-8,<?xml version="1.0" e
 </symbol>
 </g>
 </defs>
-<g id="surface1044">
+<g id="surface1058">
 <rect x="0" y="0" width="600" height="300" style="fill:rgb(10.196078%25,10.196078%25,10.196078%25);fill-opacity:1;stroke:none;"/>
 <path style=" stroke:none;fill-rule:nonzero;fill:rgb(100%25,64.705882%25,0%25);fill-opacity:1;" d="M 401.410156 196.910156 C 401.410156 202.242188 393.410156 202.242188 393.410156 196.910156 C 393.410156 191.578125 401.410156 191.578125 401.410156 196.910156 "/>
 <path style="fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:miter;stroke:rgb(100%25,64.705882%25,0%25);stroke-opacity:1;stroke-miterlimit:10;" d="M 397.410156 196.910156 L 380.996094 230.992188 "/>
@@ -679,7 +680,7 @@ end 600 400</code></pre><img src='data:image/svg+xml;utf-8,<?xml version="1.0" e
 </symbol>
 </g>
 </defs>
-<g id="surface1049">
+<g id="surface1063">
 <rect x="0" y="0" width="600" height="400" style="fill:rgb(10.196078%25,10.196078%25,10.196078%25);fill-opacity:1;stroke:none;"/>
 <path style="fill:none;stroke-width:0.5;stroke-linecap:round;stroke-linejoin:miter;stroke:rgb(80.392157%25,67.843137%25,0%25);stroke-opacity:1;stroke-miterlimit:10;" d="M 25 350 L 25 50 "/>
 <path style="fill:none;stroke-width:0.5;stroke-linecap:round;stroke-linejoin:miter;stroke:rgb(80.392157%25,67.843137%25,0%25);stroke-opacity:1;stroke-miterlimit:10;" d="M 25 350 L 86.109375 50 "/>
@@ -921,7 +922,7 @@ end 600 300</code></pre><img src='data:image/svg+xml;utf-8,<?xml version="1.0" e
 </symbol>
 </g>
 </defs>
-<g id="surface1054">
+<g id="surface1068">
 <rect x="0" y="0" width="600" height="300" style="fill:rgb(10.196078%25,10.196078%25,10.196078%25);fill-opacity:1;stroke:none;"/>
 <path style="fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:miter;stroke:rgb(100%25,64.705882%25,0%25);stroke-opacity:1;stroke-miterlimit:10;" d="M 374.050781 30 L 395.597656 82.140625 "/>
 <path style="fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:miter;stroke:rgb(100%25,64.705882%25,0%25);stroke-opacity:1;stroke-miterlimit:10;" d="M 374.050781 30 L 321.394531 48.472656 "/>
@@ -1091,7 +1092,7 @@ end 600 300</code></pre><img src='data:image/svg+xml;utf-8,<?xml version="1.0" e
 </symbol>
 </g>
 </defs>
-<g id="surface1059">
+<g id="surface1073">
 <rect x="0" y="0" width="600" height="300" style="fill:rgb(10.196078%25,10.196078%25,10.196078%25);fill-opacity:1;stroke:none;"/>
 <path style="fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:miter;stroke:rgb(100%25,64.705882%25,0%25);stroke-opacity:1;stroke-miterlimit:10;" d="M 299.011719 151.042969 L 181.039062 179.367188 "/>
 <path style="fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:miter;stroke:rgb(100%25,64.705882%25,0%25);stroke-opacity:1;stroke-miterlimit:10;" d="M 299.011719 151.042969 L 185.015625 111.261719 "/>
@@ -1201,7 +1202,7 @@ end 600 300</code></pre><img src='data:image/svg+xml;utf-8,<?xml version="1.0" e
 </symbol>
 </g>
 </defs>
-<g id="surface1064">
+<g id="surface1078">
 <rect x="0" y="0" width="600" height="300" style="fill:rgb(10.196078%25,10.196078%25,10.196078%25);fill-opacity:1;stroke:none;"/>
 <path style="fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:miter;stroke:rgb(100%25,64.705882%25,0%25);stroke-opacity:1;stroke-miterlimit:10;" d="M 302.414062 150.746094 L 249.5625 41.527344 "/>
 <path style="fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:miter;stroke:rgb(100%25,64.705882%25,0%25);stroke-opacity:1;stroke-miterlimit:10;" d="M 302.414062 150.746094 L 317.027344 30 "/>
@@ -1366,7 +1367,7 @@ end 600 300</code></pre><img src='data:image/svg+xml;utf-8,<?xml version="1.0" e
 </symbol>
 </g>
 </defs>
-<g id="surface1069">
+<g id="surface1083">
 <rect x="0" y="0" width="800" height="800" style="fill:rgb(10.196078%25,10.196078%25,10.196078%25);fill-opacity:1;stroke:none;"/>
 <path style="fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:miter;stroke:rgb(100%25,64.705882%25,0%25);stroke-opacity:1;stroke-miterlimit:10;" d="M 110.183594 86.5 L 81.773438 104.386719 "/>
 <path style="fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:miter;stroke:rgb(100%25,64.705882%25,0%25);stroke-opacity:1;stroke-miterlimit:10;" d="M 110.183594 86.5 L 80.585938 70.652344 "/>
@@ -2598,7 +2599,7 @@ end 600 300</code></pre><img src='data:image/svg+xml;utf-8,<?xml version="1.0" e
 </g>
 </g>
 </svg>
-'/><p>You will have no trouble finding out more about these well-known graphs online, such as on the wikipedia. Some of the graphs in this illustration would benefit from attentive ‘tuning’ of the various layout parameters.</p><p>Here&#39;s a larger view of a Petersen graph (named after Julius Petersen, who first described it in 1898).</p><pre><code class="language-julia hljs">@drawsvg begin
+'/><p>It&#39;s easy to find out more about these well-known graphs online, such as on the wikipedia. Some of the graphs in this illustration would benefit from attentive ‘tuning’ of the various layout parameters.</p><p>Here&#39;s a larger view of the Petersen graph (named after Julius Petersen, who first described it in 1898).</p><pre><code class="language-julia hljs">@drawsvg begin
 background(&quot;grey10&quot;)
 pg = smallgraph(:petersen)
 sethue(&quot;orange&quot;)
@@ -2642,7 +2643,7 @@ end 600 300</code></pre><img src='data:image/svg+xml;utf-8,<?xml version="1.0" e
 </symbol>
 </g>
 </defs>
-<g id="surface1075">
+<g id="surface1090">
 <rect x="0" y="0" width="600" height="300" style="fill:rgb(10.196078%25,10.196078%25,10.196078%25);fill-opacity:1;stroke:none;"/>
 <path style="fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:miter;stroke:rgb(100%25,64.705882%25,0%25);stroke-opacity:1;stroke-miterlimit:10;" d="M 414.125 150 L 326.941406 30 "/>
 <path style="fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:miter;stroke:rgb(100%25,64.705882%25,0%25);stroke-opacity:1;stroke-miterlimit:10;" d="M 414.125 150 L 326.941406 270 "/>
@@ -2709,7 +2710,7 @@ sethue(&quot;orange&quot;)
 drawgraph(g, layout = Spring(Ptype=Float64))
 end 600 300</code></pre><img src='data:image/svg+xml;utf-8,<?xml version="1.0" encoding="UTF-8"?>
 <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="600pt" height="300pt" viewBox="0 0 600 300" version="1.1">
-<g id="surface1080">
+<g id="surface1095">
 <rect x="0" y="0" width="600" height="300" style="fill:rgb(10.196078%25,10.196078%25,10.196078%25);fill-opacity:1;stroke:none;"/>
 <path style="fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:miter;stroke:rgb(100%25,64.705882%25,0%25);stroke-opacity:1;stroke-miterlimit:10;" d="M 294.046875 181.546875 L 277.445312 270 "/>
 <path style="fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:miter;stroke:rgb(100%25,64.705882%25,0%25);stroke-opacity:1;stroke-miterlimit:10;" d="M 294.046875 181.546875 L 397.707031 116.375 "/>
@@ -2735,13 +2736,13 @@ end 600 300</code></pre><img src='data:image/svg+xml;utf-8,<?xml version="1.0" e
 </svg>
 '/><h2 id="Getting-some-information-about-the-graph"><a class="docs-heading-anchor" href="#Getting-some-information-about-the-graph">Getting some information about the graph</a><a id="Getting-some-information-about-the-graph-1"></a><a class="docs-heading-anchor-permalink" href="#Getting-some-information-about-the-graph" title="Permalink"></a></h2><p>There are lots of functions for obtaining information about a graph.</p><p>How many vertices?</p><pre><code class="language-julia hljs">julia&gt; nv(pg)
 6</code></pre><p>How many edges?</p><pre><code class="language-julia hljs">julia&gt; ne(pg)
-15</code></pre><p>Which vertices are connected with vertex 1 - ie what are the neighbors of a particular vertex?</p><pre><code class="language-julia hljs">julia&gt; neighbors(pg, 1)
+15</code></pre><p>Which vertices are connected with vertex 1? - ie what are the neighbors of a particular vertex?</p><pre><code class="language-julia hljs">julia&gt; neighbors(pg, 1)
 5-element Vector{Int64}:
  2
  3
  4
  5
- 6</code></pre><p>We can iterate over vertices and edges.</p><p>To step through each vertex:</p><pre><code class="language-julia hljs">for e in vertices(pg)
+ 6</code></pre><p>We can iterate over vertices and edges. To step through each vertex:</p><pre><code class="language-julia hljs">for e in vertices(pg)
     println(e)
 end
 
@@ -2825,7 +2826,7 @@ end 600 300</code></pre><img src='data:image/svg+xml;utf-8,<?xml version="1.0" e
 </symbol>
 </g>
 </defs>
-<g id="surface1085">
+<g id="surface1100">
 <rect x="0" y="0" width="600" height="300" style="fill:rgb(10.196078%25,10.196078%25,10.196078%25);fill-opacity:1;stroke:none;"/>
 <path style="fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:miter;stroke:rgb(0%25,0%25,100%25);stroke-opacity:1;stroke-miterlimit:10;" d="M 414.125 150 L 326.941406 30 "/>
 <path style="fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:miter;stroke:rgb(0%25,0%25,100%25);stroke-opacity:1;stroke-miterlimit:10;" d="M 414.125 150 L 326.941406 270 "/>
@@ -2940,7 +2941,7 @@ end 600 400</code></pre><img src='data:image/svg+xml;utf-8,<?xml version="1.0" e
 </symbol>
 </g>
 </defs>
-<g id="surface1090">
+<g id="surface1105">
 <rect x="0" y="0" width="600" height="400" style="fill:rgb(10.196078%25,10.196078%25,10.196078%25);fill-opacity:1;stroke:none;"/>
 <path style="fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:miter;stroke:rgb(100%25,64.705882%25,0%25);stroke-opacity:1;stroke-miterlimit:10;" d="M 461.679688 200 L 338.167969 30 "/>
 <path style="fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:miter;stroke:rgb(100%25,64.705882%25,0%25);stroke-opacity:1;stroke-miterlimit:10;" d="M 461.679688 200 L 338.167969 370 "/>
@@ -3035,7 +3036,7 @@ end 800 400</code></pre><img src='data:image/svg+xml;utf-8,<?xml version="1.0" e
 </symbol>
 </g>
 </defs>
-<g id="surface1095">
+<g id="surface1110">
 <rect x="0" y="0" width="800" height="400" style="fill:rgb(10.196078%25,10.196078%25,10.196078%25);fill-opacity:1;stroke:none;"/>
 <path style="fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:miter;stroke:rgb(100%25,64.705882%25,0%25);stroke-opacity:1;stroke-miterlimit:10;" d="M 138.070312 30 L 113.878906 345.226562 "/>
 <path style="fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:miter;stroke:rgb(100%25,64.705882%25,0%25);stroke-opacity:1;stroke-miterlimit:10;" d="M 138.070312 30 L 453.1875 54.820312 "/>
@@ -3076,9 +3077,9 @@ end 800 400</code></pre><img src='data:image/svg+xml;utf-8,<?xml version="1.0" e
  ⋅  ⋅  ⋅  ⋅  1  ⋅  ⋅  ⋅  ⋅  ⋅  ⋅  ⋅  1  1  ⋅
  ⋅  ⋅  ⋅  ⋅  ⋅  ⋅  1  ⋅  ⋅  ⋅  1  ⋅  ⋅  ⋅  1
  ⋅  ⋅  ⋅  ⋅  ⋅  ⋅  ⋅  ⋅  1  ⋅  ⋅  1  1  ⋅  ⋅
- ⋅  ⋅  ⋅  ⋅  ⋅  ⋅  ⋅  ⋅  ⋅  1  ⋅  ⋅  ⋅  1  1</code></pre><p>The first column of this matrix is an edge between vertex 1 and vertex 2, whereas the first column of the adjacency matrix defines the vertices that are connected with vertex 1.</p><p>For a directed graph:</p><pre><code class="language-julia hljs">dg = DiGraph(3, 3)
+ ⋅  ⋅  ⋅  ⋅  ⋅  ⋅  ⋅  ⋅  ⋅  1  ⋅  ⋅  ⋅  1  1</code></pre><p>The first column of this matrix is an edge between vertex 1 and vertex 2, whereas the first column of the adjacency matrix defines the vertices that are connected with vertex 1.</p><p>For a directed graph:</p><pre><code class="language-julia hljs">julia&gt; dg = DiGraph(3, 3)
 
-incidence_matrix(dg)
+julia&gt; incidence_matrix(dg)
 
 3×3 SparseArrays.SparseMatrixCSC{Int64, Int64} with 6 stored entries:
  -1   1   1
@@ -3090,7 +3091,7 @@ incidence_matrix(dg)
 @drawsvg begin
 background(&quot;grey20&quot;)
 drawgraph(Graph(g),
-    layout = ngon(O + (0, 10), 120, 3, π/6, vertices=true),
+    layout = ngon(O + (0, 20), 120, 3, π/6, vertices=true),
     vertexshapes = :circle,
     vertexshapesizes = 70,
     edgestrokeweights = 25,
@@ -3098,14 +3099,14 @@ drawgraph(Graph(g),
     vertexfillcolors = [colorant&quot;#CB3C33&quot;, colorant&quot;#389826&quot;, colorant&quot;#9558B2&quot;])
 end 600 400</code></pre><img src='data:image/svg+xml;utf-8,<?xml version="1.0" encoding="UTF-8"?>
 <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="600pt" height="400pt" viewBox="0 0 600 400" version="1.1">
-<g id="surface1100">
+<g id="surface1115">
 <rect x="0" y="0" width="600" height="400" style="fill:rgb(20%25,20%25,20%25);fill-opacity:1;stroke:none;"/>
-<path style="fill:none;stroke-width:25;stroke-linecap:round;stroke-linejoin:miter;stroke:rgb(100%25,84.313725%25,0%25);stroke-opacity:1;stroke-miterlimit:10;" d="M 196.078125 270 L 300 90 "/>
-<path style="fill:none;stroke-width:25;stroke-linecap:round;stroke-linejoin:miter;stroke:rgb(100%25,84.313725%25,0%25);stroke-opacity:1;stroke-miterlimit:10;" d="M 196.078125 270 L 403.921875 270 "/>
-<path style="fill:none;stroke-width:25;stroke-linecap:round;stroke-linejoin:miter;stroke:rgb(100%25,84.313725%25,0%25);stroke-opacity:1;stroke-miterlimit:10;" d="M 300 90 L 403.921875 270 "/>
-<path style="fill-rule:nonzero;fill:rgb(79.607843%25,23.529412%25,20%25);fill-opacity:1;stroke-width:2;stroke-linecap:butt;stroke-linejoin:miter;stroke:rgb(0%25,0%25,0%25);stroke-opacity:1;stroke-miterlimit:10;" d="M 266.078125 270 C 266.078125 308.660156 234.738281 340 196.078125 340 C 157.417969 340 126.078125 308.660156 126.078125 270 C 126.078125 231.339844 157.417969 200 196.078125 200 C 234.738281 200 266.078125 231.339844 266.078125 270 "/>
-<path style="fill-rule:nonzero;fill:rgb(21.960784%25,59.607843%25,14.901961%25);fill-opacity:1;stroke-width:2;stroke-linecap:butt;stroke-linejoin:miter;stroke:rgb(0%25,0%25,0%25);stroke-opacity:1;stroke-miterlimit:10;" d="M 370 90 C 370 128.660156 338.660156 160 300 160 C 261.339844 160 230 128.660156 230 90 C 230 51.339844 261.339844 20 300 20 C 338.660156 20 370 51.339844 370 90 "/>
-<path style="fill-rule:nonzero;fill:rgb(58.431373%25,34.509804%25,69.803922%25);fill-opacity:1;stroke-width:2;stroke-linecap:butt;stroke-linejoin:miter;stroke:rgb(0%25,0%25,0%25);stroke-opacity:1;stroke-miterlimit:10;" d="M 473.921875 270 C 473.921875 308.660156 442.582031 340 403.921875 340 C 365.261719 340 333.921875 308.660156 333.921875 270 C 333.921875 231.339844 365.261719 200 403.921875 200 C 442.582031 200 473.921875 231.339844 473.921875 270 "/>
+<path style="fill:none;stroke-width:25;stroke-linecap:round;stroke-linejoin:miter;stroke:rgb(100%25,84.313725%25,0%25);stroke-opacity:1;stroke-miterlimit:10;" d="M 196.078125 280 L 300 100 "/>
+<path style="fill:none;stroke-width:25;stroke-linecap:round;stroke-linejoin:miter;stroke:rgb(100%25,84.313725%25,0%25);stroke-opacity:1;stroke-miterlimit:10;" d="M 196.078125 280 L 403.921875 280 "/>
+<path style="fill:none;stroke-width:25;stroke-linecap:round;stroke-linejoin:miter;stroke:rgb(100%25,84.313725%25,0%25);stroke-opacity:1;stroke-miterlimit:10;" d="M 300 100 L 403.921875 280 "/>
+<path style="fill-rule:nonzero;fill:rgb(79.607843%25,23.529412%25,20%25);fill-opacity:1;stroke-width:2;stroke-linecap:butt;stroke-linejoin:miter;stroke:rgb(0%25,0%25,0%25);stroke-opacity:1;stroke-miterlimit:10;" d="M 266.078125 280 C 266.078125 318.660156 234.738281 350 196.078125 350 C 157.417969 350 126.078125 318.660156 126.078125 280 C 126.078125 241.339844 157.417969 210 196.078125 210 C 234.738281 210 266.078125 241.339844 266.078125 280 "/>
+<path style="fill-rule:nonzero;fill:rgb(21.960784%25,59.607843%25,14.901961%25);fill-opacity:1;stroke-width:2;stroke-linecap:butt;stroke-linejoin:miter;stroke:rgb(0%25,0%25,0%25);stroke-opacity:1;stroke-miterlimit:10;" d="M 370 100 C 370 138.660156 338.660156 170 300 170 C 261.339844 170 230 138.660156 230 100 C 230 61.339844 261.339844 30 300 30 C 338.660156 30 370 61.339844 370 100 "/>
+<path style="fill-rule:nonzero;fill:rgb(58.431373%25,34.509804%25,69.803922%25);fill-opacity:1;stroke-width:2;stroke-linecap:butt;stroke-linejoin:miter;stroke:rgb(0%25,0%25,0%25);stroke-opacity:1;stroke-miterlimit:10;" d="M 473.921875 280 C 473.921875 318.660156 442.582031 350 403.921875 350 C 365.261719 350 333.921875 318.660156 333.921875 280 C 333.921875 241.339844 365.261719 210 403.921875 210 C 442.582031 210 473.921875 241.339844 473.921875 280 "/>
 </g>
 </svg>
 '/><h3 id="Adjacency-list"><a class="docs-heading-anchor" href="#Adjacency-list">Adjacency list</a><a id="Adjacency-list-1"></a><a class="docs-heading-anchor-permalink" href="#Adjacency-list" title="Permalink"></a></h3><p>Another way of representing a graph is by using an array of arrays in the form of an <strong>adjacency list</strong>. This array has <code>n</code> elements to represent a graph with <code>n</code> vertices. The first element of the array is an array of those vertex numbers that are connected with vertex 1, and similarly for elements 2 to <code>n</code>.</p><p>For example, this adjacency list:</p><pre><code class="language-julia hljs">[
@@ -3157,7 +3158,7 @@ sethue(&quot;orange&quot;)
 drawgraph(g, layout=stress)
 end 600 300</code></pre><img src='data:image/svg+xml;utf-8,<?xml version="1.0" encoding="UTF-8"?>
 <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="600pt" height="300pt" viewBox="0 0 600 300" version="1.1">
-<g id="surface1105">
+<g id="surface1120">
 <rect x="0" y="0" width="600" height="300" style="fill:rgb(10.196078%25,10.196078%25,10.196078%25);fill-opacity:1;stroke:none;"/>
 <path style="fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:miter;stroke:rgb(100%25,64.705882%25,0%25);stroke-opacity:1;stroke-miterlimit:10;" d="M 236.234375 156.683594 L 178.121094 161.769531 "/>
 <path style="fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:miter;stroke:rgb(100%25,64.705882%25,0%25);stroke-opacity:1;stroke-miterlimit:10;" d="M 236.234375 156.683594 L 274.855469 91.277344 "/>
@@ -3212,7 +3213,7 @@ end 600 300</code></pre><img src='data:image/svg+xml;utf-8,<?xml version="1.0" e
 </g>
 </svg>
 '/><p>Graphs.jl uses adjacency lists internally. If we peek inside a graph and look at its fields, we&#39;ll see something like this, for a Directed Graph:</p><pre><code class="nohighlight hljs">fieldnames(DiGraph)
-(:ne, :fadjlist, :badjlist)</code></pre><p>Here, <code>fadjlist</code> is a forward adjacency list which defines how each vertex connects <strong>to</strong> other vertices, and <code>badjlist</code> is a backward adjacency list which defines how each vertex receives connections <strong>from</strong> other vertices.</p><h2 id="Paths,-cycles,-routes,-and-traversals"><a class="docs-heading-anchor" href="#Paths,-cycles,-routes,-and-traversals">Paths, cycles, routes, and traversals</a><a id="Paths,-cycles,-routes,-and-traversals-1"></a><a class="docs-heading-anchor-permalink" href="#Paths,-cycles,-routes,-and-traversals" title="Permalink"></a></h2><p>Graphs help us answer questions about connectivity and relationships. For example, thinking of a graph as a railway network, with the vertices as stations and the edges as railway lines, we want to ask questions such as &quot;Can we get from A to B&quot;, which becomes the question &quot;Are there sufficient edges between two vertices such that we can find a path that joins them?&quot;.</p><p>Graphs.jl has many features for traversing graphs and finding paths. We can look at just a few of them here.</p><div class="admonition is-info"><header class="admonition-header">Note</header><div class="admonition-body"><p>The study of graphs uses a lot of terminology, and many of the terms also have informal and familiar meanings. Usually the informal meanings are reasonably accurate and appropriate, but note that the words also have more precise definitions in the literature.</p></div></div><h3 id="Paths-and-cycles"><a class="docs-heading-anchor" href="#Paths-and-cycles">Paths and cycles</a><a id="Paths-and-cycles-1"></a><a class="docs-heading-anchor-permalink" href="#Paths-and-cycles" title="Permalink"></a></h3><p>A path is a sequence of edges between some start vertex and some end vertex, such that a continuous unbroken route is available.</p><p>A cycle is a path where the start and end vertices are the same - a closed path. These are also called <strong>circuits</strong> in some sources.</p><p>You can find all the cycles in a graph (at least, you can find a <strong>basis</strong>, which is a minimal collection of cycles that can be added to make all the cycles) with the <code>cycle_basis()</code> function. The result is an array of arrays of vertex numbers.</p><pre><code class="nohighlight hljs">cycles = cycle_basis(g)
+(:ne, :fadjlist, :badjlist)</code></pre><p>Here, <code>fadjlist</code> is a forward adjacency list which defines how each vertex connects <strong>to</strong> other vertices, and <code>badjlist</code> is a backward adjacency list which defines how each vertex receives connections <strong>from</strong> other vertices.</p><h2 id="Paths,-cycles,-routes,-and-traversals"><a class="docs-heading-anchor" href="#Paths,-cycles,-routes,-and-traversals">Paths, cycles, routes, and traversals</a><a id="Paths,-cycles,-routes,-and-traversals-1"></a><a class="docs-heading-anchor-permalink" href="#Paths,-cycles,-routes,-and-traversals" title="Permalink"></a></h2><p>Graphs help us answer questions about connectivity and relationships. For example, thinking of a railway network as a graph, with the stations as vertices, and the tracks as edges, we want to ask questions such as &quot;Can we get from A to B by train?&quot;, which therefore becomes the question &quot;Are there sufficient edges between two vertices such that we can find a path that joins them?&quot;.</p><p>Graphs.jl has many features for traversing graphs and finding paths. We can look at just a few of them here.</p><div class="admonition is-info"><header class="admonition-header">Note</header><div class="admonition-body"><p>The study of graphs uses a lot of terminology, and many of the terms also have informal and familiar meanings. Usually the informal meanings are reasonably accurate and appropriate, but note that the words also have more precise definitions in the literature.</p></div></div><h3 id="Paths-and-cycles"><a class="docs-heading-anchor" href="#Paths-and-cycles">Paths and cycles</a><a id="Paths-and-cycles-1"></a><a class="docs-heading-anchor-permalink" href="#Paths-and-cycles" title="Permalink"></a></h3><p>A path is a sequence of edges between some start vertex and some end vertex, such that a continuous unbroken route is available.</p><p>A cycle is a path where the start and end vertices are the same - a closed path. These are also called <strong>circuits</strong> in some sources.</p><p>The <code>cycle_basis()</code> function finds all the cycles in a graph (at least, a <strong>basis</strong>, which is a minimal collection of cycles that can be added to make all the cycles). The result is an array of arrays of vertex numbers.</p><pre><code class="nohighlight hljs">cycles = cycle_basis(g)
 
 11-element Vector{Vector{Int64}}:
  [13, 14, 15, 16, 17]
@@ -3225,7 +3226,93 @@ end 600 300</code></pre><img src='data:image/svg+xml;utf-8,<?xml version="1.0" e
  [5, 6, 16, 17, 18]
  [12, 13, 17, 18, 19]
  [4, 5, 18, 19, 20]
- [11, 12, 19, 20, 1]</code></pre><h3 id="Shortest-paths:-the-A*-algorithm"><a class="docs-heading-anchor" href="#Shortest-paths:-the-A*-algorithm">Shortest paths: the A* algorithm</a><a id="Shortest-paths:-the-A*-algorithm-1"></a><a class="docs-heading-anchor-permalink" href="#Shortest-paths:-the-A*-algorithm" title="Permalink"></a></h3><p>One way to find the shortest path between two vertices is to use the <code>a_star()</code> function, and provide the graph, the start vertex, and the end vertex. The function returns a list of edges.</p><p>(The odd name of this function is just a reference to the name of the algorithm, <code>A*</code>, first published in 1968.)</p><p>The function finds the shortest path and returns an array of edges that define the path.</p><pre><code class="language-julia hljs">@drawsvg begin
+ [11, 12, 19, 20, 1]</code></pre><pre><code class="language-julia hljs">@drawsvg begin
+background(&quot;grey10&quot;)
+sethue(&quot;magenta&quot;)
+pg = smallgraph(:petersen)
+
+cycles = cycle_basis(pg)
+
+for (n, cycle) in enumerate(cycles)
+    sethue(HSB(rescale(n, 1, length(cycles), 0, 360), .7, .7))
+    drawgraph(pg,
+        layout = stress,
+        vertexshapes = :none,
+        edgestrokeweights = 3,
+        edgecurvature = 10,
+        edgelist = [Edge(cycle[i], cycle[mod1(i + 1, end)]) for i in 1:length(cycle)])
+end
+end 600 300</code></pre><img src='data:image/svg+xml;utf-8,<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="600pt" height="300pt" viewBox="0 0 600 300" version="1.1">
+<g id="surface1125">
+<rect x="0" y="0" width="600" height="300" style="fill:rgb(10.196078%25,10.196078%25,10.196078%25);fill-opacity:1;stroke:none;"/>
+<path style="fill:none;stroke-width:3;stroke-linecap:round;stroke-linejoin:miter;stroke:rgb(70%25,21%25,21%25);stroke-opacity:1;stroke-miterlimit:10;" d="M 243.707031 52.355469 C 256.703125 34.710938 279.988281 26.628906 301.214844 30.554688 "/>
+<path style=" stroke:none;fill-rule:nonzero;fill:rgb(70%25,21%25,21%25);fill-opacity:1;" d="M 302.324219 26.140625 L 309.753906 32.835938 L 299.769531 33.355469 "/>
+<path style="fill:none;stroke-width:3;stroke-linecap:round;stroke-linejoin:miter;stroke:rgb(70%25,21%25,21%25);stroke-opacity:1;stroke-miterlimit:10;" d="M 328.003906 35.003906 C 359.113281 37.035156 388.4375 53.132812 408.070312 77.113281 "/>
+<path style=" stroke:none;fill-rule:nonzero;fill:rgb(70%25,21%25,21%25);fill-opacity:1;" d="M 411.492188 74.679688 L 413.605469 84.457031 L 405.199219 79.035156 "/>
+<path style="fill:none;stroke-width:3;stroke-linecap:round;stroke-linejoin:miter;stroke:rgb(70%25,21%25,21%25);stroke-opacity:1;stroke-miterlimit:10;" d="M 421.605469 99.4375 C 433.441406 134.742188 431.292969 174.019531 417.269531 208.355469 "/>
+<path style=" stroke:none;fill-rule:nonzero;fill:rgb(70%25,21%25,21%25);fill-opacity:1;" d="M 421.304688 209.292969 L 413.90625 216.019531 L 414.378906 206.03125 "/>
+<path style="fill:none;stroke-width:3;stroke-linecap:round;stroke-linejoin:miter;stroke:rgb(70%25,21%25,21%25);stroke-opacity:1;stroke-miterlimit:10;" d="M 409.132812 216.882812 C 388.820312 204.511719 377.023438 180.847656 377.566406 157.355469 "/>
+<path style=" stroke:none;fill-rule:nonzero;fill:rgb(70%25,21%25,21%25);fill-opacity:1;" d="M 373.125 157.207031 L 378.339844 148.671875 L 380.6875 158.394531 "/>
+<path style="fill:none;stroke-width:3;stroke-linecap:round;stroke-linejoin:miter;stroke:rgb(70%25,21%25,21%25);stroke-opacity:1;stroke-miterlimit:10;" d="M 365.65625 134.402344 C 320.996094 124.222656 280.066406 99.914062 248.59375 66.796875 "/>
+<path style=" stroke:none;fill-rule:nonzero;fill:rgb(70%25,21%25,21%25);fill-opacity:1;" d="M 245.9375 69.808594 L 242.6875 60.351562 L 251.671875 64.738281 "/>
+<path style="fill:none;stroke-width:3;stroke-linecap:round;stroke-linejoin:miter;stroke:rgb(60.2%25,70%25,21%25);stroke-opacity:1;stroke-miterlimit:10;" d="M 325.4375 236.417969 C 296.875 231.851562 271.5625 213.332031 257.167969 188.480469 "/>
+<path style=" stroke:none;fill-rule:nonzero;fill:rgb(60.2%25,70%25,21%25);fill-opacity:1;" d="M 253.667969 190.917969 L 253.222656 180.929688 L 260.601562 187.679688 "/>
+<path style="fill:none;stroke-width:3;stroke-linecap:round;stroke-linejoin:miter;stroke:rgb(60.2%25,70%25,21%25);stroke-opacity:1;stroke-miterlimit:10;" d="M 249.847656 165.933594 C 256.777344 120.925781 278.070312 78.640625 308.792969 45.199219 "/>
+<path style=" stroke:none;fill-rule:nonzero;fill:rgb(60.2%25,70%25,21%25);fill-opacity:1;" d="M 305.578125 42.785156 L 314.792969 38.902344 L 311.019531 48.164062 "/>
+<path style="fill:none;stroke-width:3;stroke-linecap:round;stroke-linejoin:miter;stroke:rgb(60.2%25,70%25,21%25);stroke-opacity:1;stroke-miterlimit:10;" d="M 328.003906 35.003906 C 359.113281 37.035156 388.4375 53.132812 408.070312 77.113281 "/>
+<path style=" stroke:none;fill-rule:nonzero;fill:rgb(60.2%25,70%25,21%25);fill-opacity:1;" d="M 411.492188 74.679688 L 413.605469 84.457031 L 405.199219 79.035156 "/>
+<path style="fill:none;stroke-width:3;stroke-linecap:round;stroke-linejoin:miter;stroke:rgb(60.2%25,70%25,21%25);stroke-opacity:1;stroke-miterlimit:10;" d="M 421.605469 99.4375 C 433.441406 134.742188 431.292969 174.019531 417.269531 208.355469 "/>
+<path style=" stroke:none;fill-rule:nonzero;fill:rgb(60.2%25,70%25,21%25);fill-opacity:1;" d="M 421.304688 209.292969 L 413.90625 216.019531 L 414.378906 206.03125 "/>
+<path style="fill:none;stroke-width:3;stroke-linecap:round;stroke-linejoin:miter;stroke:rgb(60.2%25,70%25,21%25);stroke-opacity:1;stroke-miterlimit:10;" d="M 409.132812 216.882812 C 388.820312 204.511719 377.023438 180.847656 377.566406 157.355469 "/>
+<path style=" stroke:none;fill-rule:nonzero;fill:rgb(60.2%25,70%25,21%25);fill-opacity:1;" d="M 373.125 157.207031 L 378.339844 148.671875 L 380.6875 158.394531 "/>
+<path style="fill:none;stroke-width:3;stroke-linecap:round;stroke-linejoin:miter;stroke:rgb(60.2%25,70%25,21%25);stroke-opacity:1;stroke-miterlimit:10;" d="M 370.535156 148.855469 C 374 177.480469 363.148438 206.824219 343.226562 227.382812 "/>
+<path style=" stroke:none;fill-rule:nonzero;fill:rgb(60.2%25,70%25,21%25);fill-opacity:1;" d="M 346.546875 230.070312 L 337.054688 233.214844 L 341.542969 224.28125 "/>
+<path style="fill:none;stroke-width:3;stroke-linecap:round;stroke-linejoin:miter;stroke:rgb(21%25,70%25,40.6%25);stroke-opacity:1;stroke-miterlimit:10;" d="M 255.550781 260.070312 C 239.835938 241.855469 235.640625 215.496094 243.164062 192.933594 "/>
+<path style=" stroke:none;fill-rule:nonzero;fill:rgb(21%25,70%25,40.6%25);fill-opacity:1;" d="M 239.007812 191.402344 L 246.488281 184.765625 L 245.894531 194.746094 "/>
+<path style="fill:none;stroke-width:3;stroke-linecap:round;stroke-linejoin:miter;stroke:rgb(21%25,70%25,40.6%25);stroke-opacity:1;stroke-miterlimit:10;" d="M 249.847656 165.933594 C 256.777344 120.925781 278.070312 78.640625 308.792969 45.199219 "/>
+<path style=" stroke:none;fill-rule:nonzero;fill:rgb(21%25,70%25,40.6%25);fill-opacity:1;" d="M 305.578125 42.785156 L 314.792969 38.902344 L 311.019531 48.164062 "/>
+<path style="fill:none;stroke-width:3;stroke-linecap:round;stroke-linejoin:miter;stroke:rgb(21%25,70%25,40.6%25);stroke-opacity:1;stroke-miterlimit:10;" d="M 328.003906 35.003906 C 359.113281 37.035156 388.4375 53.132812 408.070312 77.113281 "/>
+<path style=" stroke:none;fill-rule:nonzero;fill:rgb(21%25,70%25,40.6%25);fill-opacity:1;" d="M 411.492188 74.679688 L 413.605469 84.457031 L 405.199219 79.035156 "/>
+<path style="fill:none;stroke-width:3;stroke-linecap:round;stroke-linejoin:miter;stroke:rgb(21%25,70%25,40.6%25);stroke-opacity:1;stroke-miterlimit:10;" d="M 421.605469 99.4375 C 433.441406 134.742188 431.292969 174.019531 417.269531 208.355469 "/>
+<path style=" stroke:none;fill-rule:nonzero;fill:rgb(21%25,70%25,40.6%25);fill-opacity:1;" d="M 421.304688 209.292969 L 413.90625 216.019531 L 414.378906 206.03125 "/>
+<path style="fill:none;stroke-width:3;stroke-linecap:round;stroke-linejoin:miter;stroke:rgb(21%25,70%25,40.6%25);stroke-opacity:1;stroke-miterlimit:10;" d="M 403.617188 228.703125 C 365.914062 254.179688 320.441406 267.265625 275.058594 267.421875 "/>
+<path style=" stroke:none;fill-rule:nonzero;fill:rgb(21%25,70%25,40.6%25);fill-opacity:1;" d="M 275.480469 271.421875 L 266.371094 267.292969 L 275.730469 263.773438 "/>
+<path style="fill:none;stroke-width:3;stroke-linecap:round;stroke-linejoin:miter;stroke:rgb(21%25,40.6%25,70%25);stroke-opacity:1;stroke-miterlimit:10;" d="M 330.683594 232.878906 C 310.113281 210.453125 300.621094 179.105469 303.59375 149.015625 "/>
+<path style=" stroke:none;fill-rule:nonzero;fill:rgb(21%25,40.6%25,70%25);fill-opacity:1;" d="M 299.414062 148.53125 L 304.84375 140.136719 L 306.941406 149.914062 "/>
+<path style="fill:none;stroke-width:3;stroke-linecap:round;stroke-linejoin:miter;stroke:rgb(21%25,40.6%25,70%25);stroke-opacity:1;stroke-miterlimit:10;" d="M 311.625 127.269531 C 336.332031 104.0625 370.289062 91.835938 404.015625 92.285156 "/>
+<path style=" stroke:none;fill-rule:nonzero;fill:rgb(21%25,40.6%25,70%25);fill-opacity:1;" d="M 403.894531 88.144531 L 412.800781 92.691406 L 403.289062 95.773438 "/>
+<path style="fill:none;stroke-width:3;stroke-linecap:round;stroke-linejoin:miter;stroke:rgb(21%25,40.6%25,70%25);stroke-opacity:1;stroke-miterlimit:10;" d="M 421.605469 99.4375 C 433.441406 134.742188 431.292969 174.019531 417.269531 208.355469 "/>
+<path style=" stroke:none;fill-rule:nonzero;fill:rgb(21%25,40.6%25,70%25);fill-opacity:1;" d="M 421.304688 209.292969 L 413.90625 216.019531 L 414.378906 206.03125 "/>
+<path style="fill:none;stroke-width:3;stroke-linecap:round;stroke-linejoin:miter;stroke:rgb(21%25,40.6%25,70%25);stroke-opacity:1;stroke-miterlimit:10;" d="M 409.132812 216.882812 C 388.820312 204.511719 377.023438 180.847656 377.566406 157.355469 "/>
+<path style=" stroke:none;fill-rule:nonzero;fill:rgb(21%25,40.6%25,70%25);fill-opacity:1;" d="M 373.125 157.207031 L 378.339844 148.671875 L 380.6875 158.394531 "/>
+<path style="fill:none;stroke-width:3;stroke-linecap:round;stroke-linejoin:miter;stroke:rgb(21%25,40.6%25,70%25);stroke-opacity:1;stroke-miterlimit:10;" d="M 370.535156 148.855469 C 374 177.480469 363.148438 206.824219 343.226562 227.382812 "/>
+<path style=" stroke:none;fill-rule:nonzero;fill:rgb(21%25,40.6%25,70%25);fill-opacity:1;" d="M 346.546875 230.070312 L 337.054688 233.214844 L 341.542969 224.28125 "/>
+<path style="fill:none;stroke-width:3;stroke-linecap:round;stroke-linejoin:miter;stroke:rgb(60.2%25,21%25,70%25);stroke-opacity:1;stroke-miterlimit:10;" d="M 229.371094 63.992188 C 228.261719 95.132812 213.042969 124.898438 189.65625 145.210938 "/>
+<path style=" stroke:none;fill-rule:nonzero;fill:rgb(60.2%25,21%25,70%25);fill-opacity:1;" d="M 192.191406 148.558594 L 182.484375 150.953125 L 187.652344 142.394531 "/>
+<path style="fill:none;stroke-width:3;stroke-linecap:round;stroke-linejoin:miter;stroke:rgb(60.2%25,21%25,70%25);stroke-opacity:1;stroke-miterlimit:10;" d="M 187.472656 157.464844 C 214.617188 136.730469 249.855469 127.84375 283.652344 131.539062 "/>
+<path style=" stroke:none;fill-rule:nonzero;fill:rgb(60.2%25,21%25,70%25);fill-opacity:1;" d="M 283.992188 127.417969 L 292.425781 132.789062 L 282.664062 134.957031 "/>
+<path style="fill:none;stroke-width:3;stroke-linecap:round;stroke-linejoin:miter;stroke:rgb(60.2%25,21%25,70%25);stroke-opacity:1;stroke-miterlimit:10;" d="M 311.625 127.269531 C 336.332031 104.0625 370.289062 91.835938 404.015625 92.285156 "/>
+<path style=" stroke:none;fill-rule:nonzero;fill:rgb(60.2%25,21%25,70%25);fill-opacity:1;" d="M 403.894531 88.144531 L 412.800781 92.691406 L 403.289062 95.773438 "/>
+<path style="fill:none;stroke-width:3;stroke-linecap:round;stroke-linejoin:miter;stroke:rgb(60.2%25,21%25,70%25);stroke-opacity:1;stroke-miterlimit:10;" d="M 421.605469 99.4375 C 433.441406 134.742188 431.292969 174.019531 417.269531 208.355469 "/>
+<path style=" stroke:none;fill-rule:nonzero;fill:rgb(60.2%25,21%25,70%25);fill-opacity:1;" d="M 421.304688 209.292969 L 413.90625 216.019531 L 414.378906 206.03125 "/>
+<path style="fill:none;stroke-width:3;stroke-linecap:round;stroke-linejoin:miter;stroke:rgb(60.2%25,21%25,70%25);stroke-opacity:1;stroke-miterlimit:10;" d="M 409.132812 216.882812 C 388.820312 204.511719 377.023438 180.847656 377.566406 157.355469 "/>
+<path style=" stroke:none;fill-rule:nonzero;fill:rgb(60.2%25,21%25,70%25);fill-opacity:1;" d="M 373.125 157.207031 L 378.339844 148.671875 L 380.6875 158.394531 "/>
+<path style="fill:none;stroke-width:3;stroke-linecap:round;stroke-linejoin:miter;stroke:rgb(60.2%25,21%25,70%25);stroke-opacity:1;stroke-miterlimit:10;" d="M 365.65625 134.402344 C 320.996094 124.222656 280.066406 99.914062 248.59375 66.796875 "/>
+<path style=" stroke:none;fill-rule:nonzero;fill:rgb(60.2%25,21%25,70%25);fill-opacity:1;" d="M 245.9375 69.808594 L 242.6875 60.351562 L 251.671875 64.738281 "/>
+<path style="fill:none;stroke-width:3;stroke-linecap:round;stroke-linejoin:miter;stroke:rgb(70%25,21%25,21%25);stroke-opacity:1;stroke-miterlimit:10;" d="M 250.921875 261.871094 C 219.589844 242.421875 196.515625 210.988281 185.773438 175.871094 "/>
+<path style=" stroke:none;fill-rule:nonzero;fill:rgb(70%25,21%25,21%25);fill-opacity:1;" d="M 182.078125 177.773438 L 183.5625 167.882812 L 189.503906 175.925781 "/>
+<path style="fill:none;stroke-width:3;stroke-linecap:round;stroke-linejoin:miter;stroke:rgb(70%25,21%25,21%25);stroke-opacity:1;stroke-miterlimit:10;" d="M 187.472656 157.464844 C 214.617188 136.730469 249.855469 127.84375 283.652344 131.539062 "/>
+<path style=" stroke:none;fill-rule:nonzero;fill:rgb(70%25,21%25,21%25);fill-opacity:1;" d="M 283.992188 127.417969 L 292.425781 132.789062 L 282.664062 134.957031 "/>
+<path style="fill:none;stroke-width:3;stroke-linecap:round;stroke-linejoin:miter;stroke:rgb(70%25,21%25,21%25);stroke-opacity:1;stroke-miterlimit:10;" d="M 311.625 127.269531 C 336.332031 104.0625 370.289062 91.835938 404.015625 92.285156 "/>
+<path style=" stroke:none;fill-rule:nonzero;fill:rgb(70%25,21%25,21%25);fill-opacity:1;" d="M 403.894531 88.144531 L 412.800781 92.691406 L 403.289062 95.773438 "/>
+<path style="fill:none;stroke-width:3;stroke-linecap:round;stroke-linejoin:miter;stroke:rgb(70%25,21%25,21%25);stroke-opacity:1;stroke-miterlimit:10;" d="M 421.605469 99.4375 C 433.441406 134.742188 431.292969 174.019531 417.269531 208.355469 "/>
+<path style=" stroke:none;fill-rule:nonzero;fill:rgb(70%25,21%25,21%25);fill-opacity:1;" d="M 421.304688 209.292969 L 413.90625 216.019531 L 414.378906 206.03125 "/>
+<path style="fill:none;stroke-width:3;stroke-linecap:round;stroke-linejoin:miter;stroke:rgb(70%25,21%25,21%25);stroke-opacity:1;stroke-miterlimit:10;" d="M 403.617188 228.703125 C 365.914062 254.179688 320.441406 267.265625 275.058594 267.421875 "/>
+<path style=" stroke:none;fill-rule:nonzero;fill:rgb(70%25,21%25,21%25);fill-opacity:1;" d="M 275.480469 271.421875 L 266.371094 267.292969 L 275.730469 263.773438 "/>
+</g>
+</svg>
+'/><h3 id="Shortest-paths:-the-A*-algorithm"><a class="docs-heading-anchor" href="#Shortest-paths:-the-A*-algorithm">Shortest paths: the A* algorithm</a><a id="Shortest-paths:-the-A*-algorithm-1"></a><a class="docs-heading-anchor-permalink" href="#Shortest-paths:-the-A*-algorithm" title="Permalink"></a></h3><p>One way to find the shortest path between two vertices is to use the <code>a_star()</code> function, and provide the graph, the start vertex, and the end vertex. The function returns a list of edges.</p><p>(The unusual name of this function is just a reference to the name of the algorithm, <code>A*</code>, first published in 1968 by Peter Hart, Nils Nilsson, and Bertram Raphael.)</p><p>The function finds the shortest path and returns an array of edges that define the path.</p><pre><code class="language-julia hljs">@drawsvg begin
 background(&quot;grey20&quot;)
 
 sethue(&quot;lemon chiffon&quot;)
@@ -3240,7 +3327,7 @@ drawgraph(dirg, layout=buchheim,
     vertexlabels = 1:nv(g),
     vertexshapes = (vtx) -&gt; box(O, 30, 20, :fill),
     vertexlabelfontsizes = 16,
-    vertexfillcolors = (vtx) -&gt; (vtx ∈ src.(astar) || vtx ∈ dst.(astar))  &amp;&amp; colorant&quot;red&quot;,
+    vertexfillcolors = (vtx) -&gt; (vtx ∈ src.(astar) || vtx ∈ dst.(astar)) &amp;&amp; colorant&quot;red&quot;,
     edgelist = astar)
 end 800 400</code></pre><img src='data:image/svg+xml;utf-8,<?xml version="1.0" encoding="UTF-8"?>
 <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="800pt" height="400pt" viewBox="0 0 800 400" version="1.1">
@@ -3281,7 +3368,7 @@ end 800 400</code></pre><img src='data:image/svg+xml;utf-8,<?xml version="1.0" e
 </symbol>
 </g>
 </defs>
-<g id="surface1110">
+<g id="surface1130">
 <rect x="0" y="0" width="800" height="400" style="fill:rgb(20%25,20%25,20%25);fill-opacity:1;stroke:none;"/>
 <path style=" stroke:none;fill-rule:nonzero;fill:rgb(100%25,98.039216%25,80.392157%25);fill-opacity:1;" d="M 319 72.5 C 319 77.832031 311 77.832031 311 72.5 C 311 67.167969 319 67.167969 319 72.5 "/>
 <path style="fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:miter;stroke:rgb(100%25,98.039216%25,80.392157%25);stroke-opacity:1;stroke-miterlimit:10;" d="M 315 72.5 L 242.734375 108.632812 "/>
@@ -3632,7 +3719,7 @@ end 800 400</code></pre><img src='data:image/svg+xml;utf-8,<?xml version="1.0" e
 </g>
 </g>
 </svg>
-'/><p>The A* algorithm is useful for finding paths through mazes. A grid graph is subjected to some random vandalism, removing  a fair number of edges, the route through the maze was easily found by <code>a_star()</code>.</p><pre><code class="language-julia hljs">using  Random
+'/><p>One use for the A* algorithm is for finding paths through mazes. In the next example, a grid graph is subjected to some random vandalism, removing quite a few edges. Then a route through the maze was easily found by <code>a_star()</code>.</p><pre><code class="language-julia hljs">using Random
 
 Random.seed!(67)
 @drawsvg begin
@@ -3660,7 +3747,7 @@ drawgraph(g, vertexshapes= :none, layout=squaregrid, edgelist=astar, edgestrokew
 
 end 600 600</code></pre><img src='data:image/svg+xml;utf-8,<?xml version="1.0" encoding="UTF-8"?>
 <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="600pt" height="600pt" viewBox="0 0 600 600" version="1.1">
-<g id="surface1115">
+<g id="surface1135">
 <rect x="0" y="0" width="600" height="600" style="fill:rgb(49.803922%25,49.803922%25,49.803922%25);fill-opacity:1;stroke:none;"/>
 <path style="fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:miter;stroke:rgb(10.196078%25,10.196078%25,10.196078%25);stroke-opacity:1;stroke-miterlimit:10;" d="M 30 30 L 48.621094 30 "/>
 <path style="fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:miter;stroke:rgb(10.196078%25,10.196078%25,10.196078%25);stroke-opacity:1;stroke-miterlimit:10;" d="M 48.621094 30 L 48.621094 48.621094 "/>
@@ -4964,9 +5051,9 @@ end 600 600</code></pre><img src='data:image/svg+xml;utf-8,<?xml version="1.0" e
 <path style="fill:none;stroke-width:10;stroke-linecap:round;stroke-linejoin:miter;stroke:rgb(100%25,64.705882%25,0%25);stroke-opacity:1;stroke-miterlimit:10;" d="M 551.378906 570 L 570 570 "/>
 </g>
 </svg>
-'/><h2 id="Weighted-graphs"><a class="docs-heading-anchor" href="#Weighted-graphs">Weighted graphs</a><a id="Weighted-graphs-1"></a><a class="docs-heading-anchor-permalink" href="#Weighted-graphs" title="Permalink"></a></h2><p>Up to now our graphs have been like maps of train or metro networks, focusing on connections rather than on, say, distances and journey times. Edges are effectively always one unit long. Shortest path calculations can&#39;t take into account the true length of edges. But some systems modelled by graphs require this knowledge, which is where weighted graphs are useful. A weighted graph, which can be either undirected or directed, has numeric values assigned to each edge. This value is called the &quot;weight&quot; of an edge, and they&#39;re usually positive integers, but can be anything.</p><p>The word &quot;weight&quot; is interpreted according to context and the nature of the system modelled by the graph. For example, a higher value for the weight of an edge could mean a longer journey time or more expensive fuel costs, for map-style graphs, but it could signify high attraction levels for a social network graph.</p><p>To use weighted graphs, we must install a separate package, SimpleWeightedGraphs.jl, and load it alongside Graphs.jl.</p><p>To create a new weighted graph:</p><pre><code class="language-julia hljs">using Graphs, SimpleWeightedGraphs
+'/><h2 id="Weighted-graphs"><a class="docs-heading-anchor" href="#Weighted-graphs">Weighted graphs</a><a id="Weighted-graphs-1"></a><a class="docs-heading-anchor-permalink" href="#Weighted-graphs" title="Permalink"></a></h2><p>Up to now, our graphs have been like maps of train or metro networks, focusing on connections, rather than on, say, distances and journey times. Edges are effectively always one unit long. Shortest path calculations can&#39;t take into account the true length of edges. But some systems modelled by graphs require this knowledge, which is where weighted graphs are useful. A weighted graph, which can be either undirected or directed, has numeric values assigned to each edge. This value is called the &quot;weight&quot; of an edge, and they&#39;re usually positive integers, but can be anything.</p><p>The word &quot;weight&quot; is interpreted according to context and the nature of the system modelled by the graph. For example, a higher value for the weight of an edge could mean a longer journey time or more expensive fuel costs, for map-style graphs, but it could signify high attraction levels for a social network graph.</p><p>To use weighted graphs, we must install a separate package, SimpleWeightedGraphs.jl, and load it alongside Graphs.jl.</p><p>To create a new weighted graph:</p><pre><code class="language-julia hljs">using Graphs, SimpleWeightedGraphs
 
-wg = SimpleWeightedGraph()</code></pre><p>This creates a new, empty, weighted, undirected, graph. Or we can pass an existing graph to this function:</p><pre><code class="language-julia hljs">wg = SimpleWeightedGraph(Graph(6, 15), 4.0)</code></pre><p>To get the weights of a vertex, use:</p><pre><code class="nohighlight hljs">get_weight(wg, 1, 2)</code></pre><p>You can change the weight of an edge with:</p><pre><code class="nohighlight hljs">add_edge!(graph, from, to, weight)</code></pre><p>In this example, we set the default weight of every edge to 4.0 when the graph is created, and changed just one edge&#39;s weight:</p><pre><code class="language-julia hljs">wg = SimpleWeightedGraph(Graph(6, 15), 4.0)
+julia&gt; wg = SimpleWeightedGraph()</code></pre><p>This creates a new, empty, weighted, undirected, graph. Or we can pass an existing graph to this function:</p><pre><code class="language-julia hljs">julia&gt; wg = SimpleWeightedGraph(Graph(6, 15), 4.0)</code></pre><p>To get the weights of a vertex, use:</p><pre><code class="language-julia hljs">julia&gt; get_weight(wg, 1, 2)</code></pre><p>You can change the weight of an edge with:</p><pre><code class="language-julia hljs">julia&gt; add_edge!(graph, from, to, weight)</code></pre><p>In this example, we set the default weight of every edge to 4.0 when the graph is created, and changed just one edge&#39;s weight:</p><pre><code class="language-julia hljs">wg = SimpleWeightedGraph(Graph(6, 15), 4.0)
 add_edge!(wg, 1, 2, 10_000_000)
 @drawsvg begin
     sethue(&quot;gold&quot;)
@@ -5015,7 +5102,7 @@ end 600 300</code></pre><img src='data:image/svg+xml;utf-8,<?xml version="1.0" e
 </symbol>
 </g>
 </defs>
-<g id="surface1120">
+<g id="surface1140">
 <path style="fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:miter;stroke:rgb(100%25,84.313725%25,0%25);stroke-opacity:1;stroke-miterlimit:10;" d="M 415 158.660156 C 412.769531 190.4375 396.191406 220.335938 371.59375 240.289062 "/>
 <path style=" stroke:none;fill-rule:nonzero;fill:rgb(100%25,84.313725%25,0%25);fill-opacity:1;" d="M 374.761719 243.097656 L 365 245.261719 L 370.375 236.828125 "/>
 <g style="fill:rgb(100%25,0%25,0%25);fill-opacity:1;">
@@ -5149,14 +5236,14 @@ end 600 300</code></pre><img src='data:image/svg+xml;utf-8,<?xml version="1.0" e
 </g>
 </g>
 </svg>
-'/><p>If you look at the graph&#39;s adjacency matrix, you&#39;ll see that the weights have replaced the 1s:</p><pre><code class="nohighlight hljs">adjacency_matrix(wg)
+'/><p>If you look at the graph&#39;s adjacency matrix, you&#39;ll see that the weights have replaced the 1s:</p><pre><code class="language-julia hljs">julia&gt; adjacency_matrix(wg)
 6×6 SparseArrays.SparseMatrixCSC{Float64, Int64} with 30 stored entries:
   ⋅     1.0e7  4.0  4.0  4.0  4.0
  1.0e7   ⋅     4.0  4.0  4.0  4.0
  4.0    4.0     ⋅   4.0  4.0  4.0
  4.0    4.0    4.0   ⋅   4.0  4.0
  4.0    4.0    4.0  4.0   ⋅   4.0
- 4.0    4.0    4.0  4.0  4.0   ⋅</code></pre><p>For a directed graph, each edge can have two weights, one from src to dst, the other from dst to src.     </p><p>Note that <code>a_star()</code> doesn&#39;t work with weighted graphs yet.</p><h3 id="Spanning-trees"><a class="docs-heading-anchor" href="#Spanning-trees">Spanning trees</a><a id="Spanning-trees-1"></a><a class="docs-heading-anchor-permalink" href="#Spanning-trees" title="Permalink"></a></h3><p>A spanning tree is a set of edges that connect all the vertices of a graph together, without forming any cycles. There are various functions for finding spanning trees in Graphs.jl, including algorithms by Otakar Borůvka (<code>boruvka_mst()</code>), Joseph Kruskal (<code>kruskal_mst()</code>), and Robert Prim (<code>prim_mst()</code>). (Immortality can be attained by inventing a new graph-spanning algorithm.)</p><p>When used on a weighted graph, these functions find the minimum possible tree - the tree that scores the lowest when the weights of the edges are added up. (Some of them can also find the highest-scoring trees.)</p><pre><code class="language-julia hljs">@drawsvg begin
+ 4.0    4.0    4.0  4.0  4.0   ⋅</code></pre><p>For a directed graph, each edge can have two weights, one from src to dst, the other from dst to src.     </p><p>Note that <code>a_star()</code> doesn&#39;t work with weighted graphs yet.</p><h3 id="Spanning-trees"><a class="docs-heading-anchor" href="#Spanning-trees">Spanning trees</a><a id="Spanning-trees-1"></a><a class="docs-heading-anchor-permalink" href="#Spanning-trees" title="Permalink"></a></h3><p>A spanning tree is a set of edges that connect all the vertices of a graph together, without forming any cycles. There are various functions for finding spanning trees in Graphs.jl, including algorithms by Otakar Borůvka (<code>boruvka_mst()</code>), Joseph Kruskal (<code>kruskal_mst()</code>), and Robert Prim (<code>prim_mst()</code>). (Immortality can be attained by inventing a new graph-spanning algorithm.)</p><p>When used on a weighted graph, these functions find the minimum possible tree - the tree that scores the lowest when the weights of the edges are added up. (Some of these functions can also find the highest-scoring trees.)</p><pre><code class="language-julia hljs">@drawsvg begin
 background(&quot;grey20&quot;)
 
 g = SimpleWeightedGraph(smallgraph(:octahedral))
@@ -5228,7 +5315,7 @@ end 600 400</code></pre><img src='data:image/svg+xml;utf-8,<?xml version="1.0" e
 </symbol>
 </g>
 </defs>
-<g id="surface1125">
+<g id="surface1145">
 <rect x="0" y="0" width="600" height="400" style="fill:rgb(20%25,20%25,20%25);fill-opacity:1;stroke:none;"/>
 <path style="fill:none;stroke-width:3;stroke-linecap:round;stroke-linejoin:miter;stroke:rgb(49.803922%25,49.803922%25,49.803922%25);stroke-opacity:1;stroke-miterlimit:10;" d="M 152.347656 272.703125 L 289.726562 370 "/>
 <g style="fill:rgb(0%25,100%25,100%25);fill-opacity:1;">
@@ -5351,7 +5438,7 @@ end 600 400</code></pre><img src='data:image/svg+xml;utf-8,<?xml version="1.0" e
 </g>
 </g>
 </svg>
-'/><p>Notice how all the spanning trees found avoid the edge joining 1 and 4, which has been given a weight of 200.0.</p><p>Here&#39;s <code>boruka_mst()</code> looking for the maximum spanning tree; <code>Edge(1 =&gt; 4)</code> is always included now.</p><pre><code class="language-julia hljs">@drawsvg begin
+'/><p>Notice how all the spanning trees found have avoided the edge joining 1 and 4, which has been given a weight of 200.0.</p><p>Next, here&#39;s <code>boruka_mst()</code> looking for the <strong>maximum</strong> spanning tree; <code>Edge(1 =&gt; 4)</code> is always included everytime the function runs.</p><pre><code class="language-julia hljs">@drawsvg begin
 background(&quot;grey20&quot;)
 
 g = SimpleWeightedGraph(smallgraph(:octahedral))
@@ -5419,7 +5506,7 @@ end 600 400</code></pre><img src='data:image/svg+xml;utf-8,<?xml version="1.0" e
 </symbol>
 </g>
 </defs>
-<g id="surface1130">
+<g id="surface1150">
 <rect x="0" y="0" width="600" height="400" style="fill:rgb(20%25,20%25,20%25);fill-opacity:1;stroke:none;"/>
 <path style="fill:none;stroke-width:3;stroke-linecap:round;stroke-linejoin:miter;stroke:rgb(49.803922%25,49.803922%25,49.803922%25);stroke-opacity:1;stroke-miterlimit:10;" d="M 152.347656 272.703125 L 289.726562 370 "/>
 <g style="fill:rgb(100%25,64.705882%25,0%25);fill-opacity:1;">
@@ -5534,4 +5621,4 @@ end 600 400</code></pre><img src='data:image/svg+xml;utf-8,<?xml version="1.0" e
 </g>
 </g>
 </svg>
-'/></article><nav class="docs-footer"><a class="docs-footer-prevpage" href="index.html">« Introduction to Karnak</a><a class="docs-footer-nextpage" href="syntax.html">Kwarg madness »</a><div class="flexbox-break"></div><p class="footer-message">Powered by <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> and the <a href="https://julialang.org/">Julia Programming Language</a>.</p></nav></div><div class="modal" id="documenter-settings"><div class="modal-background"></div><div class="modal-card"><header class="modal-card-head"><p class="modal-card-title">Settings</p><button class="delete"></button></header><section class="modal-card-body"><p><label class="label">Theme</label><div class="select"><select id="documenter-themepicker"><option value="documenter-light">documenter-light</option><option value="documenter-dark">documenter-dark</option></select></div></p><hr/><p>This document was generated with <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> version 0.27.15 on <span class="colophon-date" title="Tuesday 12 April 2022 16:30">Tuesday 12 April 2022</span>. Using Julia version 1.7.0.</p></section><footer class="modal-card-foot"></footer></div></div></div></body></html>
+'/></article><nav class="docs-footer"><a class="docs-footer-prevpage" href="index.html">« Introduction to Karnak</a><a class="docs-footer-nextpage" href="syntax.html">Kwarg madness »</a><div class="flexbox-break"></div><p class="footer-message">Powered by <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> and the <a href="https://julialang.org/">Julia Programming Language</a>.</p></nav></div><div class="modal" id="documenter-settings"><div class="modal-background"></div><div class="modal-card"><header class="modal-card-head"><p class="modal-card-title">Settings</p><button class="delete"></button></header><section class="modal-card-body"><p><label class="label">Theme</label><div class="select"><select id="documenter-themepicker"><option value="documenter-light">documenter-light</option><option value="documenter-dark">documenter-dark</option></select></div></p><hr/><p>This document was generated with <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> version 0.27.15 on <span class="colophon-date" title="Tuesday 12 April 2022 21:51">Tuesday 12 April 2022</span>. Using Julia version 1.7.0.</p></section><footer class="modal-card-foot"></footer></div></div></div></body></html>

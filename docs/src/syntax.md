@@ -1,14 +1,5 @@
 ```@setup graphsection
 using Karnak, Luxor, Graphs, NetworkLayout, Colors, SimpleWeightedGraphs
-
-# these bright colors work on both white and dark backgrounds
-#  "fuchsia" "magenta" "magenta1" "brown1" "firebrick1"
-#  "blue" "blue1" "red" "red1" "purple1" "royalblue1"
-#  "orangered" "orangered1" "deeppink" "deeppink1" "maroon1"
-#  "darkorchid1" "dodgerblue" "dodgerblue1" "blue2"
-#  "purple2" "royalblue2" "dodgerblue2" "slateblue2"
-#  "mediumslateblue" "darkorchid2" "violetred2" "maroon2"
-#  "orangered2" "brown2"
 ```
 
 # Syntax
@@ -19,7 +10,6 @@ Karnak's function for drawing graphs is `drawgraph()`. This
 takes a single argument, a `Graph`, and tries to place it on
 the current Luxor drawing. It uses the current color, scale,
 and rotation, marking the vertices of the graph with circles.
-
 
 ```@example graphsection
 @drawsvg begin
@@ -514,8 +504,8 @@ end 600 600
 ```@example graphsection
 g = barbell_graph(3, 3)
 @drawsvg begin
+    background("grey10")
     fontsize(30)
-    background("grey20")
     sethue("white")
     drawgraph(g,
         layout=stress,
@@ -540,12 +530,12 @@ for e in edges(wg)
     add_edge!(wg, src(e), dst(e), rand(1:20))
 end    
 @drawsvg begin
+   	background("grey20")
     sethue("gold")
     drawgraph(wg,
         edgecurvature=20,
         vertexlabels = 1:nv(wg),
-        edgestrokeweights = [get_weight(wg, src(e), dst(e)) for e in edges(wg)]
-    )
+        edgestrokeweights = [get_weight(wg, src(e), dst(e)) for e in edges(wg)])
 end
 ```
 
