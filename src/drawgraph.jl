@@ -56,7 +56,6 @@ function _drawedgelines(from, to, edgesrc, edgedest;
     else
         edgeline = true
     end
-
     strokecolor = Luxor.get_current_color()
 
     # set edge stroke color
@@ -134,7 +133,7 @@ function _drawedgelines(from, to, edgesrc, edgedest;
     # finally time to draw the edge
     # edgeline = nothing | true | function
 
-    if edgeline == false
+    if edgeline == false || edgeline == nothing
         return
     end
     @layer begin
@@ -719,7 +718,7 @@ function drawedge(from::Point, to::Point;
             edgestrokeweights,
             edgedashpatterns,
             edgegaps,
-            digraph=graph isa DiGraph,
+            digraph=is_directed(graph),
             edgecurvature=edgecurvature)
         _drawedgelabels(from, to;
             edgenumber,
@@ -987,7 +986,7 @@ function drawgraph(g::AbstractGraph;
     end
 
     # experimental
-    if g isa DiGraph
+    if is_directed(g)
         # if digraph, consolidate double edges to one single one
         digraphedges = Edge[]
         for edge in edges(g)

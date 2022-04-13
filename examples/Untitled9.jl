@@ -40,7 +40,7 @@ g, labels = walk_tree(:(begin g = DiGraph()
 end))
 
 @drawsvg begin
-    background("grey20")
+    background("grey10")
     sethue("gold")
     drawgraph(g,
         layout = buchheim,

@@ -20,7 +20,7 @@ function drawball(pos, ballradius, col::Color;
 end
 
 @drawsvg begin
-background("grey4")
+background("grey10")
 
 g = grid((10, 10))
 

@@ -84,7 +84,7 @@ For example, in this next drawing, the two sets of points for a bipartite graph 
 
 ```@example graphsection
 @drawsvg begin
-background("grey20")
+background("grey10")
 N = 12; H = 250; W = 550
 g = complete_bipartite_graph(N, N)
 pts = vcat(
@@ -259,7 +259,7 @@ function drawball(pos, ballradius, col::Color;
 end
 
 @drawsvg begin
-background("grey4")
+background("grey10")
 g = clique_graph(5, 6)
 sethue("yellow")
 setline(0.2)
@@ -318,7 +318,7 @@ end 600 300
 
 ```@example graphsection
 @drawsvg begin
-background("grey30")
+background("grey10")
 sethue("orange")
 g = grid((20, 20))
 drawgraph(g,
@@ -397,7 +397,7 @@ Use `edgelabels`, `edgelabelcolors`, `edgelabelrotations`, etc. to control the a
 
 ```@example graphsection
 @drawsvg begin
-background("grey20")
+background("grey10")
 g = smallgraph(:dodecahedral)
 g = complete_graph(5)
 fontsize(20)
@@ -430,7 +430,7 @@ for i in 1:n
 end
 
 @drawsvg begin
-    background("grey20")
+    background("grey10")
     drawgraph(g, layout=stress,
         vertexshapes = :circle,
         vertexlabels = 1:n,

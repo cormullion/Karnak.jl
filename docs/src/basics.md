@@ -422,6 +422,27 @@ end 600 300
 
 Other useful functions in Graphs.jl include `has_vertex(g, v)` and `has_edge(g, s, d)`.
 
+### Degree
+
+The **degree** of a vertex is the number of edges that meet at that vertex.
+
+```@example graphsection
+@draw begin
+background("grey10")
+sethue("gold")
+g = smallgraph(:krackhardtkite)
+
+drawgraph(g, layout=spring,
+    vertexfillcolors = (vtx) -> HSB(36degree(g, vtx), .9, .5),
+    vertexshapesizes = 20,
+    margin=40,
+    vertexlabels = (vtx) -> string(degree(g, vtx)),
+    vertexlabeltextcolors = colorant"white",
+    vertexlabelfontsizes = 30
+    )
+end 600 300
+```
+
 ## Graphs as matrices
 
 Graphs can be represented as matrices. In the world of graph theory, we'll meet the adjacency matrix, the incidence matrix, and the adjacency list.
@@ -454,7 +475,9 @@ drawgraph(pg, vertexlabels = 1:nv(pg), layout = Shell(nlist=[6:10,]))
 end 600 400
 ```
 
-Notice that this matrix, for a Petersen graph, is symmetrical about the top-left/bottom-right diagonal, because, in an undirected graph, a connection from vertex 4 to vertex 5 is also a connection from vertex 5 to 4. The vertical sum of each column (and the horizontal sum of each row) is the number of edges shared by that vertex, which is usually called the **degree** of the vertex.
+Notice that this matrix, for a Petersen graph, is symmetrical about the top-left/bottom-right diagonal, because, in an undirected graph, a connection from vertex 4 to vertex 5 is also a connection from vertex 5 to 4. The vertical sum of each column (and the horizontal sum of each row) is the number of edges shared by that vertex,
+
+
 
 We can provide an adjacency matrix to the graph construction functions to create a graph. For example, this matrix recreates the House graph from its adjacency matrix:
 
@@ -671,7 +694,7 @@ The function finds the shortest path and returns an array of edges that define t
 
 ```@example graphsection
 @drawsvg begin
-background("grey20")
+background("grey10")
 
 sethue("lemonchiffon")
 
@@ -695,11 +718,13 @@ end 800 400
 One use for the A* algorithm is for finding paths through mazes. In the next example, a grid graph is subjected to some random vandalism, removing quite a few edges. Then a route through the maze was easily found by `a_star()`.
 
 ```@example graphsection
+using Karnak, Luxor, Graphs, Colors, NetworkLayout
+
 using Random
 
 Random.seed!(67)
 @drawsvg begin
-background("grey50")
+background("grey10")
 
 W, H = 30, 30
 g = grid((W, H))
@@ -712,14 +737,21 @@ let
     end
 end
 
-sethue("grey10")
-drawgraph(g, vertexshapes= :none, layout=squaregrid)
+sethue("maroon")
+drawgraph(g,
+    vertexshapes = :none,
+    layout=squaregrid)
 
 astar = a_star(g, 1, W * H)
 
 sethue("orange")
 
-drawgraph(g, vertexshapes= :none, layout=squaregrid, edgelist=astar, edgestrokeweights=10)
+drawgraph(g,
+    vertexshapes= :none,
+    layout=squaregrid,
+    edgelist=astar,
+    edgegaps=0,
+    edgestrokeweights=5)
 
 end 600 600
 ```
@@ -800,7 +832,7 @@ When used on a weighted graph, these functions find the minimum possible tree - 
 
 ```@example graphsection
 @drawsvg begin
-background("grey20")
+background("grey10")
 
 g = SimpleWeightedGraph(smallgraph(:octahedral))
 
@@ -838,7 +870,7 @@ Next, here's `boruka_mst()` looking for the **maximum** spanning tree; `Edge(1 =
 
 ```@example graphsection
 @drawsvg begin
-background("grey20")
+background("grey10")
 
 g = SimpleWeightedGraph(smallgraph(:octahedral))
 
