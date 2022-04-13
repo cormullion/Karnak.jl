@@ -166,24 +166,24 @@ function _drawedgelines(from, to, edgesrc, edgedest;
                 rotate(π + s)
                 arrow(O, selfloopradius, 0, 2π - π / 16, linewidth=linewidth, arrowheadlength=d / 2)
             end
-            # digraph
+        # digraph
         elseif digraph == true
             if abs(edgecurvature) > 0.0
-                # digraph and curvey lines
-
+               # digraph and curvey lines
                 arrow(between(from, to, edgegap / d),
                     between(from, to, 1 - edgegap / d),
                     [edgecurvature, edgecurvature],
-                    startarrow=true,
+                    startarrow=false,
                     finisharrow=true, :stroke, linewidth=linewidth)
-
-
             else
                 midpt = midpoint(from, to)
-                arrow(midpt, between(midpt, to, 1 - edgegap / d), linewidth=linewidth)
-                arrow(midpt, between(midpt, from, 1 - edgegap / d), linewidth=linewidth)
+                arrow(between(from, to, edgegap / d),
+                    between(from, to, 1 - edgegap / d),
+                    [0, 0],
+                    startarrow=false,
+                    finisharrow=true, :stroke, linewidth=linewidth)
             end
-            # not digraph
+        # not digraph
         elseif digraph == false
             if abs(edgecurvature) > 0.0
 
@@ -192,9 +192,6 @@ function _drawedgelines(from, to, edgesrc, edgedest;
                     [edgecurvature, edgecurvature],
                     startarrow=true,
                     finisharrow=true, :stroke, linewidth=linewidth)
-
-
-
             else
                 line(between(from, to, edgegap / d), between(from, to, 1 - edgegap / d), :stroke)
             end
@@ -985,17 +982,17 @@ function drawgraph(g::AbstractGraph;
         edgestodraw = edges(g)
     end
 
-    # experimental
-    if is_directed(g)
-        # if digraph, consolidate double edges to one single one
-        digraphedges = Edge[]
-        for edge in edges(g)
-            if Edge(dst(edge), src(edge)) ∉ digraphedges
-                push!(digraphedges, Edge(src(edge), dst(edge)))
-            end
-        end
-        edgestodraw = digraphedges
-    end
+    # # experimental
+    # if is_directed(g)
+    #     # if digraph, consolidate double edges to one single one
+    #     digraphedges = Edge[]
+    #     for edge in edges(g)
+    #         if Edge(dst(edge), src(edge)) ∉ digraphedges
+    #             push!(digraphedges, Edge(src(edge), dst(edge)))
+    #         end
+    #     end
+    #     edgestodraw = digraphedges
+    # end
 
     for (n, edge) in enumerate(edgestodraw)
         s, d = src(edge), dst(edge)

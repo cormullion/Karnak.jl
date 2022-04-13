@@ -708,10 +708,11 @@ drawgraph(dirg, layout=buchheim,
     vertexlabels = 1:nv(g),
     vertexshapes = (vtx) -> box(O, 30, 20, :fill),
     vertexlabelfontsizes = 16,
-    edgegaps=25,
-    edgestrokecolors = (edgenumber, from, to, s, d) -> (s ∈ src.(astar) && d ∈ dst.(astar)) ? colorant"red" : Luxor.get_current_color(),
-    vertexfillcolors = (vtx) -> (vtx ∈ src.(astar) || vtx ∈ dst.(astar)) && colorant"red",
-    edgelist = astar)
+    edgegaps=20,
+    edgestrokecolors = (edgenumber, from, to, s, d) -> (s ∈ src.(astar) && d ∈ dst.(astar)) ?
+        colorant"red" : colorant"grey40",
+    vertexfillcolors = (vtx) -> (vtx ∈ src.(astar) || vtx ∈ dst.(astar)) && colorant"red"
+    )
 end 800 400
 ```
 
