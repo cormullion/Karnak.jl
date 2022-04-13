@@ -93,7 +93,7 @@ pts = vcat(
 circle.(pts, 1, :fill)
 drawgraph(g, vertexlabels = 1:nv(g), layout = pts,
     edgestrokeweights = 0.5,
-	edgestrokecolors = (n, f, t) -> HSB(rescale(n, 1, ne(g), 0, 360), 0.6, 0.9))
+	edgestrokecolors = (n, f, t, s, d) -> HSB(rescale(n, 1, ne(g), 0, 360), 0.6, 0.9))
 end 600 300
 ```
 
@@ -103,7 +103,7 @@ The two keyword arguments `vertexfunction` and `edgefunction` allow you to pass 
 
 ```
 vertexfunction = my_vertexfunction(vertex, coordinates)
-edgefunction = my_edgefunction(from::Point, to::Point)
+edgefunction = my_edgefunction(edgenumber, from, to, edgesrc, edgedest)
 ```
 
 These allow you to place graphics at `coordinates[vertex]`, and to draw edges from `from` to `to`, using any available tools for drawing.
@@ -236,6 +236,8 @@ drawgraph(g, layout=stress,
 end 600 300
 ```
 
+One more example with `vertexshapes`.
+
 ```@example graphsection
 function whiten(col::Color, f=0.5)
     hsl = convert(HSL, col)
@@ -258,10 +260,11 @@ end
 
 @drawsvg begin
 background("grey4")
-g = grid((10, 10))
+g = clique_graph(5, 6)
+sethue("yellow")
+setline(0.2)
 drawgraph(g,
-	layout = squaregrid,
-	edgelines = 0,
+	layout = stress,
 	vertexshapes = (v) -> drawball(O, 25, RGB([Luxor.julia_red,Luxor.julia_purple, Luxor.julia_green][rand(1:end)]...))
 )
 end 600 600
@@ -367,7 +370,7 @@ background(0.1, 0.25, 0.15)
 g = barbell_graph(22, 22)
 A = Point[]
 drawgraph(g, layout=stress,
-    edgefunction = (from, to) -> begin
+    edgefunction = (edgenumber, from, to, edgesrc, edgedest) -> begin
      push!(A, from),
      push!(A, to)
      end,
@@ -451,12 +454,15 @@ g = SimpleWeightedGraph(sources, destinations, weights)
 		vertexlabels = 1:nv(g),
 		vertexshapesizes = 20,
 		vertexlabelfontsizes = 30,
+		edgecurvature = 10,
+		edgegaps = 25,
 		edgelabels = (edgenumber, edgesrc, edgedest, from, to) -> begin
 			@layer begin
 				sethue("black")
 				box(midpoint(from, to), 50, 30, :fill)
 			end
 			box(midpoint(from, to), 50, 30, :stroke)
+			fontsize(16)
 			text(string(get_weight(g, edgesrc, edgedest)),
 				midpoint(from, to),
 				halign=:center,
@@ -484,8 +490,8 @@ This example draws the graph more than once; once with all the edges, and once w
 		layout=stress,
 	 	vertexshapes = :none,
 		edgelist = astar,
-		edgestrokecolors=RGBA(1, 1, 0, 0.35),
-		edgestrokeweights=20)
+		edgestrokecolors=RGBA(1, 1, 0, 0.5),
+		edgestrokeweights=10)
 	drawgraph(g,
 		layout=stress,
 		edgelines=0,
@@ -495,11 +501,35 @@ This example draws the graph more than once; once with all the edges, and once w
 end 600 600
 ```
 
-### `edgelines`
+### `edgecurvature` and `edgecaps`
 
-### `edgecurvature`
+`edgecurvature` determines the curvature of the edges, and `edgegaps` sets the distance between the tip of the arrowhead and the vertex position.
 
-### `edgestrokecolors`
+```@example graphsection
+g = grid((3, 3))
+
+for e in edges(g)
+    add_edge!(g, src(e), src(e))
+    add_edge!(g, dst(e), dst(e))
+end
+
+@drawsvg begin
+    background("grey10")
+    sethue("white")
+    for c in 1:10
+    drawgraph(g,
+        margin=70,
+        vertexshapes = :none,
+        edgegaps = 5c,
+        edgecurvature = 5c,
+        edgestrokecolors = HSB(36c, .8, .8),
+        edgestrokeweights = 1,
+        layout=squaregrid)
+    end
+end 600 500
+```
+
+### `edgestrokecolors` and `edgestrokeweights`
 
 ```@example graphsection
 g = barbell_graph(3, 3)
@@ -513,30 +543,31 @@ g = barbell_graph(3, 3)
         edgecurvature = 10,
         edgestrokeweights = 2 * (1:ne(g)),
         edgelabelcolors = colorant"white",
-        edgestrokecolors=(edgenumber, from, to) ->
-            HSB(rescale(edgenumber, 1, ne(g), 0, 359), .8, .8)
-          )
+        edgestrokecolors= (n, from, to, edgesrc, edgedest) -> HSB(rescale(n, 1, ne(g), 0, 359), .8, .8))
 end 600 500
 ```
 
-### `edgestrokeweights`
+### `edgedashpatterns`
 
-One possible use for varying the stroke weight of the edges might be to indicate
-the weight of a weighted graph's edge:
+Line dashes work the same as in Luxor.jl. If you want to alternate between dash patterns, supply an array of patterns.
 
 ```@example graphsection
-wg = SimpleWeightedDiGraph(Graph(5, 10), 1.0)
-for e in edges(wg)
-    add_edge!(wg, src(e), dst(e), rand(1:20))
-end    
+g = grid((5, 5))
 @drawsvg begin
-   	background("grey20")
-    sethue("gold")
-    drawgraph(wg,
-        edgecurvature=20,
-        vertexlabels = 1:nv(wg),
-        edgestrokeweights = [get_weight(wg, src(e), dst(e)) for e in edges(wg)])
-end
+    background("grey10")
+    sethue("white")
+    drawgraph(g,
+        layout=squaregrid,
+        edgestrokeweights = 5,
+        edgelabels = (edgenumber, edgesrc, edgedest, from::Point, to::Point) ->
+            begin
+                label(string(isodd(edgenumber) ? 'a' : 'b'), :se, midpoint(from, to), offset=10)
+            end,
+        edgedashpatterns = [[20, 10, 1, 10], [20, 10], [0.5, 10]],
+        edgelabelfontsizes = 20,
+        vertexshapesizes = 2,
+        edgestrokecolors=(edgenumber, from, to, src, dst) ->
+            HSB(rescale(edgenumber, 1, ne(g), 0, 359), .8, .8)
+          )
+end 600 400
 ```
-
-### `edgedashpatterns`

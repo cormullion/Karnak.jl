@@ -4,13 +4,12 @@ using Random
 Random.seed!(42)
 logo = readsvg("docs/src/assets/logo.svg")
 
-
-
 function hiero()
     tiles = Tiler(1280, 640, 8, 12)
     for (pos, n) in tiles
         @layer begin
             translate(pos)
+            setline(0.5)
             bb = BoundingBox(box(O, tiles.tilewidth, tiles.tileheight))
             rule(O + (tiles.tilewidth)/2, π/2)
             R = rand(1:10)
@@ -45,44 +44,47 @@ function hiero()
 end
 
 @png begin
-    #background("#bc9e78")
 
-
-     pl = box(BoundingBox())
-      mesh1 = mesh(pl, [
-          Colors.RGBA(0.0, 0.0, 0.1, 0.99),
-          Colors.RGBA(0.7, 0.5, 0.0, 0.99),
-          Colors.RGBA(0.0, 0.0, 0.0, 0.99),
-          Colors.RGBA(0.0, 0.2, 0.4, 0.99),
-          ])
-      setmesh(mesh1)
-      paint()
+    pl = box(BoundingBox())
+    mesh1 = mesh(pl, [
+    Colors.RGBA(0.0, 0.0, 0.1, 0.99),
+    Colors.RGBA(0.7, 0.5, 0.0, 0.99),
+    Colors.RGBA(0.2, 0.1, 0.2, 0.99),
+    Colors.RGBA(0.0, 0.1, 0.2, 0.99),
+    ])
+    setmesh(mesh1)
+    paint()
 
     panes = Tiler(1280,  640, 1, 2, margin=0)
 
+    # left
+    @layer begin
+        box(first(panes[1]), 640, 640, :fill)
+        box(first(panes[1]), 640, 640, :clip)
+        sethue("gold2")
+        setopacity(0.3)
+        hiero()
+        clipreset()
+    end
+
+    # right
+    @layer begin
+        setopacity(0.2)
+        sethue("midnightblue")
+        box(first(panes[2]), 640, 640, :fill)
+        box(first(panes[2]), 640, 640, :clip)
+        sethue("gold2")
+        hiero()
+        clipreset()
+    end
 
     @layer begin
-        #setopacity(0.1)
-    box(first(panes[1]), 640, 640, :fill)
-    box(first(panes[1]), 640, 640, :clip)
-    sethue("gold2")
-    setopacity(0.3)
-    hiero()
-    clipreset()
-end
-
-    @layer begin
-    setopacity(0.4)
-    sethue(0.05, 0.1, 0.3)
-    box(first(panes[2]), 640, 640, :fill)
-    box(first(panes[2]), 640, 640, :clip)
-#    sethue("black")
-#    setopacity(1.0)
-    setopacity(0.2)
-    sethue("gold2")
-    hiero()
-    clipreset()
-end
+        sethue("gold")
+        setopacity(0.2)
+        for pt in randompointarray(BoundingBox(), 30)
+            star(pt, 16, 6, 0.1, rand() * 2π, :fill)
+        end
+    end
 
     @layer begin
         translate(first(panes[1]))
@@ -91,35 +93,35 @@ end
     end
 
     @layer begin
-#       sethue("black")
         translate(first(panes[2]))
-        fontsize(140)
-       fontface("EgyptianWide")
-       bx = box(O, panes.tilewidth/1.5, panes.tileheight/1.5)
-       #poly(bx, :stroke, close=true)
-       textoutlines("Karnak", O + (0, -150), halign=:center, :path)
+        fontsize(62)
+        fontface("EgyptianWide")
+        bx = box(O, panes.tilewidth/1.5, panes.tileheight/1.5)
+        textoutlines("KARNAK", O + (0, -150), halign=:center, :path)
         @layer begin
             sethue("gold")
             fillpreserve()
-            setline(6)
-               sethue("black")
-               strokepath()
+            setline(3)
+            sethue("black")
+            strokepath()
         end
 
-    sethue("gold")
-       bx = box(O, panes.tilewidth/1.5, panes.tileheight/4)
-       fontsize(30)
-       textwrap("A small Luxor.jl utility package to help with drawing some graph-style drawings, more for decorative purposes than anything else. Uses Graphs.jl and NetworkLayout.jl.", 800, boxtopleft(BoundingBox(bx)), leading=get_fontsize() + 10)
+        bx = box(O + (0, 100), panes.tilewidth/1.5, panes.tileheight/1.8)
+        @layer begin
+            sethue("black")
+            setopacity(0.2)
+            poly(bx, :fill)
+        end
+        fontsize(25)
+        fontface("WorkSans-Bold")
+        sethue("gold")
+        textwrap("Karnak.jl is a small utility package for Luxor.jl
+that helps with drawing some graph-style drawings, more for
+decorative purposes than anything else. Uses Graphs.jl and
+NetworkLayout.jl.", 800, boxtopleft(BoundingBox(bx)) + (20, 0),
+leading=get_fontsize() + 20)
 
     end
 
-
-    # @layer begin
-    #     sethue("gold")
-    #     setopacity(0.2)
-    #     for pt in randompointarray(BoundingBox(), 30)
-    #         star(pt, 20, 6, 0.1, rand() * 2π, :fill)
-    #     end
-    # end
 
 end 1280 640 "docs/src/assets/figures/karnak-social-media-preview.png"

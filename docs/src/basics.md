@@ -12,7 +12,31 @@ of programming in Julia.
 ## Graphs, vertices, and edges
 
 Graph theory is used for analysing networks and
-the relationships between things. A typical graph consists of:
+the relationships between things in the network.
+
+```@setup graphtheory
+using Karnak, Luxor, Graphs, NetworkLayout, Colors, SimpleWeightedGraphs
+d = @drawsvg begin
+    background("grey10")
+    sethue("yellow")
+    fontsize(15)
+    drawgraph(Graph(3, 3),
+        layout=spring,
+        margin=50,
+        vertexshapes = :circle,
+        edgedashpatterns = [10, 30],
+        vertexshapesizes = 40,
+        vertexlabels = ["thing 1", "thing 2", "thing 3"],
+        edgelabels = ["a relationship", "a relationship", "a relationship"]
+        )
+end 600 350
+```
+
+```@example graphtheory
+d # hide
+```
+
+A typical graph consists of:
 
 - vertices, which represent the things or entities, and
 
@@ -391,7 +415,7 @@ drawgraph(pg,
     layout = Shell(nlist=[6:10,]),
     vertexfillcolors = (v) -> ((v == vertexofinterest) || v ∈ neighbors(pg, vertexofinterest)) && colorant"blue",
     vertexshapesizes = [v == vertexofinterest ? 20 : 10 for v in 1:nv(pg)],
-    edgestrokecolors = (e, f, t) -> (e ∈ E) ? colorant"red" : colorant"blue"
+    edgestrokecolors = (e, f, t, s, d) -> (e ∈ E) ? colorant"red" : colorant"blue"
     )
 end 600 300
 ```
@@ -649,18 +673,20 @@ The function finds the shortest path and returns an array of edges that define t
 @drawsvg begin
 background("grey20")
 
-sethue("lemon chiffon")
+sethue("lemonchiffon")
+
 g = binary_tree(5)
+
 dirg = SimpleDiGraph(collect(edges(g)))
 
-astar = a_star(dirg, 1, 24)
-
-drawgraph(dirg, layout=buchheim)
+astar = a_star(dirg, 1, 21)
 
 drawgraph(dirg, layout=buchheim,
     vertexlabels = 1:nv(g),
     vertexshapes = (vtx) -> box(O, 30, 20, :fill),
     vertexlabelfontsizes = 16,
+    edgegaps=25,
+    edgestrokecolors = (edgenumber, from, to, s, d) -> (s ∈ src.(astar) && d ∈ dst.(astar)) ? colorant"red" : Luxor.get_current_color(),
     vertexfillcolors = (vtx) -> (vtx ∈ src.(astar) || vtx ∈ dst.(astar)) && colorant"red",
     edgelist = astar)
 end 800 400
@@ -742,6 +768,7 @@ add_edge!(wg, 1, 2, 10_000_000)
     drawgraph(wg, edgecurvature=10,
         vertexlabels = 1:nv(wg),
         edgelabels = [get_weight(wg, src(e), dst(e)) for e in edges(wg)],
+        edgegaps = 10,
         edgelabelcolors =
             [get_weight(wg, src(e), dst(e)) > 10 ?
                 colorant"red" : colorant"green" for e in edges(wg)])

@@ -123,7 +123,7 @@ function test2()
 
         #drawgraph(g)
 
-        #drawgraph(g, vertexfunction  = (v, coords) -> circle(coords[v], 5, :fill), edgefunction = (f, t) -> arrow(f, t, linewidth=0.5))
+        #drawgraph(g, vertexfunction  = (v, coords) -> circle(coords[v], 5, :fill), edgefunction = (n, f, t, s, d) -> arrow(f, t, linewidth=0.5))
 
         setopacity(0.85)
         setline(3)

@@ -1,4 +1,4 @@
-using Graphs, Karnak, NetworkLayout, Colors
+using Luxor, Graphs, Karnak, NetworkLayout, Colors
 
 dg = Graph(30, [
 [2, 5, 7],
@@ -25,7 +25,7 @@ dg = Graph(30, [
 @drawsvg begin # hide
     sethue("black")
     sethue("orange")
-    drawgraph(dg,
+    drawgraph(DiGraph(dg),
             layout = stress,
             vertexshapesizes= 10,
             #vertexfillcolors = RGB(1, rand(), rand()),
@@ -33,7 +33,8 @@ dg = Graph(30, [
             vertexshapes = (v) -> ngon(O, rand(5:15), 6, 0, :fill),
             edgelines  = range(1, nv(dg), step=1),
             edgecurvature= -10,
-            edgestrokeweights = [1, 2, 23],
+            edgegaps = [10, 20, 30, 10, 10],
+            edgestrokeweights = [1, 2, 4],
             edgestrokecolors=[colorant"cyan", colorant"red", colorant"blue", colorant"gold"],
             )
 end 800 500 # hide
