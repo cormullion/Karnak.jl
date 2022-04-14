@@ -1,3 +1,9 @@
+# This code is odd; it's mostly `if` statements and `nothing`s...
+# Perhaps I should rewrite it, but it did what I needed it to do, so
+# that's not a high priority.
+
+const defaultshaperadius = 6
+
 function _normalize_layout_coordinates(rawcoordinates, boundingbox, margin)
     # convert NetworkLayout coordinates to fit inside Luxor BB
     if length(rawcoordinates[1]) == 3
@@ -21,6 +27,8 @@ function _normalize_layout_coordinates(rawcoordinates, boundingbox, margin)
     return [(sf * offset) + (sf * (Point(first(p), -last(p)))) for p in rawcoordinates]
 end
 
+# TODO refactor
+
 function _drawedgelines(from, to, edgesrc, edgedest;
     edgenumber=1,
     edgelines=nothing,
@@ -32,7 +40,6 @@ function _drawedgelines(from, to, edgesrc, edgedest;
     digraph=false)
 
     # decide whether or not to draw this edge
-
     edgeline = nothing
 
     if edgelines isa Vector
@@ -80,6 +87,7 @@ function _drawedgelines(from, to, edgesrc, edgedest;
     end
 
     # set the stroke weight
+
     Luxor.current_surface_type() == :png ? linewidth = 2 : linewidth = 1
     if isnothing(edgestrokeweights)
         # by default, do nothing
@@ -115,19 +123,20 @@ function _drawedgelines(from, to, edgesrc, edgedest;
 
     # set the edgegap: gap between arrow tip and vertex center
 
-    edgegap = 0.0
+    edgegap = defaultshaperadius
 
     if edgegaps isa Vector
         edgegap = edgegaps[mod1(edgenumber, end)]
     elseif edgegaps isa AbstractRange
         edgegap = edgegaps[mod1(edgenumber, end)]
     elseif edgegaps isa Real
-        edgegap = edgegaps
-    elseif edgegaps == :none
-        edgegap = 0.0
+        if isapprox(edgegaps, 0.0)
+            edgegap = 0.0
+        else
+            edgegap = edgegaps
+        end
     else
-        # guess using linewidth
-        edgegap = 2linewidth
+        edgegap = defaultshaperadius
     end
 
     # finally time to draw the edge
@@ -136,64 +145,67 @@ function _drawedgelines(from, to, edgesrc, edgedest;
     if edgeline == false || edgeline == nothing
         return
     end
+
     @layer begin
         setline(linewidth)
-        setlinecap("round")
         if strokecolor isa Function
             strokecolor(edgenumber, from, to, edgesrc, edgedest)
         else
             setcolor(strokecolor)
         end
+
         if !isempty(dashpattern)
             setdash(dashpattern)
         end
 
         if edgeline isa Function
             edgeline(from, to)
-            return
-        end
+        else
+            d = distance(from, to)
+            if isapprox(from, to)
+                # self loop, draw arrow in circle
+                @layer begin
+                    defaultshaperadius
+                    s = slope(O, from)
+                    selfloopradius = 5defaultshaperadius
+                    loopcenter = from + polar(selfloopradius, s)
+                    translate(loopcenter)
+                    rotate(π + s)
+                    arrow(O, selfloopradius, 0, 2π - π / 16, linewidth=linewidth, arrowheadlength=arrowheadlength=rescale(linewidth, 1, 10, 5, 25))
+                    arrow(O, selfloopradius, 0, 2π - π / 16, linewidth=linewidth, arrowheadlength=arrowheadlength=rescale(linewidth, 1, 10, 5, 25))
+                end
+             # digraph
+             elseif digraph == true
+                normalizedgap = edgegap/d
+                if abs(edgecurvature) > 0.0
+                   # digraph and curvey lines
+                    arrow(between(from, to, normalizedgap),
+                        between(from, to, 1 - normalizedgap),
+                        [edgecurvature, edgecurvature],
+                        startarrow=false,
+                        finisharrow=true, :stroke, linewidth=arrowheadlength=rescale(linewidth, 1, 10, 5, 25))
+                else
+                    midpt = midpoint(from, to)
 
-        d = distance(from, to)
-
-        # self loop, draw arrow in circle
-        if isapprox(from, to)
-            @layer begin
-                d = 10linewidth
-                s = slope(O, from)
-                selfloopradius = d
-                loopcenter = from + polar(d, s)
-                translate(loopcenter)
-                rotate(π + s)
-                arrow(O, selfloopradius, 0, 2π - π / 16, linewidth=linewidth, arrowheadlength=d / 2)
-            end
-        # digraph
-        elseif digraph == true
-            if abs(edgecurvature) > 0.0
-               # digraph and curvey lines
-                arrow(between(from, to, edgegap / d),
-                    between(from, to, 1 - edgegap / d),
-                    [edgecurvature, edgecurvature],
-                    startarrow=false,
-                    finisharrow=true, :stroke, linewidth=linewidth)
-            else
-                midpt = midpoint(from, to)
-                arrow(between(from, to, edgegap / d),
-                    between(from, to, 1 - edgegap / d),
-                    [0, 0],
-                    startarrow=false,
-                    finisharrow=true, :stroke, linewidth=linewidth)
-            end
-        # not digraph
-        elseif digraph == false
-            if abs(edgecurvature) > 0.0
-
-                arrow(between(from, to, edgegap / d),
-                    between(from, to, 1 - edgegap / d),
-                    [edgecurvature, edgecurvature],
-                    startarrow=true,
-                    finisharrow=true, :stroke, linewidth=linewidth)
-            else
-                line(between(from, to, edgegap / d), between(from, to, 1 - edgegap / d), :stroke)
+                    # default gap is at least the radius of default shape
+                    arrow(between(from, to, normalizedgap),
+                        between(from, to, 1 - normalizedgap),
+                        [0, 0],
+                        startarrow=false,
+                        finisharrow=true, :stroke, linewidth=linewidth, arrowheadlength=arrowheadlength=rescale(linewidth, 1, 10, 5, 25))
+                end
+            elseif digraph == false
+                normalizedgap = edgegap/d
+                # not digraph
+                if abs(edgecurvature) > 0.0
+                    arrow(between(from, to, normalizedgap),
+                        between(from, to, 1 - normalizedgap),
+                        [edgecurvature, edgecurvature],
+                        startarrow=true,
+                        finisharrow=true, :stroke, linewidth=linewidth, arrowheadlength=arrowheadlength=rescale(linewidth, 1, 10, 5, 25))
+                else
+                    line(between(from, to, normalizedgap), between(from, to, 1 - normalizedgap), :stroke)
+                end
             end
         end
     end
@@ -389,7 +401,7 @@ function _drawvertexshapes(vertex, coordinates::Array{Point,1};
         return
     end
 
-    # so now we can draw this vertex
+    # so now we can draw at this vertex
 
     # vertexshape is hopefully one of true, square, circle, or can be a function
 
@@ -403,7 +415,6 @@ function _drawvertexshapes(vertex, coordinates::Array{Point,1};
     # if :none, don't draw it (will override other specs)
 
     fillcolor = :none
-
 
     if vertexfillcolors isa Array && !isempty(vertexfillcolors)
         if vertexfillcolors[mod1(vertex, end)] isa Colorant
@@ -446,8 +457,7 @@ function _drawvertexshapes(vertex, coordinates::Array{Point,1};
     end
 
     # set the stroke weight
-    # default to Luxor default
-    linewidth = 2
+    Luxor.current_surface_type() == :png ? linewidth = 2 : linewidth = 1
 
     if isnothing(vertexstrokeweights)
         # by default, do nothing
@@ -459,15 +469,18 @@ function _drawvertexshapes(vertex, coordinates::Array{Point,1};
         end
     elseif vertexstrokeweights isa AbstractRange
         linewidth = vertexstrokeweights[mod1(vertex, end)]
+    elseif vertexstrokeweights isa Real
+        linewidth = vertexstrokeweights
     elseif vertexstrokeweights == :none
         # do nothing
     end
 
     # set shape sizes
-    # vertexshape size is going to be a radius rather than a diameter
+    # vertexshape size is "radius" rather than "diameter"
     vertexshapesize = 0
     if isnothing(vertexshapesizes)
-        vertexshapesize = 6
+        # default
+        vertexshapesize = defaultshaperadius
     elseif vertexshapesizes isa Array
         if !isempty(vertexshapesizes)
             if vertexshapesizes[mod1(vertex, end)] != :none
@@ -482,16 +495,16 @@ function _drawvertexshapes(vertex, coordinates::Array{Point,1};
         # don't draw it
     end
 
-    # finally do some drawing
+    # finally, do some drawing
     # vertexshape is one of true, square, circle, function
+
     @layer begin
         if fillcolorfunction isa Function
             # a vertexfillcolors function is f(vertex) ->
-
             fillcolor = fillcolorfunction(vertex)
         end
 
-        if strokecolor isa Function
+        if strokecolorfunction isa Function
             # a vertexstrokecolors function is f(vertex) ->
             strokecolor = strokecolorfunction(vertex)
         end
@@ -501,22 +514,17 @@ function _drawvertexshapes(vertex, coordinates::Array{Point,1};
         setline(linewidth)
 
         if vertexshape isa Function
-            # we just doing fill color or stroke color priority?
+            # TODO fill color or stroke color priority?
             @layer begin
                 strokecolor isa Colorant && setcolor(strokecolor)
                 fillcolor isa Colorant && setcolor(fillcolor)
                 vertexshape(vertex)
             end
-        elseif vertexshape == :circle
-            fillcolor isa Colorant && setcolor(fillcolor)
-            circle(O, vertexshapesize, :fill)
-            strokecolor isa Colorant && setcolor(strokecolor)
-            circle(O, vertexshapesize, :stroke)
         elseif vertexshape == :square
             fillcolor isa Colorant && setcolor(fillcolor)
-            box(O, vertexshapesize, vertexshapesize, :fill)
+            box(O, 2vertexshapesize, 2vertexshapesize, :fill)
             strokecolor isa Colorant && setcolor(strokecolor)
-            box(O, vertexshapesize, vertexshapesize, :stroke)
+            box(O, 2vertexshapesize, 2vertexshapesize, :stroke)
         else # default is a circle
             fillcolor isa Colorant && setcolor(fillcolor)
             circle(O, vertexshapesize, :fill)
@@ -524,8 +532,6 @@ function _drawvertexshapes(vertex, coordinates::Array{Point,1};
             circle(O, vertexshapesize, :stroke)
         end
     end
-    # restore previous color - I don't know why this is needed
-    # setcolor(previouscolor)
 end
 
 function _drawvertexlabels(vertex, coordinates::Array{Point,1};

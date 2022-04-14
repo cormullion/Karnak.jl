@@ -19,13 +19,13 @@ using Karnak, Luxor, Graphs, NetworkLayout, Colors, SimpleWeightedGraphs
 d = @drawsvg begin
     background("grey10")
     sethue("yellow")
-    fontsize(15)
+    fontsize(12)
     drawgraph(Graph(3, 3),
         layout=spring,
         margin=50,
         vertexshapes = :circle,
-        edgedashpatterns = [10, 30],
-        vertexshapesizes = 40,
+        edgedashpatterns = [1, 10],
+        vertexshapesizes = 20,
         vertexlabels = ["thing 1", "thing 2", "thing 3"],
         edgelabels = ["a relationship", "a relationship", "a relationship"]
         )
@@ -433,12 +433,12 @@ sethue("gold")
 g = smallgraph(:krackhardtkite)
 
 drawgraph(g, layout=spring,
-    vertexfillcolors = (vtx) -> HSB(36degree(g, vtx), .9, .5),
+    vertexfillcolors = (vtx) -> distinguishable_colors(nv(g), transform=tritanopic)[degree(g, vtx)],
     vertexshapesizes = 20,
     margin=40,
     vertexlabels = (vtx) -> string(degree(g, vtx)),
-    vertexlabeltextcolors = colorant"white",
-    vertexlabelfontsizes = 30
+    vertexlabelfontsizes = 20,
+    vertexlabeltextcolors = [colorant"black", colorant"white"]
     )
 end 600 300
 ```
@@ -544,13 +544,13 @@ g = [0 1 1;
 @drawsvg begin
 background("grey20")
 drawgraph(Graph(g),
-    layout = ngon(O + (0, 20), 120, 3, π/6, vertices=true),
+    layout = ngon(O + (0, 20), 80, 3, π/6, vertices=true),
     vertexshapes = :circle,
-    vertexshapesizes = 70,
-    edgestrokeweights = 25,
+    vertexshapesizes = 40,
+    edgestrokeweights = 15,
     edgestrokecolors = colorant"gold",
     vertexfillcolors = [colorant"#CB3C33", colorant"#389826", colorant"#9558B2"])
-end 600 400
+end 600 250
 ```
 
 ### Adjacency list
@@ -684,7 +684,7 @@ end
 end 600 300
 ```
 
-### Shortest paths: the A* algorithm
+## Shortest paths: the A* algorithm
 
 One way to find the shortest path between two vertices is to use the `a_star()` function, and provide the graph, the start vertex, and the end vertex. The function returns a list of edges.
 
@@ -695,23 +695,19 @@ The function finds the shortest path and returns an array of edges that define t
 ```@example graphsection
 @drawsvg begin
 background("grey10")
-
 sethue("lemonchiffon")
-
 g = binary_tree(5)
-
 dirg = SimpleDiGraph(collect(edges(g)))
-
 astar = a_star(dirg, 1, 21)
-
 drawgraph(dirg, layout=buchheim,
     vertexlabels = 1:nv(g),
     vertexshapes = (vtx) -> box(O, 30, 20, :fill),
     vertexlabelfontsizes = 16,
     edgegaps=20,
+    edgestrokeweights= 5,
     edgestrokecolors = (edgenumber, from, to, s, d) -> (s ∈ src.(astar) && d ∈ dst.(astar)) ?
-        colorant"red" : colorant"grey40",
-    vertexfillcolors = (vtx) -> (vtx ∈ src.(astar) || vtx ∈ dst.(astar)) && colorant"red"
+        colorant"orange" : colorant"grey40",
+    vertexfillcolors = (vtx) -> (vtx ∈ src.(astar) || vtx ∈ dst.(astar)) && colorant"orange"
     )
 end 800 400
 ```
@@ -719,9 +715,7 @@ end 800 400
 One use for the A* algorithm is for finding paths through mazes. In the next example, a grid graph is subjected to some random vandalism, removing quite a few edges. Then a route through the maze was easily found by `a_star()`.
 
 ```@example graphsection
-using Karnak, Luxor, Graphs, Colors, NetworkLayout
-
-using Random
+using Karnak, Luxor, Graphs, Colors, NetworkLayout, Random
 
 Random.seed!(67)
 @drawsvg begin
@@ -730,6 +724,7 @@ background("grey10")
 W, H = 30, 30
 g = grid((W, H))
 
+# vandalize the grid:
 let
     c = 0
     while c < 500
@@ -738,17 +733,18 @@ let
     end
 end
 
-sethue("maroon")
-drawgraph(g,
-    vertexshapes = :none,
-    layout=squaregrid)
-
+# find a route
 astar = a_star(g, 1, W * H)
 
-sethue("orange")
-
+sethue("grey30")
 drawgraph(g,
-    vertexshapes= :none,
+    vertexshapes = :square,
+    layout=squaregrid,
+    edgegaps=0)
+
+sethue("orange")
+drawgraph(g,
+    vertexshapes = :none,
     layout=squaregrid,
     edgelist=astar,
     edgegaps=0,
@@ -825,7 +821,7 @@ For a directed graph, each edge can have two weights, one from src to dst, the o
 
 Note that `a_star()` doesn't work with weighted graphs yet.
 
-### Spanning trees
+## Spanning trees
 
 A spanning tree is a set of edges that connect all the vertices of a graph together, without forming any cycles. There are various functions for finding spanning trees in Graphs.jl, including algorithms by Otakar Borůvka (`boruvka_mst()`), Joseph Kruskal (`kruskal_mst()`), and Robert Prim (`prim_mst()`). (Immortality can be attained by inventing a new graph-spanning algorithm.)
 
@@ -895,11 +891,13 @@ sethue("gold")
 drawgraph(g, layout=spring,
         vertexshapes = :none,
         edgelist = mst,
-        edgestrokeweights = 15)
+        edgestrokeweights = 12)
 
-sethue("black")
 drawgraph(g, layout=spring,
     vertexlabels = 1:nv(g),
+    vertexshapes = :circle,
+    vertexshapesizes = 7.5,
+    edgegaps=0,
     edgelines=:none)
 
 end 600 400
