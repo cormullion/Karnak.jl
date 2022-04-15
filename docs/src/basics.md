@@ -20,14 +20,27 @@ d = @drawsvg begin
     background("grey10")
     sethue("yellow")
     fontsize(12)
-    drawgraph(Graph(3, 3),
+    g = Graph(3, 3)
+    add_vertex!(g)
+    add_edge!(g, 3, 4)
+    drawgraph(g,
         layout=spring,
         margin=50,
-        vertexshapes = :circle,
-        edgedashpatterns = [1, 10],
-        vertexshapesizes = 20,
-        vertexlabels = ["thing 1", "thing 2", "thing 3"],
-        edgelabels = ["a relationship", "a relationship", "a relationship"]
+        edgecurvature=0.2,
+        edgegaps=25,
+        edgestrokeweights=2,
+        vertexlabels = (v) -> "thing $(v)",
+        vertexshapes = [:circle, :square],
+        vertexfillcolors = [RGB(Luxor.julia_red...), RGB(Luxor.julia_purple...), RGB(Luxor.julia_green...), RGB(Luxor.julia_blue...)],
+        vertexshapesizes = 25,
+        vertexlabeltextcolors = colorant"white",
+        edgelabels = (n, s, d, f, t) -> begin
+                θ = slope(f, t)
+                fontsize(15)
+                translate(midpoint(f, t))
+                rotate(θ)
+                label(["relationship", "relationship", "relationship", "relationship"][n], [:n, :n, :s, :n][n], O, offset=10)
+            end,
         )
 end 600 350
 ```

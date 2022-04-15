@@ -122,8 +122,10 @@ function _drawedgelines(from, to, edgesrc, edgedest;
     end
 
     # set the edgegap: gap between arrow tip and vertex center
+    # should be 0 for no arrows
+    # half vertex shape for arrows
 
-    edgegap = defaultshaperadius
+    edgegap = 0.0
 
     if edgegaps isa Vector
         edgegap = edgegaps[mod1(edgenumber, end)]
@@ -167,6 +169,7 @@ function _drawedgelines(from, to, edgesrc, edgedest;
                 @layer begin
                     defaultshaperadius
                     s = slope(O, from)
+                    #TODO better default circle size
                     selfloopradius = 5defaultshaperadius
                     loopcenter = from + polar(selfloopradius, s)
                     translate(loopcenter)
@@ -178,22 +181,22 @@ function _drawedgelines(from, to, edgesrc, edgedest;
              elseif digraph == true
                 normalizedgap = edgegap/d
                 if abs(edgecurvature) > 0.0
-                   # digraph and curvey lines
+                   # digraph _and_ curvey edges
                     arrow(between(from, to, normalizedgap),
                         between(from, to, 1 - normalizedgap),
                         [edgecurvature, edgecurvature],
                         startarrow=false,
-                        finisharrow=true, :stroke, linewidth=arrowheadlength=rescale(linewidth, 1, 10, 5, 25))
+                        finisharrow=true, :stroke, arrowheadlength=rescale(linewidth, 1, 10, 5, 25))
                 else
-                    midpt = midpoint(from, to)
-
+                    # digraph, straight edges
                     # default gap is at least the radius of default shape
                     arrow(between(from, to, normalizedgap),
                         between(from, to, 1 - normalizedgap),
                         [0, 0],
                         startarrow=false,
-                        finisharrow=true, :stroke, linewidth=linewidth, arrowheadlength=arrowheadlength=rescale(linewidth, 1, 10, 5, 25))
+                        finisharrow=true, :stroke, linewidth=linewidth, arrowheadlength=rescale(linewidth, 1, 10, 5, 25))
                 end
+            # graph
             elseif digraph == false
                 normalizedgap = edgegap/d
                 # not digraph
@@ -255,6 +258,8 @@ function _drawedgelabels(from, to;
         textrotation = edgelabelrotations[mod1(edgenumber, end)]
     elseif edgelabelrotations isa Real
         textrotation = edgelabelrotations
+    elseif edgelabelrotations isa Function
+        textrotation = edgelabelrotations(edgenumber, edgesrc, edgedest, from, to)
     elseif edgelabelrotations == :none
         # do nothing
     end
@@ -797,7 +802,7 @@ vertexstrokecolors f            edgestrokecolors   f
 vertexstrokeweights             edgestrokeweights
 vertexfillcolors f              edgedashpatterns
 vertexlabeltextcolors           edgegaps
-vertexlabelfontsizes            edgelabelrotations
+vertexlabelfontsizes            edgelabelrotations f
 vertexlabelfontfaces            edgelabelcolors
 vertexlabelrotations
 vertexlabeloffsetangles
@@ -927,7 +932,7 @@ gaps from vertex center to arrow tip
 
 the colors of the label text
 
-`edgelabelrotations`
+`edgelabelrotations`: A | Range | function  edgelabelrotations = (n, s, d, f, t) -> angle
 
 the rotation of the label text
 

@@ -365,36 +365,56 @@ end 600 300
 
 ### `edgefunction`
 
-As with `vertexfunction`, the `edgefunction` keyword argument allows you to do anything you like when the edges are drawn, and overrides all other keyword arguments. Here, the calculated coordinates are extracted into a vector for later questionable purposes.
+As with `vertexfunction`, the `edgefunction` keyword argument allows you to do anything you like when the edges are drawn, and overrides all other keyword arguments. Here, the calculated coordinates of the graph and a path between two vertices are extracted into vectors for later treatment.
 
 ```@example graphsection
 @drawsvg begin
 background("black")
-g = barbell_graph(22, 22)
+sethue("white")
+g = clique_graph(16, 4)
+
 A = Point[]
+B = Point[]
+
 drawgraph(g, layout=stress,
     edgefunction = (edgenumber, from, to, edgesrc, edgedest) -> begin
         push!(A, from),
         push!(A, to)
         end,
-    vertexshapes = :none)
+    vertexshapes = :none,
+    )
 
-    # Luxor takes over:
-    setlinejoin("bevel")
-    setline(0.25)
-    @layer begin
-        scale(1.2)
-        for θ in range(0, 2π, length=6)
-            @layer begin
-                rotate(θ)
-                sethue(HSB(rescale(θ, 0, 2π, 90, 210), .8, .8))
-                poly(A, :stroke)
-            end
-            scale(0.8)
-        end
-    end
+route = a_star(g, 6, 29)
+
+drawgraph(g, layout=stress,
+    edgelist = route,
+    vertexshapes = :none,
+    edgefunction = (edgenumber, from, to, edgesrc, edgedest) -> begin
+        push!(B, from),
+        push!(B, to)
+        end)
+
+# Luxor takes over:
+setlinejoin("bevel")
+setline(0.25)
+
+sethue("grey60")
+@layer begin
+    poly(A, :stroke)
+end
+
+sethue("gold")
+setline(4)
+@layer begin
+    poly(B, :stroke)
+end
+circle.(B[[begin, end]], 5, :fill)
 end 600 400
 ```
+
+!!! note
+
+    This keyword overrides the other `edge-` keywords.
 
 ### Edge labels
 
