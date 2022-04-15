@@ -58,8 +58,8 @@ function _drawedgelines(from, to, edgesrc, edgedest;
     elseif edgelines == :none
         #
     elseif edgelines isa Function
-        # an edgeline function is f(from, to)
-        edgeline = edgelines(from, to)
+        # an edgeline function is f(edgenumber, edgesrc, edgedest, from, to)
+        edgeline = edgelines(edgenumber, edgesrc, edgedest, from, to)
     else
         edgeline = true
     end
@@ -122,23 +122,17 @@ function _drawedgelines(from, to, edgesrc, edgedest;
     end
 
     # set the edgegap: gap between arrow tip and vertex center
-    # should be 0 for no arrows
-    # half vertex shape for arrows
+    # should default to 0 if no arrows/curvature
+    # or defaultshaperadius for arrows
 
-    edgegap = 0.0
+    edgegap = :none
 
     if edgegaps isa Vector
         edgegap = edgegaps[mod1(edgenumber, end)]
     elseif edgegaps isa AbstractRange
         edgegap = edgegaps[mod1(edgenumber, end)]
     elseif edgegaps isa Real
-        if isapprox(edgegaps, 0.0)
-            edgegap = 0.0
-        else
-            edgegap = edgegaps
-        end
-    else
-        edgegap = defaultshaperadius
+        edgegap = edgegaps
     end
 
     # finally time to draw the edge
@@ -179,9 +173,13 @@ function _drawedgelines(from, to, edgesrc, edgedest;
                 end
              # digraph
              elseif digraph == true
-                normalizedgap = edgegap/d
                 if abs(edgecurvature) > 0.0
                    # digraph _and_ curvey edges
+                   # use default shape radius to allow for arrows, unless otherwise specified
+                   if edgegap == :none
+                       edgegap = defaultshaperadius
+                   end
+                   normalizedgap = edgegap/d
                     arrow(between(from, to, normalizedgap),
                         between(from, to, 1 - normalizedgap),
                         [edgecurvature, edgecurvature],
@@ -190,6 +188,11 @@ function _drawedgelines(from, to, edgesrc, edgedest;
                 else
                     # digraph, straight edges
                     # default gap is at least the radius of default shape
+                    # use default shape radius to allow for arrows, unless otherwise specified
+                    if edgegap == :none
+                        edgegap = defaultshaperadius
+                    end
+                    normalizedgap = edgegap/d
                     arrow(between(from, to, normalizedgap),
                         between(from, to, 1 - normalizedgap),
                         [0, 0],
@@ -198,7 +201,13 @@ function _drawedgelines(from, to, edgesrc, edgedest;
                 end
             # graph
             elseif digraph == false
-                normalizedgap = edgegap/d
+                if edgegap == :none
+                    normalizedgap = 0
+                elseif isapprox(edgegap, 0.0)
+                    normalizedgap = 0
+                else
+                    normalizedgap = edgegap/d
+                end
                 # not digraph
                 if abs(edgecurvature) > 0.0
                     arrow(between(from, to, normalizedgap),
@@ -871,8 +880,8 @@ The text labels for each vertex. Vertex labels are not drawn by default.
 
 `vertexshapes` : Array | Range | :circle | :square | :none | Function (vtx) ->
 
-Use shape for vertex. `vtx` is vertex number, using current vertex rotation
-(`vertextshaperotations`) The function can override rotations and colors.
+Use shape for vertex. If function, `vtx` is vertex number, using current vertex rotation
+(`vertextshaperotations`), make your own graphic shapes. The function can override rotations and colors.
 
 `vertexshapesizes`: Array | Range | Real
 
@@ -906,7 +915,7 @@ Rotation of shape.
 
 list of Edges to be drawn. Takes priority over `edgelines`.
 
-`edgelines`: Array | Range | Int| :none | Function (from, to) ->
+`edgelines`: Array | Range | Int| :none | Function (edgenumber, edgesrc, edgedest, from, to) ->
 
 Edge numbers to be drawn.
 

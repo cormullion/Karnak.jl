@@ -2,7 +2,7 @@
 using Karnak, Luxor, Graphs, NetworkLayout, Colors, SimpleWeightedGraphs
 ```
 
-# Tutorial
+# Graph theory
 
 This section contains an introduction to basic graph theory
 using the Graphs.jl package. You don't need any prior
@@ -30,7 +30,7 @@ d = @drawsvg begin
         edgegaps=25,
         edgestrokeweights=2,
         vertexlabels = (v) -> "thing $(v)",
-        vertexshapes = [:circle, :square],
+        vertexshapes = :circle,
         vertexfillcolors = [RGB(Luxor.julia_red...), RGB(Luxor.julia_purple...), RGB(Luxor.julia_green...), RGB(Luxor.julia_blue...)],
         vertexshapesizes = 25,
         vertexlabeltextcolors = colorant"white",
@@ -661,39 +661,51 @@ A cycle is a path where the start and end vertices are the same - a closed path.
 The `cycle_basis()` function finds all the cycles in a graph (at least, a **basis**, which is a minimal collection of cycles that can be added to make all the cycles). The result is an array of arrays of vertex numbers.
 
 ```
-cycles = cycle_basis(g)
-
-11-element Vector{Vector{Int64}}:
- [13, 14, 15, 16, 17]
- [11, 10, 14, 15, 16, 17, 18, 19, 20, 1]
- [2, 9, 10, 14, 15, 16, 17, 18, 19, 20, 1]
- [8, 9, 10, 14, 15]
- [6, 7, 8, 15, 16]
- [2, 3, 7, 8, 15, 16, 17, 18, 19, 20, 1]
- [4, 3, 7, 8, 15, 16, 17, 18, 19, 20]
- [5, 6, 16, 17, 18]
- [12, 13, 17, 18, 19]
- [4, 5, 18, 19, 20]
- [11, 12, 19, 20, 1]
+julia> pg = smallgraph(:petersen)
+julia> cycles = cycle_basis(pg)
+6-element Vector{Vector{Int64}}:
+ [1, 6, 8, 10, 5]
+ [4, 9, 6, 8, 10, 5]
+ [7, 9, 6, 8, 10]
+ [4, 3, 8, 10, 5]
+ [1, 2, 3, 8, 10, 5]
+ [7, 2, 3, 8, 10]
 ```
 
 ```@example graphsection
 @drawsvg begin
-background("grey10")
-sethue("magenta")
-pg = smallgraph(:petersen)
+    background("grey10")
+    sethue("magenta")
+    pg = smallgraph(:petersen)
 
-cycles = cycle_basis(pg)
+    cycles = cycle_basis(pg)
+    @show length(cycles)
+    table = Table(2, length(cycles) ÷ 2, 220, 160)
 
-for (n, cycle) in enumerate(cycles)
-    sethue(HSB(rescale(n, 1, length(cycles), 0, 360), .7, .7))
-    drawgraph(pg,
-        layout = stress,
-        vertexshapes = :none,
-        edgestrokeweights = 3,
-        edgecurvature = 10,
-        edgelist = [Edge(cycle[i], cycle[mod1(i + 1, end)]) for i in 1:length(cycle)])
-end
+    for (n, cycle) in enumerate(cycles)
+        cycleedges = [Edge(cycle[i], cycle[mod1(i + 1, end)]) for i in 1:length(cycle)]
+        @layer begin
+            translate(table[n])
+            bb = BoundingBox(box(O, table.colwidths[1], table.rowheights[1]))
+            sethue("grey60")
+            drawgraph(pg,
+                layout = stress,
+                vertexshapes = :none,
+                boundingbox = bb)
+            sethue(HSB(rescale(n, 1, length(cycles) + 1, 0, 360), 0.8, 0.6))
+            drawgraph(pg,
+                layout = stress,
+                boundingbox = bb,
+                vertexshapes = (v) -> begin
+                    v ∈ cycle && box(O, 12, 12, :fill)
+                end,
+                vertexshapesizes = 30,
+                vertexlabels = (v) -> v ∈ cycle && string(v),
+                edgestrokeweights = 5,
+                edgelist = cycleedges,
+            )
+        end
+    end
 end 600 300
 ```
 
@@ -879,39 +891,54 @@ Notice how all the spanning trees found have avoided the edge joining 1 and 4, w
 Next, here's `boruka_mst()` looking for the **maximum** spanning tree; `Edge(1 => 4)` is always included everytime the function runs.
 
 ```@example graphsection
+using Karnak, Luxor, Graphs, NetworkLayout, Colors, SimpleWeightedGraphs
+
 @drawsvg begin
-background("grey10")
+    background("grey10")
+    tiles = Tiler(600, 600, 2, 2)
+    let
+        g = SimpleWeightedGraph(smallgraph(:octahedral))
+        for (pos, n) in tiles
+            for e in edges(g)
+                add_edge!(g, src(e), dst(e), rand(1:10))
+            end
+            add_edge!(g, 1, 4, 200)
+            @layer begin
+                translate(pos)
+                bb = BoundingBox(box(O, tiles.tilewidth, tiles.tileheight))
+                sethue("grey50")
+                mst, weights = boruvka_mst(g, minimize=false)
+                drawgraph(g,
+                    boundingbox=bb,
+                    layout=spring,
+                    vertexshapesizes=10,
+                    edgestrokeweights=3,
+                    edgelabels=(k, src, dest, f, t) -> begin
+                        sethue("orange")
+                        label(string(get_weight(g, src, dest)), :nw, midpoint(f, t))
+                        end,)
 
-g = SimpleWeightedGraph(smallgraph(:octahedral))
+                sethue("gold")
+                drawgraph(g,
+                    boundingbox=bb,
+                    layout=spring,
+                    vertexshapes=:none,
+                    edgelist=mst,
+                    edgestrokeweights=5,)
 
-for e in edges(g)
-    add_edge!(g, src(e), dst(e), rand(1:10))
-end
-add_edge!(g, 1, 4, 200)
-
-sethue("grey50")
-drawgraph(g, layout=spring,
-    vertexshapesizes = 20,
-    edgestrokeweights = 3,
-    edgelabels = (k, src, dest, f, t) ->
-        begin
-            sethue("orange")
-            label(string(get_weight(g, src, dest)), :nw, midpoint(f, t))
-        end)
-
-mst, weights = boruvka_mst(g, minimize=false)
-sethue("gold")
-drawgraph(g, layout=spring,
-        vertexshapes = :none,
-        edgelist = mst,
-        edgestrokeweights = 12)
-
-drawgraph(g, layout=spring,
-    vertexlabels = 1:nv(g),
-    vertexshapes = :circle,
-    vertexshapesizes = 7.5,
-    edgegaps=0,
-    edgelines=:none)
-
-end 600 400
+                drawgraph(
+                    g,
+                    boundingbox=bb,
+                    layout=spring,
+                    vertexlabels=1:nv(g),
+                    vertexshapes=:circle,
+                    vertexshapesizes=7.5,
+                    edgegaps=0,
+                    edgelines=:none,)
+            end
+        end
+    end
+end 600 600
 ```
+
+## Centrality

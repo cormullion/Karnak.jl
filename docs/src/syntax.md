@@ -108,7 +108,7 @@ edgefunction = my_edgefunction(edgenumber, from, to, edgesrc, edgedest)
 
 These allow you to place graphics at `coordinates[vertex]`, and to draw edges from `from` to `to`, using any available tools for drawing.
 
-In the following picture, the vertex positions were passed to a function that placed clipped PNG images on the drawing (using `Luxor.readpng()` and `Luxor.placeimage()`), and the edges were drawn using sine curves. Refer to the Luxor documentation for more than you could possibly want to know about putting colored things on drawings.
+In the following picture, the vertex positions were passed to a function that placed clipped PNG images on the drawing (using `Luxor.readpng()` and `Luxor.placeimage()`), and the edges were drawn using sine curves. Refer to the Luxor documentation for more about putting colored things on drawings.
 
 ![image vertices](assets/figures/karnakmap.png)
 
@@ -365,7 +365,7 @@ end 600 300
 
 ### `edgefunction`
 
-As with `vertexfunction`, the `edgefunction` keyword argument allows you to do anything you like when the edges are drawn, and overrides all other keyword arguments. Here, the calculated coordinates of the graph and a path between two vertices are extracted into vectors for later treatment.
+As with `vertexfunction`, the `edgefunction` keyword argument allows you to do anything you like when the edges are drawn, and overrides all other keyword arguments. Here, the calculated coordinates of the graph and a path between two vertices are extracted into vectors for later Luxor-ious treatment.
 
 ```@example graphsection
 @drawsvg begin
