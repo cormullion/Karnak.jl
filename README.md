@@ -11,8 +11,11 @@ help with constructing graph-style drawings.
 Karnak relies on [Graphs.jl](https://juliagraphs.org/Graphs.jl/) for graph construction, and
 on [NetworkLayout.jl](https://juliagraphs.org/NetworkLayout.jl/) for graph layout.
 
-The focus in Karnak, unlike other graph visualization packages,
-is on decorative and aesthetic uses, for use in design and generative art, rather than on scientific rigor and mathematical elegance.
+The focus in Karnak, unlike other graph visualization
+packages, is on decorative and aesthetic uses, for use in
+design, generative art, social media previews, NFTs, and
+other mission-critical items, rather than on
+scientific rigor and mathematical elegance.
 
 ## Warning
 

@@ -1,6 +1,6 @@
 # This code is odd; it's mostly `if` statements and `nothing`s...
 # Perhaps I should rewrite it, but it did what I needed it to do, so
-# that's not a high priority.
+# that's not a high priority...
 
 const defaultshaperadius = 6
 
