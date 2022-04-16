@@ -136,11 +136,9 @@ end 600 300
 
 In this representation of our directed graph `gd`, we can now see the direction of the edges joining vertices. Notice how vertices 1 and 4 are doubly connected, because there's one edge for each direction.
 
-Neither of these graphs is **connected**. In a connected graph, every vertex is connected to every other via some path, a sequence of edges.
-
 ## Very simple graphs
 
-Creating graphs by typing the connections manually is tedious, so we usually use the `Graph/SimpleGraph` and `DiGraph/SimpleDiGraph` constructors:
+Creating graphs by typing the connections manually is tedious, so we can use functions such as the `Graph/SimpleGraph` and `DiGraph/SimpleDiGraph` constructor functions:
 
 ```@example graphsection
 g = Graph(10, 5) # 10 vertices, 5 edges
@@ -162,6 +160,8 @@ end 400 300
 
 hcat(d1, d2)
 ```
+
+Neither of these graphs is **connected**. In a connected graph, every vertex is connected to every other via some path, a sequence of edges.
 
 ## Well-known graphs
 
@@ -193,7 +193,7 @@ drawgraph(g, vertexlabels = 1:nv(g))
 end 600 300
 ```
 
-In a **bi-partite graph**, every vertex belongs to one of two groups. Every vertex in the first group is connected to one or more edges in the second group. This illustration shows a **complete** bi-partite graph. The word "complete" here means that each vertex is connected to every other vertex.
+In a **bi-partite graph**, every vertex belongs to one of two groups. Every vertex in the first group is connected to one or more vertices in the second group. This illustration shows the **complete** version of a bi-partite graph. So each vertex is connected to every other vertex.
 
 ```@example graphsection
 N = 10
@@ -437,7 +437,7 @@ Other useful functions in Graphs.jl include `has_vertex(g, v)` and `has_edge(g, 
 
 ### Degree
 
-The **degree** of a vertex is the number of edges that meet at that vertex.
+The **degree** of a vertex is the number of edges that meet at that vertex. This is shown in both text form and color-coded:
 
 ```@example graphsection
 @draw begin
@@ -458,11 +458,11 @@ end 600 300
 
 ## Graphs as matrices
 
-Graphs can be represented as matrices. In the world of graph theory, we'll meet the adjacency matrix, the incidence matrix, and the adjacency list.
+Graphs can be represented as matrices. In the world of graph theory, we'll meet the adjacency matrix and the incidence matrix (and there's an array called the adjacency list too).
 
 ### Adjacency matrix
 
-A graph `G` with `n` vertices can be represented by a square matrix `A` with `n` rows and columns. The matrix consists of 1s and 0s. A value of 1 means that there's a connection between two vertices with those indices. For example, if vertex 5 is connected with vertex 4, then `A[5, 4]` is 1. The `adjacency_matrix()` function displays the matrix for a graph:
+A graph `G` with `n` vertices can be represented by a square matrix `A` with `n` rows and columns. The matrix consists of 1s and 0s. A value of 1 means that there's a connection between two vertices with those indices. For example, if vertex 5 is connected with vertex 4, then `A[5, 4]` contains 1. The `adjacency_matrix()` function displays the matrix for a graph:
 
 ```julia
 julia> adjacency_matrix(pg)
@@ -479,6 +479,8 @@ julia> adjacency_matrix(pg)
  ⋅  ⋅  ⋅  ⋅  1  ⋅  1  1  ⋅  ⋅
 ```
 
+(This one:)
+
 ```@example graphsection
 @drawsvg begin
 background("grey10")
@@ -490,9 +492,7 @@ end 600 400
 
 Notice that this matrix, for a Petersen graph, is symmetrical about the top-left/bottom-right diagonal, because, in an undirected graph, a connection from vertex 4 to vertex 5 is also a connection from vertex 5 to 4. The vertical sum of each column (and the horizontal sum of each row) is the number of edges shared by that vertex,
 
-
-
-We can provide an adjacency matrix to the graph construction functions to create a graph. For example, this matrix recreates the House graph from its adjacency matrix:
+We can provide an adjacency matrix to the graph construction functions to create a graph. For example, this matrix recreates the House graph (aka `smallgraph(:house)` from its adjacency matrix:
 
 ```@example graphsection
 m = [0 1 1 0 0;
