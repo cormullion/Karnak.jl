@@ -46,7 +46,7 @@ end))
         layout = buchheim,
         vertexlabels = labels,
         vertexshapes = :none,
-        edgefunction = (n, f, t, s, d) -> begin
+        edgefunction = (n, s, d, f, t) -> begin
 
                 move(f)
                 line(t)

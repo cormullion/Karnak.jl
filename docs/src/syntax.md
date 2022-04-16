@@ -103,7 +103,7 @@ The two keyword arguments `vertexfunction` and `edgefunction` allow you to pass 
 
 ```
 vertexfunction = my_vertexfunction(vertex, coordinates)
-edgefunction = my_edgefunction(edgenumber, from, to, edgesrc, edgedest)
+edgefunction = my_edgefunction(edgenumber, edgesrc, edgedest, from::Point, to::Point)
 ```
 
 These allow you to place graphics at `coordinates[vertex]`, and to draw edges from `from` to `to`, using any available tools for drawing.
@@ -377,7 +377,7 @@ A = Point[]
 B = Point[]
 
 drawgraph(g, layout=stress,
-    edgefunction = (edgenumber, from, to, edgesrc, edgedest) -> begin
+    edgefunction = (edgenumber, edgesrc, edgedest, from, to) -> begin
         push!(A, from),
         push!(A, to)
         end,
@@ -389,7 +389,7 @@ route = a_star(g, 6, 29)
 drawgraph(g, layout=stress,
     edgelist = route,
     vertexshapes = :none,
-    edgefunction = (edgenumber, from, to, edgesrc, edgedest) -> begin
+    edgefunction = (edgenumber, edgesrc, edgedest, from, to) -> begin
         push!(B, from),
         push!(B, to)
         end)

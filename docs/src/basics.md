@@ -778,6 +778,33 @@ drawgraph(g,
 end 600 600
 ```
 
+## Visiting every vertex
+
+Another feature of a graph that you might want to find out: how to visit all vertices in a network just once.
+
+You can do this by finding a cycle that is the same length as the graph. However, there might be a lot of possibilities, since there could be many such cycles. Here's a way of finding a cycle that visits every vertex. `simplecycles()` finds all of them (there are 120 for this graph), so only the first one is used.
+
+``` @example graphsection
+@drawsvg begin
+background("grey10")
+g = complete_digraph(6)
+
+tour = first(filter(cycle -> length(cycle) == nv(g), simplecycles(g)))
+
+vertexlist_to_edgelist(vlist) = [Edge(p[1] => p[2]) for p in zip(vlist, circshift(vlist, -1))]
+
+sethue("grey50")
+
+drawgraph(g, layout = spring)
+
+sethue("orange")
+drawgraph(g, layout = spring,
+    edgelist = vertexlist_to_edgelist(tour),
+    edgestrokeweights = 10,
+    )
+end 800 400
+```
+
 ## Weighted graphs
 
 Up to now, our graphs have been like maps of train or metro networks, focusing on connections, rather than on, say, distances and journey times. Edges are effectively always one unit long. Shortest path calculations can't take into account the true length of edges. But some systems modelled by graphs require this knowledge, which is where weighted graphs are useful. A weighted graph, which can be either undirected or directed, has numeric values assigned to each edge. This value is called the "weight" of an edge, and they're usually positive integers, but can be anything.
@@ -842,7 +869,7 @@ julia> adjacency_matrix(wg)
  4.0    4.0    4.0  4.0  4.0   ⋅
 ```
 
-For a directed graph, each edge can have two weights, one from src to dst, the other from dst to src.     
+For a directed graph, each edge can have two weights, one from `src` to `dst`, the other from `dst` to `src`.
 
 Note that `a_star()` doesn't work with weighted graphs yet.
 
@@ -942,3 +969,40 @@ end 600 600
 ```
 
 ## Centrality
+
+Centrality is a measure of the importance of vertices in a graph. It might describe the importance of "influencers" in social networks, or the importance of certain key positions in a transport network. Graphs.jl offers a number of ways to measure the centrality of vertices in a graph. Refer to the manual's "Centrality Measures" section.
+
+Here's `betweenness_centrality()` applied to the Karate Club network. The vertices are sized and colored using the vector of values returned in `bc`.
+
+```@example graphsection
+@drawsvg begin
+background("grey10")
+g = smallgraph(:karate)
+bc = betweenness_centrality(g)
+sethue("gold")
+drawgraph(g, layout = spring,
+    vertexlabels = string.(round.(100bc, digits = 1)),
+    vertexshapesizes = 15 .+ 30bc,
+    vertexfillcolors = HSB.(rescale.(bc, 0, maximum(bc), 150, 360), 0.7, 0.8),
+    )
+end 800 600
+```
+
+## Graph coloring
+
+A simple **graph coloring** is a way of coloring the vertices or edges of a graph so that no two adjacent vertices or edges are the same color. The `greedy_color()` function finds a random graph coloring for a graph. You can access the total number of colors, and an array of integers representing the colors, in fields of the returned value.
+
+In the following example, only three colors are needed such that no edge connects two vertices with the same color.
+
+```@example graphsection
+@drawsvg begin
+background("grey10")
+g = smallgraph(:octahedral)
+gc = greedy_color(g)
+d = distinguishable_colors(gc.num_colors)
+sethue("gold")
+drawgraph(g, layout=stress,
+    vertexfillcolors = d[gc.colors],
+    vertexshapesizes = 30)
+end 800 400
+```

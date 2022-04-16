@@ -6,13 +6,13 @@ function drawlittlegraph(pos, w)
         drawgraph(star_graph(12),
             layout = stress,
             vertexfillcolors = [RGB(Luxor.julia_purple...),RGB(Luxor.julia_green...),RGB(Luxor.julia_red...)],
-            vertexshapesizes = 6,
+            vertexshapesizes = 8,
             boundingbox = BoundingBox(box(O, w, w)))
     end
 end
 
 function set_gold_blend()
-    gblend = blend(O, 0, O, 250, "gold2", "gold3")
+    gblend = blend(O, 0, O, 140, "gold", "gold3")
     setblend(gblend)
 end
 
@@ -54,8 +54,8 @@ Drawing(500, 600, "/tmp/logo.svg")
 
     drawgraph(g,
         layout=pts,
-        edgestrokeweights = 25,
-        vertexshapesizes = 100,
+        edgestrokeweights = 20,
+        vertexshapesizes = 60,
         vertexshapes = :square
         )
 
@@ -63,7 +63,7 @@ Drawing(500, 600, "/tmp/logo.svg")
         layout=pts,
         vertexfillcolors = colorant"black",
         vertexshapes = :square,
-        vertexshapesizes = 90,
+        vertexshapesizes = 50,
     )
 
     drawgraph(g,

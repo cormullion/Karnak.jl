@@ -80,7 +80,7 @@ function _drawedgelines(from, to, edgesrc, edgedest;
     elseif edgestrokecolors isa Colorant
         strokecolor = edgestrokecolors
     elseif edgestrokecolors isa Function
-        strokecolor = edgestrokecolors(edgenumber, from, to, edgesrc, edgedest)
+        strokecolor = edgestrokecolors(edgenumber, edgesrc, edgedest, from, to, )
         !(strokecolor isa Colorant) && throw(error("edgestrokecolors should return a color"))
     elseif edgestrokecolors == :none
         strokecolor = :none
@@ -145,7 +145,7 @@ function _drawedgelines(from, to, edgesrc, edgedest;
     @layer begin
         setline(linewidth)
         if strokecolor isa Function
-            strokecolor(edgenumber, from, to, edgesrc, edgedest)
+            strokecolor(edgenumber, edgesrc, edgedest, from, to)
         else
             setcolor(strokecolor)
         end
@@ -725,7 +725,7 @@ function drawedge(from::Point, to::Point;
     # is completely specified by function?
     if edgefunction isa Function
         @layer begin
-            edgefunction(edgenumber, from, to, edgesrc, edgedest)
+            edgefunction(edgenumber, edgesrc, edgedest, from, to)
         end
     else
         _drawedgelines(from, to, edgesrc, edgedest;
@@ -801,7 +801,7 @@ layout                          Point[] or function
 margin                          default 20
 
 vertexfunction(vtx, coords) -> _
-edgefunction(edgenumber, from, to, edgesrc, edgedest) -> _
+edgefunction(edgenumber, edgesrc, edgedest, from, to) -> _
 
 vertexlabels   f                edgelabels  f
 vertexshapes   f                edgelines    f
@@ -860,7 +860,7 @@ of the other vertex- keyword arguments will be used. Example:
 vertexfunction = (v, c) -> ngon(c[v], 30, 6, 0, :fill)
 ```
 
-`edgefunction(edgenumber, from, to, edgesrc, edgedest)` ->
+`edgefunction(edgenumber, edgesrc, edgedest, from, to)` ->
 
 a function `edgefunction(edgenumber, from, to, edgesrc, edgedest)` that
 completely specifies the appearance of every vertex. None
@@ -923,9 +923,9 @@ Edge numbers to be drawn.
 
 `edgecurvature=0.0`
 
-`edgestrokecolors`: Array | Colorant | Function (n, from, to, s, d)` -> colorant
+`edgestrokecolors`: Array | Colorant | Function (n, s, d, from, to)` -> colorant
 
-Colors of edges. Function can be `edgestrokecolors = (n, from, to, s, d) -> HSB(rescale(n, 1, ne(g), 0, 360), 0.9, 0.8))`
+Colors of edges. Function can be `edgestrokecolors = (n, s, d, f, t) -> HSB(rescale(n, 1, ne(g), 0, 360), 0.9, 0.8))`
 
 `edgestrokeweights`
 
