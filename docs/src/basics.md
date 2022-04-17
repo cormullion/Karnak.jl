@@ -64,7 +64,7 @@ g = Graph()
 ```
 
 The `Graph()` function creates a new empty graph and stores it in `g`.
-(You can use `SimpleGraph()` as well as `Graph()`.)
+(`SimpleGraph()` is an alternative to `Graph()`.)
 Let's add a single vertex:
 
 ```julia
@@ -730,7 +730,7 @@ drawgraph(dirg, layout=buchheim,
     vertexlabelfontsizes = 16,
     edgegaps=20,
     edgestrokeweights= 5,
-    edgestrokecolors = (edgenumber, from, to, s, d) -> (s ∈ src.(astar) && d ∈ dst.(astar)) ?
+    edgestrokecolors = (edgenumber, s, d, f, t) -> (s ∈ src.(astar) && d ∈ dst.(astar)) ?
         colorant"orange" : colorant"grey40",
     vertexfillcolors = (vtx) -> (vtx ∈ src.(astar) || vtx ∈ dst.(astar)) && colorant"orange"
     )
@@ -742,17 +742,17 @@ One use for the A* algorithm is for finding paths through mazes. In the next exa
 ```@example graphsection
 using Karnak, Luxor, Graphs, Colors, NetworkLayout, Random
 
-Random.seed!(67)
+Random.seed!(6)
 @drawsvg begin
 background("grey10")
 
-W, H = 30, 30
+W, H = 20, 20
 g = grid((W, H))
 
 # vandalize the grid:
 let
     c = 0
-    while c < 500
+    while c < 200
         v = rand(1:W*H)
         rem_edge!(g, v, [v-1, v+1, v-W, v+H][rand(1:end)]) && (c += 1)
     end
@@ -763,9 +763,11 @@ astar = a_star(g, 1, W * H)
 
 sethue("grey30")
 drawgraph(g,
-    vertexshapes = :square,
+#    vertexshapes = :square,
+    vertexshapesizes = 6,
     layout=squaregrid,
-    edgegaps=0)
+    edgegaps=2,
+    edgestrokeweights = 4)
 
 sethue("orange")
 drawgraph(g,
@@ -773,16 +775,16 @@ drawgraph(g,
     layout=squaregrid,
     edgelist=astar,
     edgegaps=0,
-    edgestrokeweights=5)
+    edgestrokeweights=3)
 
 end 600 600
 ```
 
 ## Visiting every vertex
 
-Another feature of a graph that you might want to find out: how to visit all vertices in a network just once.
+Another feature of a graph that's useful to know: how to visit all vertices in a network just once.
 
-You can do this by finding a cycle that is the same length as the graph. However, there might be a lot of possibilities, since there could be many such cycles. Here's a way of finding a cycle that visits every vertex. `simplecycles()` finds all of them (there are 120 for this graph), so only the first one is used.
+To do this, find a cycle that's the same length as the graph. However, there might be a lot of possibilities, since there could be many such cycles. Here's a way of finding a cycle that visits every vertex. `simplecycles()` finds all of them (there are 120 for this graph), so only the first one is used.
 
 ``` @example graphsection
 @drawsvg begin
@@ -804,6 +806,74 @@ drawgraph(g, layout = spring,
     )
 end 800 400
 ```
+
+## Shortest paths: Dijkstra's algorithm
+
+A well-known algorithm for finding the shortest path between graph vertices is names for its creator, Edsger W. Dijkstra:
+
+> "I designed it in about twenty minutes. One morning I was
+> shopping in Amsterdam with my young fiancée, and tired, we
+> sat down on the café terrace to drink a cup of coffee and
+> I was just thinking about whether I could do this, and I
+> then designed the algorithm for the shortest path.
+
+In Graphs.jl, this algorithm is available with `dijkstra_shortest_paths()`. After running this function, the result is an object with various pieces of information about all the shortest paths: this is a `DijkstraState` object, with fields containing things like distances and predecessor vertices. There's an `enumerate_paths()` function which can extract the vertex information for a specific path from the DijkstraState.
+
+The following code animates the results of examining a grid graph using Dijkstra's algorithm. The shortest paths between the first vertex and every other vertex are drawn in a series of frames, one by one.
+
+```julia
+function frame(scene, framenumber, g)
+    framenumber == 1 && return
+
+    # run Dijkstra's algorithm
+
+    ds = dijkstra_shortest_paths(g, 1, allpaths=true, trackvertices=true)
+
+    # for which destination vertex?
+    destv = framenumber
+
+    # get the vertices on the path
+    _, ep = enumerate_paths(ds, [1, destv])
+
+    # convert to edges
+    vlist = [Edge(p[1] => p[2]) for p in zip(ep, circshift(ep, -1))]
+
+    # draw background graph
+    background("grey10")
+    sethue("grey40")
+    drawgraph(g, layout=squaregrid, vertexshapes=:none)
+    path = Point[]
+
+    # draw shortest path
+    drawgraph(g,
+    layout=squaregrid,
+    vertexlabelfontsizes=30,
+    vertexshapes=:none,
+    edgelist = vlist[1:end-1],
+    edgefunction = (n, s, d, f, t) -> begin
+        push!(path, f)
+        push!(path, t)
+    end)
+    sethue("orange")
+    setline(10)
+    setlinejoin("bevel")
+    poly(path, :stroke, close=false)
+    sethue("red")
+    circle.(path[[1, end]], 10, :fill)
+end
+
+function main()
+    g = grid((20, 20))
+    amovie = Movie(600, 600, "dijkstra")
+    animate(amovie,
+    Scene(amovie, (s, f) -> frame(s, f, g), 1:400),
+    framerate=10)
+end
+
+main()
+```
+
+![animated dijkstra](assets/figures/dijkstra.gif)
 
 ## Weighted graphs
 
@@ -833,7 +903,7 @@ To get the weights of a vertex, use:
 julia> get_weight(wg, 1, 2)
 ```
 
-You can change the weight of an edge with:
+To change the weight of an edge:
 
 ```julia
 julia> add_edge!(graph, from, to, weight)
@@ -845,6 +915,7 @@ In this example, we set the default weight of every edge to 4.0 when the graph i
 wg = SimpleWeightedGraph(Graph(6, 15), 4.0)
 add_edge!(wg, 1, 2, 10_000_000)
 @drawsvg begin
+    background("grey10")
     sethue("gold")
     drawgraph(wg, edgecurvature=10,
         vertexlabels = 1:nv(wg),
@@ -856,7 +927,7 @@ add_edge!(wg, 1, 2, 10_000_000)
 end 600 300
 ```
 
-If you look at the graph's adjacency matrix, you'll see that the weights have replaced the 1s:
+A look at the graph's adjacency matrix shows that the weights have replaced the 1s:
 
 ```julia
 julia> adjacency_matrix(wg)
@@ -990,7 +1061,7 @@ end 800 600
 
 ## Graph coloring
 
-A simple **graph coloring** is a way of coloring the vertices or edges of a graph so that no two adjacent vertices or edges are the same color. The `greedy_color()` function finds a random graph coloring for a graph. You can access the total number of colors, and an array of integers representing the colors, in fields of the returned value.
+A simple **graph coloring** is a way of coloring the vertices or edges of a graph so that no two adjacent vertices or edges are the same color. The `greedy_color()` function finds a random graph coloring for a graph. The total number of colors, and an array of integers representing the colors, are returned in fields of the returned value.
 
 In the following example, only three colors are needed such that no edge connects two vertices with the same color.
 
