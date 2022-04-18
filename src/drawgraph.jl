@@ -305,7 +305,7 @@ function _drawedgelabels(from, to;
         end
     elseif edgelabelfontfaces isa AbstractRange
         font_face = edgelabelfontfaces[mod1(edgenumber, end)]
-    elseif edgelabelfontfaces isa String
+    elseif edgelabelfontfaces isa AbstractString
         font_face = edgelabelfontfaces
     elseif edgelabelfontfaces == :none
     end
@@ -610,7 +610,7 @@ function _drawvertexlabels(vertex, coordinates::Array{Point,1};
         end
     elseif vertexlabelfontfaces isa AbstractRange
         font_face = vertexlabelfontfaces[mod1(vertex, end)]
-    elseif vertexlabelfontfaces isa String
+    elseif vertexlabelfontfaces isa AbstractString
         font_face = vertexlabelfontfaces
     elseif vertexlabelfontfaces == :none
     end
@@ -691,7 +691,7 @@ function _drawvertexlabels(vertex, coordinates::Array{Point,1};
 
     # draw the label
 
-    if vertexlabel isa String # && !isnothing(vertexlabel)
+    if vertexlabel isa AbstractString # && !isnothing(vertexlabel)
         @layer begin
             pt = coordinates[vertex]
             translate(pt)

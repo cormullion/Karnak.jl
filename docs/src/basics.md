@@ -175,7 +175,7 @@ g = complete_graph(N)
 d1 = @drawsvg begin
 background("grey10")
 setline(0.5)
-sethue("maroon")
+sethue("pink")
 drawgraph(g, vertexlabels = 1:nv(g))
 end 600 300
 ```
@@ -598,6 +598,8 @@ For example, this adjacency list:
 ```
 
 defines a graph with 10 vertices, such that vertex 1 has edges joining it to vertices 2, 5, 6, and 10, and so on for each element of the whole array.
+
+The `Graph()` function accepts an adjacency list, along with the number of edges.
 
 ```@example graphsection
 g = Graph(30, [
