@@ -1,6 +1,7 @@
 using Documenter, Karnak
 
 makedocs(
+    # debug=true,
     modules = [Karnak],
     sitename = "Karnak",
     format = Documenter.HTML(

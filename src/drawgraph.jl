@@ -58,8 +58,7 @@ function _drawedgelines(from, to, edgesrc, edgedest;
     elseif edgelines == :none
         #
     elseif edgelines isa Function
-        # an edgeline function is f(edgenumber, edgesrc, edgedest, from, to)
-        edgeline = edgelines(edgenumber, edgesrc, edgedest, from, to)
+        edgeline = edgelines
     else
         edgeline = true
     end
@@ -155,7 +154,7 @@ function _drawedgelines(from, to, edgesrc, edgedest;
         end
 
         if edgeline isa Function
-            edgeline(from, to)
+            edgeline(edgenumber, edgesrc, edgedest, from, to)
         else
             d = distance(from, to)
             if isapprox(from, to)
@@ -539,6 +538,7 @@ function _drawvertexshapes(vertex, coordinates::Array{Point,1};
             box(O, 2vertexshapesize, 2vertexshapesize, :fill)
             strokecolor isa Colorant && setcolor(strokecolor)
             box(O, 2vertexshapesize, 2vertexshapesize, :stroke)
+
         else # default is a circle
             fillcolor isa Colorant && setcolor(fillcolor)
             circle(O, vertexshapesize, :fill)
@@ -800,8 +800,12 @@ boundingbox::BoundingBox        graph fits inside this BB
 layout                          Point[] or function
 margin                          default 20
 
+Functions that override all options
+
 vertexfunction(vtx, coords) -> _
 edgefunction(edgenumber, edgesrc, edgedest, from, to) -> _
+
+Draw only edges in `edgelist`
 
 vertexlabels   f                edgelabels  f
 vertexshapes   f                edgelines    f
@@ -871,7 +875,7 @@ of the other edge- keyword arguments are used.
 `vertexfillcolors`:  Array | Colorant | :none | Function (vtx) ->
 the colors for vertex
 
-`vertexlabels`: Array | Range " string "|:none | Function (vtx) ->
+`vertexlabels`: Array | Range " string "|:none | Function (vtx) -> return label for each vertex
 
 The text labels for each vertex. Vertex labels are not drawn by default.
 
@@ -913,7 +917,7 @@ Rotation of shape.
 
 `edgelist`: Array | Edge iterator
 
-list of Edges to be drawn. Takes priority over `edgelines`.
+list of Edges (Graphs.EdgeIterator) to be drawn. Takes prioity over `edgelines`.
 
 `edgelines`: Array | Range | Int| :none | Function (edgenumber, edgesrc, edgedest, from, to) ->
 
@@ -999,20 +1003,9 @@ function drawgraph(g::AbstractGraph;
         # only some edges to be drawn
         edgestodraw = edgelist
     else
-        edgestodraw = edges(g)
+        # potentially all edges of graph
+        edgestodraw = Graphs.edges(g)
     end
-
-    # # experimental
-    # if is_directed(g)
-    #     # if digraph, consolidate double edges to one single one
-    #     digraphedges = Edge[]
-    #     for edge in edges(g)
-    #         if Edge(dst(edge), src(edge)) ∉ digraphedges
-    #             push!(digraphedges, Edge(src(edge), dst(edge)))
-    #         end
-    #     end
-    #     edgestodraw = digraphedges
-    # end
 
     for (n, edge) in enumerate(edgestodraw)
         s, d = src(edge), dst(edge)
