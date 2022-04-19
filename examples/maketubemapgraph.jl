@@ -12,28 +12,37 @@ amatrix = Matrix(tubedata[:, 4:270])
 g = Graph(amatrix)
 
 extrema_lat = extrema(tubedata.Latitude)
-
 extrema_long = extrema(tubedata.Longitude)
 
-# scale and flip LatLong to current drawing
+# scale LatLong and flip in y to fit into current Luxor drawing
 positions = @. Point(rescale(tubedata.Longitude, extrema_long..., -280, 280), rescale(tubedata.Latitude, extrema_lat..., 280, -280))
 
 stations = tubedata[!,:Station]
 
-uxbridge_to_upminster = a_star(g, findfirst(isequal("Uxbridge"), stations), findfirst(isequal("Upminster"), stations))
+find(str) = findfirst(isequal(str), stations)
+find(x::Int64) = stations[x]
+
+uxbridge_to_upminster = a_star(g, find("Uxbridge"), find("Upminster"))
+
+morden_to_morningtoncrescent = a_star(g, find("Morden"), find("Mornington Crescent"))
+
 @drawsvg begin
-	background("azure")
-	sethue("purple")
+	background("grey70")
+	sethue("grey50")
 	drawgraph(g,
 		layout = positions,
-		vertexshapesizes = :none,
-		#vertexshapesizes = 2,
-		#vertexlabelfontsizes = 5,
-		#vertexlabeltextcolors = colorant"black",
-		)
+		vertexshapesizes = :none)
+	sethue("black")
 	drawgraph(g,
-		layout=positions,
-		vertexshapesizes = :none,
-		edgelist = uxbridge_to_upminster,
-		edgestrokeweights = 10)
+		vertexshapes = :none,
+		edgelines = :none,
+		vertexlabels = (vtx) -> begin
+			if vtx ∈ src.(morden_to_morningtoncrescent) || vtx ∈ dst.(morden_to_morningtoncrescent)
+				println(find(vtx))
+				find(vtx)
+				circle(positions[vtx], 5, :fill)
+				label(find(vtx), :e, positions[vtx], offset=10)
+			end
+		end
+		)
 end

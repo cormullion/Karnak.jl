@@ -426,7 +426,7 @@ end 600 600
 
 `edgelist` is useful for drawing paths.
 
-```@example begin
+```@example graphsection
 @drawsvg begin
 background("grey10")
 g = grid((15, 15))

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en"><head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/><title>Basic graphs · Karnak</title><script data-outdated-warner src="assets/warner.js"></script><link href="https://cdnjs.cloudflare.com/ajax/libs/lato-font/3.0.0/css/lato-font.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/juliamono/0.039/juliamono-regular.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/fontawesome.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/solid.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/brands.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.13.11/katex.min.css" rel="stylesheet" type="text/css"/><script>documenterBaseURL="."</script><script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js" data-main="assets/documenter.js"></script><script src="siteinfo.js"></script><script src="../versions.js"></script><link class="docs-theme-link" rel="stylesheet" type="text/css" href="assets/themes/documenter-dark.css" data-theme-name="documenter-dark" data-theme-primary-dark/><link class="docs-theme-link" rel="stylesheet" type="text/css" href="assets/themes/documenter-light.css" data-theme-name="documenter-light" data-theme-primary/><script src="assets/themeswap.js"></script></head><body><div id="documenter"><nav class="docs-sidebar"><a class="docs-logo" href="index.html"><img src="assets/logo.svg" alt="Karnak logo"/></a><div class="docs-package-name"><span class="docs-autofit"><a href="index.html">Karnak</a></span></div><form class="docs-search" action="search.html"><input class="docs-search-query" id="documenter-search-query" name="q" type="text" placeholder="Search docs"/></form><ul class="docs-menu"><li><a class="tocitem" href="index.html">Introduction to Karnak</a></li><li class="is-active"><a class="tocitem" href="basics.html">Basic graphs</a><ul class="internal"><li><a class="tocitem" href="#Graphs,-vertices,-and-edges"><span>Graphs, vertices, and edges</span></a></li><li><a class="tocitem" href="#Undirected-and-directed-graphs"><span>Undirected and directed graphs</span></a></li><li><a class="tocitem" href="#Very-simple-graphs"><span>Very simple graphs</span></a></li><li><a class="tocitem" href="#Well-known-graphs"><span>Well-known graphs</span></a></li><li><a class="tocitem" href="#Getting-some-information-about-the-graph"><span>Getting some information about the graph</span></a></li><li><a class="tocitem" href="#Graphs-as-matrices"><span>Graphs as matrices</span></a></li><li><a class="tocitem" href="#Paths,-cycles,-routes,-and-traversals"><span>Paths, cycles, routes, and traversals</span></a></li><li><a class="tocitem" href="#Shortest-paths:-the-A*-algorithm"><span>Shortest paths: the A* algorithm</span></a></li><li><a class="tocitem" href="#Visiting-every-vertex"><span>Visiting every vertex</span></a></li><li><a class="tocitem" href="#Shortest-paths:-Dijkstra&#39;s-algorithm"><span>Shortest paths: Dijkstra&#39;s algorithm</span></a></li><li><a class="tocitem" href="#Weighted-graphs"><span>Weighted graphs</span></a></li><li><a class="tocitem" href="#Spanning-trees"><span>Spanning trees</span></a></li><li><a class="tocitem" href="#Centrality"><span>Centrality</span></a></li><li><a class="tocitem" href="#Graph-coloring"><span>Graph coloring</span></a></li></ul></li><li><a class="tocitem" href="syntax.html">Kwarg madness</a></li><li><input class="collapse-toggle" id="menuitem-4" type="checkbox"/><label class="tocitem" for="menuitem-4"><span class="docs-label">Reference</span><i class="docs-chevron"></i></label><ul class="collapsed"><li><a class="tocitem" href="reference/functionindex.html">Alphabetical function list</a></li><li><a class="tocitem" href="reference/api.html">Function reference</a></li></ul></li></ul><div class="docs-version-selector field has-addons"><div class="control"><span class="docs-label button is-static is-size-7">Version</span></div><div class="docs-selector control is-expanded"><div class="select is-fullwidth is-size-7"><select id="documenter-version-selector"></select></div></div></div></nav><div class="docs-main"><header class="docs-navbar"><nav class="breadcrumb"><ul class="is-hidden-mobile"><li class="is-active"><a href="basics.html">Basic graphs</a></li></ul><ul class="is-hidden-tablet"><li class="is-active"><a href="basics.html">Basic graphs</a></li></ul></nav><div class="docs-right"><a class="docs-edit-link" href="https://github.com/cormullion/Karnak.jl/blob/master/docs/src/basics.md" title="Edit on GitHub"><span class="docs-icon fab"></span><span class="docs-label is-hidden-touch">Edit on GitHub</span></a><a class="docs-settings-button fas fa-cog" id="documenter-settings-button" href="#" title="Settings"></a><a class="docs-sidebar-button fa fa-bars is-hidden-desktop" id="documenter-sidebar-button" href="#"></a></div></header><article class="content" id="documenter-page"><h1 id="Graph-theory"><a class="docs-heading-anchor" href="#Graph-theory">Graph theory</a><a id="Graph-theory-1"></a><a class="docs-heading-anchor-permalink" href="#Graph-theory" title="Permalink"></a></h1><p>This section contains an introduction to basic graph theory using the Graphs.jl package. You don&#39;t need any prior knowledge of graphs, but you should be familiar with the basics of programming in Julia.</p><h2 id="Graphs,-vertices,-and-edges"><a class="docs-heading-anchor" href="#Graphs,-vertices,-and-edges">Graphs, vertices, and edges</a><a id="Graphs,-vertices,-and-edges-1"></a><a class="docs-heading-anchor-permalink" href="#Graphs,-vertices,-and-edges" title="Permalink"></a></h2><p>Graph theory is used for analysing networks and the relationships between things in the network.</p><img src='data:image/svg+xml;utf-8,<?xml version="1.0" encoding="UTF-8"?>
+<html lang="en"><head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/><title>Basic graphs · Karnak</title><script data-outdated-warner src="assets/warner.js"></script><link href="https://cdnjs.cloudflare.com/ajax/libs/lato-font/3.0.0/css/lato-font.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/juliamono/0.039/juliamono-regular.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/fontawesome.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/solid.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/brands.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.13.11/katex.min.css" rel="stylesheet" type="text/css"/><script>documenterBaseURL="."</script><script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js" data-main="assets/documenter.js"></script><script src="siteinfo.js"></script><script src="../versions.js"></script><link class="docs-theme-link" rel="stylesheet" type="text/css" href="assets/themes/documenter-dark.css" data-theme-name="documenter-dark" data-theme-primary-dark/><link class="docs-theme-link" rel="stylesheet" type="text/css" href="assets/themes/documenter-light.css" data-theme-name="documenter-light" data-theme-primary/><script src="assets/themeswap.js"></script></head><body><div id="documenter"><nav class="docs-sidebar"><a class="docs-logo" href="index.html"><img src="assets/logo.svg" alt="Karnak logo"/></a><div class="docs-package-name"><span class="docs-autofit"><a href="index.html">Karnak</a></span></div><form class="docs-search" action="search.html"><input class="docs-search-query" id="documenter-search-query" name="q" type="text" placeholder="Search docs"/></form><ul class="docs-menu"><li><a class="tocitem" href="index.html">Introduction to Karnak</a></li><li class="is-active"><a class="tocitem" href="basics.html">Basic graphs</a><ul class="internal"><li><a class="tocitem" href="#Graphs,-vertices,-and-edges"><span>Graphs, vertices, and edges</span></a></li><li><a class="tocitem" href="#Undirected-and-directed-graphs"><span>Undirected and directed graphs</span></a></li><li><a class="tocitem" href="#Very-simple-graphs"><span>Very simple graphs</span></a></li><li><a class="tocitem" href="#Well-known-graphs"><span>Well-known graphs</span></a></li><li><a class="tocitem" href="#Getting-some-information-about-the-graph"><span>Getting some information about the graph</span></a></li><li><a class="tocitem" href="#Graphs-as-matrices"><span>Graphs as matrices</span></a></li><li><a class="tocitem" href="#Paths,-cycles,-routes,-and-traversals"><span>Paths, cycles, routes, and traversals</span></a></li><li><a class="tocitem" href="#Shortest-paths:-the-A*-algorithm"><span>Shortest paths: the A* algorithm</span></a></li><li><a class="tocitem" href="#Visiting-every-vertex"><span>Visiting every vertex</span></a></li><li><a class="tocitem" href="#Shortest-paths:-Dijkstra&#39;s-algorithm"><span>Shortest paths: Dijkstra&#39;s algorithm</span></a></li><li><a class="tocitem" href="#Weighted-graphs"><span>Weighted graphs</span></a></li><li><a class="tocitem" href="#Spanning-trees"><span>Spanning trees</span></a></li><li><a class="tocitem" href="#Centrality"><span>Centrality</span></a></li><li><a class="tocitem" href="#Graph-coloring"><span>Graph coloring</span></a></li></ul></li><li><a class="tocitem" href="syntax.html">Syntax</a></li><li><a class="tocitem" href="examples.html">Examples</a></li><li><input class="collapse-toggle" id="menuitem-5" type="checkbox"/><label class="tocitem" for="menuitem-5"><span class="docs-label">Reference</span><i class="docs-chevron"></i></label><ul class="collapsed"><li><a class="tocitem" href="reference/functionindex.html">Alphabetical function list</a></li><li><a class="tocitem" href="reference/api.html">Function reference</a></li></ul></li></ul><div class="docs-version-selector field has-addons"><div class="control"><span class="docs-label button is-static is-size-7">Version</span></div><div class="docs-selector control is-expanded"><div class="select is-fullwidth is-size-7"><select id="documenter-version-selector"></select></div></div></div></nav><div class="docs-main"><header class="docs-navbar"><nav class="breadcrumb"><ul class="is-hidden-mobile"><li class="is-active"><a href="basics.html">Basic graphs</a></li></ul><ul class="is-hidden-tablet"><li class="is-active"><a href="basics.html">Basic graphs</a></li></ul></nav><div class="docs-right"><a class="docs-edit-link" href="https://github.com/cormullion/Karnak.jl/blob/master/docs/src/basics.md" title="Edit on GitHub"><span class="docs-icon fab"></span><span class="docs-label is-hidden-touch">Edit on GitHub</span></a><a class="docs-settings-button fas fa-cog" id="documenter-settings-button" href="#" title="Settings"></a><a class="docs-sidebar-button fa fa-bars is-hidden-desktop" id="documenter-sidebar-button" href="#"></a></div></header><article class="content" id="documenter-page"><h1 id="Graph-theory"><a class="docs-heading-anchor" href="#Graph-theory">Graph theory</a><a id="Graph-theory-1"></a><a class="docs-heading-anchor-permalink" href="#Graph-theory" title="Permalink"></a></h1><p>This section contains an introduction to basic graph theory using the Graphs.jl package. You don&#39;t need any prior knowledge of graphs, but you should be familiar with the basics of programming in Julia.</p><h2 id="Graphs,-vertices,-and-edges"><a class="docs-heading-anchor" href="#Graphs,-vertices,-and-edges">Graphs, vertices, and edges</a><a id="Graphs,-vertices,-and-edges-1"></a><a class="docs-heading-anchor-permalink" href="#Graphs,-vertices,-and-edges" title="Permalink"></a></h2><p>Graph theory is used for analysing networks and the relationships between things in the network.</p><img src='data:image/svg+xml;utf-8,<?xml version="1.0" encoding="UTF-8"?>
 <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="600pt" height="350pt" viewBox="0 0 600 350" version="1.1">
 <defs>
 <g>
@@ -183,7 +183,7 @@
 </symbol>
 </g>
 </defs>
-<g id="surface2061">
+<g id="surface6254">
 <rect x="0" y="0" width="600" height="350" style="fill:rgb(10.196078%25,10.196078%25,10.196078%25);fill-opacity:1;stroke:none;"/>
 <path style="fill:none;stroke-width:2;stroke-linecap:butt;stroke-linejoin:miter;stroke:rgb(100%25,100%25,0%25);stroke-opacity:1;stroke-miterlimit:10;" d="M 142.78125 197.421875 C 158.664062 223.316406 173.8125 248.476562 188.777344 273.746094 "/>
 <path style=" stroke:none;fill-rule:nonzero;fill:rgb(100%25,100%25,0%25);fill-opacity:1;" d="M 190.625 271.4375 L 191.640625 278.589844 L 185.867188 274.25 "/>
@@ -334,7 +334,7 @@ end 600 300</code></pre><img src='data:image/svg+xml;utf-8,<?xml version="1.0" e
 </symbol>
 </g>
 </defs>
-<g id="surface2067">
+<g id="surface6260">
 <rect x="0" y="0" width="600" height="300" style="fill:rgb(10.196078%25,10.196078%25,10.196078%25);fill-opacity:1;stroke:none;"/>
 <path style="fill:none;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke:rgb(100%25,64.705882%25,0%25);stroke-opacity:1;stroke-miterlimit:10;" d="M 420 150 L 300 270 "/>
 <path style="fill:none;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke:rgb(100%25,64.705882%25,0%25);stroke-opacity:1;stroke-miterlimit:10;" d="M 420 150 L 180 150 "/>
@@ -391,7 +391,7 @@ end 600 300</code></pre><img src='data:image/svg+xml;utf-8,<?xml version="1.0" e
 </symbol>
 </g>
 </defs>
-<g id="surface2072">
+<g id="surface6265">
 <rect x="0" y="0" width="600" height="300" style="fill:rgb(10.196078%25,10.196078%25,10.196078%25);fill-opacity:1;stroke:none;"/>
 <path style="fill:none;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke:rgb(41.568627%25,35.294118%25,80.392157%25);stroke-opacity:1;stroke-miterlimit:10;" d="M 415.757812 154.242188 C 379.328125 190.671875 342.902344 227.097656 306.472656 263.527344 "/>
 <path style=" stroke:none;fill-rule:nonzero;fill:rgb(41.568627%25,35.294118%25,80.392157%25);fill-opacity:1;" d="M 308.863281 263.84375 L 304.242188 265.757812 L 306.15625 261.136719 "/>
@@ -440,13 +440,13 @@ end 400 300
 
 hcat(d1, d2)</code></pre><img src='data:image/svg+xml;utf-8,<?xml version="1.0" encoding="UTF-8"?>
 <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="800pt" height="300pt" viewBox="0 0 800 300" version="1.1">
-<g id="surface2087">
+<g id="surface6280">
 <path style=" stroke:none;fill-rule:nonzero;fill:rgb(10.196079%25,10.196079%25,10.196079%25);fill-opacity:1;" d="M 0 0 L 400 0 L 400 300 L 0 300 Z M 0 0 "/>
-<path style="fill:none;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke:rgb(100%25,84.313726%25,0%25);stroke-opacity:1;stroke-miterlimit:10;" d="M 320 150 L 102.917969 79.464844 "/>
-<path style="fill:none;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke:rgb(100%25,84.313726%25,0%25);stroke-opacity:1;stroke-miterlimit:10;" d="M 320 150 L 297.082031 79.464844 "/>
-<path style="fill:none;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke:rgb(100%25,84.313726%25,0%25);stroke-opacity:1;stroke-miterlimit:10;" d="M 297.082031 220.535156 L 237.082031 264.125 "/>
-<path style="fill:none;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke:rgb(100%25,84.313726%25,0%25);stroke-opacity:1;stroke-miterlimit:10;" d="M 237.082031 264.125 L 162.917969 264.125 "/>
-<path style="fill:none;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke:rgb(100%25,84.313726%25,0%25);stroke-opacity:1;stroke-miterlimit:10;" d="M 102.917969 220.535156 L 237.082031 35.875 "/>
+<path style="fill:none;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke:rgb(100%25,84.313726%25,0%25);stroke-opacity:1;stroke-miterlimit:10;" d="M 297.082031 220.535156 L 102.917969 220.535156 "/>
+<path style="fill:none;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke:rgb(100%25,84.313726%25,0%25);stroke-opacity:1;stroke-miterlimit:10;" d="M 297.082031 220.535156 L 237.082031 35.875 "/>
+<path style="fill:none;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke:rgb(100%25,84.313726%25,0%25);stroke-opacity:1;stroke-miterlimit:10;" d="M 102.917969 220.535156 L 80 150 "/>
+<path style="fill:none;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke:rgb(100%25,84.313726%25,0%25);stroke-opacity:1;stroke-miterlimit:10;" d="M 102.917969 79.464844 L 162.917969 35.875 "/>
+<path style="fill:none;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke:rgb(100%25,84.313726%25,0%25);stroke-opacity:1;stroke-miterlimit:10;" d="M 237.082031 35.875 L 297.082031 79.464844 "/>
 <path style="fill-rule:nonzero;fill:rgb(100%25,84.313726%25,0%25);fill-opacity:1;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke:rgb(100%25,84.313726%25,0%25);stroke-opacity:1;stroke-miterlimit:10;" d="M 326 150 C 326 153.3125 323.3125 156 320 156 C 316.6875 156 314 153.3125 314 150 C 314 146.6875 316.6875 144 320 144 C 323.3125 144 326 146.6875 326 150 "/>
 <path style=" stroke:none;fill-rule:nonzero;fill:rgb(0%25,0%25,0%25);fill-opacity:1;" d="M 318.175781 148.527344 L 318.175781 147.855469 C 318.8125 147.792969 319.253906 147.691406 319.503906 147.546875 C 319.753906 147.402344 319.941406 147.058594 320.066406 146.519531 L 320.757812 146.519531 L 320.757812 153.480469 L 319.820312 153.480469 L 319.820312 148.527344 Z M 318.175781 148.527344 "/>
 <path style="fill-rule:nonzero;fill:rgb(100%25,84.313726%25,0%25);fill-opacity:1;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke:rgb(100%25,84.313726%25,0%25);stroke-opacity:1;stroke-miterlimit:10;" d="M 303.082031 220.535156 C 303.082031 223.847656 300.394531 226.535156 297.082031 226.535156 C 293.769531 226.535156 291.082031 223.847656 291.082031 220.535156 C 291.082031 217.21875 293.769531 214.535156 297.082031 214.535156 C 300.394531 214.535156 303.082031 217.21875 303.082031 220.535156 "/>
@@ -469,12 +469,12 @@ hcat(d1, d2)</code></pre><img src='data:image/svg+xml;utf-8,<?xml version="1.0" 
 <path style=" stroke:none;fill-rule:nonzero;fill:rgb(0%25,0%25,0%25);fill-opacity:1;" d="M 292.476562 78.007812 L 292.476562 77.335938 C 293.113281 77.273438 293.554688 77.171875 293.804688 77.027344 C 294.054688 76.882812 294.242188 76.539062 294.367188 76 L 295.058594 76 L 295.058594 82.960938 L 294.121094 82.960938 L 294.121094 78.007812 Z M 292.476562 78.007812 "/>
 <path style=" stroke:none;fill-rule:nonzero;fill:rgb(0%25,0%25,0%25);fill-opacity:1;" d="M 299.785156 75.96875 C 300.691406 75.96875 301.347656 76.339844 301.75 77.085938 C 302.0625 77.664062 302.21875 78.453125 302.21875 79.453125 C 302.21875 80.40625 302.078125 81.191406 301.792969 81.8125 C 301.382812 82.703125 300.714844 83.152344 299.78125 83.152344 C 298.941406 83.152344 298.316406 82.785156 297.90625 82.058594 C 297.566406 81.449219 297.394531 80.632812 297.394531 79.605469 C 297.394531 78.8125 297.496094 78.128906 297.703125 77.5625 C 298.085938 76.5 298.78125 75.96875 299.785156 75.96875 Z M 299.777344 82.351562 C 300.234375 82.351562 300.597656 82.148438 300.867188 81.746094 C 301.136719 81.34375 301.269531 80.589844 301.269531 79.488281 C 301.269531 78.695312 301.175781 78.042969 300.980469 77.527344 C 300.785156 77.015625 300.402344 76.757812 299.839844 76.757812 C 299.324219 76.757812 298.945312 77.003906 298.707031 77.488281 C 298.464844 77.976562 298.347656 78.695312 298.347656 79.640625 C 298.347656 80.351562 298.421875 80.925781 298.574219 81.359375 C 298.808594 82.019531 299.210938 82.351562 299.777344 82.351562 Z M 299.777344 82.351562 "/>
 <path style=" stroke:none;fill-rule:nonzero;fill:rgb(10.196079%25,10.196079%25,10.196079%25);fill-opacity:1;" d="M 400 0 L 800 0 L 800 300 L 400 300 Z M 400 0 "/>
-<path style="fill:none;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke:rgb(69.803923%25,13.333334%25,13.333334%25);stroke-opacity:1;stroke-miterlimit:10;" d="M 316.472656 154.855469 C 291.945312 188.617188 267.414062 222.378906 242.882812 256.140625 " transform="matrix(1,0,0,1,400,0)"/>
-<path style=" stroke:none;fill-rule:nonzero;fill:rgb(69.803923%25,13.333334%25,13.333334%25);fill-opacity:1;" d="M 644.871094 256.660156 L 640.609375 259.273438 L 641.777344 254.410156 "/>
 <path style="fill:none;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke:rgb(69.803923%25,13.333334%25,13.333334%25);stroke-opacity:1;stroke-miterlimit:10;" d="M 314.292969 148.144531 C 247.109375 126.316406 179.921875 104.484375 112.738281 82.65625 " transform="matrix(1,0,0,1,400,0)"/>
 <path style=" stroke:none;fill-rule:nonzero;fill:rgb(69.803923%25,13.333334%25,13.333334%25);fill-opacity:1;" d="M 512.425781 84.566406 L 508.625 81.320312 L 513.609375 80.925781 "/>
-<path style="fill:none;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke:rgb(69.803923%25,13.333334%25,13.333334%25);stroke-opacity:1;stroke-miterlimit:10;" d="M 106.445312 84.320312 C 147.96875 141.472656 189.492188 198.621094 231.011719 255.773438 " transform="matrix(1,0,0,1,400,0)"/>
-<path style=" stroke:none;fill-rule:nonzero;fill:rgb(69.803923%25,13.333334%25,13.333334%25);fill-opacity:1;" d="M 632.386719 254.410156 L 633.554688 259.273438 L 629.292969 256.660156 "/>
+<path style="fill:none;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke:rgb(69.803923%25,13.333334%25,13.333334%25);stroke-opacity:1;stroke-miterlimit:10;" d="M 231.375 262.273438 C 191.6875 249.375 151.996094 236.480469 112.308594 223.585938 " transform="matrix(1,0,0,1,400,0)"/>
+<path style=" stroke:none;fill-rule:nonzero;fill:rgb(69.803923%25,13.333334%25,13.333334%25);fill-opacity:1;" d="M 512.425781 225.636719 L 508.625 222.386719 L 513.609375 221.996094 "/>
+<path style="fill:none;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke:rgb(69.803923%25,13.333334%25,13.333334%25);stroke-opacity:1;stroke-miterlimit:10;" d="M 233.554688 259.273438 C 192.03125 202.121094 150.507812 144.96875 108.988281 87.820312 " transform="matrix(1,0,0,1,400,0)"/>
+<path style=" stroke:none;fill-rule:nonzero;fill:rgb(69.803923%25,13.333334%25,13.333334%25);fill-opacity:1;" d="M 507.613281 89.183594 L 506.445312 84.320312 L 510.707031 86.933594 "/>
 <path style="fill-rule:nonzero;fill:rgb(69.803923%25,13.333334%25,13.333334%25);fill-opacity:1;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke:rgb(69.803923%25,13.333334%25,13.333334%25);stroke-opacity:1;stroke-miterlimit:10;" d="M 326 150 C 326 153.3125 323.3125 156 320 156 C 316.6875 156 314 153.3125 314 150 C 314 146.6875 316.6875 144 320 144 C 323.3125 144 326 146.6875 326 150 " transform="matrix(1,0,0,1,400,0)"/>
 <path style=" stroke:none;fill-rule:nonzero;fill:rgb(100%25,100%25,100%25);fill-opacity:1;" d="M 718.175781 148.527344 L 718.175781 147.855469 C 718.8125 147.792969 719.253906 147.691406 719.503906 147.546875 C 719.753906 147.402344 719.941406 147.058594 720.066406 146.519531 L 720.757812 146.519531 L 720.757812 153.480469 L 719.820312 153.480469 L 719.820312 148.527344 Z M 718.175781 148.527344 "/>
 <path style="fill-rule:nonzero;fill:rgb(69.803923%25,13.333334%25,13.333334%25);fill-opacity:1;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke:rgb(69.803923%25,13.333334%25,13.333334%25);stroke-opacity:1;stroke-miterlimit:10;" d="M 243.082031 264.125 C 243.082031 267.441406 240.394531 270.125 237.082031 270.125 C 233.769531 270.125 231.082031 267.441406 231.082031 264.125 C 231.082031 260.8125 233.769531 258.125 237.082031 258.125 C 240.394531 258.125 243.082031 260.8125 243.082031 264.125 " transform="matrix(1,0,0,1,400,0)"/>
@@ -533,7 +533,7 @@ end 600 300</code></pre><img src='data:image/svg+xml;utf-8,<?xml version="1.0" e
 </symbol>
 </g>
 </defs>
-<g id="surface2092">
+<g id="surface6285">
 <rect x="0" y="0" width="600" height="300" style="fill:rgb(10.196078%25,10.196078%25,10.196078%25);fill-opacity:1;stroke:none;"/>
 <path style="fill:none;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke:rgb(100%25,75.294118%25,79.607843%25);stroke-opacity:1;stroke-miterlimit:10;" d="M 420 150 L 397.082031 220.535156 "/>
 <path style="fill:none;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke:rgb(100%25,75.294118%25,79.607843%25);stroke-opacity:1;stroke-miterlimit:10;" d="M 420 150 L 337.082031 264.125 "/>
@@ -660,7 +660,7 @@ end 600 300</code></pre><img src='data:image/svg+xml;utf-8,<?xml version="1.0" e
 </symbol>
 </g>
 </defs>
-<g id="surface2097">
+<g id="surface6290">
 <rect x="0" y="0" width="600" height="300" style="fill:rgb(10.196078%25,10.196078%25,10.196078%25);fill-opacity:1;stroke:none;"/>
 <path style="fill:none;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke:rgb(100%25,64.705882%25,0%25);stroke-opacity:1;stroke-miterlimit:10;" d="M 417.398438 155.40625 C 404.738281 181.691406 392.078125 207.976562 379.421875 234.261719 "/>
 <path style=" stroke:none;fill-rule:nonzero;fill:rgb(100%25,64.705882%25,0%25);fill-opacity:1;" d="M 381.148438 235.082031 L 377.421875 238.414062 L 377.703125 233.421875 "/>
@@ -826,7 +826,7 @@ end 600 400</code></pre><img src='data:image/svg+xml;utf-8,<?xml version="1.0" e
 </symbol>
 </g>
 </defs>
-<g id="surface2102">
+<g id="surface6295">
 <rect x="0" y="0" width="600" height="400" style="fill:rgb(10.196078%25,10.196078%25,10.196078%25);fill-opacity:1;stroke:none;"/>
 <path style="fill:none;stroke-width:0.5;stroke-linecap:butt;stroke-linejoin:miter;stroke:rgb(80.392157%25,67.843137%25,0%25);stroke-opacity:1;stroke-miterlimit:10;" d="M 25 350 L 25 50 "/>
 <path style="fill:none;stroke-width:0.5;stroke-linecap:butt;stroke-linejoin:miter;stroke:rgb(80.392157%25,67.843137%25,0%25);stroke-opacity:1;stroke-miterlimit:10;" d="M 25 350 L 86.109375 50 "/>
@@ -1068,7 +1068,7 @@ end 600 300</code></pre><img src='data:image/svg+xml;utf-8,<?xml version="1.0" e
 </symbol>
 </g>
 </defs>
-<g id="surface2107">
+<g id="surface6300">
 <rect x="0" y="0" width="600" height="300" style="fill:rgb(10.196078%25,10.196078%25,10.196078%25);fill-opacity:1;stroke:none;"/>
 <path style="fill:none;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke:rgb(100%25,64.705882%25,0%25);stroke-opacity:1;stroke-miterlimit:10;" d="M 374.050781 30 L 395.597656 82.140625 "/>
 <path style="fill:none;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke:rgb(100%25,64.705882%25,0%25);stroke-opacity:1;stroke-miterlimit:10;" d="M 374.050781 30 L 321.394531 48.472656 "/>
@@ -1238,7 +1238,7 @@ end 600 300</code></pre><img src='data:image/svg+xml;utf-8,<?xml version="1.0" e
 </symbol>
 </g>
 </defs>
-<g id="surface2112">
+<g id="surface6305">
 <rect x="0" y="0" width="600" height="300" style="fill:rgb(10.196078%25,10.196078%25,10.196078%25);fill-opacity:1;stroke:none;"/>
 <path style="fill:none;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke:rgb(100%25,64.705882%25,0%25);stroke-opacity:1;stroke-miterlimit:10;" d="M 299.011719 151.042969 L 181.039062 179.367188 "/>
 <path style="fill:none;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke:rgb(100%25,64.705882%25,0%25);stroke-opacity:1;stroke-miterlimit:10;" d="M 299.011719 151.042969 L 185.015625 111.261719 "/>
@@ -1348,7 +1348,7 @@ end 600 300</code></pre><img src='data:image/svg+xml;utf-8,<?xml version="1.0" e
 </symbol>
 </g>
 </defs>
-<g id="surface2117">
+<g id="surface6310">
 <rect x="0" y="0" width="600" height="300" style="fill:rgb(10.196078%25,10.196078%25,10.196078%25);fill-opacity:1;stroke:none;"/>
 <path style="fill:none;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke:rgb(100%25,64.705882%25,0%25);stroke-opacity:1;stroke-miterlimit:10;" d="M 302.414062 150.746094 L 249.5625 41.527344 "/>
 <path style="fill:none;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke:rgb(100%25,64.705882%25,0%25);stroke-opacity:1;stroke-miterlimit:10;" d="M 302.414062 150.746094 L 317.027344 30 "/>
@@ -1513,7 +1513,7 @@ end 600 300</code></pre><img src='data:image/svg+xml;utf-8,<?xml version="1.0" e
 </symbol>
 </g>
 </defs>
-<g id="surface2122">
+<g id="surface6315">
 <rect x="0" y="0" width="800" height="800" style="fill:rgb(10.196078%25,10.196078%25,10.196078%25);fill-opacity:1;stroke:none;"/>
 <path style="fill:none;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke:rgb(100%25,64.705882%25,0%25);stroke-opacity:1;stroke-miterlimit:10;" d="M 110.183594 86.5 L 81.773438 104.386719 "/>
 <path style="fill:none;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke:rgb(100%25,64.705882%25,0%25);stroke-opacity:1;stroke-miterlimit:10;" d="M 110.183594 86.5 L 80.585938 70.652344 "/>
@@ -2735,7 +2735,7 @@ end 600 300</code></pre><img src='data:image/svg+xml;utf-8,<?xml version="1.0" e
 </symbol>
 </g>
 </defs>
-<g id="surface2128">
+<g id="surface6321">
 <rect x="0" y="0" width="600" height="300" style="fill:rgb(10.196078%25,10.196078%25,10.196078%25);fill-opacity:1;stroke:none;"/>
 <path style="fill:none;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke:rgb(100%25,64.705882%25,0%25);stroke-opacity:1;stroke-miterlimit:10;" d="M 414.125 150 L 326.941406 30 "/>
 <path style="fill:none;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke:rgb(100%25,64.705882%25,0%25);stroke-opacity:1;stroke-miterlimit:10;" d="M 414.125 150 L 326.941406 270 "/>
@@ -2802,7 +2802,7 @@ sethue(&quot;orange&quot;)
 drawgraph(g, layout = Spring(Ptype=Float64))
 end 600 300</code></pre><img src='data:image/svg+xml;utf-8,<?xml version="1.0" encoding="UTF-8"?>
 <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="600pt" height="300pt" viewBox="0 0 600 300" version="1.1">
-<g id="surface2133">
+<g id="surface6326">
 <rect x="0" y="0" width="600" height="300" style="fill:rgb(10.196078%25,10.196078%25,10.196078%25);fill-opacity:1;stroke:none;"/>
 <path style="fill:none;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke:rgb(100%25,64.705882%25,0%25);stroke-opacity:1;stroke-miterlimit:10;" d="M 294.046875 181.546875 L 277.445312 270 "/>
 <path style="fill:none;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke:rgb(100%25,64.705882%25,0%25);stroke-opacity:1;stroke-miterlimit:10;" d="M 294.046875 181.546875 L 397.707031 116.375 "/>
@@ -2918,7 +2918,7 @@ end 600 300</code></pre><img src='data:image/svg+xml;utf-8,<?xml version="1.0" e
 </symbol>
 </g>
 </defs>
-<g id="surface2138">
+<g id="surface6331">
 <rect x="0" y="0" width="600" height="300" style="fill:rgb(10.196078%25,10.196078%25,10.196078%25);fill-opacity:1;stroke:none;"/>
 <path style="fill:none;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke:rgb(0%25,0%25,100%25);stroke-opacity:1;stroke-miterlimit:10;" d="M 414.125 150 L 326.941406 30 "/>
 <path style="fill:none;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke:rgb(0%25,0%25,100%25);stroke-opacity:1;stroke-miterlimit:10;" d="M 414.125 150 L 326.941406 270 "/>
@@ -3046,7 +3046,7 @@ end 600 400</code></pre><img src='data:image/svg+xml;utf-8,<?xml version="1.0" e
 </symbol>
 </g>
 </defs>
-<g id="surface2154">
+<g id="surface6347">
 <rect x="0" y="0" width="600" height="400" style="fill:rgb(10.196078%25,10.196078%25,10.196078%25);fill-opacity:1;stroke:none;"/>
 <path style="fill:none;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke:rgb(100%25,64.705882%25,0%25);stroke-opacity:1;stroke-miterlimit:10;" d="M 461.679688 200 L 338.167969 30 "/>
 <path style="fill:none;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke:rgb(100%25,64.705882%25,0%25);stroke-opacity:1;stroke-miterlimit:10;" d="M 461.679688 200 L 338.167969 370 "/>
@@ -3141,7 +3141,7 @@ end 800 400</code></pre><img src='data:image/svg+xml;utf-8,<?xml version="1.0" e
 </symbol>
 </g>
 </defs>
-<g id="surface2159">
+<g id="surface6352">
 <rect x="0" y="0" width="800" height="400" style="fill:rgb(10.196078%25,10.196078%25,10.196078%25);fill-opacity:1;stroke:none;"/>
 <path style="fill:none;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke:rgb(100%25,64.705882%25,0%25);stroke-opacity:1;stroke-miterlimit:10;" d="M 138.070312 30 L 113.878906 345.226562 "/>
 <path style="fill:none;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke:rgb(100%25,64.705882%25,0%25);stroke-opacity:1;stroke-miterlimit:10;" d="M 138.070312 30 L 453.1875 54.820312 "/>
@@ -3204,7 +3204,7 @@ drawgraph(Graph(g),
     vertexfillcolors = [colorant&quot;#CB3C33&quot;, colorant&quot;#389826&quot;, colorant&quot;#9558B2&quot;])
 end 600 250</code></pre><img src='data:image/svg+xml;utf-8,<?xml version="1.0" encoding="UTF-8"?>
 <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="600pt" height="250pt" viewBox="0 0 600 250" version="1.1">
-<g id="surface2164">
+<g id="surface6357">
 <rect x="0" y="0" width="600" height="250" style="fill:rgb(20%25,20%25,20%25);fill-opacity:1;stroke:none;"/>
 <path style="fill:none;stroke-width:15;stroke-linecap:butt;stroke-linejoin:miter;stroke:rgb(100%25,84.313725%25,0%25);stroke-opacity:1;stroke-miterlimit:10;" d="M 230.71875 185 L 300 65 "/>
 <path style="fill:none;stroke-width:15;stroke-linecap:butt;stroke-linejoin:miter;stroke:rgb(100%25,84.313725%25,0%25);stroke-opacity:1;stroke-miterlimit:10;" d="M 230.71875 185 L 369.28125 185 "/>
@@ -3263,7 +3263,7 @@ sethue(&quot;orange&quot;)
 drawgraph(g, layout=stress)
 end 600 300</code></pre><img src='data:image/svg+xml;utf-8,<?xml version="1.0" encoding="UTF-8"?>
 <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="600pt" height="300pt" viewBox="0 0 600 300" version="1.1">
-<g id="surface2169">
+<g id="surface6362">
 <rect x="0" y="0" width="600" height="300" style="fill:rgb(10.196078%25,10.196078%25,10.196078%25);fill-opacity:1;stroke:none;"/>
 <path style="fill:none;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke:rgb(100%25,64.705882%25,0%25);stroke-opacity:1;stroke-miterlimit:10;" d="M 236.234375 156.683594 L 178.121094 161.769531 "/>
 <path style="fill:none;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke:rgb(100%25,64.705882%25,0%25);stroke-opacity:1;stroke-miterlimit:10;" d="M 236.234375 156.683594 L 274.855469 91.277344 "/>
@@ -3398,7 +3398,7 @@ end 600 300</code></pre><img src='data:image/svg+xml;utf-8,<?xml version="1.0" e
 </symbol>
 </g>
 </defs>
-<g id="surface2174">
+<g id="surface6367">
 <rect x="0" y="0" width="600" height="300" style="fill:rgb(10.196078%25,10.196078%25,10.196078%25);fill-opacity:1;stroke:none;"/>
 <path style="fill:none;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke:rgb(60%25,60%25,60%25);stroke-opacity:1;stroke-miterlimit:10;" d="M 52.550781 30.496094 L 29.058594 74.0625 "/>
 <path style="fill:none;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke:rgb(60%25,60%25,60%25);stroke-opacity:1;stroke-miterlimit:10;" d="M 52.550781 30.496094 L 110.925781 65.648438 "/>
@@ -3713,7 +3713,7 @@ end 800 400</code></pre><img src='data:image/svg+xml;utf-8,<?xml version="1.0" e
 </symbol>
 </g>
 </defs>
-<g id="surface2179">
+<g id="surface6372">
 <rect x="0" y="0" width="800" height="400" style="fill:rgb(10.196078%25,10.196078%25,10.196078%25);fill-opacity:1;stroke:none;"/>
 <path style="fill:none;stroke-width:5;stroke-linecap:butt;stroke-linejoin:miter;stroke:rgb(100%25,64.705882%25,0%25);stroke-opacity:1;stroke-miterlimit:10;" d="M 382.113281 38.945312 C 340.949219 59.523438 299.789062 80.105469 258.625 100.6875 "/>
 <path style=" stroke:none;fill-rule:nonzero;fill:rgb(100%25,64.705882%25,0%25);fill-opacity:1;" d="M 261.742188 105.070312 L 247.886719 106.054688 L 256.988281 95.5625 "/>
@@ -3962,7 +3962,7 @@ drawgraph(g,
 
 end 600 600</code></pre><img src='data:image/svg+xml;utf-8,<?xml version="1.0" encoding="UTF-8"?>
 <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="600pt" height="600pt" viewBox="0 0 600 600" version="1.1">
-<g id="surface2184">
+<g id="surface6377">
 <rect x="0" y="0" width="600" height="600" style="fill:rgb(10.196078%25,10.196078%25,10.196078%25);fill-opacity:1;stroke:none;"/>
 <path style="fill:none;stroke-width:4;stroke-linecap:butt;stroke-linejoin:miter;stroke:rgb(30.196078%25,30.196078%25,30.196078%25);stroke-opacity:1;stroke-miterlimit:10;" d="M 32 30 L 56.421875 30 "/>
 <path style="fill:none;stroke-width:4;stroke-linecap:butt;stroke-linejoin:miter;stroke:rgb(30.196078%25,30.196078%25,30.196078%25);stroke-opacity:1;stroke-miterlimit:10;" d="M 30 32 L 30 56.421875 "/>
@@ -4983,7 +4983,7 @@ drawgraph(g, layout = spring,
     )
 end 800 400</code></pre><img src='data:image/svg+xml;utf-8,<?xml version="1.0" encoding="UTF-8"?>
 <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="800pt" height="400pt" viewBox="0 0 800 400" version="1.1">
-<g id="surface2189">
+<g id="surface6382">
 <rect x="0" y="0" width="800" height="400" style="fill:rgb(10.196078%25,10.196078%25,10.196078%25);fill-opacity:1;stroke:none;"/>
 <path style="fill:none;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke:rgb(49.803922%25,49.803922%25,49.803922%25);stroke-opacity:1;stroke-miterlimit:10;" d="M 235.484375 223.214844 C 280.652344 269.757812 325.816406 316.300781 370.984375 362.84375 "/>
 <path style=" stroke:none;fill-rule:nonzero;fill:rgb(49.803922%25,49.803922%25,49.803922%25);fill-opacity:1;" d="M 371.902344 361.046875 L 373.75 365.695312 L 369.15625 363.710938 "/>
@@ -5172,7 +5172,7 @@ end 600 300</code></pre><img src='data:image/svg+xml;utf-8,<?xml version="1.0" e
 </symbol>
 </g>
 </defs>
-<g id="surface2194">
+<g id="surface6387">
 <rect x="0" y="0" width="600" height="300" style="fill:rgb(10.196078%25,10.196078%25,10.196078%25);fill-opacity:1;stroke:none;"/>
 <path style="fill:none;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke:rgb(100%25,84.313725%25,0%25);stroke-opacity:1;stroke-miterlimit:10;" d="M 414.628906 162.792969 C 410.769531 195.097656 393.273438 224.097656 368.175781 242.957031 "/>
 <path style=" stroke:none;fill-rule:nonzero;fill:rgb(100%25,84.313725%25,0%25);fill-opacity:1;" d="M 369.882812 244.179688 L 365 245.261719 L 367.6875 241.046875 "/>
@@ -5398,7 +5398,7 @@ end 600 400</code></pre><img src='data:image/svg+xml;utf-8,<?xml version="1.0" e
 </symbol>
 </g>
 </defs>
-<g id="surface2199">
+<g id="surface6392">
 <rect x="0" y="0" width="600" height="400" style="fill:rgb(10.196078%25,10.196078%25,10.196078%25);fill-opacity:1;stroke:none;"/>
 <path style="fill:none;stroke-width:3;stroke-linecap:butt;stroke-linejoin:miter;stroke:rgb(49.803922%25,49.803922%25,49.803922%25);stroke-opacity:1;stroke-miterlimit:10;" d="M 152.347656 272.703125 L 289.726562 370 "/>
 <g style="fill:rgb(0%25,100%25,100%25);fill-opacity:1;">
@@ -5610,7 +5610,7 @@ end 600 600</code></pre><img src='data:image/svg+xml;utf-8,<?xml version="1.0" e
 </symbol>
 </g>
 </defs>
-<g id="surface2204">
+<g id="surface6397">
 <rect x="0" y="0" width="600" height="600" style="fill:rgb(10.196078%25,10.196078%25,10.196078%25);fill-opacity:1;stroke:none;"/>
 <path style="fill:none;stroke-width:3;stroke-linecap:butt;stroke-linejoin:miter;stroke:rgb(49.803922%25,49.803922%25,49.803922%25);stroke-opacity:1;stroke-miterlimit:10;" d="M 55.117188 204.183594 L 148.050781 270 "/>
 <g style="fill:rgb(100%25,64.705882%25,0%25);fill-opacity:1;">
@@ -6098,7 +6098,7 @@ end 800 600</code></pre><img src='data:image/svg+xml;utf-8,<?xml version="1.0" e
 </symbol>
 </g>
 </defs>
-<g id="surface2209">
+<g id="surface6402">
 <rect x="0" y="0" width="800" height="600" style="fill:rgb(10.196078%25,10.196078%25,10.196078%25);fill-opacity:1;stroke:none;"/>
 <path style="fill:none;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke:rgb(100%25,84.313725%25,0%25);stroke-opacity:1;stroke-miterlimit:10;" d="M 294.75 370.246094 L 365.320312 398.828125 "/>
 <path style="fill:none;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke:rgb(100%25,84.313725%25,0%25);stroke-opacity:1;stroke-miterlimit:10;" d="M 294.75 370.246094 L 423.53125 309.292969 "/>
@@ -6400,7 +6400,7 @@ drawgraph(g, layout=stress,
     vertexshapesizes = 30)
 end 800 400</code></pre><img src='data:image/svg+xml;utf-8,<?xml version="1.0" encoding="UTF-8"?>
 <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="800pt" height="400pt" viewBox="0 0 800 400" version="1.1">
-<g id="surface2214">
+<g id="surface6407">
 <rect x="0" y="0" width="800" height="400" style="fill:rgb(10.196078%25,10.196078%25,10.196078%25);fill-opacity:1;stroke:none;"/>
 <path style="fill:none;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke:rgb(100%25,84.313725%25,0%25);stroke-opacity:1;stroke-miterlimit:10;" d="M 381.488281 370 L 242.335938 269.671875 "/>
 <path style="fill:none;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke:rgb(100%25,84.313725%25,0%25);stroke-opacity:1;stroke-miterlimit:10;" d="M 381.488281 370 L 261.023438 98.03125 "/>
@@ -6422,4 +6422,4 @@ end 800 400</code></pre><img src='data:image/svg+xml;utf-8,<?xml version="1.0" e
 <path style="fill-rule:nonzero;fill:rgb(100%25,100%25,45.490196%25);fill-opacity:1;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke:rgb(100%25,84.313725%25,0%25);stroke-opacity:1;stroke-miterlimit:10;" d="M 448.511719 30 C 448.511719 46.570312 435.078125 60 418.511719 60 C 401.941406 60 388.511719 46.570312 388.511719 30 C 388.511719 13.429688 401.941406 0 418.511719 0 C 435.078125 0 448.511719 13.429688 448.511719 30 "/>
 </g>
 </svg>
-'/></article><nav class="docs-footer"><a class="docs-footer-prevpage" href="index.html">« Introduction to Karnak</a><a class="docs-footer-nextpage" href="syntax.html">Kwarg madness »</a><div class="flexbox-break"></div><p class="footer-message">Powered by <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> and the <a href="https://julialang.org/">Julia Programming Language</a>.</p></nav></div><div class="modal" id="documenter-settings"><div class="modal-background"></div><div class="modal-card"><header class="modal-card-head"><p class="modal-card-title">Settings</p><button class="delete"></button></header><section class="modal-card-body"><p><label class="label">Theme</label><div class="select"><select id="documenter-themepicker"><option value="documenter-light">documenter-light</option><option value="documenter-dark">documenter-dark</option></select></div></p><hr/><p>This document was generated with <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> version 0.27.15 on <span class="colophon-date" title="Tuesday 19 April 2022 15:37">Tuesday 19 April 2022</span>. Using Julia version 1.7.0.</p></section><footer class="modal-card-foot"></footer></div></div></div></body></html>
+'/></article><nav class="docs-footer"><a class="docs-footer-prevpage" href="index.html">« Introduction to Karnak</a><a class="docs-footer-nextpage" href="syntax.html">Syntax »</a><div class="flexbox-break"></div><p class="footer-message">Powered by <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> and the <a href="https://julialang.org/">Julia Programming Language</a>.</p></nav></div><div class="modal" id="documenter-settings"><div class="modal-background"></div><div class="modal-card"><header class="modal-card-head"><p class="modal-card-title">Settings</p><button class="delete"></button></header><section class="modal-card-body"><p><label class="label">Theme</label><div class="select"><select id="documenter-themepicker"><option value="documenter-light">documenter-light</option><option value="documenter-dark">documenter-dark</option></select></div></p><hr/><p>This document was generated with <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> version 0.27.15 on <span class="colophon-date" title="Tuesday 19 April 2022 23:07">Tuesday 19 April 2022</span>. Using Julia version 1.7.0.</p></section><footer class="modal-card-foot"></footer></div></div></div></body></html>
