@@ -16,7 +16,7 @@ function hiero()
             if R  == 1
                 g = binary_tree(rand(2:4))
                 dirg = SimpleDiGraph(collect(edges(g)))
-                drawgraph(dirg, vertexshapesizes = 1, layout = buchheim, edgecurvature=0, boundingbox=bb, margin=5)
+                drawgraph(dirg, vertexshapesizes = 1, layout = buchheim, edgegaps=0, edgecurvature=1, boundingbox=bb, margin=5)
             elseif R  == 2
                 g = star_graph(rand(3:10))
                 drawgraph(g, boundingbox=bb, margin=10,  layout=stress, vertexstrokeweights=0.25)
@@ -94,8 +94,8 @@ end
 
     @layer begin
         translate(first(panes[2]))
-        fontsize(62)
-        fontface("EgyptianWide")
+        fontsize(80)
+        fontface("Goblin")
         bx = box(O, panes.tilewidth/1.5, panes.tileheight/1.5)
         textoutlines("KARNAK", O + (0, -150), halign=:center, :path)
         @layer begin
@@ -122,6 +122,5 @@ NetworkLayout.jl.", 800, boxtopleft(BoundingBox(bx)) + (20, 0),
 leading=get_fontsize() + 20)
 
     end
-
 
 end 1280 640 "docs/src/assets/figures/karnak-social-media-preview.png"
