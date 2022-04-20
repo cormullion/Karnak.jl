@@ -20,7 +20,7 @@ scientific rigor and mathematical elegance.
 ## Warning
 
 For scientific and technical visualization, use one of
-the following Julia packages:
+the following Julia packages to visualize your graphs:
 
 - [TikzGraphs.jl](https://github.com/sisl/TikzGraphs.jl): backend: Tikz/Latex
 

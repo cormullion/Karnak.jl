@@ -110,7 +110,7 @@ add_edge!(g, 1, 4)
 end 600 300
 ```
 
-This is one of the many ways this graph can be represented visually. The coordinates of the vertices when drawn here are _not_ part of the graph's definition, and have been assigned randomly by the layout algorithm.
+This is one of the many ways this graph can be represented visually. The coordinates of the vertices when drawn here are _not_ part of the graph's definition. The default styling uses the current Luxor color, with small circles marking the vertex positions. `drawgraph()` places graphics for the graph on the current Luxor drawing.
 
 ## Undirected and directed graphs
 
@@ -134,7 +134,7 @@ drawgraph(gd, vertexlabels = [1, 2, 3, 4])
 end 600 300
 ```
 
-In this representation of our directed graph `gd`, we can now see the direction of the edges joining vertices. Notice how vertices 1 and 4 are doubly connected, because there's one edge for each direction.
+In this representation of our directed graph `gd`, we can now see the direction of the edges joining vertices. Vertices 1 and 4 are connected to each other.
 
 ## Very simple graphs
 

@@ -19,8 +19,8 @@ scientific rigor and mathematical elegance.
 
 !!! warning
 
-	For mathematical and scientific visualizations, use one of
-	the following Julia packages, rather than this one.
+	For mathematical and scientific visualizations, use one of the following Julia
+	packages to display your graphs, rather than this one.
 
 	- [TikzGraphs.jl](https://github.com/sisl/TikzGraphs.jl): backend: Tikz/LaTeX
 

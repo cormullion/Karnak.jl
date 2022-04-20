@@ -11,6 +11,16 @@ takes a single argument, a `Graph`, and tries to place it on
 the current Luxor drawing. It uses the current color, scale,
 and rotation, marking the vertices of the graph with circles.
 
+The default display for graphs is:
+
+- current Luxor color
+
+- circles mark all vertices
+
+- no vertex labels
+
+- all edges drawn
+
 ```@example graphsection
 @drawsvg begin
 background("grey10")
@@ -22,7 +32,7 @@ end 600 300
 
 To control the appearance of the graph, you supply values to
 the keyword arguments. Most keyword arguments accepts
-vectors, ranges, and scalar values, and somme accept
+vectors, ranges, and scalar values, and some accept
 functions as well.
 
 Here's a contrived (and consequently hideously ugly)
@@ -421,10 +431,10 @@ drawgraph(g,
     vertexshapes = :none,
     edgelines = rand(1:ne(g), 30)
 )
-end 600 600
+end 600 300
 ```
 
-`edgelist` is useful for drawing paths.
+`edgelist` is useful for drawing paths - a sequence of edges.
 
 ```@example graphsection
 @drawsvg begin
@@ -444,7 +454,7 @@ drawgraph(g,
     vertexshapes = :none,
     edgestrokeweights = 5,
     edgelist = astar)
-end 600 600
+end 600 300
 ```
 
 For more interesting arrows for edges, Luxor's arrows are available:
@@ -460,9 +470,9 @@ drawgraph(g,
     vertexshapes = 0,
     edgestrokecolors = distinguishable_colors(ne(g)),
     edgelines = (k, s, d, f, t) ->
-    arrow(f, t, [35, -5],
+    arrow(f, between(f, t, .95), [10, -5],
         linewidth=10,
-        arrowheadlength=30,
+        arrowheadlength=40,
         arrowheadangle=π/7,
         decorate = () -> begin
             sethue("purple")
@@ -470,7 +480,7 @@ drawgraph(g,
             sethue("white")
             text(string(k), angle = -getrotation(), halign=:center, valign=:middle)
             end,
-            decoration=0.7)
+            decoration=0.65)
     )
 end 600 400
 ```
@@ -678,10 +688,10 @@ end
         drawgraph(g,
             margin=70,
             vertexshapes = :none,
-            edgegaps = 5c,
-            edgecurvature = 5c,
+            edgegaps = 3c,
+            edgecurvature = 3c,
             edgestrokecolors = HSB(36c, .8, .8),
-            edgestrokeweights = 1,
+            edgestrokeweights = 0.5,
             layout=squaregrid)
     end
 end 600 500

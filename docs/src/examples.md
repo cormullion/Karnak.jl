@@ -41,8 +41,6 @@ details.
 using Karnak, Luxor, Graphs, NetworkLayout, Colors
 using DataFrames, CSV
 
-cd(joinpath(@__DIR__))
-
 # positions are in LatLong
 
 tubedata = CSV.File("examples/tubedata-modified.csv") |> DataFrame
@@ -54,8 +52,8 @@ extrema_long = extrema(tubedata.Longitude)
 
 # scale LatLong and flip in y to fit into current Luxor drawing
 positions = @. Point(
-	rescale(tubedata.Longitude, extrema_long..., -280, 280),
-	rescale(tubedata.Latitude, extrema_lat..., 280, -280))
+    rescale(tubedata.Longitude, extrema_long..., -280, 280),
+    rescale(tubedata.Latitude, extrema_lat..., 280, -280))
 
 stations = tubedata[!,:Station]
 
@@ -83,20 +81,25 @@ Most London residents and visitors are used to seeing the famous [Tube Map](http
 
 ![tube map](assets/figures/tubemap.png)
 
-It's a design classic, hand-drawn by Harry Beck in 1931, and updated regularly ever since. As an electrical engineer, Beck represented the sprawling London track network as a tidy circuit board. As with graphs, what was important to Beck were the connections, rather than accurate geography.
+It's a design classic, hand-drawn by Harry Beck in 1931, and updated regularly
+ever since. As an electrical engineer, Beck represented the sprawling London
+track network as a tidy circuit board. As with graphs, what was important to
+Beck were the connections, rather than accurate geography.
 
-Our version looks very different, but it is more accurate, geographically, because the latitude and longitude values of the stations are passed to `layout`.
+Our version looks very different, but it is at least more accurate,
+geographically, because the latitude and longitude values of the stations are
+passed to `layout`.
 
 ```@example tubesection
 @drawsvg begin
 background("grey10")
 sethue("grey50")
 drawgraph(g,
-	layout=positions,
-	vertexshapes = :none,
-	vertexlabeltextcolors = colorant"white",
-	vertexlabels = find.(1:nv(g)),
-	vertexlabelfontsizes = 6)
+    layout=positions,
+    vertexshapes = :none,
+    vertexlabeltextcolors = colorant"white",
+    vertexlabels = find.(1:nv(g)),
+    vertexlabelfontsizes = 6)
 end
 ```
 
@@ -109,27 +112,27 @@ tiles = Tiler(800, 400, 1, 2)
 sethue("white")
 
 @layer begin
-	translate(first(tiles[1]))
-	drawgraph(g,
-		layout=spring,
-		boundingbox = BoundingBox(box(O, 400, 400)),
-		vertexshapes = :none,
-		vertexlabeltextcolors = colorant"white",
-		vertexlabels = find.(1:nv(g)),
-		vertexlabelfontsizes = 6
-		)
+    translate(first(tiles[1]))
+    drawgraph(g,
+        layout=spring,
+        boundingbox = BoundingBox(box(O, 400, 400)),
+        vertexshapes = :none,
+        vertexlabeltextcolors = colorant"white",
+        vertexlabels = find.(1:nv(g)),
+        vertexlabelfontsizes = 6
+        )
 end
 
 @layer begin
-	translate(first(tiles[2]))
-	drawgraph(g,
-		layout=stress,
-		boundingbox = BoundingBox(box(O, 400, 400)),
-		vertexshapes = :none,
-		vertexlabeltextcolors = colorant"white",
-		vertexlabels = find.(1:nv(g)),
-		vertexlabelfontsizes = 6
-		)
+    translate(first(tiles[2]))
+    drawgraph(g,
+        layout=stress,
+        boundingbox = BoundingBox(box(O, 400, 400)),
+        vertexshapes = :none,
+        vertexlabeltextcolors = colorant"white",
+        vertexlabels = find.(1:nv(g)),
+        vertexlabelfontsizes = 6
+        )
 end
 
 end 800 400
@@ -158,11 +161,13 @@ These labels show names familiar to all Tube-riders - the ones shown on the fron
 
 ## Neighbors
 
-The best connected station is also one of the oldest:
+The best connected station is also one of the oldest, dating back to 1863:
 
 ```@example tubesection
 find(argmax(degree(g, 1:nv(g))))
 ```
+
+Its neighbors are:
 
 ```@example tubesection
 find.(neighbors(g, find("Baker Street")))
@@ -191,7 +196,7 @@ end 800 600
 
 ## Mornington Crescent
 
-A route from Heathrow Terminal 5 to [Mornington Crescent](https://en.wikipedia.org/wiki/Mornington_Crescent_(game)) is found using `a_star()`.
+A route from Heathrow Terminal 5 to [Mornington Crescent](https://en.wikipedia.org/wiki/Mornington_Crescent_(game)) can be found using `a_star()`.
 
 ```@example tubesection
 heathrow_to_morningtoncrescent = a_star(g,
@@ -199,16 +204,19 @@ heathrow_to_morningtoncrescent = a_star(g,
     find("Mornington Crescent"))
 
 @drawsvg begin
-    background("grey70")
-    sethue("grey50")
-    translate(0, -100)
-    scale(3)
-    drawgraph(g,
+background("grey70")
+translate(0, -100)
+scale(3)
+
+sethue("grey50")
+drawgraph(g,
     layout = positions,
-    vertexshapesizes = :none)
-    sethue("black")
-    fontsize(4)
-    drawgraph(g, layout = positions,
+    vertexshapesizes = 1)
+
+sethue("black")
+fontsize(4)
+drawgraph(g,
+    layout = positions,
     vertexshapes = :none,
     edgelist = heathrow_to_morningtoncrescent,
     edgestrokeweights = 3,
@@ -238,48 +246,46 @@ but a colorful layer imposed on top of the track network.
 
 ## Diffusion
 
-Graphs.jl provides many functions for many different
-applications. The `diffusion()` function appears to simulate
-the diffusion of an infection from some starting vertices.
+Graphs.jl provides many functions for analysing graph networks. The
+`diffusion()` function appears to simulate the diffusion of an infection from
+some starting vertices.
 
-So here, apparently, is a simulation of what happens when an
-infection arrives at Heathrow Airport's Terminal 5 tube
-station, and starts spreading through the tube network.
+So here, apparently, is a simulation of what might happen when an infection
+arrives at Heathrow Airport's Terminal 5 tube station, and starts spreading
+through the tube network.
 
 ```julia
 function frame(scene, framenumber, d)
-	background("black")
-	sethue("gold")
-	text(string(framenumber), boxbottomleft() + (10, -10))
-	drawgraph(g,
-		layout = positions,
-		vertexshapesizes = 3
-		)
+    background("black")
+    sethue("gold")
+    text(string(framenumber), boxbottomleft() + (10, -10))
+    drawgraph(g,
+        layout = positions,
+        vertexshapesizes = 3)
     for k in 1:framenumber
-		i = d[k]
+        i = d[k]
         drawgraph(g,
             layout = positions,
-			edgelines = 0,
+            edgelines = 0,
             vertexfunction = (v, c) -> begin
                 if !isempty(i)
                     if v ∈ i
-						sethue("red")
+                        sethue("red")
                         circle(positions[v], 5, :fill)
                     end
                 end
-            end
-            )
+            end)
         end
     end
 
 function main()
     amovie = Movie(600, 600, "diff")
-	d = diffusion(g, 0.2, 200, initial_infections=[find("Heathrow Terminal 5")])
+    d = diffusion(g, 0.2, 200, initial_infections=[find("Heathrow Terminal 5")])
     animate(amovie,
-		Scene(amovie, (s, f) -> frame(s, f, d), 1:length(d)),
-		framerate=10,
-		creategif=true,
-		pathname="/tmp/diff.gif")
+        Scene(amovie, (s, f) -> frame(s, f, d), 1:length(d)),
+        framerate=10,
+        creategif=true,
+        pathname="/tmp/diff.gif")
 end
 main()
 ```

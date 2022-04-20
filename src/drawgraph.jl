@@ -167,8 +167,8 @@ function _drawedgelines(from, to, edgesrc, edgedest;
                     loopcenter = from + polar(selfloopradius, s)
                     translate(loopcenter)
                     rotate(π + s)
-                    arrow(O, selfloopradius, 0, 2π - π / 16, linewidth=linewidth, arrowheadlength=arrowheadlength=rescale(linewidth, 1, 10, 5, 25))
-                    arrow(O, selfloopradius, 0, 2π - π / 16, linewidth=linewidth, arrowheadlength=arrowheadlength=rescale(linewidth, 1, 10, 5, 25))
+                    arrow(O, selfloopradius, 0, 2π - π / 16, linewidth=linewidth, arrowheadlength=rescale(linewidth, 1, 10, 12, 25))
+                    arrow(O, selfloopradius, 0, 2π - π / 16, linewidth=linewidth, arrowheadlength=rescale(linewidth, 1, 10, 12, 25))
                 end
              # digraph
              elseif digraph == true
@@ -183,7 +183,7 @@ function _drawedgelines(from, to, edgesrc, edgedest;
                         between(from, to, 1 - normalizedgap),
                         [edgecurvature, edgecurvature],
                         startarrow=false,
-                        finisharrow=true, :stroke, arrowheadlength=rescale(linewidth, 1, 10, 5, 25))
+                        finisharrow=true, :stroke, arrowheadlength=rescale(linewidth, 1, 10, 12, 25))
                 else
                     # digraph, straight edges
                     # default gap is at least the radius of default shape
@@ -196,7 +196,7 @@ function _drawedgelines(from, to, edgesrc, edgedest;
                         between(from, to, 1 - normalizedgap),
                         [0, 0],
                         startarrow=false,
-                        finisharrow=true, :stroke, linewidth=linewidth, arrowheadlength=rescale(linewidth, 1, 10, 5, 25))
+                        finisharrow=true, :stroke, linewidth=linewidth, arrowheadlength=rescale(linewidth, 1, 10, 12, 25))
                 end
             # graph
             elseif digraph == false
@@ -213,7 +213,7 @@ function _drawedgelines(from, to, edgesrc, edgedest;
                         between(from, to, 1 - normalizedgap),
                         [edgecurvature, edgecurvature],
                         startarrow=true,
-                        finisharrow=true, :stroke, linewidth=linewidth, arrowheadlength=arrowheadlength=rescale(linewidth, 1, 10, 5, 25))
+                        finisharrow=true, :stroke, linewidth=linewidth, arrowheadlength=arrowheadlength=rescale(linewidth, 1, 10, 12, 25))
                 else
                     line(between(from, to, normalizedgap), between(from, to, 1 - normalizedgap), :stroke)
                 end
@@ -800,26 +800,26 @@ boundingbox::BoundingBox        graph fits inside this BB
 layout                          Point[] or function
 margin                          default 20
 
-Functions that override all options
+Functions that override all options:
 
 vertexfunction(vtx, coords) -> _
 edgefunction(edgenumber, edgesrc, edgedest, from, to) -> _
 
-Draw only edges in `edgelist`
+Draw only edges in `edgelist`.
 
-vertexlabels   f                edgelabels  f
-vertexshapes   f                edgelines    f
-vertexshapesizes                edgelist
-vertexshaperotations            edgecurvature
-vertexstrokecolors f            edgestrokecolors   f
-vertexstrokeweights             edgestrokeweights
-vertexfillcolors f              edgedashpatterns
-vertexlabeltextcolors           edgegaps
-vertexlabelfontsizes            edgelabelrotations f
-vertexlabelfontfaces            edgelabelcolors
-vertexlabelrotations
-vertexlabeloffsetangles
-vertexlabeloffsetdistances
+• vertexlabels   f               • edgelabels  f
+• vertexshapes   f               • edgelines    f
+• vertexshapesizes               • edgelist
+• vertexshaperotations           • edgecurvature
+• vertexstrokecolors f           • edgestrokecolors   f
+• vertexstrokeweights            • edgestrokeweights
+• vertexfillcolors f             • edgedashpatterns
+• vertexlabeltextcolors          • edgegaps
+• vertexlabelfontsizes           • edgelabelrotations f
+• vertexlabelfontfaces           • edgelabelcolors
+• vertexlabelrotations
+• vertexlabeloffsetangles
+• vertexlabeloffsetdistances
 ```
 
 `layout`
@@ -866,7 +866,7 @@ vertexfunction = (v, c) -> ngon(c[v], 30, 6, 0, :fill)
 
 `edgefunction(edgenumber, edgesrc, edgedest, from, to)` ->
 
-a function `edgefunction(edgenumber, from, to, edgesrc, edgedest)` that
+A function `edgefunction(edgenumber, from, to, edgesrc, edgedest)` that
 completely specifies the appearance of every vertex. None
 of the other edge- keyword arguments are used.
 
@@ -917,11 +917,11 @@ Rotation of shape.
 
 `edgelist`: Array | Edge iterator
 
-list of Edges (Graphs.EdgeIterator) to be drawn. Takes prioity over `edgelines`.
+A list of Edges (Graphs.EdgeIterator) to be drawn. Takes prioity over `edgelines`.
 
 `edgelines`: Array | Range | Int| :none | Function (edgenumber, edgesrc, edgedest, from, to) ->
 
-Edge numbers to be drawn.
+Edge lines to be drawn.
 
 `edgelabels`: Array  | Range | Dict | Function (edgenumber, edgesrc, edgedest, from::Point, to::Point) ->
 
@@ -939,15 +939,15 @@ The dash pattern or an array of dash patterns for the edge lines. Dash patterns 
 
 `edgegaps`:
 
-gaps from vertex center to arrow tip
+The gaps from vertex center to arrow tip
 
 `edgelabelcolors`
 
-the colors of the label text
+The colors of the label text
 
 `edgelabelrotations`: A | Range | function  edgelabelrotations = (n, s, d, f, t) -> angle
 
-the rotation of the label text
+The rotation of the label text
 
 `edgelabelfontsizes`
 
@@ -1012,43 +1012,43 @@ function drawgraph(g::AbstractGraph;
         @layer begin
             drawedge(
                 coordinates[s],
-                coordinates[d],
+                coordinates[d];
                 graph=g,
                 edgenumber=n,
                 edgesrc=s,
                 edgedest=d,
-                edgefunction=edgefunction,
-                edgelabels=edgelabels,
-                edgelines=edgelines,
-                edgedashpatterns=edgedashpatterns,
-                edgegaps=edgegaps,
-                edgecurvature=edgecurvature,
-                edgestrokecolors=edgestrokecolors,
-                edgelabelcolors=edgelabelcolors,
-                edgelabelfontsizes=edgelabelfontsizes,
-                edgelabelfontfaces=edgelabelfontfaces,
-                edgestrokeweights=edgestrokeweights,
-                edgelabelrotations=edgelabelrotations,
+                edgefunction,
+                edgelabels,
+                edgelines,
+                edgedashpatterns,
+                edgegaps,
+                edgecurvature,
+                edgestrokecolors,
+                edgelabelcolors,
+                edgelabelfontsizes,
+                edgelabelfontfaces,
+                edgestrokeweights,
+                edgelabelrotations,
             )
         end
     end
     for vertex in vertices(g)
         @layer begin
-            drawvertex(vertex, coordinates,
-                vertexfunction=vertexfunction,
-                vertexlabels=vertexlabels,
-                vertexshapes=vertexshapes,
-                vertexshapesizes=vertexshapesizes,
-                vertexshaperotations=vertexshaperotations,
-                vertexstrokecolors=vertexstrokecolors,
-                vertexstrokeweights=vertexstrokeweights,
-                vertexfillcolors=vertexfillcolors,
-                vertexlabeltextcolors=vertexlabeltextcolors,
-                vertexlabelfontsizes=vertexlabelfontsizes,
-                vertexlabelfontfaces=vertexlabelfontfaces,
-                vertexlabelrotations=vertexlabelrotations,
-                vertexlabeloffsetangles=vertexlabeloffsetangles,
-                vertexlabeloffsetdistances=vertexlabeloffsetdistances,
+            drawvertex(vertex, coordinates;
+                vertexfunction,
+                vertexlabels,
+                vertexshapes,
+                vertexshapesizes,
+                vertexshaperotations,
+                vertexstrokecolors,
+                vertexstrokeweights,
+                vertexfillcolors,
+                vertexlabeltextcolors,
+                vertexlabelfontsizes,
+                vertexlabelfontfaces,
+                vertexlabelrotations,
+                vertexlabeloffsetangles,
+                vertexlabeloffsetdistances,
             )
         end
     end
