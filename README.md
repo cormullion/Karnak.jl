@@ -15,7 +15,7 @@ The focus in Karnak, unlike other graph visualization
 packages, is on decorative and aesthetic uses, for use in
 design, generative art, social media previews, NFTs, and
 other mission-critical items, rather than on
-scientific rigor and mathematical elegance.
+scientific rigor and mathematical elegance. So...
 
 ## Warning
 
