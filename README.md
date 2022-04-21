@@ -35,10 +35,10 @@ the following Julia packages to visualize your graphs:
 rather than this one.
 
 [docs-development-img]: https://img.shields.io/badge/docs-development-blue
-[docs-development-url]: http://github.com/cormullion/Karnak.jl/dev/
+[docs-development-url]: http://cormullion.github.io/Karnak.jl/dev/
 
 [docs-stable-img]: https://img.shields.io/badge/docs-stable-blue.svg
-[docs-stable-url]: http://github.com/cormullion/Karnak.jl/stable/
+[docs-stable-url]: http://cormullion.github.io/Karnak.jl/dev/
 
 [ci-img]: https://github.com/cormullion/Karnak.jl/workflows/CI/badge.svg
 [ci-url]: https://github.com/cormullion/Karnak.jl/actions?query=workflow%3ACI
