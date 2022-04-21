@@ -88,9 +88,10 @@ add_edge!(g, 2, 3)
 add_edge!(g, 1, 4)
 ```
 
-`g` is now a `{{4, 1} undirected simple Int64 graph}`. It's
-time to see some kind of visual representation of the graph
-we've made.
+`g` is now a `{{4, 1} undirected simple Int64 graph}`.
+
+It's time to see some kind of visual representation of the
+graph we've made.
 
 ```@example graphsection
 # packages to load:
@@ -110,11 +111,11 @@ add_edge!(g, 1, 4)
 end 600 300
 ```
 
-This is one of the many ways this graph can be represented visually. The coordinates of the vertices when drawn here are _not_ part of the graph's definition. The default styling uses the current Luxor color, with small circles marking the vertex positions. `drawgraph()` places graphics for the graph on the current Luxor drawing.
+This is one of the many ways this graph can be represented visually. The coordinates of the vertices when drawn here are _not_ part of the graph's definition. The default styling uses the current Luxor color, with small circles marking the vertex positions. `drawgraph()` places the graphics for the graph on the current Luxor drawing.
 
 ## Undirected and directed graphs
 
-We'll meet two main types of graph, **undirected** and **directed**. In our undirected graph `g` above, vertex 1 and vertex 2 are neighbors, connected by an edge, but there's no way to specify or see a direction for that connection. For example, if the graph was modelling people making financial transactions, we couldn't tell whether the person at vertex 1 sent money to the person at vertex 2, or received money from them.
+We'll meet two main types of graph, **undirected** and **directed**. In our undirected graph `g` above, vertex 1 and vertex 2 are _neighbors_, connected with an edge, but there's no way to specify or see a direction for that connection. For example, if the graph was modelling people making financial transactions, we couldn't tell whether the person at vertex 1 sent money to the person at vertex 2, or received money from them.
 
 In Graphs.jl, we can create directed graphs with `DiGraph()` (also `SimpleDiGraph()`).
 
@@ -129,7 +130,7 @@ add_edge!(gd, 4, 1) # vertex 4 to vertex 1
 
 @drawsvg begin
 background("grey10")
-sethue("slateblue")
+sethue("thistle1")
 drawgraph(gd, vertexlabels = [1, 2, 3, 4])
 end 600 300
 ```
@@ -146,7 +147,7 @@ g = Graph(10, 5) # 10 vertices, 5 edges
 d1 = @drawsvg begin
 background("grey10")
 sethue("gold")
-drawgraph(g, vertexlabels = 1:nv(g))
+drawgraph(g, vertexlabels = vertices(g))
 end 400 300
 
 gd = SimpleDiGraph(5, 3) # 5 vertices, 3, edges
@@ -155,13 +156,13 @@ d2 = @drawsvg begin
 background("grey10")
 setline(0.5)
 sethue("firebrick")
-drawgraph(gd, vertexlabels = 1:nv(g))
+drawgraph(gd, vertexlabels = vertices(g))
 end 400 300
 
 hcat(d1, d2)
 ```
 
-Neither of these graphs is **connected**. In a connected graph, every vertex is connected to every other via some path, a sequence of edges.
+Neither of these graphs is **connected**. In a connected graph, every vertex is connected to some other via some path, a sequence of edges.
 
 ## Well-known graphs
 
@@ -176,7 +177,7 @@ d1 = @drawsvg begin
 background("grey10")
 setline(0.5)
 sethue("pink")
-drawgraph(g, vertexlabels = 1:nv(g))
+drawgraph(g, vertexlabels = vertices(g))
 end 600 300
 ```
 
@@ -189,11 +190,11 @@ d1 = @drawsvg begin
 background("grey10")
 setline(0.5)
 sethue("orange")
-drawgraph(g, vertexlabels = 1:nv(g))
+drawgraph(g, vertexlabels = vertices(g))
 end 600 300
 ```
 
-In a **bi-partite graph**, every vertex belongs to one of two groups. Every vertex in the first group is connected to one or more vertices in the second group. This illustration shows the **complete** version of a bi-partite graph. So each vertex is connected to every other vertex.
+In a **bi-partite graph**, every vertex belongs to one of two groups. Every vertex in the first group is connected to one or more vertices in the second group. This illustration shows the **complete** version of a bi-partite graph. So each vertex is connected to every other vertex in the other group.
 
 ```@example graphsection
 N = 10
@@ -205,7 +206,7 @@ background("grey10")
 pts = vcat(
     between.(O + (-W/2, H/2), O + (W/2, H/2), range(0, 1, length=N)),
     between.(O + (-W/2, -H/2), O + (W/2, -H/2), range(0, 1, length=N)))
-sethue("gold3")
+sethue("aquamarine")
 drawgraph(g, vertexlabels = 1:nv(g), layout = pts, edgestrokeweights=0.5)
 end 600 400
 ```
@@ -219,7 +220,7 @@ g = Graphs.grid([M, N]) # grid((m, n))
 d1 = @drawsvg begin
 background("grey10")
 setline(0.5)
-sethue("orange")
+sethue("greenyellow")
 drawgraph(g, vertexlabels = 1:nv(g), layout=stress)
 end 600 300
 ```
@@ -238,7 +239,7 @@ end 600 300
 g = wheel_graph(12)
 d1 = @drawsvg begin
     background("grey10")
-    sethue("orange")
+    sethue("palegreen")
     drawgraph(g, vertexlabels=1:nv(g), layout=stress)
 end 600 300
 ```
@@ -254,35 +255,31 @@ using Karnak, Luxor, Graphs, NetworkLayout
 smallgraphs = (
 (:bull, "bull"),
 (:chvatal, "chvatal"),
-(:cubical, "(Platonic) cubical "),
-(:desargues, "desarguesg"),
+(:cubical, "cubical"),
+(:desargues, "desargues"),
 (:diamond, "diamond"),
-(:dodecahedral, "(Platonic) dodecahedral"),
+(:dodecahedral, "dodecahedral"),
 (:frucht, "frucht"),
 (:heawood, "heawood"),
 (:house, "house"),
-(:housex, "housex "),
-(:icosahedral, "(Platonic) icosahedral"),
+(:housex, "housex"),
+(:icosahedral, "icosahedral"),
 (:karate, "karate"),
 (:krackhardtkite, "krackhardtkite"),
 (:moebiuskantor, "moebiusantor"),
-(:octahedral, "(platonic) octahedral"),
+(:octahedral, "octahedral"),
 (:pappus, "pappus"),
 (:petersen, "petersen"),
 (:sedgewickmaze, "sedgewick"),
-(:tetrahedral, "(Platonic) tetrahedral"),
+(:tetrahedral, "tetrahedral"),
 (:truncatedcube, "truncatedcube"),
 (:truncatedtetrahedron, "truncatedtetrahedron"),
 (:truncatedtetrahedron_dir, "truncatedtetrahedron"),
 (:tutte, "tutte"))
 
-colors = ["orange", "brown1", "firebrick1",
-"blue", "red", "purple1", "royalblue1",
-"orangered", "orangered1", "deeppink", "deeppink1", "maroon1",
-"darkorchid1", "dodgerblue", "dodgerblue1", "blue2",
-"purple2", "royalblue2", "dodgerblue2", "slateblue2",
-"mediumslateblue", "darkorchid2", "violetred2", "maroon2",
-"orangered2", "brown2"]
+colors = ["paleturquoise", "chartreuse", "thistle1", "pink",
+"gold", "wheat", "olivedrab1", "palegreen", "turquoise1",
+"lightgreen", "plum1", "plum", "violet", "hotpink"]
 
 smallgraphs = @drawsvg begin
 background("grey10")
@@ -378,7 +375,7 @@ end
 6
 ```
 
-Iterating over edges will give a value of type `Edge`, and the `src()` and
+Iterating over edges will give a value of type `Edge`. The `src()` and
 and `dst()` functions applied to an edge argument return the numbers of the source and destination vertices respectively.
 
 ```julia
@@ -426,9 +423,10 @@ end
 drawgraph(pg,
     vertexlabels = 1:nv(pg),
     layout = Shell(nlist=[6:10,]),
-    vertexfillcolors = (v) -> ((v == vertexofinterest) || v ∈ neighbors(pg, vertexofinterest)) && colorant"blue",
+    vertexfillcolors = (v) -> ((v == vertexofinterest) ||
+        v ∈ neighbors(pg, vertexofinterest)) && colorant"rebeccapurple",
     vertexshapesizes = [v == vertexofinterest ? 20 : 10 for v in 1:nv(pg)],
-    edgestrokecolors = (e, f, t, s, d) -> (e ∈ E) ? colorant"red" : colorant"blue"
+    edgestrokecolors = (e, f, t, s, d) -> (e ∈ E) ? colorant"firebrick" : colorant"thistle1"
     )
 end 600 300
 ```
@@ -440,7 +438,7 @@ Other useful functions in Graphs.jl include `has_vertex(g, v)` and `has_edge(g, 
 The **degree** of a vertex is the number of edges that meet at that vertex. This is shown in both text form and color-coded:
 
 ```@example graphsection
-@draw begin
+@drawsvg begin
 background("grey10")
 sethue("gold")
 g = smallgraph(:krackhardtkite)
@@ -492,7 +490,7 @@ end 600 400
 
 Notice that this matrix, for a Petersen graph, is symmetrical about the top-left/bottom-right diagonal, because, in an undirected graph, a connection from vertex 4 to vertex 5 is also a connection from vertex 5 to 4. The vertical sum of each column (and the horizontal sum of each row) is the number of edges shared by that vertex,
 
-We can provide an adjacency matrix to the graph construction functions to create a graph. For example, this matrix recreates the House graph (aka `smallgraph(:house)` from its adjacency matrix:
+We can provide an adjacency matrix to the graph construction functions to create a graph. For example, this matrix recreates the House graph (aka `smallgraph(:house)`) from its adjacency matrix:
 
 ```@example graphsection
 m = [0 1 1 0 0;
@@ -504,14 +502,14 @@ m = [0 1 1 0 0;
 @drawsvg begin
 background("grey10")
 hg = Graph(m)
-sethue("orange")
+sethue("palegreen")
 drawgraph(hg, vertexlabels=1:nv(hg), layout=stress)
 end 800 400
 ```
 
 ### Incidence matrix
 
-We can also represent a graph G with a matrix M consisting of 1s, -1s, and 0s in which the rows are vertices and the columns are edges. M is called an **incidence matrix**.
+We can also represent a graph `G` with a matrix `M` consisting of 1s, -1s, and 0s, where the rows are vertices and the columns are edges. `M` is called an **incidence matrix**.
 
 ```julia
 julia> incidence_matrix(pg)
@@ -543,7 +541,7 @@ julia> incidence_matrix(dg)
   ⋅   ⋅  -1
 ```
 
-Here, negative values are used, so 1 and -1 are used to indicate directions. The first column,`-1 1 0`, specifies the first edge goes **from** 2 to 1.
+Here, negative values are used, so 1 and -1 are used to indicate directions. The first column,`-1 1 0`, specifies that the first edge goes **from** 2 to 1.
 
 An incidence matrix is another useful way of quickly defining a graph. That's why we can pass an incidence matrix to the `Graph()` and `DiGraph()` functions to create new graphs.
 
@@ -597,7 +595,7 @@ For example, this adjacency list:
 ]
 ```
 
-defines a graph with 10 vertices, such that vertex 1 has edges joining it to vertices 2, 5, 6, and 10, and so on for each element of the whole array.
+defines a graph with 10 vertices, such that vertex 1 has edges joining it to vertices 2, 5, and 7, and so on for each element of the whole array.
 
 The `Graph()` function accepts an adjacency list, along with the number of edges.
 
@@ -642,7 +640,7 @@ Here, `fadjlist` is a forward adjacency list which defines how each vertex conne
 
 ## Paths, cycles, routes, and traversals
 
-Graphs help us answer questions about connectivity and relationships. For example, thinking of a railway network as a graph, with the stations as vertices, and the tracks as edges, we want to ask questions such as "Can we get from A to B by train?", which therefore becomes the question "Are there sufficient edges between two vertices such that we can find a path that joins them?".
+Graphs help us answer questions about connectivity and relationships. For example, thinking of a railway network as a graph, with the stations as vertices, and the tracks as edges, we want to ask questions such as "Can we get from A to B by train?", which therefore becomes the question "Are there sufficient edges between two vertices such that we can find a continuous path that joins them?".
 
 Graphs.jl has many features for traversing graphs and finding paths. We can look at just a few of them here.
 
@@ -660,7 +658,7 @@ A path is a sequence of edges between some start vertex and some end vertex, suc
 
 A cycle is a path where the start and end vertices are the same - a closed path. These are also called **circuits** in some sources.
 
-The `cycle_basis()` function finds all the cycles in a graph (at least, a **basis**, which is a minimal collection of cycles that can be added to make all the cycles). The result is an array of arrays of vertex numbers.
+The `cycle_basis()` function finds all the cycles in a graph (at least, it finds a **basis** of an undirected graph, which is a minimal collection of cycles that can be added to make all the cycles). The result is an array of arrays of vertex numbers.
 
 ```
 julia> pg = smallgraph(:petersen)
@@ -733,8 +731,9 @@ drawgraph(dirg, layout=buchheim,
     edgegaps=20,
     edgestrokeweights= 5,
     edgestrokecolors = (edgenumber, s, d, f, t) -> (s ∈ src.(astar) && d ∈ dst.(astar)) ?
-        colorant"orange" : colorant"grey40",
-    vertexfillcolors = (vtx) -> (vtx ∈ src.(astar) || vtx ∈ dst.(astar)) && colorant"orange"
+        colorant"gold" : colorant"grey40",
+    vertexfillcolors = (vtx) -> (vtx ∈ src.(astar) ||
+        vtx ∈ dst.(astar)) && colorant"gold"
     )
 end 800 400
 ```
@@ -765,7 +764,6 @@ astar = a_star(g, 1, W * H)
 
 sethue("grey30")
 drawgraph(g,
-#    vertexshapes = :square,
     vertexshapesizes = 6,
     layout=squaregrid,
     edgegaps=2,
@@ -811,7 +809,7 @@ end 800 400
 
 ## Shortest paths: Dijkstra's algorithm
 
-A well-known algorithm for finding the shortest path between graph vertices is names for its creator, Edsger W. Dijkstra:
+A well-known algorithm for finding the shortest path between graph vertices is named for its creator, Edsger W. Dijkstra:
 
 > "I designed it in about twenty minutes. One morning I was
 > shopping in Amsterdam with my young fiancée, and tired, we
@@ -848,14 +846,14 @@ function frame(scene, framenumber, g)
 
     # draw shortest path
     drawgraph(g,
-    layout=squaregrid,
-    vertexlabelfontsizes=30,
-    vertexshapes=:none,
-    edgelist = vlist[1:end-1],
-    edgefunction = (n, s, d, f, t) -> begin
-        push!(path, f)
-        push!(path, t)
-    end)
+        layout=squaregrid,
+        vertexlabelfontsizes=30,
+        vertexshapes=:none,
+        edgelist = vlist[1:end-1],
+        edgefunction = (n, s, d, f, t) -> begin
+            push!(path, f)
+            push!(path, t)
+        end)
     sethue("orange")
     setline(10)
     setlinejoin("bevel")
@@ -868,8 +866,8 @@ function main()
     g = grid((20, 20))
     amovie = Movie(600, 600, "dijkstra")
     animate(amovie,
-    Scene(amovie, (s, f) -> frame(s, f, g), 1:400),
-    framerate=10)
+        Scene(amovie, (s, f) -> frame(s, f, g), 1:400),
+        framerate=10)
 end
 
 main()
@@ -879,7 +877,9 @@ main()
 
 ## Weighted graphs
 
-Up to now, our graphs have been like maps of train or metro networks, focusing on connections, rather than on, say, distances and journey times. Edges are effectively always one unit long. Shortest path calculations can't take into account the true length of edges. But some systems modelled by graphs require this knowledge, which is where weighted graphs are useful. A weighted graph, which can be either undirected or directed, has numeric values assigned to each edge. This value is called the "weight" of an edge, and they're usually positive integers, but can be anything.
+Up to now, our graphs have been like maps of train or metro networks, focusing on connections, rather than on, say, distances and journey times. Edges have been effectively always one unit long, and shortest path calculations can't take into account the true length of edges. But some systems modelled by graphs require this knowledge, which is where __weighted graphs__ are useful.
+
+A weighted graph, which can be either undirected or directed, has numeric values assigned to each edge. This value is called the "weight" of an edge, and it's usually a positive integer, but can be anything.
 
 The word "weight" is interpreted according to context and the nature of the system modelled by the graph. For example, a higher value for the weight of an edge could mean a longer journey time or more expensive fuel costs, for map-style graphs, but it could signify high attraction levels for a social network graph.
 
@@ -986,9 +986,9 @@ drawgraph(g, layout=spring, vertexlabels = 1:nv(g), edgelines=:none)
 end 600 400
 ```
 
-Notice how all the spanning trees found have avoided the edge joining 1 and 4, which has been given a weight of 200.0.
+Notice how all the spanning trees found have avoided the edge joining 1 and 4, which has a weight of 200.0.
 
-Next, here's `boruka_mst()` looking for the **maximum** spanning tree; `Edge(1 => 4)` is always included everytime the function runs.
+Next, here's `boruka_mst()` looking for the **maximum** spanning tree; `Edge(1 => 4)` is always included every time the function runs.
 
 ```@example graphsection
 using Karnak, Luxor, Graphs, NetworkLayout, Colors, SimpleWeightedGraphs
@@ -1043,7 +1043,7 @@ end 600 600
 
 ## Centrality
 
-Centrality is a measure of the importance of vertices in a graph. It might describe the importance of "influencers" in social networks, or the importance of certain key positions in a transport network. Graphs.jl offers a number of ways to measure the centrality of vertices in a graph. Refer to the manual's "Centrality Measures" section.
+Centrality is a measure of the importance of vertices in a graph. It might describe the importance of "influencers" in social networks, or the importance of certain key positions in a transport network. Graphs.jl offers a number of ways to measure the centrality of vertices in a graph. Refer to the manual's "Centrality Measures" section for details.
 
 Here's `betweenness_centrality()` applied to the Karate Club network. The vertices are sized and colored using the vector of values returned in `bc`.
 
@@ -1072,10 +1072,10 @@ In the following example, only three colors are needed such that no edge connect
 background("grey10")
 g = smallgraph(:octahedral)
 gc = greedy_color(g)
-d = distinguishable_colors(gc.num_colors)
+dcolors = distinguishable_colors(gc.num_colors)
 sethue("gold")
 drawgraph(g, layout=stress,
-    vertexfillcolors = d[gc.colors],
+    vertexfillcolors = dcolors[gc.colors],
     vertexshapesizes = 30)
 end 800 400
 ```

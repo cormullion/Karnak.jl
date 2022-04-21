@@ -7,9 +7,10 @@ using Karnak, Luxor, Graphs, NetworkLayout, Colors, SimpleWeightedGraphs
 ## Overview
 
 Karnak's function for drawing graphs is `drawgraph()`. This
-takes a single argument, a `Graph`, and tries to place it on
-the current Luxor drawing. It uses the current color, scale,
-and rotation, marking the vertices of the graph with circles.
+takes a single argument, a `Graph`, and tries to place
+representative graphics on the current Luxor drawing. It
+uses the current color, scale, and rotation, marking the
+vertices of the graph with circles.
 
 The default display for graphs is:
 
@@ -75,6 +76,9 @@ no particularly good reason.
 Usually, if a vector runs out before the vertices and edges
 have been drawn, some `mod1` magic means the values repeat
 from the beginning again.
+
+You can use `drawgraph()` more than once, to build up the
+graph in layers. Remember to use the same layout algorithm.
 
 ## The BoundingBox
 
@@ -205,7 +209,7 @@ You can use a function with `vertexlabels` to display a vertex; it should accept
 @drawsvg begin
 background("grey10")
 g = smallgraph(:octahedral)
-sethue("purple")
+sethue("skyblue")
 drawgraph(g, layout=stress,
     vertexlabels = (v) -> v ∈ (1, 4, 6) && string(v, "/6"),
     vertexshapesizes = 15,
@@ -264,7 +268,7 @@ To show every other vertex, you could use something like this:
 @drawsvg begin
 background("grey10")
 g = smallgraph(:truncatedcube)
-sethue("slateblue")
+sethue("darkturquoise")
 drawgraph(g, layout=stress,
     vertexlabels = ["1", ""],
     vertexshapesizes = [10, 0])
@@ -277,7 +281,7 @@ When circles and squares don't cut it, supply a function to `vertexshapes`. The 
 @drawsvg begin
 background("grey10")
 g = smallgraph(:moebiuskantor)
-sethue("cyan")
+sethue("hotpink")
 drawgraph(g, layout=shell,
     vertexshapes = (v) -> star(O, 15, v+2, 0.5, 0, :fill))
 end 600 300

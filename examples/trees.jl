@@ -1,4 +1,7 @@
-using Graphs
+using Karnak, Graphs, NetworkLayout, Colors
+
+# I started adapting David Sanders https://github.com/JuliaTeX/TreeView.jl
+# but didn't finish
 
 add_numbered_vertex!(g) = (add_vertex!(g); top = nv(g))
 
