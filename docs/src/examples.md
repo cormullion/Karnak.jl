@@ -130,7 +130,7 @@ end
         boundingbox = BoundingBox(box(O, 400, 400)),
         vertexshapes = :none,
         vertexlabeltextcolors = colorant"white",
-        vertexlabels = find.(1:nv(g)),
+        vertexlabels = find.(vertices(g)),
         vertexlabelfontsizes = 6
         )
 end
@@ -148,12 +148,10 @@ background("grey90")
 sethue("black")
 drawgraph(g, layout=positions,
     vertexshapesizes = 2,
-    vertexlabels = (vtx) ->
-        begin
-            if degree(g, vtx) == 1
-                text(find(vtx), positions[vtx])
-            end
-        end)
+    vertexlabels = [(degree(g, n) == 1) ? find(n) : ""
+        for n in vertices(g)],
+    vertexlabeltextcolors = colorant"blue"
+    )
 end
 ```
 
