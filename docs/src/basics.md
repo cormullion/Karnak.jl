@@ -9,12 +9,27 @@ using the Graphs.jl package. You don't need any prior
 knowledge of graphs, but you should be familiar with the basics
 of programming in Julia.
 
+!!! note
+
+    All the figures in this manual are generated when the
+    pages are built by Documenter.jl, and the code to draw
+    them is included here. SVG is used because it's good for
+    line drawings, but you can use `drawgraph()` in any
+    Luxor environment, such as PNG  - recommended as the
+    drawings get very complex, since large SVGs can tax browsers.
+
 ## Graphs, vertices, and edges
 
 Graph theory is used for analysing networks and
 the relationships between things in the network.
 
-```@setup graphtheory
+```@raw html
+<details closed><summary>Code for this figure</summary>
+```
+
+This code generates the figure below.
+
+```@example graphsection
 using Karnak, Luxor, Graphs, NetworkLayout, Colors, SimpleWeightedGraphs
 d = @drawsvg begin
     background("grey10")
@@ -45,7 +60,11 @@ d = @drawsvg begin
 end 600 350
 ```
 
-```@example graphtheory
+```@raw html
+</details>
+```
+
+```@example graphsection
 d # hide
 ```
 
@@ -77,9 +96,9 @@ We can easily add a number of new vertices:
 add_vertices!(g, 3)
 ```
 
-Now we'll join pairs of vertices with an edge. The four
-vertices we've made can be referred to with `1`, `2`, `3`,
-and `4`:
+The graph has four now. We'll join pairs of vertices with an
+edge. The four vertices we've made can be referred to with
+`1`, `2`, `3`, and `4`:
 
 ```julia
 add_edge!(g, 1, 2)  # join vertex 1 with vertex 2
@@ -162,13 +181,13 @@ end 400 300
 hcat(d1, d2)
 ```
 
-Neither of these graphs is **connected**. In a connected graph, every vertex is connected to some other via some path, a sequence of edges.
+Neither of these graphs is **connected**. In a connected graph, every vertex is connected to every other via some path, a sequence of edges.
 
 ## Well-known graphs
 
 Graphs have been studied for a few centuries, so there are many familiar and well-known graphs and types of graph.
 
-In a **complete graph**, every vertex is connected to every other vertex.
+In a **complete graph**, every vertex is connected with a single edge to every other vertex.
 
 ```@example graphsection
 N = 10
@@ -194,7 +213,13 @@ drawgraph(g, vertexlabels = vertices(g))
 end 600 300
 ```
 
-In a **bi-partite graph**, every vertex belongs to one of two groups. Every vertex in the first group is connected to one or more vertices in the second group. This illustration shows the **complete** version of a bi-partite graph. So each vertex is connected to every other vertex in the other group.
+In a **bi-partite graph**, every vertex belongs to one of
+two groups. Each vertex in the first group is connected to
+one or more vertices in the second group.
+
+The next figure shows the **complete** version of a
+bi-partite graph. So each vertex is connected to every other
+vertex in the other group.
 
 ```@example graphsection
 N = 10
@@ -224,6 +249,7 @@ sethue("greenyellow")
 drawgraph(g, vertexlabels = 1:nv(g), layout=stress)
 end 600 300
 ```
+
 Star graphs (`star_graph(n)`) and wheel graphs (`wheel_graph(n)`) deliver what their names promise.
 
 ```@example graphsection
@@ -246,71 +272,90 @@ end 600 300
 
 ### Even more well-known graphs
 
-There are probably as many graphs as there are possible games of chess. In both fields, the more commonly-seen patterns have been studied extensively by enthusiasts for years.
+There are probably as many graphs as there are possible
+games of chess. In both fields, the more commonly-seen
+patterns have been studied extensively by enthusiasts for
+years.
 
-Many well-known graphs are provided by the `smallgraph()` function. Supply one of the available symbols, such as `:bull`, or `:house`.
+Many well-known graphs are provided by the `smallgraph()`
+function. Supply one of the available symbols, such as
+`:bull`, or `:house`.
 
-```@setup smallgraphs
+```@raw html
+<details closed><summary>Code for this figure</summary>
+```
+
+This code generates the figure below.
+
+```@example smallgraphs
 using Karnak, Luxor, Graphs, NetworkLayout
 smallgraphs = (
-(:bull, "bull"),
-(:chvatal, "chvatal"),
-(:cubical, "cubical"),
-(:desargues, "desargues"),
-(:diamond, "diamond"),
-(:dodecahedral, "dodecahedral"),
-(:frucht, "frucht"),
-(:heawood, "heawood"),
-(:house, "house"),
-(:housex, "housex"),
-(:icosahedral, "icosahedral"),
-(:karate, "karate"),
-(:krackhardtkite, "krackhardtkite"),
-(:moebiuskantor, "moebiusantor"),
-(:octahedral, "octahedral"),
-(:pappus, "pappus"),
-(:petersen, "petersen"),
-(:sedgewickmaze, "sedgewick"),
-(:tetrahedral, "tetrahedral"),
-(:truncatedcube, "truncatedcube"),
-(:truncatedtetrahedron, "truncatedtetrahedron"),
-(:truncatedtetrahedron_dir, "truncatedtetrahedron"),
-(:tutte, "tutte"))
+    (:bull, "bull"),
+    (:chvatal, "chvatal"),
+    (:cubical, "cubical"),
+    (:desargues, "desargues"),
+    (:diamond, "diamond"),
+    (:dodecahedral, "dodecahedral"),
+    (:frucht, "frucht"),
+    (:heawood, "heawood"),
+    (:house, "house"),
+    (:housex, "housex"),
+    (:icosahedral, "icosahedral"),
+    (:karate, "karate"),
+    (:krackhardtkite, "krackhardtkite"),
+    (:moebiuskantor, "moebiusantor"),
+    (:octahedral, "octahedral"),
+    (:pappus, "pappus"),
+    (:petersen, "petersen"),
+    (:sedgewickmaze, "sedgewick"),
+    (:tetrahedral, "tetrahedral"),
+    (:truncatedcube, "truncatedcube"),
+    (:truncatedtetrahedron, "truncatedtetrahedron"),
+    (:truncatedtetrahedron_dir, "truncatedtetrahedron"),
+    (:tutte, "tutte"))
 
 colors = ["paleturquoise", "chartreuse", "thistle1", "pink",
 "gold", "wheat", "olivedrab1", "palegreen", "turquoise1",
 "lightgreen", "plum1", "plum", "violet", "hotpink"]
 
 smallgraphs = @drawsvg begin
-background("grey10")
-sethue("orange")
-ng = length(smallgraphs)
-N = convert(Int, ceil(sqrt(ng)))
-tiles = Tiler(800, 800, N, N)
-setline(0.5)
-for (pos, n) in tiles
-@layer begin
-n > ng && break
-translate(pos)
-sethue(colors[mod1(n, end)])
-bbox = BoundingBox(box(O, tiles.tilewidth, tiles.tileheight))
-g = smallgraph(first(smallgraphs[n]))
-drawgraph(g, boundingbox=bbox, vertexshapesizes = 2, layout = stress)
-sethue("cyan")
-text(string(last(smallgraphs[n])), halign=:center, boxbottomcenter(bbox))
-end
-end
+    background("grey10")
+    sethue("orange")
+    ng = length(smallgraphs)
+    N = convert(Int, ceil(sqrt(ng)))
+    tiles = Tiler(800, 800, N, N)
+    setline(0.5)
+    for (pos, n) in tiles
+        @layer begin
+            n > ng && break
+            translate(pos)
+            sethue(colors[mod1(n, end)])
+            bbox = BoundingBox(box(O, tiles.tilewidth, tiles.tileheight))
+            g = smallgraph(first(smallgraphs[n]))
+            drawgraph(g, boundingbox = bbox, vertexshapesizes = 2, layout = stress)
+            sethue("cyan")
+            text(string(last(smallgraphs[n])), halign = :center, boxbottomcenter(bbox))
+        end
+    end
 end 800 800
+```
+
+```@raw html
+</details>
 ```
 
 ```@example smallgraphs
 smallgraphs # hide
 ```
 
-It's easy to find out more about these well-known graphs online, such as on the wikipedia.
-Some of the graphs in this illustration would benefit from attentive ‘tuning’ of the various layout parameters.
+It's easy to find out more about these well-known graphs
+online, such as on the
+[wikipedia](https://en.wikipedia.org/wiki/Gallery_of_named_graphs).
+Some of the graphs in this figure would benefit from
+individual ‘tuning’ of the various layout parameters.
 
-Here's a larger view of the Petersen graph (named after Julius Petersen, who first described it in 1898).
+Here's a larger view of the Petersen graph (named after
+Julius Petersen, who first described it in 1898).
 
 ```@example graphsection
 @drawsvg begin
@@ -435,7 +480,9 @@ Other useful functions in Graphs.jl include `has_vertex(g, v)` and `has_edge(g, 
 
 ### Degree
 
-The **degree** of a vertex is the number of edges that meet at that vertex. This is shown in both text form and color-coded:
+The **degree** of a vertex is the number of edges that meet
+at that vertex. This is shown in the figure by the vertex
+labels and also color-coded:
 
 ```@example graphsection
 @drawsvg begin
@@ -545,7 +592,7 @@ Here, negative values are used, so 1 and -1 are used to indicate directions. The
 
 An incidence matrix is another useful way of quickly defining a graph. That's why we can pass an incidence matrix to the `Graph()` and `DiGraph()` functions to create new graphs.
 
-For example, here's a vaguely familiar image:
+For example, here's a familiar image:
 
 ```@example graphsection
 g = [0 1 1;
@@ -741,9 +788,9 @@ end 800 400
 One use for the A* algorithm is for finding paths through mazes. In the next example, a grid graph is subjected to some random vandalism, removing quite a few edges. Then a route through the maze was easily found by `a_star()`.
 
 ```@example graphsection
-using Karnak, Luxor, Graphs, Colors, NetworkLayout, Random
-
+using Random
 Random.seed!(6)
+
 @drawsvg begin
 background("grey10")
 
@@ -767,7 +814,7 @@ drawgraph(g,
     vertexshapesizes = 6,
     layout=squaregrid,
     edgegaps=2,
-    edgestrokeweights = 4)
+    edgestrokeweights = 12)
 
 sethue("orange")
 drawgraph(g,
@@ -775,7 +822,7 @@ drawgraph(g,
     layout=squaregrid,
     edgelist=astar,
     edgegaps=0,
-    edgestrokeweights=3)
+    edgestrokeweights=2)
 
 end 600 600
 ```
@@ -809,7 +856,7 @@ end 800 400
 
 ## Shortest paths: Dijkstra's algorithm
 
-A well-known algorithm for finding the shortest path between graph vertices is named for its creator, Edsger W. Dijkstra:
+A well-known algorithm for finding the shortest path between graph vertices is named for its creator, Edsger W. Dijkstra. He wrote about his inspiration:
 
 > "I designed it in about twenty minutes. One morning I was
 > shopping in Amsterdam with my young fiancée, and tired, we
@@ -817,7 +864,7 @@ A well-known algorithm for finding the shortest path between graph vertices is n
 > I was just thinking about whether I could do this, and I
 > then designed the algorithm for the shortest path.
 
-In Graphs.jl, this algorithm is available with `dijkstra_shortest_paths()`. After running this function, the result is an object with various pieces of information about all the shortest paths: this is a `DijkstraState` object, with fields containing things like distances and predecessor vertices. There's an `enumerate_paths()` function which can extract the vertex information for a specific path from the DijkstraState.
+In Graphs.jl, this algorithm is available with `dijkstra_shortest_paths()`. After running this function, the result is an object with various pieces of information about all the shortest paths: this is a `DijkstraState` object, with fields containing things like distances and predecessor vertices. There's an `enumerate_paths()` function which can extract the vertex information for a specific path from the DijkstraState object.
 
 The following code animates the results of examining a grid graph using Dijkstra's algorithm. The shortest paths between the first vertex and every other vertex are drawn in a series of frames, one by one.
 
