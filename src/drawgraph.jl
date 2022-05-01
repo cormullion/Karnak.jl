@@ -1052,4 +1052,6 @@ function drawgraph(g::AbstractGraph;
             )
         end
     end
+
+    return coordinates
 end

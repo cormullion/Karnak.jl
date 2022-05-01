@@ -113,6 +113,11 @@ layout = shell ∘ adjacency_matrix
 layout = (g) -> sfdp(g, Ptype=Float64, dim=2, tol=0.05, C=0.4, K=2)
 
 layout = Shell(nlist=[6:10,])
+
+layout = Stress(iterations = 100, weights = M) # M is matrix of weights
+
+layout = Spring(iterations = 200, initialtemp = 2.5)
+
 ```
 
 Alternatively, you can pass a vector of Luxor Points to the `layout` keyword argument. Vertices will be placed on these points (vertex 1 on point 1, etc...), rather than at points suggested by the NetworkLayout functions.
