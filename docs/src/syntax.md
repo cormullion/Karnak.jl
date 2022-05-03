@@ -139,6 +139,8 @@ drawgraph(g, vertexlabels = 1:nv(g), layout = pts,
 end 600 300
 ```
 
+The coordinates of the positions are returned by the `drawgraph()` function.
+
 ## The `vertexfunction` and `edgefunction` arguments
 
 The two keyword arguments `vertexfunction` and `edgefunction` allow you to pass control over the drawing process completely to two functions, which can be anonymous functions.
@@ -154,8 +156,7 @@ In the following picture, the vertex positions were passed to a function that pl
 
 ![image vertices](assets/figures/karnakmap.png)
 
-It's also possible to draw graphs recursively if you use `vertexfunction`.
-
+It's also possible, for example, to draw a graph at a vertex point (ie recursive graphh drawing) if you use `vertexfunction`.
 
 ```@example graphsection
 g = star_graph(8)

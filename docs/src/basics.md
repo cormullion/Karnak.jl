@@ -107,6 +107,8 @@ add_edge!(g, 2, 3)
 add_edge!(g, 1, 4)
 ```
 
+(Vertices are always numberered from 1 to `n`.)
+
 `g` is now a `{{4, 1} undirected simple Int64 graph}`.
 
 It's time to see some kind of visual representation of the
@@ -114,7 +116,7 @@ graph we've made.
 
 ```@example graphsection
 # packages to load:
-# using Karnak, Luxor, Graphs, NetworkLayout, Colors, SimpleWeightedGraphs
+# using Karnak, Graphs, NetworkLayout, Colors
 
 g = Graph()
 add_vertices!(g, 4)
@@ -130,7 +132,7 @@ add_edge!(g, 1, 4)
 end 600 300
 ```
 
-This is one of the many ways this graph can be represented visually. The coordinates of the vertices when drawn here are _not_ part of the graph's definition. The default styling uses the current Luxor color, with small circles marking the vertex positions. `drawgraph()` places the graphics for the graph on the current Luxor drawing.
+This is just one of the many ways this graph can be represented visually. The coordinates of the vertices when drawn here are _not_ part of the graph's definition. The default styling uses the current Luxor color, with small circles marking the vertex positions. `drawgraph()` places the graphics for the graph on the current Luxor drawing.
 
 ## Undirected and directed graphs
 
@@ -187,16 +189,16 @@ Neither of these graphs is **connected**. In a connected graph, every vertex is 
 
 Graphs have been studied for a few centuries, so there are many familiar and well-known graphs and types of graph.
 
-In a **complete graph**, every vertex is connected with a single edge to every other vertex.
+In a **complete graph**, every vertex is connected to every other vertex.
 
 ```@example graphsection
 N = 10
 g = complete_graph(N)
-d1 = @drawsvg begin
-background("grey10")
-setline(0.5)
-sethue("pink")
-drawgraph(g, vertexlabels = vertices(g))
+@drawsvg begin
+   background("grey10")
+   setline(0.5)
+   sethue("pink")
+   drawgraph(g, vertexlabels = vertices(g))
 end 600 300
 ```
 
@@ -205,11 +207,11 @@ There's also a `complete_digraph()` function.
 ```@example graphsection
 N = 7
 g = complete_digraph(N)
-d1 = @drawsvg begin
-background("grey10")
-setline(0.5)
-sethue("orange")
-drawgraph(g, vertexlabels = vertices(g))
+@drawsvg begin
+    background("grey10")
+    setline(0.5)
+    sethue("orange")
+    drawgraph(g, vertexlabels = vertices(g))
 end 600 300
 ```
 
@@ -226,7 +228,7 @@ N = 10
 g = complete_bipartite_graph(N, N)
 H = 300
 W = 550
-d1 = @drawsvg begin
+@drawsvg begin
 background("grey10")
 pts = vcat(
     between.(O + (-W/2, H/2), O + (W/2, H/2), range(0, 1, length=N)),
@@ -242,7 +244,7 @@ A **grid** graph doesn't need much explanation:
 M = 4
 N = 5
 g = Graphs.grid([M, N]) # grid((m, n))
-d1 = @drawsvg begin
+@drawsvg begin
 background("grey10")
 setline(0.5)
 sethue("greenyellow")
@@ -254,7 +256,7 @@ Star graphs (`star_graph(n)`) and wheel graphs (`wheel_graph(n)`) deliver what t
 
 ```@example graphsection
 g = star_graph(12)
-d1 = @drawsvg begin
+@drawsvg begin
     background("grey10")
     sethue("orange")
     drawgraph(g, vertexlabels=1:nv(g), layout=stress)
@@ -263,7 +265,7 @@ end 600 300
 
 ```@example graphsection
 g = wheel_graph(12)
-d1 = @drawsvg begin
+@drawsvg begin
     background("grey10")
     sethue("palegreen")
     drawgraph(g, vertexlabels=1:nv(g), layout=stress)
@@ -642,32 +644,32 @@ For example, this adjacency list:
 ]
 ```
 
-defines a graph with 10 vertices, such that vertex 1 has edges joining it to vertices 2, 5, and 7, and so on for each element of the whole array.
+defines a graph with 20 vertices, such that vertex 1 has edges joining it to vertices 2, 5, and 7, and so on for each element of the whole array.
 
 The `Graph()` function accepts an adjacency list, along with the number of edges.
 
 ```@example graphsection
 g = Graph(30, [
-[2, 5, 7],
-[1, 3, 9],
-[2, 4, 11],
-[3, 5, 13],
-[1, 4, 15],
-[7, 15, 20],
-[1, 6, 8],
-[7, 9, 16],
-[2, 8, 10],
-[9, 11, 17],
-[3, 10, 12],
-[11, 13, 18],
-[4, 12, 14],
-[13, 15, 19],
-[5, 6, 14],
-[8, 17, 20],
-[10, 16, 18],
-[12, 17, 19],
-[14, 18, 20],
-[6, 16, 19]])
+    [2, 5, 7],
+    [1, 3, 9],
+    [2, 4, 11],
+    [3, 5, 13],
+    [1, 4, 15],
+    [7, 15, 20],
+    [1, 6, 8],
+    [7, 9, 16],
+    [2, 8, 10],
+    [9, 11, 17],
+    [3, 10, 12],
+    [11, 13, 18],
+    [4, 12, 14],
+    [13, 15, 19],
+    [5, 6, 14],
+    [8, 17, 20],
+    [10, 16, 18],
+    [12, 17, 19],
+    [14, 18, 20],
+    [6, 16, 19]])
 
 @drawsvg begin
 background("grey10")

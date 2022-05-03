@@ -359,3 +359,317 @@ colors = map(c -> RGB(c...),
         )
 end
 ```
+
+## Julia Package Dependencies
+
+This example was developed by [Mathieu
+Besançon](https://github.com/matbesancon/lightgraphs_workshop)
+and presented as part of the  workshop: __Analyzing Graphs
+at Scale__, presented at JuliaCon 2020. YOu can see the
+video on [YouTube](https://youtu.be/K3z0kUOBy2Y).
+
+The code builds a dependency graph of the connections (ie
+which package depends on which package) for Julia packages
+in the General registry. Then we can draw pretty pictures,
+such as this chonky SVG file showing the dependencies for
+the Colors.jl package:
+
+![package dependencies for Colors](assets/figures/graph-dependencies-colors.svg)
+
+The only significant change is the rename from LightGraphs.jl to Graphs.jl.
+
+Setup:
+
+```julia
+using Graphs
+using MetaGraphs
+using TOML
+using Karnak
+using Colors
+```
+
+### Finding the general registry
+
+On my computer, the registry is in its default location. You might need to modify the first line if yours is is another location:
+
+```julia
+path_to_general = expanduser("~/.julia/registries/General")
+registry_file = Pkg.TOML.parsefile(joinpath(path_to_general, "Registry.toml"))
+packages_info = registry_file["packages"];
+pkg_paths = map(values(packages_info)) do d
+    (name = d["name"], path = d["path"])
+end
+```
+
+The result in `pkg_paths` is a vector of tuples, containing the name and filepath of every package:
+
+```julia
+7495-element Vector{NamedTuple{(:name, :path), Tuple{String, String}}}:
+ (name = "COSMA_jll", path = "C/COSMA_jll")
+ (name = "CitableImage", path = "C/CitableImage")
+ (name = "Trixi2Img", path = "T/Trixi2Img")
+ (name = "ImPlot", path = "I/ImPlot")
+```
+
+The function `find_direct_deps()` finds the packages that directly depend on a source package.
+
+```julia
+function find_direct_deps(registry_path, pkg_paths, source)
+    filter(pkg_paths) do pkg_path
+        deps_file = joinpath(registry_path, pkg_path.path, "Deps.toml")
+        isfile(deps_file) && begin
+            deps_struct = Pkg.TOML.parsefile(deps_file)
+            any(values(deps_struct)) do d
+                source in keys(d)
+            end
+        end
+    end
+end
+```
+
+We can now find out how many packages depend on a particular package. For example, how many packages depend on `Colors.jl` (my favourite)?
+
+```julia
+find_direct_deps(path_to_general, pkg_paths, "Colors")
+```
+
+giving this result:
+
+```julia
+227-element Vector{NamedTuple{(:name, :path), Tuple{String, String}}}:
+ (name = "SqState", path = "S/SqState")
+ (name = "InteractBase", path = "I/InteractBase")
+ (name = "ImageMetadata", path = "I/ImageMetadata")
+ (name = "PlantGeom", path = "P/PlantGeom")
+ (name = "MicrobiomePlots", path = "M/MicrobiomePlots")
+ (name = "MeshViz", path = "M/MeshViz")
+ ⋮
+ (name = "GenomicMaps", path = "G/GenomicMaps")
+ (name = "ModiaPlot", path = "M/ModiaPlot")
+ (name = "Thebes", path = "T/Thebes")
+ (name = "ConstrainedDynamics", path = "C/ConstrainedDynamics")
+ (name = "AutomotiveVisualization", path = "A/AutomotiveVisualization")
+ (name = "Flux", path = "F/Flux")
+
+```
+
+### Time to build a graph/tree
+
+The next function, `build_tree()`, builds a directed Graph. Starting at the root package, which is the package you're interested in, the loop finds all it's dependencies, then finds the dependencies of all of those packages, and continues until it finds packages that have no further dependencies.
+
+```julia
+function build_tree(registry_path, pkg_paths, root)
+    g = MetaDiGraph()
+    add_vertex!(g)
+    set_prop!(g, 1, :name, root)
+    i = 1
+    explored_nodes = Set{String}((root,))
+    while true
+        i % 50 == 0 && print(i, " ")
+        current_node = get_prop(g, i, :name)
+        direct_deps = find_direct_deps(registry_path, pkg_paths, current_node)
+        filter!(d -> d.name ∉ explored_nodes, direct_deps)
+        if isempty(direct_deps) && i >= nv(g)
+           break
+        end
+        for ddep in direct_deps
+           push!(explored_nodes, ddep.name)
+           add_vertex!(g)
+           set_prop!(g, nv(g), :name, ddep.name)
+           add_edge!(g, i, nv(g))
+        end
+        i += 1
+    end
+    return g
+end
+```
+
+!!! note
+
+    This function takes some time to run - about 8 minutes for about 1400 iterations.
+
+```julia
+g = build_tree(path_to_general, pkg_paths, "Colors")
+```
+
+The result is a directed metagraph. In a metagraph, it's possible to add information to vertices, using `set_prop()` and `get_prop`.
+
+So to find all the package names in the graph:
+
+```julia
+get_prop.(Ref(g), outneighbors(g, 1), :name)
+
+227-element Vector{String}:
+ "SqState"
+ "InteractBase"
+ "ImageMetadata"
+ "PlantGeom"
+ "MicrobiomePlots"
+ "MeshViz"
+ "SGtSNEpi"
+ "ColorSchemes"
+ "CairoMakie"
+ "RoboDojo"
+ "Khepri"
+ "Widgets"
+ "MinAtar"
+ ⋮
+ "ComplexPhasePortrait"
+ "Gloria"
+ "ProteinEnsembles"
+ "GoogleSheets"
+ "Alexya"
+ "AsyPlots"
+ "PowerModelsAnalytics"
+ "GenomicMaps"
+ "ModiaPlot"
+ "Thebes"
+ "ConstrainedDynamics"
+ "AutomotiveVisualization"
+ "Flux"
+```
+
+### Shortest paths
+
+The `dijkstra_shortest_paths()` function finds the paths between the root package and all its dependencies. One package is very close indeed - that's Colors.jl itself!
+
+```julia
+spath_result = dijkstra_shortest_paths(g, 1)
+spath_result.dists
+1375-element Vector{Float64}:
+ 0.0
+ 1.0
+ 1.0
+ 1.0
+ 1.0
+ 1.0
+ 1.0
+ 1.0
+ 1.0
+ 1.0
+ 1.0
+ 1.0
+ 1.0
+ ⋮
+ 5.0
+ 5.0
+ 5.0
+ 5.0
+ 5.0
+ 6.0
+ 6.0
+ 6.0
+ 6.0
+ 6.0
+ 6.0
+ 7.0
+ 7.0
+```
+
+The "furthest" packages from Colors - the ones 7.0 apart - are:
+
+```julia
+for idx in eachindex(spath_result.dists)
+           if spath_result.dists[idx] == 7
+               println(get_prop(g, idx, :name))
+           end
+       end
+
+QuantumESPRESSOExpress
+Recommenders
+```
+
+### Computing the full subgraph
+
+```julia
+all_packages = get_prop.(Ref(g), vertices(g), :name);
+
+full_graph = MetaDiGraph(length(all_packages))
+
+for v in vertices(full_graph)
+    set_prop!(full_graph, v, :name, all_packages[v])
+end
+
+for v in vertices(full_graph)
+    pkg_name = get_prop(full_graph, v, :name)
+    dependent_packages = find_direct_deps(path_to_general, pkg_paths, pkg_name)
+    for dep_pkg in dependent_packages
+        pkg_idx = findfirst(==(dep_pkg.name), all_packages)
+        # only packages in graph
+        if pkg_idx !== nothing
+            add_edge!(full_graph, pkg_idx, v)
+        end
+    end
+end
+```
+
+### Pagerank
+
+```julia
+ranks = pagerank(full_graph)
+sorted_indices = sort(eachindex(ranks), by=i->ranks[i], rev=true)
+get_prop.(Ref(full_graph), sorted_indices, :name)
+```
+
+### Most dependencies, most depended on
+
+```julia
+in_sorted_indices = sort(vertices(full_graph), by=i->indegree(full_graph, i) , rev=true)
+get_prop.(Ref(full_graph), in_sorted_indices, :name)
+
+out_sorted_indices = sort(vertices(full_graph), by=i->outdegree(full_graph, i) , rev=true)
+get_prop.(Ref(full_graph), out_sorted_indices, :name)
+
+ranks_betweenness = betweenness_centrality(full_graph)
+sorted_indices_betweenness = sort(vertices(full_graph), by=i->ranks_betweenness[i], rev=true)
+get_prop.(Ref(full_graph), sorted_indices_betweenness, :name)
+```
+
+### Deoendencies are acyclic?
+
+```julia
+
+is_cyclic(full_graph)
+
+for cycle in simplecycles(full_graph)
+    names = get_prop.(Ref(full_graph), cycle, :name)
+    @info names
+end
+
+```
+
+
+```julia
+
+@info "start drawing"
+
+@pdf begin
+    background("black")
+    sethue("gold")
+    setline(0.3)
+        drawgraph(g,
+         layout = stress,
+         edgefunction = (k, s, d, f, t) -> begin
+            @layer begin
+                sl = slope(O, t)
+                sethue(HSVA(rescale(sl, 0, 2π, 0, 360), 0.7, 0.7, .9))
+                line(f, t, :stroke)
+            end
+        end ,
+        vertexfunction = (v, c) -> begin
+            @layer begin
+                t = get_prop(g, v, :name)
+                te = textextents(t)
+                setopacity(0.7)
+                sethue("grey10")
+                fontsize(3)
+                box(c[v], te[3]/2, te[4]/2, :fill)
+                setopacity(1)
+                sethue("white")
+                text(t, c[v], halign=:center, valign=:middle)
+            end
+        end
+         )
+         @info " finish drawing"
+end 2500 2500 "/tmp/graph-dependencies-colors.pdf"
+```
