@@ -7,12 +7,11 @@ This isn't yet working 100%, I still don't
 understand the Buchheim layout yet...
 =#
 
-add_numbered_vertex!(g) = (add_vertex!(g); top = nv(g))
+add_numbered_vertex!(g) = add_vertex!(g)
 
 function build_type_tree(g, T, level=0)
-    top_vertex = add_numbered_vertex!(g)
+    add_numbered_vertex!(g)
     push!(labels, T)
-
     for t in subtypes(T)
         build_type_tree(g, t, level+1)
         add_edge!(g,
