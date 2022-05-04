@@ -368,15 +368,21 @@ and presented as part of the  workshop: __Analyzing Graphs
 at Scale__, presented at JuliaCon 2020. YOu can see the
 video on [YouTube](https://youtu.be/K3z0kUOBy2Y).
 
+The only significant change is the rename from LightGraphs.jl to Graphs.jl.
+
 The code builds a dependency graph of the connections (ie
 which package depends on which package) for Julia packages
-in the General registry. Then we can draw pretty pictures,
-such as this chonky SVG file showing the dependencies for
-the Colors.jl package:
+in the General registry.
+
+Then we can draw pretty pictures, such as this chonky SVG
+file showing the dependencies for the Colors.jl package:
 
 ![package dependencies for Colors](assets/figures/graph-dependencies-colors.svg)
 
-The only significant change is the rename from LightGraphs.jl to Graphs.jl.
+Or this one, which attempts to highlight just the more
+connected packages in the Colors.jl dependency graph:
+
+![package dependencies for Colors](assets/figures/graph-dependencies-colors-2.svg)
 
 Setup:
 
@@ -450,12 +456,11 @@ giving this result:
  (name = "ConstrainedDynamics", path = "C/ConstrainedDynamics")
  (name = "AutomotiveVisualization", path = "A/AutomotiveVisualization")
  (name = "Flux", path = "F/Flux")
-
 ```
 
 ### Time to build a graph/tree
 
-The next function, `build_tree()`, builds a directed Graph. Starting at the root package, which is the package you're interested in, the loop finds all it's dependencies, then finds the dependencies of all of those packages, and continues until it finds packages that have no further dependencies.
+The next function, `build_tree()`, builds a directed Graph. Starting at the root package, which is the package you're interested in, the loop finds all its dependencies, then finds the dependencies of all of those packages, and continues until it finds packages that have no further dependencies.
 
 ```julia
 function build_tree(registry_path, pkg_paths, root)
@@ -509,18 +514,7 @@ get_prop.(Ref(g), outneighbors(g, 1), :name)
  "SGtSNEpi"
  "ColorSchemes"
  "CairoMakie"
- "RoboDojo"
- "Khepri"
- "Widgets"
- "MinAtar"
  ⋮
- "ComplexPhasePortrait"
- "Gloria"
- "ProteinEnsembles"
- "GoogleSheets"
- "Alexya"
- "AsyPlots"
- "PowerModelsAnalytics"
  "GenomicMaps"
  "ModiaPlot"
  "Thebes"
@@ -566,7 +560,7 @@ spath_result.dists
  7.0
 ```
 
-The "furthest" packages from Colors - the ones 7.0 apart - are:
+The "furthest" packages from Colors.jl - the ones 7.0 apart - are:
 
 ```julia
 for idx in eachindex(spath_result.dists)
@@ -625,7 +619,7 @@ sorted_indices_betweenness = sort(vertices(full_graph), by=i->ranks_betweenness[
 get_prop.(Ref(full_graph), sorted_indices_betweenness, :name)
 ```
 
-### Deoendencies are acyclic?
+### Dependencies are acyclic?
 
 ```julia
 
@@ -638,11 +632,9 @@ end
 
 ```
 
+### Draw graphs
 
 ```julia
-
-@info "start drawing"
-
 @pdf begin
     background("black")
     sethue("gold")
@@ -673,3 +665,36 @@ end
          @info " finish drawing"
 end 2500 2500 "/tmp/graph-dependencies-colors.pdf"
 ```
+
+![package dependencies for Colors](assets/figures/graph-dependencies-colors.svg)
+
+```julia
+using ColorSchemes
+
+@svg begin
+    background("black")
+    maxdeg = maximum(degree(full_graph))
+    drawgraph(full_graph,
+        layout=spring,
+        edgelines=0,
+        vertexfunction = (v, c) -> begin
+            d = degree(full_graph, v)
+            @layer begin
+                sethue(get(ColorSchemes.darkrainbow, rescale(d, 1, maxdeg)))
+                circle(c[v], rescale(d, 1, 270, 2, 20), :fill)
+            end
+                if d > 20
+                fontsize(rescale(d, 1, maxdeg, 5, 20))
+                setcolor("white")
+                textoutlines(all_packages[v], c[v], halign=:center, valign=:bottom, :fill)
+                setline(rescale(d, 1, maxdeg, 0.25, 1))
+                sethue("black")
+                textoutlines(all_packages[v], c[v], halign=:center, valign=:bottom, :stroke)
+            end
+        end
+        )
+end 1200 1200 "/tmp/graph-dependencies-2.svg"
+```
+
+
+![package dependencies for Colors](assets/figures/graph-dependencies-colors-2.svg)
