@@ -41,7 +41,7 @@ vectors, ranges, and scalar values, and some accept
 functions as well.
 
 Here's a contrived (and consequently hideously ugly)
-example of the type of syntax you can use:
+example of the type of syntax available:
 
 ```@example graphsection
 @drawsvg begin
@@ -81,14 +81,14 @@ Usually, if a vector runs out before the vertices and edges
 have been drawn, some `mod1` magic means the values repeat
 from the beginning again.
 
-You can use `drawgraph()` more than once, to build up the
+Use `drawgraph()` more than once, if needed, to build up the
 graph in layers. Remember to use the same layout algorithm.
 
 ## The BoundingBox
 
 The graphics for the graph are placed to fit inside the
 current BoundingBox (ie the drawing), after allowing for the
-margin (the default is 30). You can pass a different
+margin (the default is 30). Pass a different
 BoundingBox to the `boundingbox` keyword argument.
 
 ## Layout algorithms
@@ -124,7 +124,10 @@ layout = Spring(iterations = 200, initialtemp = 2.5)
 
 ```
 
-Alternatively, you can pass a vector of Luxor Points to the `layout` keyword argument. Vertices will be placed on these points (vertex 1 on point 1, etc...), rather than at points suggested by the NetworkLayout functions.
+Alternatively, pass a vector of Luxor Points to the `layout`
+keyword argument. Vertices will be placed on these points
+(vertex 1 on point 1, etc...), rather than at points
+suggested by the NetworkLayout functions.
 
 For example, in this next drawing, the two sets of points for a bipartite graph are generated beforehand.
 
@@ -213,7 +216,10 @@ drawgraph(g, layout=stress,
 end 600 300
 ```
 
-You can use a function with `vertexlabels` to display a vertex; it should accept a single numerical argument, the vertex number, and return a string to display. Labelling all of them isn't always necessary.
+A function can be passed to `vertexlabels` to display a
+vertex; it should accept a single numerical argument, the
+vertex number, and return a string to display. Labelling all
+of them isn't always necessary.
 
 ```@example graphsection
 @drawsvg begin

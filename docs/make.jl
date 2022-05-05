@@ -6,6 +6,7 @@ makedocs(
     sitename = "Karnak",
     format = Documenter.HTML(
         prettyurls = get(ENV, "CI", nothing) == "true",
+        assets = ["assets/styles.css"],
         warn_outdated = true,
         collapselevel=1,
         ),

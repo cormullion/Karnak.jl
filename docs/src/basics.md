@@ -960,21 +960,53 @@ To change the weight of an edge:
 julia> add_edge!(graph, from, to, weight)
 ```
 
-In this example, we set the default weight of every edge to 4.0 when the graph is created, and changed just one edge's weight:
+You can provide a list of weights to the `edgelabels` keyword, which can accept a vector of edge weights.
+
+```@example graphsection
+g = SimpleWeightedGraph(3)
+add_edge!(g, 1, 2, 12)
+add_edge!(g, 1, 3, 13)
+add_edge!(g, 2, 3, 23)
+
+edgeweights = [g.weights[e.src, e.dst] for e in edges(g)]
+
+@drawsvg begin
+    background("black")
+    sethue("magenta")
+    fontsize(20)
+    drawgraph(
+        g,
+        vertexshapesizes = 15,
+        vertexlabels = 1:nv(g),
+        edgelabelfontsizes = 40,
+        edgelabels = edgeweights
+    )
+end
+```
+
+In this next example, we set the default weight of every edge to 4.0 when the graph is created, and changed just one edge's weight:
 
 ```@example graphsection
 wg = SimpleWeightedGraph(Graph(6, 15), 4.0)
 add_edge!(wg, 1, 2, 10_000_000)
 @drawsvg begin
-    background("grey10")
-    sethue("gold")
-    drawgraph(wg, edgecurvature=10,
-        vertexlabels = 1:nv(wg),
-        edgelabels = [get_weight(wg, src(e), dst(e)) for e in edges(wg)],
-        edgegaps = 10,
-        edgelabelcolors =
-            [get_weight(wg, src(e), dst(e)) > 10 ?
-                colorant"red" : colorant"green" for e in edges(wg)])
+background("grey10")
+sethue("gold")
+drawgraph(wg, edgecurvature=10,
+    vertexlabels = 1:nv(wg),
+    edgelabels = (k, s, d, f, t) -> begin
+        weight = get_weight(wg, s, d)
+            if weight > 10
+                sethue("white")
+                box(midpoint(f, t), 30, 16, :fill)
+                setcolor("magenta")
+            else
+                sethue(HSB(rescale(k, 1, ne(wg), 0, 360), 0.7, 0.6))
+            end
+            text(string(weight), midpoint(f,t), halign=:center, valign=:middle)
+        end,
+    edgegaps = 10
+    )
 end 600 300
 ```
 
