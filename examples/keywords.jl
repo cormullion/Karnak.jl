@@ -1,12 +1,44 @@
 using Karnak, Graphs, NetworkLayout
 
+l = [
+"edge",
+"edgecurvature",
+"edgedashpatterns",
+"edgefunction",
+"edgegaps",
+"edgelabelcolors",
+"edgelabelfontfaces",
+"edgelabelfontsizes",
+"edgelabelrotations",
+"edgelabels",
+"edgelines",
+"edgelist",
+"edgestrokecolors",
+"edgestrokeweights",
+"vertex",
+"vertexfillcolors",
+"vertexfunction",
+"vertexlabelfontfaces",
+"vertexlabelfontsizes",
+"vertexlabeloffsetangles",
+"vertexlabeloffsetdistances",
+"vertexlabelrotations",
+"vertexlabels",
+"vertexlabeltextcolors",
+"vertexshaperotations",
+"vertexshapes",
+"vertexshapesizes",
+"vertexstrokecolors",
+"vertexstrokeweights",
+]
+
 add_numbered_vertex!(g) = add_vertex!(g)
 
 function makegraph(labelstrings)
     g = DiGraph()
-    labels = Set{String}()
-    add_numbered_vertex!(g)
+    labels = String[]
     push!(labels, "drawgraph()")
+    add_numbered_vertex!(g)
     for (n, label) in enumerate(labelstrings)
         if label ∈ labels
             label = label * string(n)
@@ -30,38 +62,6 @@ function addedges(g, labels, prs)
    end
 end
 
-l = [
-"edge",
-"edgecurvature",
-"edgedashpatterns",
-"edgefunction",
-"edgegaps",
-"edgelabelcolors",
-"edgelabelfontfaces",
-"edgelabelfontsizes",
-"edgelabelrotation",
-"edgelabels",
-"edgelines",
-"edgelist",
-"edgestrokecolors",
-"edgestrokeweights",
-"vertex",
-"vertexfillcolors",
-"vertexfunction",
-"vertexlabelfontfaces",
-"vertexlabelfontsizes",
-"vertexlabeloffsetangles",
-"vertexlabeloffsetdistances",
-"vertexlabelrotations",
-"vertexlabels",
-"vertexlabeltextcolors",
-"vertexshaperotations",
-"vertexshapes",
-"vertexshapesizes",
-"vertexstrokecolors",
-"vertexstrokeweights",
-]
-
 g, labels = makegraph(l)
 
 addedges(g, labels, [
@@ -78,29 +78,31 @@ for l in labels
     end
 end
 
-@drawsvg begin
+@svg begin
     background("black")
     sethue("white")
     fontface("JuliaMono")
     setline(1)
-    nodesizes = map(t -> textextents(string(t))[3], labels)
+    rotate(-π/2)
+    nodesizes = fill(0.2, length(labels))
     fontsize(10)
     setopacity(0.25)
     pts = map(pt -> (pt.x, pt.y), vcat(
-        ngon(O - (200, 0), 300, 10, vertices=true),
-        ngon(O + (200, 0), 300, 10, vertices=true),
+        ngon(O - (200, 0), 300, 15, vertices=true),
+        ngon(O + (200, 0), 300, 15, vertices=true),
     ))
     drawgraph(g,
-        margin=60,
-        layout=Stress(initialpos = pts),
+        margin=20,
+#        layout=Stress(initialpos = pts),
+        layout = Buchheim(nodesize=nodesizes),
         vertexfunction = (v, c) -> begin
             fontsize(12)
             if degree(g, v) == 1
                 setopacity(1)
-                text(labels[v], c[v], halign=:center)
+                text(labels[v], c[v], angle=π/2, halign=:left)
+            else
+                setcolor("cyan")
+                text("[$(labels[v])]", c[v], angle=π/2, halign=:center)
             end
         end)
-    fontsize(20)
-    setopacity(1)
-    text("drawgraph()", halign=:center, valign=:middle)
-end 800 600
+end 600 600 "/tmp/drawgraphkeywords.svg"

@@ -32,7 +32,11 @@ end 600 300
 ```
 
 To control the appearance of the graph, you supply values to
-the keyword arguments. Most keyword arguments accepts
+the keyword arguments. Apart from the general keywords `BoundingBox`, `layout`, `margin`, the keywords can be grouped into two categories:
+
+![](assets/figures/drawgraphkeywords.svg)
+
+Most of these keyword arguments accept
 vectors, ranges, and scalar values, and some accept
 functions as well.
 

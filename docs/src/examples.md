@@ -83,11 +83,10 @@ Most London residents and visitors are used to seeing the famous [Tube Map](http
 
 It's a design classic, hand-drawn by Harry Beck in 1931, and updated regularly
 ever since. As an electrical engineer, Beck represented the sprawling London
-track network as a tidy circuit board. As with graphs, what was important to
-Beck were the connections, rather than accurate geography.
+track network as a tidy circuit board. For Beck, the important thing about the map was to show the connections, rather than the accurate geography.
 
-Our version looks very different, but it is at least more accurate,
-geographically, because the latitude and longitude values of the stations are
+Our version looks very different, but it is at least geographically more accurate,
+because the latitude and longitude values of the stations are
 passed to `layout`.
 
 ```@example tubesection
@@ -95,7 +94,7 @@ passed to `layout`.
 background("grey10")
 sethue("grey50")
 drawgraph(g,
-    layout=positions,
+    layout = positions,
     vertexshapes = :none,
     vertexlabeltextcolors = colorant"white",
     vertexlabels = find.(1:nv(g)),
@@ -103,7 +102,7 @@ drawgraph(g,
 end
 ```
 
-The algorithmic representations - `layout=spring` and `layout=stress` - do a reasonable job, but people like to see north at the top of maps, and south at the bottom, not mixed up in any direction, like these.
+The layout algorithms - `layout = spring` and `layout = stress` - do a reasonable job, but people like to see north at the top of maps, and south at the bottom, not mixed up in any direction, like these.
 
 ```@example tubesection
 @drawsvg begin
@@ -239,7 +238,7 @@ Information about the required changes - at Victoria from
 the Piccadilly line to the Victoria Line, and at Warren
 Street from the Victoria Line to the Northern Line - is not
 part of the graph. Routes across the Tube network, like the
-trains, follow the tracks (edges) - the concept of "lines"
+trains, follow the tracks (edges). The concept of "lines"
 (Victoria, Circle, etc) isn't part of the graph structure,
 but a colorful layer imposed on top of the track network.
 
@@ -295,7 +294,7 @@ main()
 
 The logo for the JuliaGraphs package was easily drawn using Karnak.
 
-I wanted to use the graph coloring feature (`greedy_color()`), but unfortunately it was too clever, managing to color the graph using only two colors, instead of the four I was hoping for.
+I wanted to use the graph coloring feature (`greedy_color()`), but unfortunately it was too clever, managing to color the graph using only two colors, instead of the four I was hoping to use.
 
 ```@example
 using Graphs
@@ -374,7 +373,7 @@ The code builds a dependency graph of the connections (ie
 which package depends on which package) for Julia packages
 in the General registry.
 
-Then we can draw pretty pictures, such as this chonky SVG
+Then we can try to draw some pictures, such as this chonky SVG
 file showing the dependencies for the Colors.jl package:
 
 ![package dependencies for Colors](assets/figures/graph-dependencies-colors.svg)
@@ -417,7 +416,9 @@ The result in `pkg_paths` is a vector of tuples, containing the name and filepat
  (name = "ImPlot", path = "I/ImPlot")
 ```
 
-The function `find_direct_deps()` finds the packages that directly depend on a source package.
+### Find packages that depend on a specific package
+
+The function `find_direct_deps()` finds the packages that directly depend on a specific package.
 
 ```julia
 function find_direct_deps(registry_path, pkg_paths, source)
@@ -458,9 +459,9 @@ giving this result:
  (name = "Flux", path = "F/Flux")
 ```
 
-### Time to build a graph/tree
+### Build a graph/tree
 
-The next function, `build_tree()`, builds a directed Graph. Starting at the root package, which is the package you're interested in, the loop finds all its dependencies, then finds the dependencies of all of those packages, and continues until it finds packages that have no further dependencies.
+The next function, `build_tree()`, builds a directed graph. Starting at the root package, which is the package you're interested in, the loop finds all its dependencies, then finds the dependencies of all of those packages, and continues doing this until it finds packages that have no further dependencies.
 
 ```julia
 function build_tree(registry_path, pkg_paths, root)
@@ -491,15 +492,15 @@ end
 
 !!! note
 
-    This function takes some time to run - about 8 minutes for about 1400 iterations.
+    This function takes some time to run - about 8 minutes for about 1400 iterations on my computer.
 
 ```julia
 g = build_tree(path_to_general, pkg_paths, "Colors")
 ```
 
-The result is a directed metagraph. In a metagraph, it's possible to add information to vertices, using `set_prop()` and `get_prop`.
+The result is a _directed metagraph_. In a metagraph, as implemented by MetaGraphs.jl, it's possible to add information to vertices using `set_prop()` and `get_prop`.
 
-So to find all the package names in the graph:
+To find all the package names in the graph, we can broadcast `get_prop` like this:
 
 ```julia
 get_prop.(Ref(g), outneighbors(g, 1), :name)
@@ -525,7 +526,7 @@ get_prop.(Ref(g), outneighbors(g, 1), :name)
 
 ### Shortest paths
 
-The `dijkstra_shortest_paths()` function finds the paths between the root package and all its dependencies. One package is very close indeed - that's Colors.jl itself!
+The `dijkstra_shortest_paths()` function finds the paths between the designated package and all its dependencies. One package is very close indeed at 0.0 - that's Colors.jl itself.
 
 ```julia
 spath_result = dijkstra_shortest_paths(g, 1)
@@ -538,15 +539,7 @@ spath_result.dists
  1.0
  1.0
  1.0
- 1.0
- 1.0
- 1.0
- 1.0
- 1.0
- 1.0
  ⋮
- 5.0
- 5.0
  5.0
  5.0
  5.0
@@ -560,14 +553,14 @@ spath_result.dists
  7.0
 ```
 
-The "furthest" packages from Colors.jl - the ones 7.0 apart - are:
+The "furthest" packages from Colors.jl - the ones 7.0 away - are:
 
 ```julia
 for idx in eachindex(spath_result.dists)
-           if spath_result.dists[idx] == 7
-               println(get_prop(g, idx, :name))
-           end
-       end
+    if spath_result.dists[idx] == 7
+         println(get_prop(g, idx, :name))
+    end
+end
 
 QuantumESPRESSOExpress
 Recommenders
@@ -622,17 +615,17 @@ get_prop.(Ref(full_graph), sorted_indices_betweenness, :name)
 ### Dependencies are acyclic?
 
 ```julia
-
 is_cyclic(full_graph)
 
 for cycle in simplecycles(full_graph)
     names = get_prop.(Ref(full_graph), cycle, :name)
     @info names
 end
-
 ```
 
-### Draw graphs
+### Draw some graphs
+
+Visualizations of graphs are sometimes (often?) better at communicating vague ideas such as complexity and shape: it's quite difficult to render a graph as rich as these to show the connections clearly while also showing all the labels such that they're easy to read. The solution may be to print out these graph representations and place them on a nearby wall.
 
 ```julia
 @pdf begin
@@ -695,6 +688,5 @@ using ColorSchemes
         )
 end 1200 1200 "/tmp/graph-dependencies-2.svg"
 ```
-
 
 ![package dependencies for Colors](assets/figures/graph-dependencies-colors-2.svg)
