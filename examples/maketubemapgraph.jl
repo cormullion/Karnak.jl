@@ -27,22 +27,22 @@ uxbridge_to_upminster = a_star(g, find("Uxbridge"), find("Upminster"))
 morden_to_morningtoncrescent = a_star(g, find("Morden"), find("Mornington Crescent"))
 
 @drawsvg begin
-	background("grey70")
-	sethue("grey50")
-	drawgraph(g,
-		layout = positions,
-		vertexshapesizes = :none)
-	sethue("black")
-	drawgraph(g,
-		vertexshapes = :none,
-		edgelines = :none,
-		vertexlabels = (vtx) -> begin
-			if vtx ∈ src.(morden_to_morningtoncrescent) || vtx ∈ dst.(morden_to_morningtoncrescent)
-				println(find(vtx))
-				find(vtx)
-				circle(positions[vtx], 5, :fill)
-				label(find(vtx), :e, positions[vtx], offset=10)
-			end
-		end
-		)
+    background("grey70")
+    sethue("grey50")
+    drawgraph(g,
+        layout = positions,
+        vertexshapesizes = :none)
+    sethue("black")
+    drawgraph(g,
+        vertexshapes = :none,
+        edgelines = :none,
+        vertexlabels = (vtx) -> begin
+            if vtx ∈ src.(morden_to_morningtoncrescent) || vtx ∈ dst.(morden_to_morningtoncrescent)
+                println(find(vtx))
+                find(vtx)
+                circle(positions[vtx], 5, :fill)
+                label(find(vtx), :e, positions[vtx], offset=10)
+            end
+        end
+        )
 end

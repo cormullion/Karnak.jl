@@ -832,8 +832,8 @@ layout = squaregrid
 layout = shell
 
 layout = vcat(
-	between.(O + (-W/2, H), O + (W/2, H), range(0, 1, length=N)),
-	between.(O + (-W/2, -H), O + (W/2, -H), range(0, 1, length=N)))
+    between.(O + (-W/2, H), O + (W/2, H), range(0, 1, length=N)),
+    between.(O + (-W/2, -H), O + (W/2, -H), range(0, 1, length=N)))
 
 layout = stress
 
@@ -846,6 +846,12 @@ layout = (g) -> sfdp(g, Ptype=Float64, dim=2, tol=0.05, C=0.4, K=2)
 layout = Shell(nlist=[6:10,]) # inner shell for vertices 6 to 10
 
 layout = squaregrid
+
+the_positions = [(pt.x, pt.y) for pt in randompointarray(BoundingBox(), 50)[1:nv(G)]]
+the_weights = rand(1:20, nv(G), nv(G))
+layout=Stress(initialpos = the_positions,
+    iterations = 30,
+    weights = the_weights)
 
 layout = Stress(iterations = 100, weights = M) # M is matrix of weights
 

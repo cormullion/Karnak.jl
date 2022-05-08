@@ -3,31 +3,24 @@
 ![karnak splash image](assets/figures/karnak-social-media-preview.png)
 
 Karnak.jl is a small extension for the Luxor.jl package to
-help with constructing graph-style drawings.
+help with visualizing graphs and networks.
 
-Karnak relies on
-[Graphs.jl](https://github.com/JuliaGraphs/Graphs.jl) for graph
-construction, and on
+Karnak also relies on
+[Graphs.jl](https://github.com/JuliaGraphs/Graphs.jl) for
+graph construction, and on
 [NetworkLayout.jl](https://juliagraphs.org/NetworkLayout.jl/)
 for graph layout.
 
-The focus in Karnak, unlike other graph visualization
-packages, is on decorative and aesthetic uses, for use in
-design, generative art, social media previews, NFTs, and
-other mission-critical items, rather than on
-scientific rigor and mathematical elegance.
+!!! note
 
-!!! warning
+    There's a good selection of Julia packages for visualizing graphs:
 
-	For mathematical and scientific visualizations, use one of the following Julia
-	packages to display your graphs, rather than Karnak.
+    - [TikzGraphs.jl](https://github.com/sisl/TikzGraphs.jl): backend: Tikz/LaTeX
 
-	- [TikzGraphs.jl](https://github.com/sisl/TikzGraphs.jl): backend: Tikz/LaTeX
+    - [GraphPlot.jl](https://github.com/afternone/GraphPlot.jl): backend: Compose.jl
 
-	- [GraphPlot.jl](https://github.com/afternone/GraphPlot.jl): backend: Compose.jl
+    - [SGtSNEpi.jl](https://github.com/fcdimitr/SGtSNEpi.jl): backend: Makie.jl
 
-	- [SGtSNEpi.jl](https://github.com/fcdimitr/SGtSNEpi.jl): backend: Makie.jl
+    - [GraphRecipes.jl](https://github.com/JuliaPlots/GraphRecipes.jl): backend: Plots.jl
 
-	- [GraphRecipes.jl](https://github.com/JuliaPlots/GraphRecipes.jl): backend: Plots.jl
-
-	- [GraphMakie.jl](https://github.com/JuliaPlots/GraphMakie.jl): backend: Makie.jl
+    - [GraphMakie.jl](https://github.com/JuliaPlots/GraphMakie.jl): backend: Makie.jl

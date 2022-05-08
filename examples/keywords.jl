@@ -1,5 +1,7 @@
 using Karnak, Graphs, NetworkLayout
 
+# draw tree diagram of `drawgraph()`'s keywords
+
 l = [
 "edge",
 "edgecurvature",

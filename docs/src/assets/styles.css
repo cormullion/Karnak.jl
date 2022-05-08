@@ -1,12 +1,12 @@
 @font-face {
-	font-family: JuliaMono-Light;
-	src:
-		local('JuliaMono-Light'),
-		url("https://github.com/cormullion/juliamono/raw/master/webfonts/JuliaMono-Light.woff2");
+    font-family: JuliaMono-Light;
+    src:
+        local('JuliaMono-Light'),
+        url("https://github.com/cormullion/juliamono/raw/master/webfonts/JuliaMono-Light.woff2");
 }
 
 pre, code {
-	font-family: JuliaMono !important;
+    font-family: JuliaMono !important;
     font-feature-settings: "calt" 1;
 }
 
@@ -28,14 +28,14 @@ p > a:after {
 }
 
 html.theme--documenter-dark p > code {
-	  	color: #eff !important;
+          color: #eff !important;
 }
 
 html.theme--documenter-dark li > code {
-	  	color: #eff !important;
+          color: #eff !important;
 }
 
 
 html.theme--documenter-dark a > code {
-	  	color: #eff !important;
+          color: #eff !important;
 }

@@ -292,9 +292,13 @@ main()
 
 ## The JuliaGraphs logo
 
-The logo for the JuliaGraphs package was easily drawn using Karnak.
+The logo for the JuliaGraphs package was easily drawn using
+Karnak.
 
-I wanted to use the graph coloring feature (`greedy_color()`), but unfortunately it was too clever, managing to color the graph using only two colors, instead of the four I was hoping to use.
+I wanted to use the graph coloring feature
+(`greedy_color()`), but unfortunately it was too clever,
+managing to color the graph using only two colors, instead
+of the four I was hoping to use.
 
 ```@example
 using Graphs
@@ -361,19 +365,19 @@ end
 
 ## Julia Package Dependencies
 
-This example was developed by [Mathieu
+This example was originally developed by [Mathieu
 Besançon](https://github.com/matbesancon/lightgraphs_workshop)
-and presented as part of the  workshop: __Analyzing Graphs
-at Scale__, presented at JuliaCon 2020. YOu can see the
+and presented as part of the workshop: __Analyzing Graphs
+at Scale__, presented at JuliaCon 2020. You can watch the
 video on [YouTube](https://youtu.be/K3z0kUOBy2Y).
 
-The only significant change is the rename from LightGraphs.jl to Graphs.jl.
+The most important change is the renaming of LightGraphs.jl to Graphs.jl. Also, the way to access the list of packages might have changed between Julia v1.6 and v1.7.
 
 The code builds a dependency graph of the connections (ie
 which package depends on which package) for Julia packages
 in the General registry.
 
-Then we can try to draw some pictures, such as this chonky SVG
+Then it's possible draw some pictures, such as this chonky SVG
 file showing the dependencies for the Colors.jl package:
 
 ![package dependencies for Colors](assets/figures/graph-dependencies-colors.svg)
@@ -401,12 +405,25 @@ On my computer, the registry is in its default location. You might need to modif
 path_to_general = expanduser("~/.julia/registries/General")
 registry_file = Pkg.TOML.parsefile(joinpath(path_to_general, "Registry.toml"))
 packages_info = registry_file["packages"];
+```
+
+All we need is the name and path:
+
+```julia
+# Julia v1.6?
 pkg_paths = map(values(packages_info)) do d
     (name = d["name"], path = d["path"])
 end
 ```
 
-The result in `pkg_paths` is a vector of tuples, containing the name and filepath of every package:
+```julia
+# Julia v1.7?
+pkg_paths = map(values(Pkg.Registry.reachable_registries()[1].pkgs)) do d
+    (name = d.name, path = d.path)
+end
+```
+
+The result in `pkg_paths` is a vector of tuples, containing the name and path of every package:
 
 ```julia
 7495-element Vector{NamedTuple{(:name, :path), Tuple{String, String}}}:
@@ -418,12 +435,13 @@ The result in `pkg_paths` is a vector of tuples, containing the name and filepat
 
 ### Find packages that depend on a specific package
 
-The function `find_direct_deps()` finds the packages that directly depend on a specific package.
+The function `find_direct_deps()` finds all the packages that directly depend on a specific named package.
 
 ```julia
 function find_direct_deps(registry_path, pkg_paths, source)
     filter(pkg_paths) do pkg_path
         deps_file = joinpath(registry_path, pkg_path.path, "Deps.toml")
+        # some packages don't have Deps.toml file
         isfile(deps_file) && begin
             deps_struct = Pkg.TOML.parsefile(deps_file)
             any(values(deps_struct)) do d
@@ -444,24 +462,25 @@ giving this result:
 
 ```julia
 227-element Vector{NamedTuple{(:name, :path), Tuple{String, String}}}:
- (name = "SqState", path = "S/SqState")
- (name = "InteractBase", path = "I/InteractBase")
- (name = "ImageMetadata", path = "I/ImageMetadata")
- (name = "PlantGeom", path = "P/PlantGeom")
- (name = "MicrobiomePlots", path = "M/MicrobiomePlots")
- (name = "MeshViz", path = "M/MeshViz")
+ (name = "TopologyPreprocessing", path = "T/TopologyPreprocessing")
+ (name = "DynamicGrids", path = "D/DynamicGrids")
+ (name = "SimpleSDMLayers", path = "S/SimpleSDMLayers")
+ (name = "UnderwaterAcoustics", path = "U/UnderwaterAcoustics")
+ (name = "ColorSchemeTools", path = "C/ColorSchemeTools")
+ (name = "PrincipalMomentAnalysisApp", path = "P/PrincipalMomentAnalysisApp")
  ⋮
- (name = "GenomicMaps", path = "G/GenomicMaps")
- (name = "ModiaPlot", path = "M/ModiaPlot")
- (name = "Thebes", path = "T/Thebes")
- (name = "ConstrainedDynamics", path = "C/ConstrainedDynamics")
- (name = "AutomotiveVisualization", path = "A/AutomotiveVisualization")
- (name = "Flux", path = "F/Flux")
+ (name = "SoilWater_ToolBox", path = "S/SoilWater_ToolBox")
+ (name = "Starlight", path = "S/Starlight")
+ (name = "Dojo", path = "D/Dojo")
+ (name = "OpticSim", path = "O/OpticSim")
+ (name = "LVServer", path = "L/LVServer")
 ```
 
-### Build a graph/tree
+Colors.jl has 227 packages that depend on it. When Mathieu ran this code in 2020 on "LightGraphs", the vector had 92 elements. Today, in 2022, for "Graphs", the vector has 115 elements.
 
-The next function, `build_tree()`, builds a directed graph. Starting at the root package, which is the package you're interested in, the loop finds all its dependencies, then finds the dependencies of all of those packages, and continues doing this until it finds packages that have no further dependencies.
+### Build a directed tree
+
+The next function, `build_tree()`, will build a directed graph, to find out which packages depend on Colors.jl? Starting at the root package, which is the package we're interested in, the loop finds all its dependencies, then finds the dependencies of all of those dependent package, and continues doing this until it reaches packages that have no dependencies - the leaves at the tip of the tree's branches.
 
 ```julia
 function build_tree(registry_path, pkg_paths, root)
@@ -496,11 +515,15 @@ end
 
 ```julia
 g = build_tree(path_to_general, pkg_paths, "Colors")
+
+{1375, 1374} directed Int64 metagraph with Float64 weights defined by :weight (default weight 1.0)
 ```
 
-The result is a _directed metagraph_. In a metagraph, as implemented by MetaGraphs.jl, it's possible to add information to vertices using `set_prop()` and `get_prop`.
+Notice that there are 1375 nodes, and one less edge. The Colors.jl package is the root of the tree, and doesn't connect to anything.
 
-To find all the package names in the graph, we can broadcast `get_prop` like this:
+The result is a _directed metagraph_. In a metagraph, as implemented by MetaGraphs.jl, it's possible to add information to vertices using `set_prop()` and `get_prop()`.
+
+To find all the package names in the graph that are directly connected to Colors.jl, we can broadcast `get_prop()` like this:
 
 ```julia
 get_prop.(Ref(g), outneighbors(g, 1), :name)
@@ -524,13 +547,21 @@ get_prop.(Ref(g), outneighbors(g, 1), :name)
  "Flux"
 ```
 
-### Shortest paths
+`outneighbors` returns a list of all neighbors connected to vertex `v` by an outgoing edge.
 
-The `dijkstra_shortest_paths()` function finds the paths between the designated package and all its dependencies. One package is very close indeed at 0.0 - that's Colors.jl itself.
+### Shortest paths and lengths of branches
+
+The `dijkstra_shortest_paths()` function finds the paths between the designated package and all its dependencies.
+
+The returned value is a DijkstraState object, with fields `parents`, `dists`, `predecessors`, `pathcounts`, and `closest_vertices`
+
+Looking at the `dists` (distances), we see that one package is very close indeed at 0.0 - that's Colors.jl itself!
 
 ```julia
 spath_result = dijkstra_shortest_paths(g, 1)
+
 spath_result.dists
+
 1375-element Vector{Float64}:
  0.0
  1.0
@@ -553,7 +584,22 @@ spath_result.dists
  7.0
 ```
 
-The "furthest" packages from Colors.jl - the ones 7.0 away - are:
+Or in a barchart:
+
+```julia
+scores = [count(==(i), spath_result.dists) for i in unique(spath_result.dists)]
+```
+
+```@example
+using Karnak # hide
+scores = [1, 227, 539, 376, 161, 63, 6, 2] # hide
+@drawsvg begin # hide
+    sethue("gold") # hide
+    barchart(scores, labels=true) # hide
+end 600 260 # hide
+```
+
+The "furthest" packages from Colors.jl - the two seven steps away - are:
 
 ```julia
 for idx in eachindex(spath_result.dists)
@@ -566,17 +612,49 @@ QuantumESPRESSOExpress
 Recommenders
 ```
 
-### Computing the full subgraph
+### Computing a full subgraph
+
+All the package names are obtained with:
 
 ```julia
-all_packages = get_prop.(Ref(g), vertices(g), :name);
+all_packages = get_prop.(Ref(g), vertices(g), :name)
 
+Vector{String}:
+ "Colors"
+ "TopologyPreprocessing"
+ "DynamicGrids"
+ "SimpleSDMLayers"
+ "UnderwaterAcoustics"
+ "ColorSchemeTools"
+ ⋮
+ "ReservoirComputing"
+ "TreeParzen"
+ "GeoStatsImages"
+ "StoppingInterface"
+ "QuantumESPRESSO"
+ "Recommenders"
+ "QuantumESPRESSOExpress"
+```
+
+These next commands build a metagraph, using the package names:
+
+```julia
 full_graph = MetaDiGraph(length(all_packages))
 
+{1375, 0} directed Int64 metagraph with Float64 weights defined by :weight (default weight 1.0)
+```
+
+Assign names to the vertices:
+
+```julia
 for v in vertices(full_graph)
     set_prop!(full_graph, v, :name, all_packages[v])
 end
+```
 
+Build the full graph:
+
+```julia
 for v in vertices(full_graph)
     pkg_name = get_prop(full_graph, v, :name)
     dependent_packages = find_direct_deps(path_to_general, pkg_paths, pkg_name)
@@ -592,35 +670,221 @@ end
 
 ### Pagerank
 
+This code computes the pagerank of the graph. It returns a long list of numbers, the centrality score for each vertex.
+
 ```julia
 ranks = pagerank(full_graph)
+
+1375-element Vector{Float64}:
+ 0.15339826572024867
+ 0.00020384989099126913
+ 0.00043081071431843264
+ 0.0002471787754446367
+ 0.0005504809666182096
+ 0.00020384989099126913
+ 0.00020384989099126913
+ 0.00034105802509359976
+ 0.0012284800170342895
+ ⋮
+ 0.00020384989099126913
+ 0.00020384989099126913
+ 0.00042629607921470863
+ 0.00020384989099126913
+ 0.0002616217369290926
+```
+
+With some sorting, we can find the highest ranked packages in this part of the ecosystem.
+
+```julia
 sorted_indices = sort(eachindex(ranks), by=i->ranks[i], rev=true)
+
+1375-element Vector{Int64}:
+   1
+ 543
+ 137
+ 112
+ 144
+ 164
+   ⋮
+ 259
+ 258
+ 729
+ 730
+ 688
+```
+
+```julia
 get_prop.(Ref(full_graph), sorted_indices, :name)
+
+1375-element Vector{String}:
+ "Colors"
+ "Plots"
+ "ImageCore"
+ "PlotUtils"
+ "ColorSchemes"
+ "ColorVectorSpace"
+ ⋮
+ "TopOptMakie"
+ "VTKDataIO"
+ "EFTfitter"
+ "SpmGrids"
+ "ElectronTests"
 ```
 
 ### Most dependencies, most depended on
 
 ```julia
-in_sorted_indices = sort(vertices(full_graph), by=i->indegree(full_graph, i) , rev=true)
-get_prop.(Ref(full_graph), in_sorted_indices, :name)
+in_sorted_indices = sort(vertices(full_graph),
+    by = i -> indegree(full_graph, i), rev = true)
 
-out_sorted_indices = sort(vertices(full_graph), by=i->outdegree(full_graph, i) , rev=true)
-get_prop.(Ref(full_graph), out_sorted_indices, :name)
-
-ranks_betweenness = betweenness_centrality(full_graph)
-sorted_indices_betweenness = sort(vertices(full_graph), by=i->ranks_betweenness[i], rev=true)
-get_prop.(Ref(full_graph), sorted_indices_betweenness, :name)
+1375-element Vector{Int64}:
+ 543
+   1
+  65
+  98
+ 133
+ 137
+   ⋮
+ 287
+ 743
+ 744
+ 285
+ 688
 ```
 
-### Dependencies are acyclic?
+```julia
+get_prop.(Ref(full_graph), in_sorted_indices, :name)
+
+1375-element Vector{String}:
+ "Plots"
+ "Colors"
+ "Flux"
+ "Images"
+ "PyPlot"
+ "ImageCore"
+ ⋮
+ "PolaronMobility"
+ "CineFiles"
+ "MadNLPGraph"
+ "MicroscopyLabels"
+ "ElectronTests"
+```
+
+```julia
+out_sorted_indices = sort(vertices(full_graph),
+    by = i -> outdegree(full_graph, i), rev=true)
+
+1375-element Vector{Int64}:
+ 372
+  98
+  35
+  24
+ 300
+ 153
+   ⋮
+ 776
+ 777
+ 778
+ 779
+   1
+```
+
+```julia
+get_prop.(Ref(full_graph), out_sorted_indices, :name)
+
+1375-element Vector{String}:
+ "StatisticalRethinking"
+ "Images"
+ "Makie"
+ "MakieGallery"
+ "PredictMDExtra"
+ "GLMakie"
+ ⋮
+ "MimiPAGE2020"
+ "MimiSNEASY"
+ "OptiMimi"
+ "SyntheticNetworks"
+ "Colors"
+```
+
+```julia
+ranks_betweenness = betweenness_centrality(full_graph)
+
+1375-element Vector{Float64}:
+ 0.0
+ 0.0
+ 3.1186467511475384e-5
+ 5.300816007616213e-7
+ 5.830897608377834e-5
+ 0.0
+ ⋮
+ 0.0
+ 0.0
+ 4.24065280609297e-6
+ 0.0
+ 1.0601632015232426e-6
+```
+
+```julia
+sorted_indices_betweenness = sort(vertices(full_graph),
+    by = i -> ranks_betweenness[i], rev=true)
+
+1375-element Vector{Int64}:
+ 144
+  98
+ 112
+ 543
+ 461
+  35
+   ⋮
+ 562
+ 563
+ 564
+ 565
+   1
+```
+
+```julia
+get_prop.(Ref(full_graph), sorted_indices_betweenness, :name)
+
+1375-element Vector{String}:
+ "ColorSchemes"
+ "Images"
+ "PlotUtils"
+ "Plots"
+ "ImageIO"
+ "Makie"
+ ⋮
+ "BridgeDiffEq"
+ "BridgeLandmarks"
+ "FCA"
+ "BEASTDataPrep"
+ "Colors"
+```
+
+### Dependencies are cyclic?
 
 ```julia
 is_cyclic(full_graph)
+
+true
 
 for cycle in simplecycles(full_graph)
     names = get_prop.(Ref(full_graph), cycle, :name)
     @info names
 end
+
+["ImageCore", "MosaicViews"]
+["Images", "ImageSegmentation"]
+["Makie", "GLMakie"]
+["POMDPPolicies", "BeliefUpdaters", "POMDPModels", "POMDPSimulators"]
+["BeliefUpdaters", "POMDPModels"]
+["BeliefUpdaters", "POMDPModels", "POMDPSimulators"]
+["ReinforcementLearning", "ReinforcementLearningEnvironmentDiscrete"]
+["Modia3D", "Modia"]
+["RasterDataSources", "GeoData"]
+["DSGE", "StateSpaceRoutines"]
+
 ```
 
 ### Draw some graphs

@@ -8,11 +8,11 @@ using Karnak, Luxor, Graphs, NetworkLayout, Colors, SimpleWeightedGraphs
 
 Karnak's function for drawing graphs is `drawgraph()`. This
 takes a single argument, a `Graph`, and tries to place
-representative graphics on the current Luxor drawing. It
-uses the current color, scale, and rotation, marking the
-vertices of the graph with circles.
+representative graphics on the current Luxor drawing.
 
 The default display for graphs is:
+
+- current Luxor origin, scale and rotation
 
 - current Luxor color
 
@@ -124,7 +124,7 @@ layout = Spring(iterations = 200, initialtemp = 2.5)
 
 ```
 
-Alternatively, pass a vector of Luxor Points to the `layout`
+Alternatively, pass a vector of points to the `layout`
 keyword argument. Vertices will be placed on these points
 (vertex 1 on point 1, etc...), rather than at points
 suggested by the NetworkLayout functions.
@@ -147,6 +147,37 @@ end 600 300
 ```
 
 The coordinates of the positions are returned by the `drawgraph()` function.
+
+Some of the layout algorithms allow you to poss _initial_ positions, not vertex locations. These can be supplied as xy pairs, rather than Luxor Points (which NetworkLayout won't accept). So, for example, the next example shows how the Stress algorithm refines the vertex positions on each iteration, after starting at each "grid location".
+
+```@example graphsection
+G = smallgraph(:petersen)
+
+@drawsvg begin
+    background("black")
+    initialpositions = [(pt.x, pt.y) for (pt, n) in Tiler(800, 800, 3, 3)]
+
+    sethue("grey80")
+    circle.(Point.(initialpositions), 10, :stroke)
+
+    for i in 1:60
+        drawgraph(G,
+            layout = Stress(initialpos = initialpositions, iterations = i),
+            vertexshapes = (v) -> (
+                    setcolor(HSVA(rescale(v, 1, nv(G), 0, 360), 0.6, 0.8, rescale(i, 1, 6, 0.5, 1)));
+                    circle(O, rescale(i, 1, 60, 1, 6), :fill)
+                    ),
+            edgestrokecolors = colorant"white",
+            edgestrokeweights = 0)
+    end
+
+    drawgraph(G,
+        layout = Stress(initialpos = initialpositions, iterations = 60),
+        vertexshapes = (v) -> (
+            setcolor(HSVA(rescale(v, 1, nv(G), 0, 360), 0.6, 0.8, 1)); circle(O, 10, :fill)
+        ))
+end
+```
 
 ## The `vertexfunction` and `edgefunction` arguments
 
@@ -331,8 +362,8 @@ function whiten(col::Color, f=0.5)
 end
 
 function drawball(pos, ballradius, col::Color;
-    	fromlum=0.2,
-    	tolum=1.0)
+        fromlum=0.2,
+        tolum=1.0)
     gsave()
     translate(pos)
     for i in ballradius:-0.25:1
@@ -675,7 +706,7 @@ This example draws the graph more than once; once with all the edges, and once w
     astar = a_star(g, 15, 17)
     drawgraph(g,
     layout=stress,
-     	vertexshapes = :none,
+         vertexshapes = :none,
     edgelist = astar,
     edgestrokecolors=RGBA(1, 1, 0, 0.5),
     edgestrokeweights=10)
@@ -683,7 +714,7 @@ This example draws the graph more than once; once with all the edges, and once w
     layout=stress,
     edgelines=0,
     vertexshapes = (v) -> v ∈ src.(astar) && polycross(O, 20, 4, 0.5, π/4, :fill),
-     	vertexfillcolors = (v) -> v ∈ src.(astar) && colorant"cyan"
+         vertexfillcolors = (v) -> v ∈ src.(astar) && colorant"cyan"
     )
 end 600 600
 ```

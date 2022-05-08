@@ -22,41 +22,41 @@
 
 
 function frame(scene, framenumber, sp)
-	background("black")
-	sethue("grey40")
+    background("black")
+    sethue("grey40")
 
-	sethue("red")
-	circle(positions[find("Aldgate")], 10, :fill)
-	sethue("magenta")
+    sethue("red")
+    circle(positions[find("Aldgate")], 10, :fill)
+    sethue("magenta")
 
     for (n, V) in enumerate(sp[1:framenumber])
-	    drawgraph(g, layout = positions,
-	        vertexfunction = (v, c) -> begin
-				if v == V
-					circle(c[v], 3, :fill)
-				end
-			end,
-			edgelines=0,
-	        edgegaps = 0)
-	    if find(V) == "Kew Gardens"
-			println(V, framenumber)
-			sethue("green")
-			circle(positions[V], 10, :fill)
-			sethue("blue")
-	    end
-	end
+        drawgraph(g, layout = positions,
+            vertexfunction = (v, c) -> begin
+                if v == V
+                    circle(c[v], 3, :fill)
+                end
+            end,
+            edgelines=0,
+            edgegaps = 0)
+        if find(V) == "Kew Gardens"
+            println(V, framenumber)
+            sethue("green")
+            circle(positions[V], 10, :fill)
+            sethue("blue")
+        end
+    end
 end
 
 function main()
     amovie = Movie(600, 600, "dfs")
 
-	# sp = bfs_parents(g, find("Aldgate"))
-	sp = dfs_parents(g, find("Aldgate"))
+    # sp = bfs_parents(g, find("Aldgate"))
+    sp = dfs_parents(g, find("Aldgate"))
 
     animate(amovie,
-		Scene(amovie, (s, f) -> frame(s, f, sp), 1:length(sp)),
-		framerate=30,
-		creategif=true,
-		pathname="/tmp/dfs.gif")
+        Scene(amovie, (s, f) -> frame(s, f, sp), 1:length(sp)),
+        framerate=30,
+        creategif=true,
+        pathname="/tmp/dfs.gif")
 end
 main()

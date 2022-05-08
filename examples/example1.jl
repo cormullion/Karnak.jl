@@ -149,11 +149,11 @@ function test2()
             layout=stress,
             margin=50)
 
-        #	drawgraph(g, layout=shell)
-        #	drawgraph(g, vertexlabels = 1:nv(g), layout=shell)
-        #	drawgraph(g, vertexlabels = ["A", "B", "C", "P", "Q"], layout=shell)
+        #    drawgraph(g, layout=shell)
+        #    drawgraph(g, vertexlabels = 1:nv(g), layout=shell)
+        #    drawgraph(g, vertexlabels = ["A", "B", "C", "P", "Q"], layout=shell)
 
-        # 	drawgraph(g, vertexlabels = (v, c) -> (text(string(v), c[v])), vertexlabeltextcolors=["red", "blue"], layout=shell)
+        #     drawgraph(g, vertexlabels = (v, c) -> (text(string(v), c[v])), vertexlabeltextcolors=["red", "blue"], layout=shell)
 
         #drawgraph(g, vertexlabeltextcolors=["red", "blue"], vertexfillcolors=["green", "blue"], vertexshapes = [:circle, :square], vertexlabels = 1:6, layout=shell)
 

@@ -15,8 +15,9 @@ of programming in Julia.
     pages are built by Documenter.jl, and the code to draw
     them is included here. SVG is used because it's good for
     line drawings, but you can use `drawgraph()` in any
-    Luxor environment, such as PNG  - recommended as the
-    drawings get very complex, since large SVGs can tax browsers.
+    Luxor environment, such as PNG  - which is the
+    recommended format to use as the drawings get very
+    complex, since large SVGs can tax web browsers.
 
 ## Graphs, vertices, and edges
 
