@@ -1,6 +1,6 @@
 # Changelog
 
-## [v0.2.0] - forthcoming
+## [v0.2.0] - 2022-05-09
 
 ### Added
 

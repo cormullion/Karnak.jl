@@ -28,7 +28,6 @@ There's a good selection of Julia packages for visualizing graphs:
 
 - [GraphMakie.jl](https://github.com/JuliaPlots/GraphMakie.jl): backend: Makie.jl
 
-rather than this one.
 
 [docs-development-img]: https://img.shields.io/badge/docs-development-blue
 [docs-development-url]: http://cormullion.github.io/Karnak.jl/dev/

@@ -24,10 +24,12 @@ find(x::Int64) = stations[x]
 
 # Examples
 
+This section contains a few examples showing how to use `drawgraph()` to visualize a few graphs.
+
 ## The London Tube
 
 One real-world example of a small network is the London
-Underground, known as "the Tube". The 250 or so stations in
+Underground, known as “the Tube”. The 250 or so stations in
 the network can be modelled using a simple graph.
 
 ### Setup
@@ -51,6 +53,7 @@ extrema_lat = extrema(tubedata.Latitude)
 extrema_long = extrema(tubedata.Longitude)
 
 # scale LatLong and flip in y to fit into current Luxor drawing
+
 positions = @. Point(
     rescale(tubedata.Longitude, extrema_long..., -280, 280),
     rescale(tubedata.Latitude, extrema_lat..., 280, -280))
@@ -63,7 +66,7 @@ find(x::Int64) = stations[x]
 g = Graph(amatrix)
 ```
 
-The tube "map" is stored in `g`, as a `{267, 308} undirected simple Int64 graph`.
+The tube “map” is stored in `g`, as a `{267, 308} undirected simple Int64 graph`.
 
 The `find()` functions are just a quick way to convert between station names and ID numbers:
 
@@ -81,7 +84,7 @@ Most London residents and visitors are used to seeing the famous [Tube Map](http
 
 ![tube map](assets/figures/tubemap.png)
 
-It's a design classic, hand-drawn by Harry Beck in 1931, and updated regularly
+It’s a design classic, hand-drawn by Harry Beck in 1931, and updated regularly
 ever since. As an electrical engineer, Beck represented the sprawling London
 track network as a tidy circuit board. For Beck, the important thing about the map was to show the connections, rather than the accurate geography.
 
@@ -238,8 +241,8 @@ Information about the required changes - at Victoria from
 the Piccadilly line to the Victoria Line, and at Warren
 Street from the Victoria Line to the Northern Line - is not
 part of the graph. Routes across the Tube network, like the
-trains, follow the tracks (edges). The concept of "lines"
-(Victoria, Circle, etc) isn't part of the graph structure,
+trains, follow the tracks (edges). The concept of “lines”
+(Victoria, Circle, etc) isn’t part of the graph structure,
 but a colorful layer imposed on top of the track network.
 
 ### Pandemic
@@ -292,12 +295,12 @@ main()
 
 ## The JuliaGraphs logo
 
-The logo for the JuliaGraphs package was easily drawn using
+The ccurrent logo for the Graphs.jl package was easily drawn using
 Karnak.
 
 I wanted to use the graph coloring feature
-(`greedy_color()`), but unfortunately it was too clever,
-managing to color the graph using only two colors, instead
+(`greedy_color()`), but unfortunately it was __too__ clever,
+managing to color the graph using only two colors instead
 of the four I was hoping to use.
 
 ```@example
@@ -368,10 +371,12 @@ end
 This example was originally developed by [Mathieu
 Besançon](https://github.com/matbesancon/lightgraphs_workshop)
 and presented as part of the workshop: __Analyzing Graphs
-at Scale__, presented at JuliaCon 2020. You can watch the
+at Scale__, at JuliaCon 2020. You can watch the
 video on [YouTube](https://youtu.be/K3z0kUOBy2Y).
 
-The most important change is the renaming of LightGraphs.jl to Graphs.jl. Also, the way to access the list of packages might have changed between Julia v1.6 and v1.7.
+The most important change is the renaming of LightGraphs.jl
+to Graphs.jl. Also, the way to access the list of packages
+might have changed between Julia v1.6 and v1.7.
 
 The code builds a dependency graph of the connections (ie
 which package depends on which package) for Julia packages
@@ -399,7 +404,7 @@ using Colors
 
 ### Finding the general registry
 
-On my computer, the registry is in its default location. You might need to modify the first line if yours is is another location:
+On my computer, the registry is in its default location. You might need to modify these lines if yours is is another location:
 
 ```julia
 path_to_general = expanduser("~/.julia/registries/General")
@@ -407,7 +412,7 @@ registry_file = Pkg.TOML.parsefile(joinpath(path_to_general, "Registry.toml"))
 packages_info = registry_file["packages"];
 ```
 
-All we need is the name and path:
+First we need the name and location of every package:
 
 ```julia
 # Julia v1.6?
@@ -423,7 +428,7 @@ pkg_paths = map(values(Pkg.Registry.reachable_registries()[1].pkgs)) do d
 end
 ```
 
-The result in `pkg_paths` is a vector of tuples, containing the name and path of every package:
+The result in `pkg_paths` is a vector of tuples, containing the name and location on disk of every package:
 
 ```julia
 7495-element Vector{NamedTuple{(:name, :path), Tuple{String, String}}}:
@@ -435,7 +440,7 @@ The result in `pkg_paths` is a vector of tuples, containing the name and path of
 
 ### Find packages that depend on a specific package
 
-The function `find_direct_deps()` finds all the packages that directly depend on a specific named package.
+The function `find_direct_deps()` finds all the packages (names and locations) that directly depend on a specific named package.
 
 ```julia
 function find_direct_deps(registry_path, pkg_paths, source)
@@ -480,7 +485,7 @@ Colors.jl has 227 packages that depend on it. When Mathieu ran this code in 2020
 
 ### Build a directed tree
 
-The next function, `build_tree()`, will build a directed graph, to find out which packages depend on Colors.jl? Starting at the root package, which is the package we're interested in, the loop finds all its dependencies, then finds the dependencies of all of those dependent package, and continues doing this until it reaches packages that have no dependencies - the leaves at the tip of the tree's branches.
+The next function, `build_tree()`, will build a directed graph of the dependencies on Colors.jl. Starting at the root package (Colors) the loop finds all its dependencies, then finds the dependencies of all of those dependent packages, and continues doing this until it reaches packages that have no dependencies. These are the "leaves" at the tip of the tree's branches.
 
 ```julia
 function build_tree(registry_path, pkg_paths, root)
@@ -519,7 +524,7 @@ g = build_tree(path_to_general, pkg_paths, "Colors")
 {1375, 1374} directed Int64 metagraph with Float64 weights defined by :weight (default weight 1.0)
 ```
 
-Notice that there are 1375 nodes, and one less edge. The Colors.jl package is the root of the tree, and doesn't connect to anything.
+Notice that there are 1375 nodes, but one less edge. The Colors.jl package is the root of the tree, and doesn't connect to anything else, in this analysis.) Of course, it depends on quite a few, but that's another graph story.)
 
 The result is a _directed metagraph_. In a metagraph, as implemented by MetaGraphs.jl, it's possible to add information to vertices using `set_prop()` and `get_prop()`.
 
@@ -553,9 +558,9 @@ get_prop.(Ref(g), outneighbors(g, 1), :name)
 
 The `dijkstra_shortest_paths()` function finds the paths between the designated package and all its dependencies.
 
-The returned value is a DijkstraState object, with fields `parents`, `dists`, `predecessors`, `pathcounts`, and `closest_vertices`
+The returned value is a DijkstraState object, with fields `parents`, `dists`, `predecessors`, `pathcounts`, and `closest_vertices`.
 
-Looking at the `dists` (distances), we see that one package is very close indeed at 0.0 - that's Colors.jl itself!
+Looking at the `dists` (distances), we see that one package is very close indeed at 0.0 - that's Colors.jl itself.
 
 ```julia
 spath_result = dijkstra_shortest_paths(g, 1)
@@ -644,7 +649,7 @@ full_graph = MetaDiGraph(length(all_packages))
 {1375, 0} directed Int64 metagraph with Float64 weights defined by :weight (default weight 1.0)
 ```
 
-Assign names to the vertices:
+Assigning names to the vertices:
 
 ```julia
 for v in vertices(full_graph)
@@ -670,7 +675,7 @@ end
 
 ### Pagerank
 
-This code computes the pagerank of the graph. It returns a long list of numbers, the centrality score for each vertex.
+This code computes the _pagerank_ of the graph. It returns a long list of numbers, the centrality score for each vertex.
 
 ```julia
 ranks = pagerank(full_graph)
@@ -733,6 +738,8 @@ get_prop.(Ref(full_graph), sorted_indices, :name)
 
 ### Most dependencies, most depended on
 
+`indegree()` returns the number of edges which end at a vertex. For a package, this is another way of seeing how many other packages depend on it.  
+
 ```julia
 in_sorted_indices = sort(vertices(full_graph),
     by = i -> indegree(full_graph, i), rev = true)
@@ -769,6 +776,8 @@ get_prop.(Ref(full_graph), in_sorted_indices, :name)
  "MicroscopyLabels"
  "ElectronTests"
 ```
+
+`outdegree()` finds the number of edges which start at a vertex.
 
 ```julia
 out_sorted_indices = sort(vertices(full_graph),
@@ -862,7 +871,9 @@ get_prop.(Ref(full_graph), sorted_indices_betweenness, :name)
  "Colors"
 ```
 
-### Dependencies are cyclic?
+### Is_cyclic
+
+`is_cyclic()` returns true if the graph contains a cycle.
 
 ```julia
 is_cyclic(full_graph)
@@ -884,12 +895,19 @@ end
 ["Modia3D", "Modia"]
 ["RasterDataSources", "GeoData"]
 ["DSGE", "StateSpaceRoutines"]
-
 ```
+
+For that first cycle: ImageCore.jl's Project.toml file has MosaicViews.jl in its `[deps]` section, and MosaicViews.jl has ImageCore.jl in the `[extras]` section of its Project.toml file.
 
 ### Draw some graphs
 
-Visualizations of graphs are sometimes (often?) better at communicating vague ideas such as complexity and shape: it's quite difficult to render a graph as rich as these to show the connections clearly while also showing all the labels such that they're easy to read. The solution may be to print out these graph representations and place them on a nearby wall.
+Visualizations of graphs are sometimes (often?) better at communicating vague ideas such as complexity and shape. But it's quite difficult to render graphs as rich as these to show the connections clearly while also showing all the labels such that they're easy to read.
+
+The solution may be to print out these graph representations and place them on a nearby wall, although, with Julia's General Registry changing every day, it would be out of date before it was installed.
+
+![wall art office graph dependency](assets/figures/graph-dependency-wallart.png)
+
+The images above were made with the following code.
 
 ```julia
 @pdf begin
@@ -923,8 +941,6 @@ Visualizations of graphs are sometimes (often?) better at communicating vague id
 end 2500 2500 "/tmp/graph-dependencies-colors.pdf"
 ```
 
-![package dependencies for Colors](assets/figures/graph-dependencies-colors.svg)
-
 ```julia
 using ColorSchemes
 
@@ -952,5 +968,3 @@ using ColorSchemes
         )
 end 1200 1200 "/tmp/graph-dependencies-2.svg"
 ```
-
-![package dependencies for Colors](assets/figures/graph-dependencies-colors-2.svg)

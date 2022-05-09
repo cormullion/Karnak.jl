@@ -14,9 +14,9 @@ The default display for graphs is:
 
 - current Luxor origin, scale and rotation
 
-- current Luxor color
+- current Luxor color for edges
 
-- circles mark all vertices
+- circles for all vertex shapes
 
 - no vertex labels
 
@@ -24,17 +24,19 @@ The default display for graphs is:
 
 ```@example graphsection
 @drawsvg begin
-background("grey10")
-sethue("darkcyan")
-g = complete_graph(10)
-drawgraph(g)
+    background("grey10")
+    sethue("darkcyan")
+    g = complete_graph(10)
+    drawgraph(g)
 end 600 300
 ```
 
 To control the appearance of the graph, you supply values to
-the keyword arguments. Apart from the general keywords `BoundingBox`, `layout`, `margin`, the keywords can be grouped into two categories:
+the various keyword arguments. Apart from the general
+keywords `BoundingBox`, `layout`, and `margin`, the keywords can
+be grouped into two categories:
 
-![](assets/figures/drawgraphkeywords.svg)
+![two groups of keyword](assets/figures/drawgraphkeywords.svg)
 
 Most of these keyword arguments accept
 vectors, ranges, and scalar values, and some accept
@@ -87,9 +89,10 @@ graph in layers. Remember to use the same layout algorithm.
 ## The BoundingBox
 
 The graphics for the graph are placed to fit inside the
-current BoundingBox (ie the drawing), after allowing for the
-margin (the default is 30). Pass a different
-BoundingBox to the `boundingbox` keyword argument.
+current BoundingBox (by default, the drawing), after
+allowing for the margin (the default is 30). Pass a
+different BoundingBox to the `boundingbox` keyword argument
+to control the graph layout's size.
 
 ## Layout algorithms
 
@@ -99,7 +102,19 @@ which is where you should look for information about the
 various algorithms that determine where vertices are
 positioned.
 
-Here are some formulations which work:
+You can choose a layout algorithm, or supply the vertex positions yourself.
+
+The main layout algorithms available are:
+
+- shell
+
+- spring
+
+- stress
+
+- squaregrid
+
+Here are some formulations which work as keywords in `drawgraph()`:
 
 ```julia
 layout = squaregrid
@@ -121,15 +136,14 @@ layout = Shell(nlist=[6:10,])
 layout = Stress(iterations = 100, weights = M) # M is matrix of weights
 
 layout = Spring(iterations = 200, initialtemp = 2.5)
-
 ```
 
-Alternatively, pass a vector of points to the `layout`
-keyword argument. Vertices will be placed on these points
-(vertex 1 on point 1, etc...), rather than at points
-suggested by the NetworkLayout functions.
-
-For example, in this next drawing, the two sets of points for a bipartite graph are generated beforehand.
+Alternatively, you can pass a vector of points to the
+`layout` keyword argument. Vertices will be placed on these
+points (vertex 1 on point 1, etc...), rather than at points
+suggested by the NetworkLayout algorithms. For example, in
+this next drawing, the two sets of points for a bipartite
+graph are generated beforehand.
 
 ```@example graphsection
 @drawsvg begin
@@ -146,9 +160,11 @@ drawgraph(g, vertexlabels = 1:nv(g), layout = pts,
 end 600 300
 ```
 
-The coordinates of the positions are returned by the `drawgraph()` function.
+The calculated positions are returned by the `drawgraph()` function.
 
-Some of the layout algorithms allow you to poss _initial_ positions, not vertex locations. These can be supplied as xy pairs, rather than Luxor Points (which NetworkLayout won't accept). So, for example, the next example shows how the Stress algorithm refines the vertex positions on each iteration, after starting at each "grid location".
+Some of the layout algorithms allow you to poss _initial_ positions that are used by the algorithms as starting points. These can be supplied as xy pairs, rather than Luxor Points (which NetworkLayout won't accept).
+
+Here's a figure showing how the Stress algorithm refines the vertex positions on each iteration, after starting at each "grid location".
 
 ```@example graphsection
 G = smallgraph(:petersen)
@@ -158,7 +174,7 @@ G = smallgraph(:petersen)
     initialpositions = [(pt.x, pt.y) for (pt, n) in Tiler(800, 800, 3, 3)]
 
     sethue("grey80")
-    circle.(Point.(initialpositions), 10, :stroke)
+    circle.(Point.(initialpositions), 6, :stroke)
 
     for i in 1:60
         drawgraph(G,
@@ -181,7 +197,7 @@ end
 
 ## The `vertexfunction` and `edgefunction` arguments
 
-The two keyword arguments `vertexfunction` and `edgefunction` allow you to pass control over the drawing process completely to two functions, which can be anonymous functions.
+The two keyword arguments `vertexfunction` and `edgefunction` allow you to pass control over the drawing process completely to these two functions, ignoring all the other keywords.
 
 ```
 vertexfunction = my_vertexfunction(vertex, coordinates)
@@ -225,9 +241,9 @@ end 800 600
 
 ## Vertex labels and shapes
 
-### The `vertexlabels` argument
+### `vertexlabels`
 
-Use `vertexlabels` to choose the text to associate with each vertex. Supply a range, array of strings or numbers, a string, or a function.
+Use `vertexlabels` to choose the text to associate with each vertex. Supply a range, array of strings or numbers, a single string, or a function.
 
 This example draws all vertices, and numbers them from 1 to 6.
 
@@ -237,13 +253,12 @@ This example draws all vertices, and numbers them from 1 to 6.
 
 ```@example graphsection
 @drawsvg begin
-background("grey10")
-g = smallgraph(:octahedral)
-sethue("gold")
-drawgraph(g, layout=stress,
-    vertexlabels = 1:nv(g),
-    vertexshapesizes = 10
-    )
+    background("grey10")
+    g = smallgraph(:octahedral)
+    sethue("gold")
+    drawgraph(g, layout=stress,
+        vertexlabels = 1:nv(g),
+        vertexshapesizes = 10)
 end 600 300
 ```
 
@@ -435,21 +450,21 @@ drawgraph(g,
 end 600 600
 ```
 
-Try playing with the following keyword arguments:
+The following keyword arguments operate in a similar way:
 
-- `vertexstrokeweights`
+- `vertexstrokeweights` : Array | Range | :none
 
-- `vertexlabeltextcolors`
+- `vertexlabeltextcolors` : Array | Range | colorant
 
-- `vertexlabelfontsizes`
+- `vertexlabelfontsizes` : Array | Range | number
 
-- `vertexlabelfontfaces`
+- `vertexlabelfontfaces` : Array  | string
 
-- `vertexlabelrotations`
+- `vertexlabelrotations` : Array | Range | number
 
-- `vertexlabeloffsetangles`
+- `vertexlabeloffsetangles` : Array | Range | number
 
-- `vertexlabeloffsetdistances`
+- `vertexlabeloffsetdistances` : Array | Range | number
 
 It's possible to specify the font faces for vertex labels, but it's difficult to demonstrate when the documentation is built on machines in the cloud with unknown typographical resources. But anyway:
 
@@ -468,77 +483,9 @@ end 600 300
 
 ## Edge options
 
-### `edgelist` and `edgelines`
-
-A `Graphs.EdgeIterator` supplied to `edgelist` makes only those edges available for drawing. Otherwise, control which edges are to be drawn by supplying numbers (or a function) to `edgelines`.
-
-```@example graphsection
-@drawsvg begin
-background("grey10")
-sethue("orange")
-g = grid((15, 15))
-drawgraph(g,
-    layout = stress,
-    vertexshapes = :none,
-    edgelines = rand(1:ne(g), 30)
-)
-end 600 300
-```
-
-`edgelist` is useful for drawing paths - a sequence of edges.
-
-```@example graphsection
-@drawsvg begin
-background("grey10")
-g = grid((15, 15))
-
-astar = a_star(g, 1, 15*15 - 1)
-
-sethue("orange")
-drawgraph(g,
-    layout = stress,
-    vertexshapes = :none)
-
-sethue("cyan")
-drawgraph(g,
-    layout = stress,
-    vertexshapes = :none,
-    edgestrokeweights = 5,
-    edgelist = astar)
-end 600 300
-```
-
-For more interesting arrows for edges, Luxor's arrows are available:
-
-```@example graphsection
-@drawsvg begin
-background("grey10")
-g = star_digraph(12)
-fontsize(20)
-sethue("slateblue")
-drawgraph(g,
-    layout=spring,
-    vertexshapes = 0,
-    edgestrokecolors = distinguishable_colors(ne(g)),
-    edgelines = (k, s, d, f, t) ->
-    arrow(f, between(f, t, .95), [10, -5],
-        linewidth=10,
-        arrowheadlength=40,
-        arrowheadangle=π/7,
-        decorate = () -> begin
-            sethue("purple")
-            circle(O, 15, :fill)
-            sethue("white")
-            text(string(k), angle = -getrotation(), halign=:center, valign=:middle)
-            end,
-            decoration=0.65)
-    )
-end 600 400
-```
-
 ### `edgefunction`
 
-As with `vertexfunction`, the `edgefunction` keyword argument allows you to do anything you like when the edges are drawn, and overrides all other `edge-` keyword arguments. Here, the calculated coordinates of the graph and a path between two vertices are extracted into vectors for later Luxor-ious treatment.
+As with `vertexfunction`, the `edgefunction` keyword argument allows you to do anything you like when the edges are drawn, and overrides all other `edge-` keyword arguments. Here, the calculated coordinates of the graph and a path between two vertices aren't drawn at first, just extracted into vectors for further processing.
 
 ```@example graphsection
 @drawsvg begin
@@ -589,6 +536,75 @@ end 600 400
 
     This keyword overrides the other `edge-` keywords.
 
+### `edgelist` and `edgelines`
+
+A `Graphs.EdgeIterator` supplied to `edgelist` makes only the specified edges available for drawing. Otherwise, control which edges are to be drawn by supplying numbers (or a function) to `edgelines`.
+
+```@example graphsection
+@drawsvg begin
+background("grey10")
+sethue("orange")
+g = grid((15, 15))
+drawgraph(g,
+    layout = stress,
+    vertexshapes = :none,
+    edgelines = rand(1:ne(g), 30)
+)
+end 600 300
+```
+
+`edgelist` is useful for drawing paths - a sequence of edges. For example, if you use `a_star()` to find the shortest path between two vertices, you can draw the edges with this keyword. It's useful to draw the graph twice, once with all edges, once with selected edges.
+
+```@example graphsection
+@drawsvg begin
+background("grey10")
+g = grid((15, 15))
+
+astar = a_star(g, 1, nv(g))
+
+sethue("orange")
+drawgraph(g,
+    layout = stress,
+    vertexshapes = :none)
+
+sethue("cyan")
+drawgraph(g,
+    layout = stress,
+    vertexshapes = :none,
+    edgestrokeweights = 5,
+    edgelist = astar)
+end 600 300
+```
+
+For more interesting arrows for edges, Luxor's arrows are available:
+
+```@example graphsection
+@drawsvg begin
+background("grey10")
+g = star_graph(12)
+fontsize(20)
+sethue("slateblue")
+drawgraph(g,
+    layout=spring,
+    vertexshapes = 0,
+    vertexlabels = 1:nv(g),
+    vertexlabelfontsizes = 12,
+    edgestrokecolors = distinguishable_colors(ne(g)),
+    edgelines = (k, s, d, f, t) ->
+        arrow(f, between(f, t, .95), [20, -45],
+            linewidth = 5,
+            arrowheadlength = 15,
+            arrowheadangle = π/7,
+            decorate = () -> begin
+                    sethue("purple")
+                    circle(O, 15, :fill)
+                    sethue("white")
+                    text(string(k), angle = -getrotation(), halign = :center, valign=:middle)
+                end,
+            decoration = .7))
+end 600 400
+```
+
 ### Edge labels
 
 Use `edgelabels`, `edgelabelcolors`, `edgelabelrotations`, etc. to control the appearance of the labels alongside edges.
@@ -634,7 +650,7 @@ end
 end 600 350
 ```
 
-The `edgelabels` keyword argument can also accept a function with five arguments: `edge number`, `source`, `destination`, `from` point, and `to` point, and is able to annotate each edge with its graphical length in this particular layout.
+The `edgelabels` keyword argument can also accept a function with five arguments: `edgenumber`, `source`, `destination`, `from` and `to`. In this example, the graphical distances between the two vertex positions provide the annotations for each edge.
 
 ```@example graphsection
 @drawsvg begin
@@ -691,31 +707,35 @@ end 600 300
 
 ### `edgelist`
 
-This example draws the graph more than once; once with all the edges, and once with only the edges in `edgelist`, where `edgelist` is the path from vertex 15 to vertex 17, drawn in a pale translucent yellow. The path is marked with X marks the spot cyan-colored shapes.
+This example draws the graph more than once; once with all the edges, once with only the edges in `edgelist`, where `edgelist` is the path from vertex 15 to vertex 17, drawn in a pale translucent yellow, and once to draw the vertices on the path "X marks the spot" cyan-colored crosses.
 
 ```@example graphsection
 @drawsvg begin
     background("grey10")
     g = smallgraph(:karate)
     sethue("slateblue")
+
     drawgraph(g, layout = stress,
-    vertexlabels = 1:nv(g),
-    vertexshapes = :circle,
-    vertexshapesizes = 10,
-    vertexlabelfontsizes = 10)
+        vertexlabels = 1:nv(g),
+        vertexshapes = :circle,
+        vertexshapesizes = 10,
+        vertexlabelfontsizes = 10)
+
     astar = a_star(g, 15, 17)
+
     drawgraph(g,
-    layout=stress,
-         vertexshapes = :none,
-    edgelist = astar,
-    edgestrokecolors=RGBA(1, 1, 0, 0.5),
-    edgestrokeweights=10)
+        layout=stress,
+        vertexshapes = :none,
+        edgelist = astar,
+        edgestrokecolors=RGBA(1, 1, 0, 0.5),
+        edgestrokeweights=10)
+
     drawgraph(g,
-    layout=stress,
-    edgelines=0,
-    vertexshapes = (v) -> v ∈ src.(astar) && polycross(O, 20, 4, 0.5, π/4, :fill),
-         vertexfillcolors = (v) -> v ∈ src.(astar) && colorant"cyan"
-    )
+        layout=stress,
+        edgelines=0,
+        vertexshapes = (v) -> v ∈ src.(astar) && polycross(O, 20, 4, 0.5, π/4, :fill),
+             vertexfillcolors = (v) -> v ∈ src.(astar) && colorant"cyan"
+        )
 end 600 600
 ```
 

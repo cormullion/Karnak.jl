@@ -877,7 +877,7 @@ vertexfunction = (v, c) -> ngon(c[v], 30, 6, 0, :fill)
 `edgefunction(edgenumber, edgesrc, edgedest, from, to)` ->
 
 A function `edgefunction(edgenumber, from, to, edgesrc, edgedest)` that
-completely specifies the appearance of every vertex. None
+completely specifies the appearance of every edge. None
 of the other edge- keyword arguments are used.
 
 ## Vertex options
@@ -888,9 +888,6 @@ the colors for vertex
 `vertexlabels`: Array | Range " string "|:none | Function (vtx) -> return label for each vertex
 
 The text labels for each vertex. Vertex labels are not drawn by default.
-
-`vertexstrokecolors(vertex)` ->
-`vertexstrokecolors(vertex)` ->
 
 `vertexshapes` : Array | Range | :circle | :square | :none | Function (vtx) ->
 

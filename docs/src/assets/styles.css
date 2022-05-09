@@ -6,7 +6,7 @@
 }
 
 pre, code {
-    font-family: JuliaMono !important;
+    font-family: JuliaMono-Light !important;
     font-feature-settings: "calt" 1;
 }
 
@@ -16,7 +16,7 @@ p > a:after {
 }
 
 .schemename {
-    font-family: "JuliaMono";
+    font-family: "JuliaMono-Light";
 }
 
 .swatch {

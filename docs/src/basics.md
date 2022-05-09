@@ -5,18 +5,20 @@ using Karnak, Luxor, Graphs, NetworkLayout, Colors, SimpleWeightedGraphs
 # Graph theory
 
 This section contains an introduction to basic graph theory
-using the Graphs.jl package. You don't need any prior
-knowledge of graphs, but you should be familiar with the basics
-of programming in Julia.
+using the
+[Graphs.jl](https://github.com/JuliaGraphs/Graphs.jl)
+package, illustrated with figures made with Karnak.jl. You
+don't need any prior knowledge of graphs, but you should be
+familiar with the basics of programming in Julia.
 
 !!! note
 
     All the figures in this manual are generated when the
     pages are built by Documenter.jl, and the code to draw
     them is included here. SVG is used because it's good for
-    line drawings, but you can use `drawgraph()` in any
+    line drawings, but you can use Karnak.jl in any
     Luxor environment, such as PNG  - which is the
-    recommended format to use as the drawings get very
+    recommended format to use if the drawings get very
     complex, since large SVGs can tax web browsers.
 
 ## Graphs, vertices, and edges
@@ -71,9 +73,11 @@ d # hide
 
 A typical graph consists of:
 
-- vertices, which represent the things or entities, and
+- _vertices_, which represent the things or entities, and
 
-- edges, which describe how these things or entities connect and relate to each other
+- _edges_, which describe how the things or entities connect and relate to each other
+
+Vertices are also called _nodes_ in the world of graph theory.
 
 The Graphs.jl package provides many ways to create graphs.
 We'll start off with this basic approach:
@@ -97,9 +101,11 @@ We can easily add a number of new vertices:
 add_vertices!(g, 3)
 ```
 
-The graph has four now. We'll join pairs of vertices with an
-edge. The four vertices we've made can be referred to with
-`1`, `2`, `3`, and `4`:
+The graph has four vertices now. We can refer to them
+as `1`, `2`, `3`, and `4`.
+
+We'll join some pairs of vertices with an
+edge:
 
 ```julia
 add_edge!(g, 1, 2)  # join vertex 1 with vertex 2
@@ -108,7 +114,7 @@ add_edge!(g, 2, 3)
 add_edge!(g, 1, 4)
 ```
 
-(Vertices are always numberered from 1 to `n`.)
+In Graphs.jl, vertices are always numbered from 1 to `n`.
 
 `g` is now a `{{4, 1} undirected simple Int64 graph}`.
 
@@ -116,7 +122,6 @@ It's time to see some kind of visual representation of the
 graph we've made.
 
 ```@example graphsection
-# packages to load:
 # using Karnak, Graphs, NetworkLayout, Colors
 
 g = Graph()
@@ -133,7 +138,7 @@ add_edge!(g, 1, 4)
 end 600 300
 ```
 
-This is just one of the many ways this graph can be represented visually. The coordinates of the vertices when drawn here are _not_ part of the graph's definition. The default styling uses the current Luxor color, with small circles marking the vertex positions. `drawgraph()` places the graphics for the graph on the current Luxor drawing.
+This is just one of the many ways this graph can be represented visually. The locations of the vertices as drawn here are _not_ part of the graph's definition. The default styling uses the current Luxor color, with small circles marking the vertex positions. `drawgraph()` places the graphics for the graph on the current Luxor drawing.
 
 ## Undirected and directed graphs
 
@@ -151,13 +156,13 @@ add_edge!(gd, 1, 4) # vertex 1 to vertex 4
 add_edge!(gd, 4, 1) # vertex 4 to vertex 1
 
 @drawsvg begin
-background("grey10")
-sethue("thistle1")
-drawgraph(gd, vertexlabels = [1, 2, 3, 4])
+    background("grey10")
+    sethue("thistle1")
+    drawgraph(gd, vertexlabels = [1, 2, 3, 4])
 end 600 300
 ```
 
-In this representation of our directed graph `gd`, we can now see the direction of the edges joining vertices. Vertices 1 and 4 are connected to each other.
+In this representation of our directed graph `gd`, we can now see the direction of the edges joining vertices.
 
 ## Very simple graphs
 
@@ -167,24 +172,24 @@ Creating graphs by typing the connections manually is tedious, so we can use fun
 g = Graph(10, 5) # 10 vertices, 5 edges
 
 d1 = @drawsvg begin
-background("grey10")
-sethue("gold")
-drawgraph(g, vertexlabels = vertices(g))
+    background("grey10")
+    sethue("gold")
+    drawgraph(g, vertexlabels = vertices(g))
 end 400 300
 
 gd = SimpleDiGraph(5, 3) # 5 vertices, 3, edges
 
 d2 = @drawsvg begin
-background("grey10")
-setline(0.5)
-sethue("firebrick")
-drawgraph(gd, vertexlabels = vertices(g))
+    background("grey10")
+    setline(0.5)
+    sethue("firebrick")
+    drawgraph(gd, vertexlabels = vertices(g))
 end 400 300
 
 hcat(d1, d2)
 ```
 
-Neither of these graphs is **connected**. In a connected graph, every vertex is connected to every other via some path, a sequence of edges.
+We can define how many vertices and edges the graph should have. An undirected graph with 10 vertices can have between 0 to 45 (`binomial(10, 2)`) edges, a directed graph up to 90. Neither of these graphs is **connected**. In a connected graph, every vertex is connected to every other via some path, a sequence of edges.
 
 ## Well-known graphs
 
@@ -221,7 +226,7 @@ two groups. Each vertex in the first group is connected to
 one or more vertices in the second group.
 
 The next figure shows the **complete** version of a
-bi-partite graph. So each vertex is connected to every other
+bi-partite graph. Each vertex is connected to every other
 vertex in the other group.
 
 ```@example graphsection
@@ -230,26 +235,29 @@ g = complete_bipartite_graph(N, N)
 H = 300
 W = 550
 @drawsvg begin
-background("grey10")
-pts = vcat(
-    between.(O + (-W/2, H/2), O + (W/2, H/2), range(0, 1, length=N)),
-    between.(O + (-W/2, -H/2), O + (W/2, -H/2), range(0, 1, length=N)))
-sethue("aquamarine")
-drawgraph(g, vertexlabels = 1:nv(g), layout = pts, edgestrokeweights=0.5)
+    background("grey10")
+    pts = vcat(
+        between.(O + (-W/2, H/2), O + (W/2, H/2), range(0, 1, length=N)),
+        between.(O + (-W/2, -H/2), O + (W/2, -H/2), range(0, 1, length=N)))
+    sethue("aquamarine")
+    drawgraph(g, vertexlabels = 1:nv(g), layout = pts, edgestrokeweights=0.5)
 end 600 400
 ```
+
+We provided the required locations of the vertices on the
+drawing to the `layout` keyword.
 
 A **grid** graph doesn't need much explanation:
 
 ```@example graphsection
 M = 4
 N = 5
-g = Graphs.grid([M, N]) # grid((m, n))
+g = Graphs.grid([M, N])
 @drawsvg begin
-background("grey10")
-setline(0.5)
-sethue("greenyellow")
-drawgraph(g, vertexlabels = 1:nv(g), layout=stress)
+    background("grey10")
+    setline(0.5)
+    sethue("greenyellow")
+    drawgraph(g, vertexlabels = 1:nv(g), layout=stress)
 end 600 300
 ```
 
@@ -272,6 +280,8 @@ g = wheel_graph(12)
     drawgraph(g, vertexlabels=1:nv(g), layout=stress)
 end 600 300
 ```
+
+There are `star_digraph()` and `wheel_digraph()` DiGraph versions too.
 
 ### Even more well-known graphs
 
@@ -362,19 +372,21 @@ Julius Petersen, who first described it in 1898).
 
 ```@example graphsection
 @drawsvg begin
-background("grey10")
-pg = smallgraph(:petersen)
-sethue("orange")
-drawgraph(pg, vertexlabels = 1:nv(pg), layout = Shell(nlist=[6:10,]))
+    background("grey10")
+    pg = smallgraph(:petersen)
+    sethue("orange")
+    drawgraph(pg, vertexlabels = 1:nv(pg), layout = Shell(nlist=[6:10,]))
 end 600 300
 ```
 
+Here's a cubical graph:
+
 ```@example graphsection
 @drawsvg begin
-background("grey10")
-g = smallgraph(:cubical)
-sethue("orange")
-drawgraph(g, layout = Spring(Ptype=Float64))
+    background("grey10")
+    g = smallgraph(:cubical)
+    sethue("orange")
+    drawgraph(g, layout = spring)
 end 600 300
 ```
 
@@ -453,7 +465,7 @@ To add an edge, do:
 add_edge!(df, 1, 2) # from vertex 1 to 2
 ```
 
-It's sometimes useful to be able to see these relationships between neighbors visually.
+It's sometimes useful to be able to see these relationships between neighbors visually. This example looks for the neighbors of vertex 10:
 
 ```@example graphsection
 @drawsvg begin
@@ -461,6 +473,7 @@ background("grey10")
 pg = smallgraph(:petersen)
 
 vertexofinterest = 10
+
 E = []
 for (n, e) in enumerate(edges(pg))
     if dst(e) == vertexofinterest || src(e) == vertexofinterest
@@ -474,7 +487,8 @@ drawgraph(pg,
     vertexfillcolors = (v) -> ((v == vertexofinterest) ||
         v ∈ neighbors(pg, vertexofinterest)) && colorant"rebeccapurple",
     vertexshapesizes = [v == vertexofinterest ? 20 : 10 for v in 1:nv(pg)],
-    edgestrokecolors = (e, f, t, s, d) -> (e ∈ E) ? colorant"firebrick" : colorant"thistle1"
+    edgestrokecolors = (e, f, t, s, d) -> (e ∈ E) ?
+        colorant"firebrick" : colorant"thistle1"
     )
 end 600 300
 ```
@@ -484,7 +498,7 @@ Other useful functions in Graphs.jl include `has_vertex(g, v)` and `has_edge(g, 
 ### Degree
 
 The **degree** of a vertex is the number of edges that meet
-at that vertex. This is shown in the figure by the vertex
+at that vertex. This is shown in the figure below both in the vertex
 labels and also color-coded:
 
 ```@example graphsection
@@ -506,7 +520,7 @@ end 600 300
 
 ## Graphs as matrices
 
-Graphs can be represented as matrices. In the world of graph theory, we'll meet the adjacency matrix and the incidence matrix (and there's an array called the adjacency list too).
+Graphs can be represented as matrices - some say that graph theory is really the study of a particular set of matrices... We'll meet the adjacency matrix and the incidence matrix (and there's an array called the adjacency list too).
 
 ### Adjacency matrix
 
@@ -550,10 +564,10 @@ m = [0 1 1 0 0;
      0 0 1 1 0]
 
 @drawsvg begin
-background("grey10")
-hg = Graph(m)
-sethue("palegreen")
-drawgraph(hg, vertexlabels=1:nv(hg), layout=stress)
+    background("grey10")
+    hg = Graph(m)
+    sethue("palegreen")
+    drawgraph(hg, vertexlabels=1:nv(hg), layout=stress)
 end 800 400
 ```
 
@@ -610,7 +624,8 @@ drawgraph(Graph(g),
     vertexshapesizes = 40,
     edgestrokeweights = 15,
     edgestrokecolors = colorant"gold",
-    vertexfillcolors = [colorant"#CB3C33", colorant"#389826", colorant"#9558B2"])
+    vertexfillcolors = [colorant"#CB3C33",
+        colorant"#389826", colorant"#9558B2"])
 end 600 250
 ```
 
@@ -647,7 +662,7 @@ For example, this adjacency list:
 
 defines a graph with 20 vertices, such that vertex 1 has edges joining it to vertices 2, 5, and 7, and so on for each element of the whole array.
 
-The `Graph()` function accepts an adjacency list, along with the number of edges.
+The `Graph()` function accepts an adjacency list, preceded by the number of edges.
 
 ```@example graphsection
 g = Graph(30, [
@@ -673,9 +688,9 @@ g = Graph(30, [
     [6, 16, 19]])
 
 @drawsvg begin
-background("grey10")
-sethue("orange")
-drawgraph(g, layout=stress)
+    background("grey10")
+    sethue("orange")
+    drawgraph(g, layout=stress)
 end 600 300
 ```
 
@@ -690,7 +705,7 @@ Here, `fadjlist` is a forward adjacency list which defines how each vertex conne
 
 ## Paths, cycles, routes, and traversals
 
-Graphs help us answer questions about connectivity and relationships. For example, thinking of a railway network as a graph, with the stations as vertices, and the tracks as edges, we want to ask questions such as "Can we get from A to B by train?", which therefore becomes the question "Are there sufficient edges between two vertices such that we can find a continuous path that joins them?".
+Graphs help us answer questions about connectivity and relationships. For example, think of a railway network as a graph, with the stations as vertices, and the tracks as edges. We want to ask questions such as "Can we get from A to B by train?", which therefore becomes the question "Are there sufficient edges between vertices in the graph such that we can find a continuous path that joins them?".
 
 Graphs.jl has many features for traversing graphs and finding paths. We can look at just a few of them here.
 
@@ -704,9 +719,9 @@ Graphs.jl has many features for traversing graphs and finding paths. We can look
 
 ### Paths and cycles
 
-A path is a sequence of edges between some start vertex and some end vertex, such that a continuous unbroken route is available.
+A **path** is a sequence of edges between some start vertex and some end vertex, such that a continuous unbroken route is available.
 
-A cycle is a path where the start and end vertices are the same - a closed path. These are also called **circuits** in some sources.
+A **cycle** is a path where the start and end vertices are the same - a closed path. These are also called circuits in some sources.
 
 The `cycle_basis()` function finds all the cycles in a graph (at least, it finds a **basis** of an undirected graph, which is a minimal collection of cycles that can be added to make all the cycles). The result is an array of arrays of vertex numbers.
 
@@ -758,6 +773,44 @@ julia> cycles = cycle_basis(pg)
     end
 end 600 300
 ```
+
+For digraphs, you can use `simplecycles()`, to find every cycle.
+
+This example shows every cycle of a complete digraph `{4, 12}`.
+
+```@example graphsection
+
+sdg = complete_digraph(4)
+
+cycles = simplecycles(sdg)
+
+@drawsvg begin
+    background("grey10")
+    sethue("orange")
+    tiles = Tiler(600, 600, 4, 4)
+    for (pos, n) in tiles
+        cycle = cycles[n]
+        cycle_path = [Edge(cycle[i], cycle[i + 1]) for i in 1:length(cycle)-1]
+        @layer begin
+            translate(pos)
+            tilebox = BoundingBox(box(O, tiles.tilewidth, tiles.tileheight))
+            text(string(cycle), halign=:center, boxbottomcenter(tilebox))
+            sethue(HSV(rand(0:360), 0.6, 0.9))
+            drawgraph(sdg, layout=squaregrid,
+                boundingbox = tilebox,
+                edgelist = cycle_path,
+                edgestrokeweights = 3,
+                vertexshapes = :none,
+                edgelines = (edgenumber, edgesrc, edgedest, from, to) ->
+                    begin
+                        line(from, to, :stroke)
+                    end)
+        end
+    end
+end 600 600
+```
+
+There can be a lot of cycles in a graph. For example, a `complete_digraph(10)` has 1,110,073 cycles. Graphs.jl has tools for working with cycles efficiently.
 
 ## Shortest paths: the A* algorithm
 
@@ -812,29 +865,29 @@ end
 # find a route
 astar = a_star(g, 1, W * H)
 
-sethue("grey30")
+sethue("grey60")
+setlinecap("square")
 drawgraph(g,
-    vertexshapesizes = 6,
+    vertexshapesizes = 0,
     layout=squaregrid,
-    edgegaps=2,
     edgestrokeweights = 12)
 
-sethue("orange")
+sethue("red")
 drawgraph(g,
     vertexshapes = :none,
     layout=squaregrid,
     edgelist=astar,
     edgegaps=0,
-    edgestrokeweights=2)
+    edgestrokeweights=5)
 
 end 600 600
 ```
 
 ## Visiting every vertex
 
-Another feature of a graph that's useful to know: how to visit all vertices in a network just once.
+Another feature of a graph that's useful to know: how to visit all vertices just once.
 
-To do this, find a cycle that's the same length as the graph. However, there might be a lot of possibilities, since there could be many such cycles. Here's a way of finding a cycle that visits every vertex. `simplecycles()` finds all of them (there are 120 for this graph), so only the first one is used.
+To do this, find a cycle that's the same length as the graph. However, there might be a lot of possibilities, since there could be many such cycles. Here's a way of finding a cycle that visits every vertex. `simplecycles()` finds all of them (there are 120 for this graph), so only the first one with the right length is used.
 
 ``` @example graphsection
 @drawsvg begin
@@ -867,7 +920,7 @@ A well-known algorithm for finding the shortest path between graph vertices is n
 > I was just thinking about whether I could do this, and I
 > then designed the algorithm for the shortest path.
 
-In Graphs.jl, this algorithm is available with `dijkstra_shortest_paths()`. After running this function, the result is an object with various pieces of information about all the shortest paths: this is a `DijkstraState` object, with fields containing things like distances and predecessor vertices. There's an `enumerate_paths()` function which can extract the vertex information for a specific path from the DijkstraState object.
+In Graphs.jl, this algorithm is available with `dijkstra_shortest_paths()`. After running this function, the result is an object with various pieces of information about all the shortest paths: this is a `DijkstraState` object, with fields `parents`, `dists`, `predecessors`, `pathcounts`, `closest_vertices`. There's an `enumerate_paths()` function which can extract the vertex information for a specific path from the DijkstraState object.
 
 The following code animates the results of examining a grid graph using Dijkstra's algorithm. The shortest paths between the first vertex and every other vertex are drawn in a series of frames, one by one.
 
@@ -1151,13 +1204,28 @@ In the following example, only three colors are needed such that no edge connect
 
 ```@example graphsection
 @drawsvg begin
-background("grey10")
-g = smallgraph(:octahedral)
-gc = greedy_color(g)
-dcolors = distinguishable_colors(gc.num_colors)
-sethue("gold")
-drawgraph(g, layout=stress,
-    vertexfillcolors = dcolors[gc.colors],
-    vertexshapesizes = 30)
+    background("grey10")
+    g = smallgraph(:octahedral)
+    gc = greedy_color(g)
+    dcolors = distinguishable_colors(gc.num_colors)
+    sethue("gold")
+    drawgraph(g, layout=stress,
+        vertexfillcolors = dcolors[gc.colors],
+        vertexshapesizes = 30)
 end 800 400
+```
+
+whereas a complete graph might require many colors because there are so many connected vertices:
+
+```@example graphsection
+@drawsvg begin
+    background("grey10")
+    g = complete_graph(20)
+    gc = greedy_color(g)
+    dcolors = distinguishable_colors(gc.num_colors)
+    sethue("grey50")
+    drawgraph(g, layout=stress,
+        vertexfillcolors = dcolors[gc.colors],
+        vertexshapesizes = 20)
+end 600 300
 ```
