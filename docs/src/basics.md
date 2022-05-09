@@ -790,7 +790,7 @@ cycles = simplecycles(sdg)
     tiles = Tiler(600, 600, 4, 4)
     for (pos, n) in tiles
         cycle = cycles[n]
-        cycle_path = [Edge(cycle[i], cycle[i + 1]) for i in 1:length(cycle)-1]
+        cycle_path = [Edge(cycle[i], cycle[mod1(i + 1, end)]) for i in 1:length(cycle)]
         @layer begin
             translate(pos)
             tilebox = BoundingBox(box(O, tiles.tilewidth, tiles.tileheight))
@@ -799,11 +799,15 @@ cycles = simplecycles(sdg)
             drawgraph(sdg, layout=squaregrid,
                 boundingbox = tilebox,
                 edgelist = cycle_path,
-                edgestrokeweights = 3,
+                vertexlabels = (v) -> v ∈ cycle ? string(v) : "",
+                vertexlabeltextcolors= colorant"white",
+                vertexlabeloffsetdistances = 10,
+                vertexlabeloffsetangles = [π, 0],
                 vertexshapes = :none,
                 edgelines = (edgenumber, edgesrc, edgedest, from, to) ->
                     begin
-                        line(from, to, :stroke)
+                        newpath()
+                        arc2sagitta(from, to, 5, :stroke)
                     end)
         end
     end
