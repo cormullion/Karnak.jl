@@ -51,7 +51,7 @@ function _drawedgelines(from, to, edgesrc, edgedest;
         if edgenumber in edgelines
             edgeline = true
         end
-    elseif edgelines isa Int
+    elseif edgelines isa Integer
         if edgenumber == edgelines
             edgeline = true
         end
@@ -404,7 +404,7 @@ function _drawvertexshapes(vertex, coordinates::Array{Point,1};
         vertexshape = :square
     elseif vertexshapes == :none
         vertexshape = :none
-    elseif vertexshapes isa Int64
+    elseif vertexshapes isa Integer
         if vertexshapes == vertex
             vertexshape = true
         end
@@ -706,9 +706,9 @@ end
 
 function drawedge(from::Point, to::Point;
     graph::AbstractGraph,
-    edgenumber::Int64,
-    edgesrc::Int64,
-    edgedest::Int64,
+    edgenumber::Integer,
+    edgesrc::Integer,
+    edgedest::Integer,
     edgefunction=nothing,
     edgelabels=nothing,
     edgelines=nothing,
