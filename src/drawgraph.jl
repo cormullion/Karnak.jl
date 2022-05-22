@@ -102,6 +102,8 @@ function _drawedgelines(from, to, edgesrc, edgedest;
         linewidth = edgestrokeweights[mod1(edgenumber, end)]
     elseif edgestrokeweights isa Real
         linewidth = edgestrokeweights
+    elseif edgestrokeweights isa Function
+        linewidth = edgestrokeweights(edgenumber, edgesrc, edgedest, from, to)
     elseif edgestrokeweights == :none
         # do nothing
     end
@@ -376,6 +378,8 @@ function _drawvertexshapes(vertex, coordinates::Array{Point,1};
         vertexshaperotation = vertexshaperotations[mod1(vertex, end)]
     elseif vertexshaperotations isa Real
         vertexshaperotation = vertexshaperotations
+    elseif vertexshaperotations isa Function
+        vertexshaperotation = vertexshaperotations
     elseif vertexshaperotations == :none
         # do nothing
     end
@@ -484,6 +488,8 @@ function _drawvertexshapes(vertex, coordinates::Array{Point,1};
         linewidth = vertexstrokeweights[mod1(vertex, end)]
     elseif vertexstrokeweights isa Real
         linewidth = vertexstrokeweights
+    elseif vertexstrokeweights isa Function
+        linewidth = vertexstrokeweights(vertex)
     elseif vertexstrokeweights == :none
         # do nothing
     end
@@ -504,8 +510,10 @@ function _drawvertexshapes(vertex, coordinates::Array{Point,1};
         vertexshapesize = vertexshapesizes[mod1(vertex, end)]
     elseif vertexshapesizes isa Real
         vertexshapesize = vertexshapesizes
+    elseif vertexshapesizes isa Function
+        vertexshapesize = vertexshapesizes
     elseif vertexshapesizes == :none
-        # don't draw it
+        vertexshapesize = 0.0
     end
 
     # finally, do some drawing
@@ -523,9 +531,20 @@ function _drawvertexshapes(vertex, coordinates::Array{Point,1};
         end
 
         translate(coordinates[vertex])
-        rotate(vertexshaperotation)
+        if vertexshaperotation isa Function
+            rotate(vertexshaperotation(vertex))
+        else
+            rotate(vertexshaperotation)
+        end
         setline(linewidth)
 
+        if vertexshapesize isa Function
+            s = vertexshapesize(vertex)
+        elseif iszero(vertexshapesize)
+            s = 0.0
+        else
+            s = vertexshapesize
+        end
         if vertexshape isa Function
             # TODO fill color or stroke color priority?
             @layer begin
@@ -535,15 +554,15 @@ function _drawvertexshapes(vertex, coordinates::Array{Point,1};
             end
         elseif vertexshape == :square
             fillcolor isa Colorant && setcolor(fillcolor)
-            box(O, 2vertexshapesize, 2vertexshapesize, :fill)
+            box(O, 2s, 2s, :fill)
             strokecolor isa Colorant && setcolor(strokecolor)
-            box(O, 2vertexshapesize, 2vertexshapesize, :stroke)
+            box(O, 2s, 2s, :stroke)
 
         else # default is a circle
             fillcolor isa Colorant && setcolor(fillcolor)
-            circle(O, vertexshapesize, :fill)
+            circle(O, s, :fill)
             strokecolor isa Colorant && setcolor(strokecolor)
-            circle(O, vertexshapesize, :stroke)
+            circle(O, s, :stroke)
         end
     end
 end
@@ -798,21 +817,22 @@ Luxor `boundingbox`.
 ```
 boundingbox::BoundingBox        graph fits inside this BB
 layout                          Point[] or function
-margin                          default 20
+margin                          default 30
+edgelist                        draw only these edges
 
-Functions that override all options:
+vertexfunction(vtx, coords) ->  draw vertices
+edgefunction(edgenumber, edgesrc, edgedest, from, to) -> draw edges
+```
 
-vertexfunction(vtx, coords) -> _
-edgefunction(edgenumber, edgesrc, edgedest, from, to) -> _
+Or use these individual keywords:
 
-Draw only edges in `edgelist`.
-
+```
 • vertexlabels   f               • edgelabels  f
 • vertexshapes   f               • edgelines    f
-• vertexshapesizes               • edgelist
-• vertexshaperotations           • edgecurvature
+• vertexshapesizes f             • edgelist
+• vertexshaperotations f         • edgecurvature
 • vertexstrokecolors f           • edgestrokecolors   f
-• vertexstrokeweights            • edgestrokeweights
+• vertexstrokeweights f          • edgestrokeweights  f
 • vertexfillcolors f             • edgedashpatterns
 • vertexlabeltextcolors          • edgegaps
 • vertexlabelfontsizes           • edgelabelrotations f
@@ -894,17 +914,17 @@ The text labels for each vertex. Vertex labels are not drawn by default.
 Use shape for vertex. If function, `vtx` is vertex number, using current vertex rotation
 (`vertextshaperotations`), make your own graphic shapes. The function can override rotations and colors.
 
-`vertexshapesizes`: Array | Range | Real
+`vertexshapesizes`: Array | Range | Real | Function
 
 The size of each vertex shape for :circle :square...
 
-`vertexshaperotations`: Array | Range | Real
+`vertexshaperotations`: Array | Range | Real | Function
 
-Rotation of shape.
+the rotation of shapes,
 
 `vertexstrokecolors`: Array | Colorant | :none | Function (vtx) -> colorant
 
-`vertexstrokeweights`: Array | Range | :none
+`vertexstrokeweights`: Array | Range | :none | Function
 
 `vertexfillcolors`: Array | Colorant | :none | Function (vtx) -> colorant
 
@@ -938,7 +958,7 @@ Edge lines to be drawn.
 
 Colors of edges. Function can be `edgestrokecolors = (n, s, d, f, t) -> HSB(rescale(n, 1, ne(g), 0, 360), 0.9, 0.8))`
 
-`edgestrokeweights`
+`edgestrokeweights` Array | Range | Real | Function (n, s, d, from, to)` -> n
 
 `edgedashpatterns`: Array of Arrays | Array
 

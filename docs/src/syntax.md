@@ -197,7 +197,11 @@ end
 
 ## The `vertexfunction` and `edgefunction` arguments
 
-The two keyword arguments `vertexfunction` and `edgefunction` allow you to pass control over the drawing process completely to these two functions, ignoring all the other keywords.
+The two keyword arguments `vertexfunction` and `edgefunction` allow you to pass control over the drawing process completely to these two functions.
+
+!!! note
+
+    If you define these functions, all the separate vertex/edge keywords are ignored.
 
 ```
 vertexfunction = my_vertexfunction(vertex, coordinates)
@@ -238,6 +242,26 @@ end
     rgraph(g)
 end 800 600
 ```
+
+## Functions
+
+Some keywords accept functions:
+
+- `edgelabelrotations`
+- `edgelabels`
+- `edgelines`
+- `edgestrokecolors`
+- `edgestrokeweights`
+- `vertexfillcolors`
+- `vertexlabels`
+- `vertexshaperotations`
+- `vertexshapes`
+- `vertexshapesizes`
+- `vertexstrokecolors`
+- `vertexstrokeweights`
+
+The `edge-` keywords accept functions with arguments `(edgenumber, sourcevertex, destinationvertex, frompoint, topoint)`.
+The `vertex-` keywords accept functions with arguments `(vertex)`.
 
 ## Vertex labels and shapes
 
@@ -349,7 +373,7 @@ drawgraph(g, layout=shell,
 end 600 300
 ```
 
-Here, the vertex number is shown by the number of points on each star.
+Here, the vertex number is hinted at by the number of points on each star.
 
 In the next example, the sizes of the labels and shapes are determined by the degree of each vertex, supplied in a vector.
 

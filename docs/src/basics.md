@@ -116,7 +116,7 @@ add_edge!(g, 1, 4)
 
 In Graphs.jl, vertices are always numbered from 1 to `n`.
 
-`g` is now a `{{4, 1} undirected simple Int64 graph}`.
+`g` is now a `{4, 4} undirected simple Int64 graph}`.
 
 It's time to see some kind of visual representation of the
 graph we've made.
@@ -721,7 +721,7 @@ Graphs.jl has many features for traversing graphs and finding paths. We can look
 
 A **path** is a sequence of edges between some start vertex and some end vertex, such that a continuous unbroken route is available.
 
-A **cycle** is a path where the start and end vertices are the same - a closed path. These are also called circuits in some sources.
+A **cycle** is a path where the start and end vertices are the same - a closed path. Other vertices in the path occur just once. These are also called circuits in some sources.
 
 The `cycle_basis()` function finds all the cycles in a graph (at least, it finds a **basis** of an undirected graph, which is a minimal collection of cycles that can be added to make all the cycles). The result is an array of arrays of vertex numbers.
 

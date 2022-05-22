@@ -4,6 +4,8 @@
 
 ### Added
 
+- more keywords take functions
+
 ## Changed
 
 - Int64 -> Integer
