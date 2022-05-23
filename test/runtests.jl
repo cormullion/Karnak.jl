@@ -6,7 +6,7 @@ using NetworkLayout
 using Colors
 
 @testset "Karnak.jl" begin
-
+    @info "starting basic test"
     Drawing(600, 600, :svg)
     origin()
     background("grey10")
@@ -79,5 +79,10 @@ using Colors
         end
     end
     @test finish() == true
+    @info " finishing basic test"
+end
 
+
+@testset "functions" begin
+    include("ftests.jl")
 end

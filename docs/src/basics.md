@@ -1083,8 +1083,6 @@ julia> adjacency_matrix(wg)
 
 For a directed graph, each edge can have two weights, one from `src` to `dst`, the other from `dst` to `src`.
 
-Note that `a_star()` doesn't work with weighted graphs yet.
-
 ## Spanning trees
 
 A spanning tree is a set of edges that connect all the vertices of a graph together, without forming any cycles. There are various functions for finding spanning trees in Graphs.jl, including algorithms by Otakar Borůvka (`boruvka_mst()`), Joseph Kruskal (`kruskal_mst()`), and Robert Prim (`prim_mst()`). (Immortality can be attained by inventing a new graph-spanning algorithm.)

@@ -201,7 +201,7 @@ The two keyword arguments `vertexfunction` and `edgefunction` allow you to pass 
 
 !!! note
 
-    If you define these functions, all the separate vertex/edge keywords are ignored.
+    If you define these functions, all the other vertex/edge keywords are ignored.
 
 ```
 vertexfunction = my_vertexfunction(vertex, coordinates)
@@ -243,9 +243,9 @@ end
 end 800 600
 ```
 
-## Functions
+## Functions as keyword arguments
 
-Some keywords accept functions:
+The following keyword arguments accept functions:
 
 - `edgelabelrotations`
 - `edgelabels`
@@ -263,6 +263,8 @@ Some keywords accept functions:
 The `edge-` keywords accept functions with arguments `(edgenumber, sourcevertex, destinationvertex, frompoint, topoint)`.
 The `vertex-` keywords accept functions with arguments `(vertex)`.
 
+These functions aren't used if you supply functions to `vertexfunction` or `edgefunction`.
+
 ## Vertex labels and shapes
 
 ### `vertexlabels`
@@ -273,7 +275,7 @@ This example draws all vertices, and numbers them from 1 to 6.
 
 !!! note
 
-    In Graphs.jl, vertices are numbered from 1 to `n`. If you remove a vertex, vertices are effectively re-numbered.
+    In Graphs.jl, vertices are always numbered from 1 to `n`. If you remove a vertex, vertices are effectively re-numbered.
 
 ```@example graphsection
 @drawsvg begin
@@ -319,7 +321,7 @@ drawgraph(g, layout=shell, vertexshapes = [:square, :circle])
 end 600 300
 ```
 
-`vertexshapesizes` can set the sizes for the vertex shapes.
+`vertexshapesizes` can set the sizes for the built-in vertex shapes.
 
 ```@example graphsection
 @drawsvg begin
@@ -328,8 +330,17 @@ g = smallgraph(:moebiuskantor)
 sethue("gold")
 drawgraph(g, layout=shell,
     vertexshapes = [:square, :circle],
-    vertexshapesizes = [15, 5],
-    )
+    vertexshapesizes = [15, 5])
+end 600 300
+```
+
+```@example graphsection
+@drawsvg begin
+background("grey10")
+g = smallgraph(:moebiuskantor)
+sethue("gold")
+drawgraph(g, layout=shell,
+    vertexshapesizes = (v) -> rescale(v, 1, nv(g), 5, 25))
 end 600 300
 ```
 
@@ -348,7 +359,7 @@ drawgraph(g, layout=shell,
 end 600 300
 ```
 
-To show every other vertex, you could use something like this:
+To show every other vertex and label, you could use something like this:
 
 ```@example graphsection
 @drawsvg begin
