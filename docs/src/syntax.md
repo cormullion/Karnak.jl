@@ -162,9 +162,13 @@ end 600 300
 
 The calculated positions are returned by the `drawgraph()` function.
 
-Some of the layout algorithms allow you to poss _initial_ positions that are used by the algorithms as starting points. These can be supplied as xy pairs, rather than Luxor Points (which NetworkLayout won't accept).
+### Initial positions for the layout algorithms
 
-Here's a figure showing how the Stress algorithm refines the vertex positions on each iteration, after starting at each "grid location".
+Some of the layout algorithms - the Spring and Stress ones, for example -  allow you to pass _initial_ vertex positions to be used by the algorithms as starting points. The algorithm will continually adjust them to make a finer result. These should be supplied as xy pairs, rather than Luxor Points (which NetworkLayout doesn't accept).
+
+Here's a figure showing how the Stress algorithm gradually improves the layout on each of 60 iterations. The initial positions supplied for each loop are the "grid locations" of a Luxor Tiler. Each time through, the algorithm improves the layout, and draws a new set of vertices on top of the previous one (increasing the size of the vertex markers a bit).
+
+The final call to `drawgraph()` draws the graph using the 61st iteration of the Stress algorithm, with edges shown.
 
 ```@example graphsection
 G = smallgraph(:petersen)
@@ -183,12 +187,12 @@ G = smallgraph(:petersen)
                     setcolor(HSVA(rescale(v, 1, nv(G), 0, 360), 0.6, 0.8, rescale(i, 1, 6, 0.5, 1)));
                     circle(O, rescale(i, 1, 60, 1, 6), :fill)
                     ),
-            edgestrokecolors = colorant"white",
-            edgestrokeweights = 0)
+            edgelist = []
+            )
     end
 
     drawgraph(G,
-        layout = Stress(initialpos = initialpositions, iterations = 60),
+        layout = Stress(initialpos = initialpositions, iterations = 61),
         vertexshapes = (v) -> (
             setcolor(HSVA(rescale(v, 1, nv(G), 0, 360), 0.6, 0.8, 1)); circle(O, 10, :fill)
         ))

@@ -249,23 +249,29 @@ but a colorful layer imposed on top of the track network.
 
 Graphs.jl provides many functions for analysing graph networks. The
 `diffusion()` function appears to simulate the diffusion of an infection from
-some starting vertices.
+some starting vertices and the probability of spreading.
+
+The function returns an array of arrays, where each one contains the vertex numbers of newly "infected" vertices. For example, in this result:
+
+```julia
+[[1], Int64[], [22, 15, 25], ...]
+```
+the first stage showed vertex 1 "infected"; stage two was free of incident; but on stage 3 vertices 22, 15, and 25 have become "infected".
 
 So here, apparently, is a simulation of what might happen when an infection
 arrives at Heathrow Airport's Terminal 5 tube station, and starts spreading
 through the tube network.
 
 ```julia
-function frame(scene, framenumber, d)
+function frame(scene, framenumber, diffresult)
     background("black")
     sethue("gold")
     text(string(framenumber), boxbottomleft() + (10, -10))
-    drawgraph(g,
-        layout = positions,
-        vertexshapesizes = 3)
+    drawgraph(g, layout = positions, vertexshapesizes = 3)
     for k in 1:framenumber
-        i = d[k]
-        drawgraph(g,
+        i = diffresult[k]
+        drawgraph(
+            g,
             layout = positions,
             edgelines = 0,
             vertexfunction = (v, c) -> begin
@@ -275,15 +281,16 @@ function frame(scene, framenumber, d)
                         circle(positions[v], 5, :fill)
                     end
                 end
-            end)
-        end
+            end,
+        )
     end
+end
 
 function main()
     amovie = Movie(600, 600, "diff")
-    d = diffusion(g, 0.2, 200, initial_infections=[find("Heathrow Terminal 5")])
+    diffresult = diffusion(g, 0.2, 200, initial_infections=[find("Heathrow Terminal 5")])
     animate(amovie,
-        Scene(amovie, (s, f) -> frame(s, f, d), 1:length(d)),
+        Scene(amovie, (s, f) -> frame(s, f, diffresult), 1:length(diffresult)),
         framerate=10,
         creategif=true,
         pathname="/tmp/diff.gif")
@@ -295,7 +302,7 @@ main()
 
 ## The JuliaGraphs logo
 
-The ccurrent logo for the Graphs.jl package was easily drawn using
+The current logo for the Graphs.jl package was easily drawn using
 Karnak.
 
 I wanted to use the graph coloring feature
@@ -914,15 +921,15 @@ The images above were made with the following code.
     background("black")
     sethue("gold")
     setline(0.3)
-        drawgraph(g,
-         layout = stress,
-         edgefunction = (k, s, d, f, t) -> begin
+    drawgraph(g,
+        layout = stress,
+        edgefunction = (k, s, d, f, t) -> begin
             @layer begin
                 sl = slope(O, t)
                 sethue(HSVA(rescale(sl, 0, 2π, 0, 360), 0.7, 0.7, .9))
                 line(f, t, :stroke)
             end
-        end ,
+        end,
         vertexfunction = (v, c) -> begin
             @layer begin
                 t = get_prop(g, v, :name)
@@ -935,9 +942,8 @@ The images above were made with the following code.
                 sethue("white")
                 text(t, c[v], halign=:center, valign=:middle)
             end
-        end
-         )
-         @info " finish drawing"
+        end)
+    @info " finish drawing"
 end 2500 2500 "/tmp/graph-dependencies-colors.pdf"
 ```
 
@@ -948,15 +954,15 @@ using ColorSchemes
     background("black")
     maxdeg = maximum(degree(full_graph))
     drawgraph(full_graph,
-        layout=spring,
-        edgelines=0,
+        layout = spring,
+        edgelines = 0,
         vertexfunction = (v, c) -> begin
             d = degree(full_graph, v)
             @layer begin
                 sethue(get(ColorSchemes.darkrainbow, rescale(d, 1, maxdeg)))
                 circle(c[v], rescale(d, 1, 270, 2, 20), :fill)
             end
-                if d > 20
+            if d > 20
                 fontsize(rescale(d, 1, maxdeg, 5, 20))
                 setcolor("white")
                 textoutlines(all_packages[v], c[v], halign=:center, valign=:bottom, :fill)
@@ -964,7 +970,6 @@ using ColorSchemes
                 sethue("black")
                 textoutlines(all_packages[v], c[v], halign=:center, valign=:bottom, :stroke)
             end
-        end
-        )
+        end)
 end 1200 1200 "/tmp/graph-dependencies-2.svg"
 ```

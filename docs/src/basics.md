@@ -774,7 +774,7 @@ julia> cycles = cycle_basis(pg)
 end 600 300
 ```
 
-For digraphs, you can use `simplecycles()`, to find every cycle.
+For digraphs, you can use `simplecycles()` to find every cycle.
 
 This example shows every cycle of a complete digraph `{4, 12}`.
 
@@ -815,6 +815,33 @@ end 600 600
 ```
 
 There can be a lot of cycles in a graph. For example, a `complete_digraph(10)` has 1,110,073 cycles. Graphs.jl has tools for working with cycles efficiently.
+
+### Visiting every vertex once
+
+It's useful to know how to visit all vertices just once.
+
+You can do this for DiGraphs if you can find a cycle that's the same length as the graph. However, there might be a lot of possibilities, since there could be many such cycles. This example uses `simplecycles()` to find all of them (there are over 400 for this graph), so only the first one with the right length is used.
+
+``` @example graphsection
+@drawsvg begin
+background("grey10")
+g = complete_digraph(6)
+
+tour = first(filter(cycle -> length(cycle) == nv(g), simplecycles(g)))
+
+vertexlist_to_edgelist(vlist) = [Edge(p[1] => p[2]) for p in zip(vlist, circshift(vlist, -1))]
+
+sethue("grey50")
+
+drawgraph(g, layout = spring)
+
+sethue("orange")
+drawgraph(g, layout = spring,
+    edgelist = vertexlist_to_edgelist(tour),
+    edgestrokeweights = 10,
+    )
+end 800 400
+```
 
 ## Shortest paths: the A* algorithm
 
@@ -885,33 +912,6 @@ drawgraph(g,
     edgestrokeweights=5)
 
 end 600 600
-```
-
-## Visiting every vertex
-
-Another feature of a graph that's useful to know: how to visit all vertices just once.
-
-To do this, find a cycle that's the same length as the graph. However, there might be a lot of possibilities, since there could be many such cycles. Here's a way of finding a cycle that visits every vertex. `simplecycles()` finds all of them (there are 120 for this graph), so only the first one with the right length is used.
-
-``` @example graphsection
-@drawsvg begin
-background("grey10")
-g = complete_digraph(6)
-
-tour = first(filter(cycle -> length(cycle) == nv(g), simplecycles(g)))
-
-vertexlist_to_edgelist(vlist) = [Edge(p[1] => p[2]) for p in zip(vlist, circshift(vlist, -1))]
-
-sethue("grey50")
-
-drawgraph(g, layout = spring)
-
-sethue("orange")
-drawgraph(g, layout = spring,
-    edgelist = vertexlist_to_edgelist(tour),
-    edgestrokeweights = 10,
-    )
-end 800 400
 ```
 
 ## Shortest paths: Dijkstra's algorithm
