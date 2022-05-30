@@ -310,6 +310,34 @@ drawgraph(g, layout=stress,
 end 600 300
 ```
 
+### Using LaTex in labels
+
+If you want to use ``\LaTeX`` in vertex labels, you can load
+[MathTeXEngine.jl](https://github.com/Kolaru/MathTeXEngine.jl) to parse the
+`LaTeXString`s. Make sure the fonts in the MathTexEngine package
+are also available to the Operating System's font routines (so __copying__ them
+to your local font folder is probably required).
+
+```julia
+using Karnak, Graphs, NetworkLayout, Colors
+using MathTeXEngine, LaTeXStrings
+
+g = complete_graph(4)
+@svg begin
+    background("grey10")
+    sethue("cyan")
+    fontsize(40)
+    drawgraph(g,
+        margin=30,
+        vertexlabels = [L"v_%$(x)" for x in 1:nv(g)],
+        vertexlabeloffsetdistances = [40, 40, -40, 40],
+        vertexlabeltextcolors = colorant"white"
+    )
+end 600 300
+```
+
+![latex tet](assets/figures/latextext.svg)
+
 ### `vertexshapes` and `vertexshapesizes`
 
 The default shape for a vertex is a filled circle.
