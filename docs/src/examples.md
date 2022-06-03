@@ -680,6 +680,45 @@ for v in vertices(full_graph)
 end
 ```
 
+It's useful to be able to save and load this graph:
+
+```julia
+# using Graphs, MetaGraphs
+# save:
+savegraph("examples/full_graph.lg", full_graph))
+
+# load:
+full_graph = loadgraph("examples/full_graph.lg", MGFormat())
+```
+
+### All roads lead to home
+
+The code in this next example draws the vertices as an impressionistic point cloud, and uses the `a_star()` function to find a path from some random package back to Colors.jl.
+
+```julia
+@drawsvg begin
+    background("black")
+    sethue("white")
+    fontface("BarlowCondensed-Bold")
+    random_package = rand(1:nv(full_graph))
+    astar = a_star(full_graph, random_package, 1)
+    astar_vertices = sort(unique(vcat([src(e) for e in astar], [dst(e) for e in astar])), rev=true)
+    drawgraph(g,
+        edgelist=astar,
+        layout=spring,
+        vertexlabels = (v) -> v ∈ astar_vertices[[begin, end]] && get_prop(full_graph, v, :name),
+        vertexlabeltextcolors = colorant"white",
+        vertexlabelfontsizes = 20,
+        vertexlabelfontfaces = "BarlowCondensed-Bold",
+        vertexshapesizes = .5,
+        vertexstrokecolors = :none)
+    textfit(string(join(get_prop.(Ref(full_graph), astar_vertices, :name), " > ")),
+        BoundingBox(box(boxbottomcenter() + (0, -30), 600, 50)))
+end 800 800
+```
+
+![chain of deps](assets/figures/dep_chain.svg)
+
 ### Pagerank
 
 This code computes the _pagerank_ of the graph. It returns a long list of numbers, the centrality score for each vertex.
@@ -704,6 +743,28 @@ ranks = pagerank(full_graph)
  0.00020384989099126913
  0.0002616217369290926
 ```
+
+```julia
+@drawsvg begin
+    background("black")
+    sethue("white")
+    fontface("BarlowCondensed-Bold")
+    ranks = pagerank(full_graph)
+    drawgraph(g,
+        edgelist = [],
+        layout=spring,
+        vertexshapes = :none,
+        vertexlabels = (v) -> ranks[v] > 0.001 && get_prop(full_graph, v, :name),
+        vertexlabelfontsizes = 500ranks,
+        vertexlabeltextcolors = colorant"white")
+end 800 800
+```
+
+![pagerank](assets/figures/pagerank.svg)
+
+The problem with this representation is one of overlapping labels. This isn't an issue we can fix easily in Karnak.
+
+### Highly ranked
 
 With some sorting, we can find the highest ranked packages in this part of the ecosystem.
 

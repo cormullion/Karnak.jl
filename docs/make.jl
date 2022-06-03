@@ -8,7 +8,7 @@ makedocs(
         prettyurls = get(ENV, "CI", nothing) == "true",
         assets = ["assets/styles.css"],
         warn_outdated = true,
-        collapselevel=1,
+        collapselevel=3,
         ),
     pages    = [
         "Introduction to Karnak"  =>  "index.md",

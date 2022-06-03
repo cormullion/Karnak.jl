@@ -140,8 +140,9 @@ for v in vertices(full_graph)
     end
 end
 
-# savegraph("full_graph.lg", full_graph)
-# savegraph("g.lg", g)
+savegraph("full_graph.lg", full_graph)
+
+savegraph("g.lg", g)
 
 ## Page Rank
 
