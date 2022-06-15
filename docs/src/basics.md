@@ -189,7 +189,9 @@ end 400 300
 hcat(d1, d2)
 ```
 
-We can define how many vertices and edges the graph should have. An undirected graph with 10 vertices can have between 0 to 45 (`binomial(10, 2)`) edges, a directed graph up to 90. Neither of these graphs is **connected**. In a connected graph, every vertex is connected to every other via some path, a sequence of edges.
+Neither of these two graphs is **connected**. In a connected graph, every vertex is connected to every other via some path, a sequence of edges.
+
+We can define how many vertices and edges the graph should have. An undirected graph with 10 vertices can have between 0 to 45 (`binomial(10, 2)`) edges, a directed graph up to 90.
 
 ## Well-known graphs
 

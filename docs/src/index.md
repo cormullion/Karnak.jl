@@ -24,3 +24,25 @@ for graph layout.
     - [GraphRecipes.jl](https://github.com/JuliaPlots/GraphRecipes.jl): backend: Plots.jl
 
     - [GraphMakie.jl](https://github.com/JuliaPlots/GraphMakie.jl): backend: Makie.jl
+
+## Quick start
+
+```@example
+using Karnak
+using Graphs
+using NetworkLayout
+g = barabasi_albert(100, 1)
+@drawsvg begin
+    background("black")
+    sethue("white")
+    drawgraph(g, layout=stress, vertexlabels = 1:nv(g))
+end
+```
+
+!!! note
+
+    Karnak.jl contains just one function: `drawgraph()`, and
+    re-exports Luxor.jl. So all graphics and drawing
+    functions are from Luxor. See the [documentation of
+    Luxor.jl](http://juliagraphics.github.io/Luxor.jl/stable/)
+    for details.
