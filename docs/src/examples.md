@@ -24,7 +24,134 @@ find(x::Int64) = stations[x]
 
 # Examples
 
-This section contains a few examples showing how to use `drawgraph()` to visualize a few graphs.
+This chapter contains a few examples showing how to use `drawgraph()` to visualize a few graphs.
+
+## Julia source tree
+
+This example takes a Julia expression and displays it as a tree.
+
+```@example 
+using Karnak, Graphs, NetworkLayout, Colors
+
+# shamelessly stolen from Professor David Sanders' Tree !
+
+add_numbered_vertex!(g) = (add_vertex!(g); top = nv(g))
+
+function walk_tree!(g, labels, ex, show_call = true)
+    top_vertex = add_numbered_vertex!(g)
+    where_start = 1  # which argument to start with
+    if !(show_call) && ex.head == :call
+        f = ex.args[1]   # the function name
+        push!(labels, f)
+        where_start = 2   # drop "call" from tree
+    else
+        push!(labels, ex.head)
+    end
+    for i in where_start:length(ex.args)
+        if isa(ex.args[i], Expr)
+            child = walk_tree!(g, labels, ex.args[i], show_call)
+            add_edge!(g, top_vertex, child)
+        else
+            n = add_numbered_vertex!(g)
+            add_edge!(g, top_vertex, n)
+            push!(labels, ex.args[i])
+        end
+    end
+    return top_vertex
+end
+
+function walk_tree(ex::Expr, show_call = false)
+    g = DiGraph()
+    labels = Any[]
+    walk_tree!(g, labels, ex, show_call)
+    return (g, labels)
+end
+
+# build graph and labels
+expression = :(2 + sin(30) * cos(15) / 2π - log(-1.02^exp(-1)))
+
+g, labels = walk_tree(expression)
+
+@drawsvg begin
+    background("grey10")
+    sethue("gold")
+    fontface("JuliaMono-Black")
+    drawgraph(g,
+    margin=60,
+        layout = buchheim,
+        vertexlabels = labels,
+        vertexshapes = :circle,
+        vertexshapesizes = 20,
+        edgefunction = (n, s, d, f, t) -> begin
+            move(f)
+            line(t)
+            strokepath()
+        end,
+        vertexlabelfontsizes = 15,
+        vertexlabelfontfaces = "JuliaMono-Bold",
+        vertexlabeltextcolors = colorant"black")
+    fontsize(15)
+    text(string(expression), boxbottomcenter() + (0, -20), halign=:center)
+end
+```
+
+## Julia type tree
+
+This example tries to draw a type hierarchy diagram. The Buchheim layout algorithm can take a list of “vertex widths” that are normalized and then used to assign sufficient space for each label.
+
+```@example
+using Karnak, Graphs, NetworkLayout, InteractiveUtils
+
+add_numbered_vertex!(g) = add_vertex!(g)
+
+function build_type_tree(g, T, level=0)
+    add_numbered_vertex!(g)
+    push!(labels, T)
+    for t in subtypes(T)
+        build_type_tree(g, t, level + 1)
+        add_edge!(g,
+            findfirst(isequal(T), labels),
+            findfirst(isequal(t), labels))
+    end
+end
+
+function manhattanline(pt1, pt2)
+    mp = midpoint(pt1, pt2)
+    poly([pt1,
+            Point(pt1.x, mp.y),
+            Point(pt1.x, mp.y),
+            Point(pt2.x, mp.y),
+            Point(pt2.x, mp.y),
+            Point(pt2.x, pt2.y - get_fontsize())
+        ], :stroke)
+end
+
+g = DiGraph()
+labels = []
+build_type_tree(g, Real)
+labels = map(string, labels)
+
+@drawsvg begin
+    background("white")
+    sethue("black")
+
+    fontsize(9)
+
+    # adjust for centered labels
+    nodesizes = Float64[]
+    for l in eachindex(labels)
+        push!(nodesizes, textextents(string(labels[l]))[3] +
+                         textextents(string(labels[mod1(l + 1, end)]))[3])
+    end
+    drawgraph(g, margin=50,
+        layout=Buchheim(nodesize=nodesizes),
+        vertexfunction=(v, c) -> text(labels[v], c[v], halign=:center),
+        edgefunction=(n, s, d, f, t) -> manhattanline(f, t)
+    )
+end 1200 550
+```
+
+It can be quite difficult to get the final output to look perfect.
 
 ## The London Tube
 

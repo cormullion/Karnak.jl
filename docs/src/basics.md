@@ -17,7 +17,7 @@ familiar with the basics of programming in Julia.
     pages are built by Documenter.jl, and the code to draw
     them is included here. SVG is used because it's good for
     line drawings, but you can use Karnak.jl in any
-    Luxor environment, such as PNG  - which is the
+    Luxor environment, such as PNG - which is the
     recommended format to use if the drawings get very
     complex, since large SVGs can tax web browsers.
 
@@ -824,7 +824,7 @@ It's useful to know how to visit all vertices just once.
 
 You can do this for DiGraphs if you can find a cycle that's the same length as the graph. However, there might be a lot of possibilities, since there could be many such cycles. This example uses `simplecycles()` to find all of them (there are over 400 for this graph), so only the first one with the right length is used.
 
-``` @example graphsection
+```@example graphsection
 @drawsvg begin
 background("grey10")
 g = complete_digraph(6)
@@ -843,6 +843,58 @@ drawgraph(g, layout = spring,
     edgestrokeweights = 10,
     )
 end 800 400
+```
+
+## Trees
+
+A tree is a connected graph with no cycles. A *rooted tree* is a tree graph in which one vertex has been designated as the root, or origin. Rooted tree graphs can be drawn using the Buchheim layout algorithm (named after the developer, Christoph Buchheim).
+
+In the next example, we start with a *binary tree*, in which each vertex has at most two vertices - but we add one more vertex so that it's no longer a binary tree. 
+
+```@raw html
+<details closed><summary>Code for this figure</summary>
+```
+
+This code generates the figure below.
+
+```@example graphsection
+using Karnak, Luxor, Graphs, NetworkLayout, Colors
+
+d = @drawsvg begin
+    background("grey10")
+    sethue("purple")
+    fontsize(12)
+
+    bt = binary_tree(4)
+    g = SimpleDiGraph(collect(edges(bt)))
+
+    # add another vertex
+    add_vertex!(g)
+    add_edge!(g, 7, 16)
+
+    drawgraph(g,
+        layout=buchheim,
+        margin=20,
+        edgestrokeweights=2,
+        edgegaps=12, 
+        vertexlabels = 1:nv(g),
+        vertexshapes=:circle,
+        vertexfillcolors=[RGB(Luxor.julia_red...), 
+            RGB(Luxor.julia_purple...), 
+            RGB(Luxor.julia_green...), 
+            RGB(Luxor.julia_blue...)],
+        vertexshapesizes=12,
+        vertexlabeltextcolors=colorant"white",
+    )
+end 600 350
+```
+
+```@raw html
+</details>
+```
+
+```@example graphsection
+d # hide
 ```
 
 ## Shortest paths: the A* algorithm

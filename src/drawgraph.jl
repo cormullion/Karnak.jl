@@ -296,18 +296,22 @@ function _drawedgelabels(from, to;
 
     # set font face
     font_face = ""
+    usedefaultfont=true
     if isnothing(edgelabelfontfaces)
         # use default fontface
     elseif edgelabelfontfaces isa Array
         if !isempty(edgelabelfontfaces)
             if edgelabelfontfaces[mod1(edgenumber, end)] != :none
                 font_face = edgelabelfontfaces[mod1(edgenumber, end)]
+                usedefaultfont=false
             end
         end
     elseif edgelabelfontfaces isa AbstractRange
         font_face = edgelabelfontfaces[mod1(edgenumber, end)]
+        usedefaultfont=false
     elseif edgelabelfontfaces isa AbstractString
         font_face = edgelabelfontfaces
+        usedefaultfont=false
     elseif edgelabelfontfaces == :none
     end
 
@@ -321,7 +325,9 @@ function _drawedgelabels(from, to;
                 str = string(collect(edgelabels)[mod1(edgenumber, end)])
                 if textcolor != :none
                     setcolor(textcolor)
-                    font_face != "" && fontface(font_face)
+                    if !usedefaultfont 
+                        font_face != "" && fontface(font_face)
+                    end
                     fontsize(font_size)
                     text(str, midpoint(from, to), halign=:center, angle=textrotation)
                 end
@@ -329,7 +335,9 @@ function _drawedgelabels(from, to;
         end
     elseif edgelabels isa Function
         @layer begin
-            font_face != "" && fontface(font_face)
+            if !usedefaultfont 
+                font_face != "" && fontface(font_face)
+            end
             fontsize(font_size)
             edgelabels(edgenumber, edgesrc, edgedest, from, to)
         end
@@ -341,7 +349,9 @@ function _drawedgelabels(from, to;
             @layer begin
                 if textcolor != :none
                     setcolor(textcolor)
-                    font_face != "" && fontface(font_face)
+                    if !usedefaultfont 
+                        font_face != "" && fontface(font_face)
+                    end
                     fontsize(font_size)
                     text(edgelabel, midpoint(from, to), halign=:center, angle=textrotation)
                 end
@@ -619,18 +629,22 @@ function _drawvertexlabels(vertex, coordinates::Array{Point,1};
 
     # set font face
     font_face = ""
+    usedefaultfont = true
     if isnothing(vertexlabelfontfaces)
         # use default fontsize
     elseif vertexlabelfontfaces isa Array
         if !isempty(vertexlabelfontfaces)
             if vertexlabelfontfaces[mod1(vertex, end)] != :none
                 font_face = vertexlabelfontfaces[mod1(vertex, end)]
+                usedefaultfont = false
             end
         end
     elseif vertexlabelfontfaces isa AbstractRange
         font_face = vertexlabelfontfaces[mod1(vertex, end)]
+        usedefaultfont = false
     elseif vertexlabelfontfaces isa AbstractString
         font_face = vertexlabelfontfaces
+        usedefaultfont = false
     elseif vertexlabelfontfaces == :none
     end
 
@@ -717,7 +731,9 @@ function _drawvertexlabels(vertex, coordinates::Array{Point,1};
             rotate(textrotation)
             setcolor(textcolor)
             fontsize(font_size)
-            fontface(font_face)
+            if !usedefaultfont 
+                font_face != "" && fontface(font_face)
+            end
             text(vertexlabel, halign=:center, valign=:middle, O + polar(textoffsetdistance, textoffsetangle))
         end
     end
@@ -972,7 +988,7 @@ The gaps from vertex center to arrow tip
 
 The colors of the label text
 
-`edgelabelrotations`: A | Range | function  edgelabelrotations = (n, s, d, f, t) -> angle
+`edgelabelrotations`: Array | Range | function  edgelabelrotations = (n, s, d, f, t) -> angle
 
 The rotation of the label text
 
