@@ -840,24 +840,6 @@ vertexfunction(vtx, coords) ->  draw vertices
 edgefunction(edgenumber, edgesrc, edgedest, from, to) -> draw edges
 ```
 
-Or use these individual keywords:
-
-```
-• vertexlabels   f               • edgelabels  f
-• vertexshapes   f               • edgelines    f
-• vertexshapesizes f             • edgelist
-• vertexshaperotations f         • edgecurvature
-• vertexstrokecolors f           • edgestrokecolors   f
-• vertexstrokeweights f          • edgestrokeweights  f
-• vertexfillcolors f             • edgedashpatterns
-• vertexlabeltextcolors          • edgegaps
-• vertexlabelfontsizes           • edgelabelrotations f
-• vertexlabelfontfaces           • edgelabelcolors
-• vertexlabelrotations
-• vertexlabeloffsetangles
-• vertexlabeloffsetdistances
-```
-
 `layout`
 
 - the layout method or coordinates to be used. Examples:
@@ -898,103 +880,97 @@ Refer to the NetworkLayout.jl documentation for more.
 
 # Extended help
 
-Functions to control every aspect of vertex and edge:
+All keywords:
 
-`vertexfunction(vertex, coordinates)` ->
-
-A function `vertexfunction(vertex, coordinates)` that
-completely specifies the appearance of every vertex. None
-of the other vertex- keyword arguments will be used. Example:
-
+```plain
+ boundingbox                 BoundingBox                                              
+ margin                      Number                                                   
+ layout                      Vector{Point}                                            
+                             function from NetworkLayout.jl                           
+                             f(g::Graph)                                              
+ edgefunction                f(edgenumber::Int, edgesrc::Int, edgedest::Int, from::Poi
+ vertexfunction              f(vtx::Int, coordinates::Vector{Point})                  
+ edgecurvature               Float64                                                  
+ edgedashpatterns            Vector{Vector}[number]                                   
+                             Vector{Number}                                           
+ edgegaps                    Vector                                                   
+                             Range                                                    
+                             Real                                                     
+ edgelabelcolors             Vector{Colorant}                                         
+                             Colorant                                                 
+ edgelabelfontfaces          Vector{Strings}[edgenumber]                              
+                             String                                                   
+                             :none                                                    
+ edgelabelfontsizes          Vector{Number}                                           
+                             Number                                                   
+ edgelabelrotations          Vector{angles}                                           
+                             angle::Float64                                           
+                             f(edgenumber, edges, edgedest, from, to)                 
+ edgelabels                  Vector                                                   
+                             range                                                    
+                             Dict{Int, Int}                                           
+                             f(edgenumber, edgesrc, edgedest, from::Point, to::Point) 
+                             :none                                                    
+ edgelines                   Vector{Int}                                              
+                             range                                                    
+                             Int                                                      
+                             f(edgenumber, edgesrc, edgedest, from::Point, to::Point) 
+ edgelist                    Graphs.EdgeIterator                                      
+ edgestrokecolors            Vector{Colorant}[edge::Int]                              
+                             Colorant                                                 
+                             f(edgenumber, edgesrc, edgedest, from::Point, to::Point) 
+ edgestrokeweights           Vector{Number}[vtx]                                      
+                             range                                                    
+                             Real                                                     
+                             f(edgenumber, edgesrc, edgedest, from::Point, to::Point) 
+ vertexfillcolors            Vector{Colorant}                                         
+                             Colorant                                                 
+                             :none                                                    
+                             f(vtx::Int)                                              
+ vertexlabelfontfaces        Vector{Strings}                                          
+                             String                                                   
+ vertexlabelfontsizes        Vector                                                   
+                             range                                                    
+                             Real                                                     
+                             :none                                                    
+ vertexlabeloffsetangles     Vector                                                   
+                             Range                                                    
+                             Real                                                     
+ vertexlabeloffsetdistances  Vector                                                   
+                             range                                                    
+                             Real                                                     
+ vertexlabelrotations        Vector                                                   
+                             range                                                    
+                             Real                                                     
+                             :none                                                    
+ vertexlabels                Vector{String}                                           
+                             String                                                   
+                             range[vtx::Int]                                          
+                             :none                                                    
+                             f(vtx::Int)                                              
+ vertexlabeltextcolors       Vector{Colorant}                                         
+                             Colorant                                                 
+                             :none                                                    
+ vertexshaperotations        f(vtx::Int)                                              
+                             angle::Float64                                           
+ vertexshapes                Vector of :circle :square :none                          
+                             range[vtx]                                               
+                             :circle :square :none                                    
+                             f(vtx::Int)                                              
+ vertexshapesizes            Vector{Real}                                             
+                             range                                                    
+                             Real                                                     
+                             :none                                                    
+                             f(vtx::Int)                                              
+ vertexstrokecolors          Vector                                                   
+                             Colorant                                                 
+                             :none                                                    
+                             f(vtx::Int)                                              
+ vertexstrokeweights         Vector                                                   
+                             range                                                    
+                             :none                                                    
+                             f(vtx::Int)                                              
 ```
-vertexfunction = (v, c) -> ngon(c[v], 30, 6, 0, :fill)
-```
-
-`edgefunction(edgenumber, edgesrc, edgedest, from, to)` ->
-
-A function `edgefunction(edgenumber, from, to, edgesrc, edgedest)` that
-completely specifies the appearance of every edge. None
-of the other edge- keyword arguments are used.
-
-## Vertex options
-
-`vertexfillcolors`:  Array | Colorant | :none | Function (vtx) ->
-the colors for vertex
-
-`vertexlabels`: Array | Range " string "|:none | Function (vtx) -> return label for each vertex
-
-The text labels for each vertex. Vertex labels are not drawn by default.
-
-`vertexshapes` : Array | Range | :circle | :square | :none | Function (vtx) ->
-
-Use shape for vertex. If function, `vtx` is vertex number, using current vertex rotation
-(`vertextshaperotations`), make your own graphic shapes. The function can override rotations and colors.
-
-`vertexshapesizes`: Array | Range | Real | Function
-
-The size of each vertex shape for :circle :square...
-
-`vertexshaperotations`: Array | Range | Real | Function
-
-the rotation of shapes,
-
-`vertexstrokecolors`: Array | Colorant | :none | Function (vtx) -> colorant
-
-`vertexstrokeweights`: Array | Range | :none | Function
-
-`vertexfillcolors`: Array | Colorant | :none | Function (vtx) -> colorant
-
-`vertexlabeltextcolors`
-
-`vertexlabelfontsizes`
-
-`vertexlabelfontfaces`
-
-`vertexlabelrotations`
-
-`vertexlabeloffsetangles`
-
-`vertexlabeldistances`
-
-## Edge options
-
-`edgelist`: Array | Edge iterator
-
-A list of Edges (Graphs.EdgeIterator) to be drawn. Takes prioity over `edgelines`.
-
-`edgelines`: Array | Range | Int| :none | Function (edgenumber, edgesrc, edgedest, from, to) ->
-
-Edge lines to be drawn.
-
-`edgelabels`: Array  | Range | Dict | Function (edgenumber, edgesrc, edgedest, from::Point, to::Point) ->
-
-`edgecurvature=0.0`
-
-`edgestrokecolors`: Array | Colorant | Function (n, s, d, from, to)` -> colorant
-
-Colors of edges. Function can be `edgestrokecolors = (n, s, d, f, t) -> HSB(rescale(n, 1, ne(g), 0, 360), 0.9, 0.8))`
-
-`edgestrokeweights` Array | Range | Real | Function (n, s, d, from, to)` -> n
-
-`edgedashpatterns`: Array of Arrays | Array
-
-The dash pattern or an array of dash patterns for the edge lines. Dash patterns might be eg `[[10, 30], [1]]`. Numbers alternate between lines and spaces.
-
-`edgegaps`:
-
-The gaps from vertex center to arrow tip
-
-`edgelabelcolors`
-
-The colors of the label text
-
-`edgelabelrotations`: Array | Range | function  edgelabelrotations = (n, s, d, f, t) -> angle
-
-The rotation of the label text
-
-`edgelabelfontsizes`
-
-`edgelabelfontfaces`
 """
 function drawgraph(g::AbstractGraph;
     boundingbox::BoundingBox=BoundingBox(),
