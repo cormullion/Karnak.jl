@@ -30,14 +30,14 @@ end
 # TODO refactor
 
 function _drawedgelines(from, to, edgesrc, edgedest;
-    edgenumber=1,
-    edgelines=nothing,
-    edgestrokecolors=nothing,
-    edgestrokeweights=nothing,
-    edgedashpatterns=nothing,
-    edgegaps=nothing,
-    edgecurvature=0.0,
-    digraph=false)
+    edgenumber = 1,
+    edgelines = nothing,
+    edgestrokecolors = nothing,
+    edgestrokeweights = nothing,
+    edgedashpatterns = nothing,
+    edgegaps = nothing,
+    edgecurvature = 0.0,
+    digraph = false)
 
     # decide whether or not to draw this edge
     edgeline = nothing
@@ -79,7 +79,7 @@ function _drawedgelines(from, to, edgesrc, edgedest;
     elseif edgestrokecolors isa Colorant
         strokecolor = edgestrokecolors
     elseif edgestrokecolors isa Function
-        strokecolor = edgestrokecolors(edgenumber, edgesrc, edgedest, from, to, )
+        strokecolor = edgestrokecolors(edgenumber, edgesrc, edgedest, from, to)
         !(strokecolor isa Colorant) && throw(error("edgestrokecolors should return a color"))
     elseif edgestrokecolors == :none
         strokecolor = :none
@@ -169,23 +169,37 @@ function _drawedgelines(from, to, edgesrc, edgedest;
                     loopcenter = from + polar(selfloopradius, s)
                     translate(loopcenter)
                     rotate(π + s)
-                    arrow(O, selfloopradius, 0, 2π - π / 16, linewidth=linewidth, arrowheadlength=rescale(linewidth, 1, 10, 12, 25))
-                    arrow(O, selfloopradius, 0, 2π - π / 16, linewidth=linewidth, arrowheadlength=rescale(linewidth, 1, 10, 12, 25))
+                    arrow(
+                        O,
+                        selfloopradius,
+                        0,
+                        2π - π / 16,
+                        linewidth = linewidth,
+                        arrowheadlength = rescale(linewidth, 1, 10, 12, 25),
+                    )
+                    arrow(
+                        O,
+                        selfloopradius,
+                        0,
+                        2π - π / 16,
+                        linewidth = linewidth,
+                        arrowheadlength = rescale(linewidth, 1, 10, 12, 25),
+                    )
                 end
-             # digraph
-             elseif digraph == true
+                # digraph
+            elseif digraph == true
                 if abs(edgecurvature) > 0.0
-                   # digraph _and_ curvey edges
-                   # use default shape radius to allow for arrows, unless otherwise specified
-                   if edgegap == :none
-                       edgegap = defaultshaperadius
-                   end
-                   normalizedgap = edgegap/d
+                    # digraph _and_ curvey edges
+                    # use default shape radius to allow for arrows, unless otherwise specified
+                    if edgegap == :none
+                        edgegap = defaultshaperadius
+                    end
+                    normalizedgap = edgegap / d
                     arrow(between(from, to, normalizedgap),
                         between(from, to, 1 - normalizedgap),
                         [edgecurvature, edgecurvature],
-                        startarrow=false,
-                        finisharrow=true, :stroke, arrowheadlength=rescale(linewidth, 1, 10, 12, 25))
+                        startarrow = false,
+                        finisharrow = true, :stroke, arrowheadlength = rescale(linewidth, 1, 10, 12, 25))
                 else
                     # digraph, straight edges
                     # default gap is at least the radius of default shape
@@ -193,29 +207,31 @@ function _drawedgelines(from, to, edgesrc, edgedest;
                     if edgegap == :none
                         edgegap = defaultshaperadius
                     end
-                    normalizedgap = edgegap/d
+                    normalizedgap = edgegap / d
                     arrow(between(from, to, normalizedgap),
                         between(from, to, 1 - normalizedgap),
                         [0, 0],
-                        startarrow=false,
-                        finisharrow=true, :stroke, linewidth=linewidth, arrowheadlength=rescale(linewidth, 1, 10, 12, 25))
+                        startarrow = false,
+                        finisharrow = true, :stroke, linewidth = linewidth,
+                        arrowheadlength = rescale(linewidth, 1, 10, 12, 25))
                 end
-            # graph
+                # graph
             elseif digraph == false
                 if edgegap == :none
                     normalizedgap = 0
                 elseif isapprox(edgegap, 0.0)
                     normalizedgap = 0
                 else
-                    normalizedgap = edgegap/d
+                    normalizedgap = edgegap / d
                 end
                 # not digraph
                 if abs(edgecurvature) > 0.0
                     arrow(between(from, to, normalizedgap),
                         between(from, to, 1 - normalizedgap),
                         [edgecurvature, edgecurvature],
-                        startarrow=true,
-                        finisharrow=true, :stroke, linewidth=linewidth, arrowheadlength=arrowheadlength=rescale(linewidth, 1, 10, 12, 25))
+                        startarrow = true,
+                        finisharrow = true, :stroke, linewidth = linewidth,
+                        arrowheadlength = arrowheadlength = rescale(linewidth, 1, 10, 12, 25))
                 else
                     line(between(from, to, normalizedgap), between(from, to, 1 - normalizedgap), :stroke)
                 end
@@ -225,16 +241,16 @@ function _drawedgelines(from, to, edgesrc, edgedest;
 end
 
 function _drawedgelabels(from, to;
-    edgenumber=1,
-    edgesrc=1,
-    edgedest=nothing,
-    digraph=false,
-    straight=true,
-    edgelabels=nothing,
-    edgelabelcolors=nothing,
-    edgelabelrotations=nothing,
-    edgelabelfontsizes=nothing,
-    edgelabelfontfaces=nothing)
+    edgenumber = 1,
+    edgesrc = 1,
+    edgedest = nothing,
+    digraph = false,
+    straight = true,
+    edgelabels = nothing,
+    edgelabelcolors = nothing,
+    edgelabelrotations = nothing,
+    edgelabelfontsizes = nothing,
+    edgelabelfontfaces = nothing)
 
     # edge labels
 
@@ -296,22 +312,22 @@ function _drawedgelabels(from, to;
 
     # set font face
     font_face = ""
-    usedefaultfont=true
+    usedefaultfont = true
     if isnothing(edgelabelfontfaces)
         # use default fontface
     elseif edgelabelfontfaces isa Array
         if !isempty(edgelabelfontfaces)
             if edgelabelfontfaces[mod1(edgenumber, end)] != :none
                 font_face = edgelabelfontfaces[mod1(edgenumber, end)]
-                usedefaultfont=false
+                usedefaultfont = false
             end
         end
     elseif edgelabelfontfaces isa AbstractRange
         font_face = edgelabelfontfaces[mod1(edgenumber, end)]
-        usedefaultfont=false
+        usedefaultfont = false
     elseif edgelabelfontfaces isa AbstractString
         font_face = edgelabelfontfaces
-        usedefaultfont=false
+        usedefaultfont = false
     elseif edgelabelfontfaces == :none
     end
 
@@ -325,17 +341,17 @@ function _drawedgelabels(from, to;
                 str = string(collect(edgelabels)[mod1(edgenumber, end)])
                 if textcolor != :none
                     setcolor(textcolor)
-                    if !usedefaultfont 
+                    if !usedefaultfont
                         font_face != "" && fontface(font_face)
                     end
                     fontsize(font_size)
-                    text(str, midpoint(from, to), halign=:center, angle=textrotation)
+                    text(str, midpoint(from, to), halign = :center, angle = textrotation)
                 end
             end
         end
     elseif edgelabels isa Function
         @layer begin
-            if !usedefaultfont 
+            if !usedefaultfont
                 font_face != "" && fontface(font_face)
             end
             fontsize(font_size)
@@ -349,11 +365,11 @@ function _drawedgelabels(from, to;
             @layer begin
                 if textcolor != :none
                     setcolor(textcolor)
-                    if !usedefaultfont 
+                    if !usedefaultfont
                         font_face != "" && fontface(font_face)
                     end
                     fontsize(font_size)
-                    text(edgelabel, midpoint(from, to), halign=:center, angle=textrotation)
+                    text(edgelabel, midpoint(from, to), halign = :center, angle = textrotation)
                 end
             end
         end
@@ -365,12 +381,12 @@ function _drawedgelabels(from, to;
 end
 
 function _drawvertexshapes(vertex, coordinates::Array{Point,1};
-    vertexshapes=nothing,
-    vertexshapesizes=nothing,
-    vertexfillcolors=nothing,
-    vertexstrokecolors=nothing,
-    vertexstrokeweights=nothing,
-    vertexshaperotations=nothing)
+    vertexshapes = nothing,
+    vertexshapesizes = nothing,
+    vertexfillcolors = nothing,
+    vertexstrokecolors = nothing,
+    vertexstrokeweights = nothing,
+    vertexshaperotations = nothing)
 
     # decide whether or not to draw a shape at this vertex
 
@@ -578,13 +594,13 @@ function _drawvertexshapes(vertex, coordinates::Array{Point,1};
 end
 
 function _drawvertexlabels(vertex, coordinates::Array{Point,1};
-    vertexlabels=nothing,
-    vertexlabeltextcolors=nothing,
-    vertexlabelfontsizes=nothing,
-    vertexlabelfontfaces=nothing,
-    vertexlabelrotations=nothing,
-    vertexlabeloffsetangles=nothing,
-    vertexlabeloffsetdistances=nothing)
+    vertexlabels = nothing,
+    vertexlabeltextcolors = nothing,
+    vertexlabelfontsizes = nothing,
+    vertexlabelfontfaces = nothing,
+    vertexlabelrotations = nothing,
+    vertexlabeloffsetangles = nothing,
+    vertexlabeloffsetdistances = nothing)
 
     # decide whether to draw this vertex
 
@@ -624,6 +640,8 @@ function _drawvertexlabels(vertex, coordinates::Array{Point,1};
         font_size = vertexlabelfontsizes[mod1(vertex, end)]
     elseif vertexlabelfontsizes isa Real
         font_size = vertexlabelfontsizes[mod1(vertex, end)]
+    elseif vertexlabelfontsizes isa Function
+        font_size = vertexlabelfontsizes(vertex, coordinates)
     elseif vertexlabelfontsizes == :none
     end
 
@@ -664,6 +682,8 @@ function _drawvertexlabels(vertex, coordinates::Array{Point,1};
         textcolor = vertexlabeltextcolors[mod1(vertex, end)]
     elseif vertexlabeltextcolors isa Colorant
         textcolor = vertexlabeltextcolors
+    elseif vertexlabeltextcolors isa Function
+        textcolor = vertexlabeltextcolors(vertex)
     elseif vertexlabeltextcolors == :none
         textcolor = :none
     end
@@ -731,10 +751,10 @@ function _drawvertexlabels(vertex, coordinates::Array{Point,1};
             rotate(textrotation)
             setcolor(textcolor)
             fontsize(font_size)
-            if !usedefaultfont 
+            if !usedefaultfont
                 font_face != "" && fontface(font_face)
             end
-            text(vertexlabel, halign=:center, valign=:middle, O + polar(textoffsetdistance, textoffsetangle))
+            text(vertexlabel, halign = :center, valign = :middle, O + polar(textoffsetdistance, textoffsetangle))
         end
     end
 end
@@ -744,18 +764,18 @@ function drawedge(from::Point, to::Point;
     edgenumber::Integer,
     edgesrc::Integer,
     edgedest::Integer,
-    edgefunction=nothing,
-    edgelabels=nothing,
-    edgelines=nothing,
-    edgedashpatterns=nothing,
-    edgegaps=nothing,
-    edgecurvature=nothing,
-    edgestrokecolors=nothing,
-    edgelabelcolors=nothing,
-    edgelabelfontsizes=nothing,
-    edgelabelfontfaces=nothing,
-    edgestrokeweights=nothing,
-    edgelabelrotations=nothing)
+    edgefunction = nothing,
+    edgelabels = nothing,
+    edgelines = nothing,
+    edgedashpatterns = nothing,
+    edgegaps = nothing,
+    edgecurvature = nothing,
+    edgestrokecolors = nothing,
+    edgelabelcolors = nothing,
+    edgelabelfontsizes = nothing,
+    edgelabelfontfaces = nothing,
+    edgestrokeweights = nothing,
+    edgelabelrotations = nothing)
 
     # is completely specified by function?
     if edgefunction isa Function
@@ -770,8 +790,8 @@ function drawedge(from::Point, to::Point;
             edgestrokeweights,
             edgedashpatterns,
             edgegaps,
-            digraph=is_directed(graph),
-            edgecurvature=edgecurvature)
+            digraph = is_directed(graph),
+            edgecurvature = edgecurvature)
         _drawedgelabels(from, to;
             edgenumber,
             edgesrc,
@@ -785,20 +805,20 @@ function drawedge(from::Point, to::Point;
 end
 
 function drawvertex(vertex, coordinates::Array{Point,1};
-    vertexfunction=nothing,
-    vertexlabels=nothing,
-    vertexshapes=nothing,
-    vertexshapesizes=nothing,
-    vertexshaperotations=nothing,
-    vertexstrokecolors=nothing,
-    vertexstrokeweights=nothing,
-    vertexfillcolors=nothing,
-    vertexlabeltextcolors=nothing,
-    vertexlabelfontsizes=nothing,
-    vertexlabelfontfaces=nothing,
-    vertexlabelrotations=nothing,
-    vertexlabeloffsetangles=nothing,
-    vertexlabeloffsetdistances=nothing)
+    vertexfunction = nothing,
+    vertexlabels = nothing,
+    vertexshapes = nothing,
+    vertexshapesizes = nothing,
+    vertexshaperotations = nothing,
+    vertexstrokecolors = nothing,
+    vertexstrokeweights = nothing,
+    vertexfillcolors = nothing,
+    vertexlabeltextcolors = nothing,
+    vertexlabelfontsizes = nothing,
+    vertexlabelfontfaces = nothing,
+    vertexlabelrotations = nothing,
+    vertexlabeloffsetangles = nothing,
+    vertexlabeloffsetdistances = nothing)
 
     # is completely specified by function?
     if vertexfunction isa Function
@@ -820,7 +840,7 @@ function drawvertex(vertex, coordinates::Array{Point,1};
             vertexlabelfontfaces,
             vertexlabelrotations,
             vertexlabeloffsetangles,
-            vertexlabeloffsetdistances
+            vertexlabeloffsetdistances,
         )
     end
 end
@@ -842,7 +862,7 @@ edgefunction(edgenumber, edgesrc, edgedest, from, to) -> draw edges
 
 `layout`
 
-- the layout method or coordinates to be used. Examples:
+  - the layout method or coordinates to be used. Examples:
 
 ```
 layout = squaregrid
@@ -932,7 +952,8 @@ All keywords:
  vertexlabelfontsizes        Vector                                                   
                              range                                                    
                              Real                                                     
-                             :none                                                    
+                             :none
+                             f(vtx::Int, coord::Point[])       ************************                                             
  vertexlabeloffsetangles     Vector                                                   
                              Range                                                    
                              Real                                                     
@@ -949,7 +970,8 @@ All keywords:
                              :none                                                    
                              f(vtx::Int)                                              
  vertexlabeltextcolors       Vector{Colorant}                                         
-                             Colorant                                                 
+                             Colorant
+                             f(vtx::Int)                                                 
                              :none                                                    
  vertexshaperotations        f(vtx::Int)                                              
                              angle::Float64                                           
@@ -973,42 +995,45 @@ All keywords:
 ```
 """
 function drawgraph(g::AbstractGraph;
-    boundingbox::BoundingBox=BoundingBox(),
-    layout=nothing,
-    margin::Real=30,
-    vertexfunction=nothing,
-    vertexlabels=nothing,
-    vertexshapes=nothing,
-    vertexshapesizes=nothing,
-    vertexshaperotations=nothing,
-    vertexstrokecolors=nothing,
-    vertexstrokeweights=nothing,
-    vertexfillcolors=nothing,
-    vertexlabeltextcolors=nothing,
-    vertexlabelfontsizes=nothing,
-    vertexlabelfontfaces=nothing,
-    vertexlabelrotations=nothing,
-    vertexlabeloffsetangles=nothing,
-    vertexlabeloffsetdistances=nothing,
-    edgelist=nothing,
-    edgefunction=nothing,
-    edgelabels=nothing,
-    edgelines=nothing,
-    edgecurvature=0.0,
-    edgestrokecolors=nothing,
-    edgelabelcolors=nothing,
-    edgelabelfontsizes=nothing,
-    edgelabelfontfaces=nothing,
-    edgestrokeweights=nothing,
-    edgedashpatterns=nothing,
-    edgegaps=nothing,
-    edgelabelrotations=nothing)
+    boundingbox::BoundingBox = BoundingBox(),
+    layout = nothing,
+    margin::Real = 30,
+    vertexfunction = nothing,
+    vertexlabels = nothing,
+    vertexshapes = nothing,
+    vertexshapesizes = nothing,
+    vertexshaperotations = nothing,
+    vertexstrokecolors = nothing,
+    vertexstrokeweights = nothing,
+    vertexfillcolors = nothing,
+    vertexlabeltextcolors = nothing,
+    vertexlabelfontsizes = nothing,
+    vertexlabelfontfaces = nothing,
+    vertexlabelrotations = nothing,
+    vertexlabeloffsetangles = nothing,
+    vertexlabeloffsetdistances = nothing,
+    edgelist = nothing,
+    edgefunction = nothing,
+    edgelabels = nothing,
+    edgelines = nothing,
+    edgecurvature = 0.0,
+    edgestrokecolors = nothing,
+    edgelabelcolors = nothing,
+    edgelabelfontsizes = nothing,
+    edgelabelfontfaces = nothing,
+    edgestrokeweights = nothing,
+    edgedashpatterns = nothing,
+    edgegaps = nothing,
+    edgelabelrotations = nothing)
 
     # so, do we need some coordinates for the vertices?
     # do we have a layout function to call?
     if isnothing(layout)
         # no, make some random points up, a circle should do
-        coordinates = [polar(min(boxwidth(boundingbox - margin), boxheight(boundingbox - margin)) / 2, θ) for θ in range(0, step=2π / nv(g), length=nv(g))]
+        coordinates = [
+            polar(min(boxwidth(boundingbox - margin), boxheight(boundingbox - margin)) / 2, θ) for
+            θ in range(0, step = 2π / nv(g), length = nv(g))
+        ]
     elseif layout isa Array{Point,1}
         coordinates = layout
     else
@@ -1032,10 +1057,10 @@ function drawgraph(g::AbstractGraph;
             drawedge(
                 coordinates[s],
                 coordinates[d];
-                graph=g,
-                edgenumber=n,
-                edgesrc=s,
-                edgedest=d,
+                graph = g,
+                edgenumber = n,
+                edgesrc = s,
+                edgedest = d,
                 edgefunction,
                 edgelabels,
                 edgelines,

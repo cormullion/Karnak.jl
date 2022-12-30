@@ -1,6 +1,6 @@
 ```@setup tubesection
 using Karnak, Luxor, Graphs, NetworkLayout, Colors
-using DataFrames, CSV
+using DataFrames, CSV, DelimitedFiles
 
 # positions are in LatLong
 
@@ -152,6 +152,115 @@ end 1200 550
 ```
 
 It can be quite difficult to get the final output to look perfect.
+
+# Simple dependency graph
+
+You can draw a visual interpretation of a Julia package's dependencies easily enough by going through the TOML files.
+
+```@raw html
+<details closed><summary>Code for this figure</summary>
+```
+
+This code generates the figure below:
+
+```@example depgraph
+using Karnak
+using Graphs
+using NetworkLayout
+using InteractiveUtils
+using Colors
+using TOML
+using Base: active_project
+
+# mostly stolen from PkgGraph.jl by tfiers!
+
+manifest(proj_path) = replace(proj_path, "Project.toml" => "Manifest.toml")
+
+if VERSION ≥ v"1.7"
+    packages_in(manifest) = TOML.parsefile(manifest)["deps"]
+else
+    packages_in(manifest) = TOML.parsefile(manifest)
+end
+
+packages_in_active_manifest() = packages_in(manifest(active_project()))
+
+function depgraph(pkgname)
+    rootpkg = string(pkgname)
+    packages = packages_in_active_manifest()
+    if rootpkg ∉ keys(packages)
+        error("""
+        The given package ($pkgname) must be installed in the active project
+        (which is currently `$(active_project())`)""")
+    end
+    deps = Vector{Pair{String,String}}()
+    add_deps_of(name) = begin
+        pkg_info = only(packages[name])
+        direct_deps = get(pkg_info, "deps", [])
+        for dep in direct_deps
+            push!(deps, name => dep)
+            add_deps_of(dep)
+        end
+    end
+    add_deps_of(rootpkg)
+    return unique!(deps)
+end
+
+function build_depgraph(pkgname)
+    dgraphs = depgraph(pkgname)
+    pkglist = String[]
+    for (f, t) in dgraphs
+        if f ∉ pkglist
+            push!(pkglist, f)
+        end
+        if t ∉ pkglist
+            push!(pkglist, t)
+        end
+    end
+    g = DiGraph(length(pkglist))
+    for (f, t) in dgraphs
+        if f ∈ pkglist && t ∈ pkglist
+            add_edge!(g, findfirst(isequal(f), pkglist), findfirst(isequal(t), pkglist))
+        end
+    end
+    return g, pkglist
+end
+
+g, pkgnames = build_depgraph("Colors")
+
+d = @drawsvg begin
+    background("black")
+    sethue("gold")
+    fontsize(10)
+    fontface("Avenir-Black")
+    drawgraph(
+        g,
+        layout = Spring(iterations = 60),
+        edgegaps = 10,
+        edgecurvature = 4,
+        vertexlabels = (vtx) -> begin
+            string(pkgnames[vtx])
+        end,
+        vertexshapes = (v) -> begin
+            tx = textextents(pkgnames[v])
+            @layer begin
+                setopacity(0.8)
+                sethue("grey80")
+                box(O, 1.2tx[5], 1.5tx[4], :fill)
+            end
+        end,
+    )
+end 800 700
+```
+
+```@raw html
+</details>
+```
+
+```@example depgraph
+d # hide
+```
+
+There's an extended investigation of package dependencies later in this section.
 
 ## The London Tube
 

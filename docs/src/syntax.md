@@ -4,98 +4,6 @@ using Karnak, Luxor, Graphs, NetworkLayout, Colors, SimpleWeightedGraphs
 
 # Syntax
 
-## Summary of keywords
-
-|                            |                                                                                           |                                                                                                                                          |
-| -------------------------: | :---------------------------------------------------------------------------------------- | :--------------------------------------------------------------------------------------------------------------------------------------- | 
-| boundingbox                | BoundingBox                                                                               | drawing will fit inside this bounding box                                                                                                |
-| margin                     | Number                                                                                    | margin in points/pixels                                                                                                                  |
-| layout                     | Vector{Point}                                                                             | list of coordinates of each vertex                                                                                                       |
-|                            | function from NetworkLayout.jl                                                            | squaregrid, shell, stress, etc                                                                                                           |
-|                            | f(g::Graph)                                                                               | (g) -> spectral(adjacency_matrix(g), dim=2)                                                                                              |
-| edgefunction               | f(edgenumber::Int, edgesrc::Int, edgedest::Int, from::Point, to::Point)                   | function that completely specifies the appearance of every edge. If present, none of the other edge- keyword arguments are used.       |
-| vertexfunction             | f(vtx::Int, coordinates::Vector{Point})                                                   | function that completely specifies the appearance of every vertex. If present, None of the other vertex- keyword arguments will be used. |
-| edgecurvature              | Float64                                                                                   | curviness of edge arrows                                                                                                                 |
-| edgedashpatterns           | Vector{Vector}[number]                                                                    | vector of dash patterns                                                                                                                  |
-|                            | Vector{Number}                                                                            | a dash pattern                                                                                                                           |
-| edgegaps                   | Vector                                                                                    | gaps from each vertex center to arrow tip                                                                                                |
-|                            | Range                                                                                     |                                                                                                                                          |
-|                            | Real                                                                                      | gaps from every vertex center to arrow tip                                                                                               |
-| edgelabelcolors            | Vector{Colorant}                                                                          | colors of each vertex's label text                                                                                                       |
-|                            | Colorant                                                                                  | color of all vertex labels                                                                                                               |
-| edgelabelfontfaces         | Vector{Strings}[edgenumber]                                                               | font face for each edge                                                                                                                  |
-|                            | String                                                                                    | font face for every edge                                                                                                                 |
-|                            | :none                                                                                     |                                                                                                                                          |
-| edgelabelfontsizes         | Vector{Number}                                                                            | the font size of each edge label                                                                                                         |
-|                            | Number                                                                                    | the font size of every edge label                                                                                                        |
-| edgelabelrotations         | Vector{angles}                                                                            | rotation of each label                                                                                                                   |
-|                            | angle::Float64                                                                            | rotation of every label                                                                                                                  |
-|                            | f(edgenumber, edges, edgedest, from, to)                                                  | function returns angle for this edge                                                                                                     |
-| edgelabels                 | Vector                                                                                    |                                                                                                                                          |
-|                            | range                                                                                     |                                                                                                                                          |
-|                            | Dict{Int, Int}                                                                            | (src, dst) => "labeltext"                                                                                                                |
-|                            | f(edgenumber, edgesrc, edgedest, from::Point, to::Point)                                  |                                                                                                                                          |
-|                            | :none                                                                                     |                                                                                                                                          |
-| edgelines                  | Vector{Int}                                                                               | numbers of edges to be drawn                                                                                                             |
-|                            | range                                                                                     |                                                                                                                                          |
-|                            | Int                                                                                       |                                                                                                                                          |
-|                            | f(edgenumber, edgesrc, edgedest, from::Point, to::Point)                                  |                                                                                                                                          |
-| edgelist                   | Graphs.EdgeIterator                                                                       | the edges to be drawn - takes prioity over edgelines                                                                                     |
-| edgestrokecolors           | Vector{Colorant}[edge::Int]                                                               | colors for edges                                                                                                                         |
-|                            | Colorant                                                                                  | color for every edge                                                                                                                     |
-|                            | f(edgenumber, edgesrc, edgedest, from::Point, to::Point)                                  | function to set color for this edge                                                                                                      |
-| edgestrokeweights          | Vector{Number}[vtx]                                                                       |                                                                                                                                          |
-|                            | range                                                                                     |                                                                                                                                          |
-|                            | Real                                                                                      |                                                                                                                                          |
-|                            | f(edgenumber, edgesrc, edgedest, from::Point, to::Point)                                  | function that returns a value for line width                                                                                             |
-| vertexfillcolors           | Vector{Colorant}                                                                          |                                                                                                                                          |
-|                            | Colorant                                                                                  |                                                                                                                                          |
-|                            | :none                                                                                     |                                                                                                                                          |
-|                            | f(vtx::Int)                                                                               |                                                                                                                                          |
-| vertexlabelfontfaces       | Vector{Strings}                                                                           | font face for each vertex                                                                                                                |
-|                            | String                                                                                    | font face for every vertex                                                                                                               |
-| vertexlabelfontsizes       | Vector                                                                                    |                                                                                                                                          |
-|                            | range                                                                                     |                                                                                                                                          |
-|                            | Real                                                                                      |                                                                                                                                          |
-|                            | :none                                                                                     |                                                                                                                                          |
-| vertexlabeloffsetangles    | Vector                                                                                    |                                                                                                                                          |
-|                            | Range                                                                                     |                                                                                                                                          |
-|                            | Real                                                                                      |                                                                                                                                          |
-| vertexlabeloffsetdistances | Vector                                                                                    |                                                                                                                                          |
-|                            | range                                                                                     |                                                                                                                                          |
-|                            | Real                                                                                      |                                                                                                                                          |
-| vertexlabelrotations       | Vector                                                                                    |                                                                                                                                          |
-|                            | range                                                                                     |                                                                                                                                          |
-|                            | Real                                                                                      |                                                                                                                                          |
-|                            | :none                                                                                     |                                                                                                                                          |
-| vertexlabels               | Vector{String}                                                                            | cycles                                                                                                                                   |
-|                            | String                                                                                    | used for all vertices                                                                                                                    |
-|                            | range[vtx::Int]                                                                           | string of the number in the range, cycles                                                                                                |
-|                            | :none                                                                                     |                                                                                                                                          |
-|                            | f(vtx::Int)                                                                               | function returns a string for the vertex number                                                                                          |
-| vertexlabeltextcolors      | Vector{Colorant}                                                                          | color for each text label                                                                                                                |
-|                            | Colorant                                                                                  | color of all text labels                                                                                                                 |
-|                            | :none                                                                                     |                                                                                                                                          |
-| vertexshaperotations       | f(vtx::Int)                                                                               |                                                                                                                                          |
-|                            | angle::Float64                                                                            |                                                                                                                                          |
-| vertexshapes               | Vector of :circle :square :none                                                           | shapes of each vertex                                                                                                                    |
-|                            | range[vtx]                                                                                | draw default shape at this vertex                                                                                                        |
-|                            | :circle :square :none                                                                     | shape of every vertex                                                                                                                    |
-|                            | f(vtx::Int)                                                                               | function draws shape at this vertex (which is Point(0, 0))                                                                               |
-| vertexshapesizes           | Vector{Real}                                                                              |                                                                                                                                          |
-|                            | range                                                                                     |                                                                                                                                          |
-|                            | Real                                                                                      |                                                                                                                                          |
-|                            | :none                                                                                     |                                                                                                                                          |
-|                            | f(vtx::Int)                                                                               |                                                                                                                                          |
-| vertexstrokecolors         | Vector                                                                                    |                                                                                                                                          |
-|                            | Colorant                                                                                  |                                                                                                                                          |
-|                            | :none                                                                                     |                                                                                                                                          |
-|                            | f(vtx::Int)                                                                               |                                                                                                                                          |
-| vertexstrokeweights        | Vector                                                                                    |                                                                                                                                          |
-|                            | range                                                                                     |                                                                                                                                          |
-|                            | :none                                                                                     |                                                                                                                                          |
-|                            | f(vtx::Int)                                                                               |                                                                                                                                          |
-
 ## Overview
 
 Karnak's function for drawing graphs is `drawgraph()`. This
@@ -178,6 +86,99 @@ from the beginning again.
 Use `drawgraph()` more than once, if needed, to build up the
 graph in layers. Remember to use the same layout algorithm.
 
+## Summary of keywords
+
+|                            |                                                                                           |                                                                                                                                          |
+| -------------------------: | :---------------------------------------------------------------------------------------- | :--------------------------------------------------------------------------------------------------------------------------------------- | 
+| boundingbox                | BoundingBox                                                                               | drawing will fit inside this bounding box                                                                                                |
+| margin                     | Number                                                                                    | margin in points/pixels                                                                                                                  |
+| layout                     | Vector{Point}                                                                             | list of coordinates of each vertex                                                                                                       |
+|                            | function from NetworkLayout.jl                                                            | squaregrid, shell, stress, etc                                                                                                           |
+|                            | f(g::Graph)                                                                               | (g) -> spectral(adjacency_matrix(g), dim=2)                                                                                              |
+| edgefunction               | f(edgenumber::Int, edgesrc::Int, edgedest::Int, from::Point, to::Point)                   | function that completely specifies the appearance of every edge. If present, none of the other edge- keyword arguments are used.         |
+| vertexfunction             | f(vtx::Int, coordinates::Vector{Point})                                                   | function that completely specifies the appearance of every vertex. If present, None of the other vertex- keyword arguments will be used. |
+| edgecurvature              | Float64                                                                                   | curviness of edge arrows                                                                                                                 |
+| edgedashpatterns           | Vector{Vector}[number]                                                                    | vector of dash patterns                                                                                                                  |
+|                            | Vector{Number}                                                                            | a dash pattern                                                                                                                           |
+| edgegaps                   | Vector                                                                                    | gaps from each vertex center to arrow tip                                                                                                |
+|                            | Range                                                                                     |                                                                                                                                          |
+|                            | Real                                                                                      | gaps from every vertex center to arrow tip                                                                                               |
+| edgelabelcolors            | Vector{Colorant}                                                                          | colors of each vertex's label text                                                                                                       |
+|                            | Colorant                                                                                  | color of all vertex labels                                                                                                               |
+| edgelabelfontfaces         | Vector{Strings}[edgenumber]                                                               | font face for each edge                                                                                                                  |
+|                            | String                                                                                    | font face for every edge                                                                                                                 |
+|                            | :none                                                                                     |                                                                                                                                          |
+| edgelabelfontsizes         | Vector{Number}                                                                            | the font size of each edge label                                                                                                         |
+|                            | Number                                                                                    | the font size of every edge label                                                                                                        |
+| edgelabelrotations         | Vector{angles}                                                                            | rotation of each label                                                                                                                   |
+|                            | angle::Float64                                                                            | rotation of every label                                                                                                                  |
+|                            | f(edgenumber, edges, edgedest, from, to)                                                  | function returns angle for this edge                                                                                                     |
+| edgelabels                 | Vector                                                                                    |                                                                                                                                          |
+|                            | range                                                                                     |                                                                                                                                          |
+|                            | Dict{Int, Int}                                                                            | (src, dst) => "labeltext"                                                                                                                |
+|                            | f(edgenumber, edgesrc, edgedest, from::Point, to::Point)                                  |                                                                                                                                          |
+|                            | :none                                                                                     |                                                                                                                                          |
+| edgelines                  | Vector{Int}                                                                               | numbers of edges to be drawn                                                                                                             |
+|                            | range                                                                                     |                                                                                                                                          |
+|                            | Int                                                                                       |                                                                                                                                          |
+|                            | f(edgenumber, edgesrc, edgedest, from::Point, to::Point)                                  |                                                                                                                                          |
+| edgelist                   | Graphs.EdgeIterator                                                                       | the edges to be drawn - takes prioity over edgelines                                                                                     |
+| edgestrokecolors           | Vector{Colorant}[edge::Int]                                                               | colors for edges                                                                                                                         |
+|                            | Colorant                                                                                  | color for every edge                                                                                                                     |
+|                            | f(edgenumber, edgesrc, edgedest, from::Point, to::Point)                                  | function to set color for this edge                                                                                                      |
+| edgestrokeweights          | Vector{Number}[vtx]                                                                       |                                                                                                                                          |
+|                            | range                                                                                     |                                                                                                                                          |
+|                            | Real                                                                                      |                                                                                                                                          |
+|                            | f(edgenumber, edgesrc, edgedest, from::Point, to::Point)                                  | function that returns a value for line width                                                                                             |
+| vertexfillcolors           | Vector{Colorant}                                                                          |                                                                                                                                          |
+|                            | Colorant                                                                                  |                                                                                                                                          |
+|                            | :none                                                                                     |                                                                                                                                          |
+|                            | f(vtx::Int)                                                                               |                                                                                                                                          |
+| vertexlabelfontfaces       | Vector{Strings}                                                                           | font face for each vertex                                                                                                                |
+|                            | String                                                                                    | font face for every vertex                                                                                                               |
+| vertexlabelfontsizes       | Vector                                                                                    |                                                                                                                                          |
+|                            | range                                                                                     |                                                                                                                                          |
+|                            | Real                                                                                      |                                                                                                                                          |
+|                            | :none                                                                                     |                                                                                                                                          |
+|                            | f(vtx::Int, coords::Point[])                                                              | function returns the fontsize for this label                                                                                             |
+| vertexlabeloffsetangles    | Vector                                                                                    |                                                                                                                                          |
+|                            | Range                                                                                     |                                                                                                                                          |
+|                            | Real                                                                                      |                                                                                                                                          |
+| vertexlabeloffsetdistances | Vector                                                                                    |                                                                                                                                          |
+|                            | range                                                                                     |                                                                                                                                          |
+|                            | Real                                                                                      |                                                                                                                                          |
+| vertexlabelrotations       | Vector                                                                                    |                                                                                                                                          |
+|                            | range                                                                                     |                                                                                                                                          |
+|                            | Real                                                                                      |                                                                                                                                          |
+|                            | :none                                                                                     |                                                                                                                                          |
+| vertexlabels               | Vector{String}                                                                            | cycles                                                                                                                                   |
+|                            | String                                                                                    | used for all vertices                                                                                                                    |
+|                            | range[vtx::Int]                                                                           | string of the number in the range, cycles                                                                                                |
+|                            | :none                                                                                     |                                                                                                                                          |
+|                            | f(vtx::Int)                                                                               | function returns a string for the vertex label                                                                                           |
+| vertexlabeltextcolors      | Vector{Colorant}                                                                          | color for each text label                                                                                                                |
+|                            | Colorant                                                                                  | color of all text labels                                                                                                                 |
+|                            | :none                                                                                     |                                                                                                                                          |
+|                            | f(vtx::Int)                                                                               | function returning a colorant                                                                                                            |
+| vertexshaperotations       | f(vtx::Int)                                                                               |                                                                                                                                          |
+|                            | angle::Float64                                                                            |                                                                                                                                          |
+| vertexshapes               | Vector of :circle :square :none                                                           | shapes of each vertex                                                                                                                    |
+|                            | range[vtx]                                                                                | draw default shape at this vertex                                                                                                        |
+|                            | :circle :square :none                                                                     | shape of every vertex                                                                                                                    |
+|                            | f(vtx::Int)                                                                               | function draws shape at this vertex (which is Point(0, 0))                                                                               |
+| vertexshapesizes           | Vector{Real}                                                                              |                                                                                                                                          |
+|                            | range                                                                                     |                                                                                                                                          |
+|                            | Real                                                                                      |                                                                                                                                          |
+|                            | :none                                                                                     |                                                                                                                                          |
+|                            | f(vtx::Int)                                                                               |                                                                                                                                          |
+| vertexstrokecolors         | Vector                                                                                    |                                                                                                                                          |
+|                            | Colorant                                                                                  |                                                                                                                                          |
+|                            | :none                                                                                     |                                                                                                                                          |
+|                            | f(vtx::Int)                                                                               |                                                                                                                                          |
+| vertexstrokeweights        | Vector                                                                                    |                                                                                                                                          |
+|                            | range                                                                                     |                                                                                                                                          |
+|                            | :none                                                                                     |                                                                                                                                          |
+
 ## The BoundingBox
 
 The graphics for the graph are placed to fit inside the
@@ -256,40 +257,43 @@ The calculated positions are returned by the `drawgraph()` function.
 
 ### Initial positions for the layout algorithms
 
-Some of the layout algorithms - the Spring and Stress ones, for example -  allow you to pass _initial_ vertex positions to be used by the algorithms as starting points. The algorithm will continually adjust them to make a finer result. These should be supplied as xy pairs, rather than Luxor Points (which NetworkLayout doesn't accept).
+Some of the layout algorithms - the Spring and Stress ones, for example -  allow you to pass _initial_ vertex positions to be used by the algorithms as starting points. The algorithm will continually adjust them to make a better result. These initial positions should be supplied as xy pairs, rather than Luxor Points (which NetworkLayout doesn't know about).
 
-Here's a figure showing how the Stress algorithm gradually improves the layout on each of 60 iterations. The initial positions supplied for each loop are the "grid locations" of a Luxor Tiler. Each time through, the algorithm improves the layout, and draws a new set of vertices on top of the previous one (increasing the size of the vertex markers a bit).
+Here's an animation showing how the Stress algorithm gradually improves the layout on each iteration. The initial positions are just the "grid locations" of a Luxor Tiler.
 
-The final call to `drawgraph()` draws the graph using the 61st iteration of the Stress algorithm, with edges shown.
+```julia
+using Karnak, Graphs, NetworkLayout, Colors
 
-```@example graphsection
-G = smallgraph(:petersen)
+function frame(scene, framenumber, G)
 
-@drawsvg begin
     background("black")
-    initialpositions = [(pt.x, pt.y) for (pt, n) in Tiler(800, 800, 3, 3)]
+    initialpositions = [(pt.x, pt.y) for (pt, n) in Tiler(600, 600, 3, 3)]
 
-    sethue("grey80")
-    circle.(Point.(initialpositions), 6, :stroke)
+    sethue("grey50")
+    circle.(Point.(initialpositions), 3, :fill)
 
-    for i in 1:60
+    for i in 1:framenumber
+        setopacity(rescale(i, 1, scene.framerange.stop, 0, 0.6))
         drawgraph(G,
-            layout = Stress(initialpos = initialpositions, iterations = i),
-            vertexshapes = (v) -> (
-                    setcolor(HSVA(rescale(v, 1, nv(G), 0, 360), 0.6, 0.8, rescale(i, 1, 6, 0.5, 1)));
-                    circle(O, rescale(i, 1, 60, 1, 6), :fill)
-                    ),
-            edgelist = []
-            )
+            layout=Stress(initialpos=initialpositions, iterations=i),
+            vertexfillcolors=(i == framenumber) ? colorant"gold" : :none
+        )
     end
 
-    drawgraph(G,
-        layout = Stress(initialpos = initialpositions, iterations = 61),
-        vertexshapes = (v) -> (
-            setcolor(HSVA(rescale(v, 1, nv(G), 0, 360), 0.6, 0.8, 1)); circle(O, 10, :fill)
-        ))
 end
+
+function main()
+    G = smallgraph(:petersen)
+    amovie = Movie(600, 600, "layout")
+    animate(amovie,
+        Scene(amovie, (s, f) -> frame(s, f, G), 1:60),
+        framerate=10, creategif=true)
+end
+
+main()
 ```
+
+![animate stress algorithm](assets/figures/stresslayout.gif)
 
 ## The `vertexfunction` and `edgefunction` arguments
 
@@ -313,28 +317,30 @@ In the following picture, the vertex positions were passed to a function that pl
 It's also possible, for example, to draw a graph at a vertex point (ie recursive graphh drawing) if you use `vertexfunction`.
 
 ```@example graphsection
-g = star_graph(8)
+g = complete_graph(5)
 
 function rgraph(g, l=1)
-    if l > 3
+    if l > 4
         return
     else
-    drawgraph(g,
-        layout = stress,
-        vertexfunction = (v, c) -> begin
-            @layer begin
-                sethue(HSB(rescale(v, 1, 8, 0, 360), .7, .8))
-                translate(c[v])
-                circle(c[v], 5, :fill)
-                rgraph(g, l + 1)
-            end
-        end,
-        boundingbox = BoundingBox()/3)
+        drawgraph(g,
+            layout=stress,
+            boundingbox=BoundingBox() / 2l,
+            vertexfunction=(v, c) -> begin
+                @layer begin
+                    sethue(HSB(rescale(v, 1, 4, 0, 360), 0.7, 0.8))
+                    translate(c[v])
+                    #circle(c[v], 5, :fill)
+                    rgraph(g, l + 1)
+                end
+            end,
+            )
     end
 end
 
 @drawsvg begin
     background("grey10")
+    sethue("gold")
     rgraph(g)
 end 800 600
 ```
@@ -350,6 +356,7 @@ The following keyword arguments accept functions:
 - `edgestrokeweights`
 - `vertexfillcolors`
 - `vertexlabels`
+- `vertexlabeltextcolors`
 - `vertexshaperotations`
 - `vertexshapes`
 - `vertexshapesizes`
