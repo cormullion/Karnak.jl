@@ -15,6 +15,7 @@ makedocs(
         "Basic graphs"            =>  "basics.md",
         "Syntax"                  =>  "syntax.md",
         "Examples"                =>  "examples.md",
+        #"test"                    =>  "test.md",
         "Reference" => [
             "Alphabetical function list"   =>  "reference/functionindex.md"
             "Function reference"           =>  "reference/api.md"

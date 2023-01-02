@@ -61,6 +61,7 @@ d = @drawsvg begin
             end,
         )
 end 600 350
+nothing #hide
 ```
 
 ```@raw html
@@ -353,6 +354,7 @@ smallgraphs = @drawsvg begin
         end
     end
 end 800 800
+nothing # hide
 ```
 
 ```@raw html
@@ -887,6 +889,7 @@ d = @drawsvg begin
         vertexlabeltextcolors=colorant"white",
     )
 end 600 350
+nothing # hide
 ```
 
 ```@raw html

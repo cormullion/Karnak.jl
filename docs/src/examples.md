@@ -250,6 +250,7 @@ d = @drawsvg begin
         end,
     )
 end 800 700
+nothing # hide
 ```
 
 ```@raw html
