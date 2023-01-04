@@ -196,6 +196,7 @@ function _drawedgelines(from, to, edgesrc, edgedest;
                     end
                     normalizedgap = edgegap / d
                     arrow(between(from, to, normalizedgap),
+                        linewidth = linewidth,
                         between(from, to, 1 - normalizedgap),
                         [edgecurvature, edgecurvature],
                         startarrow = false,

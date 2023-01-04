@@ -6,7 +6,8 @@
 
 ## Changed
 
--  update docs, etc.
+- update docs, etc.
+- arrow widths
 
 ### Removed
 

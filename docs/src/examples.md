@@ -75,21 +75,21 @@ g, labels = walk_tree(expression)
 @drawsvg begin
     background("grey10")
     sethue("gold")
-    fontface("JuliaMono-Black")
     drawgraph(g,
-    margin=60,
-        layout = buchheim,
-        vertexlabels = labels,
-        vertexshapes = :circle,
-        vertexshapesizes = 20,
-        edgefunction = (n, s, d, f, t) -> begin
-            move(f)
-            line(t)
-            strokepath()
-        end,
-        vertexlabelfontsizes = 15,
-        vertexlabelfontfaces = "JuliaMono-Bold",
-        vertexlabeltextcolors = colorant"black")
+        margin=60,
+            layout = buchheim,
+            vertexlabels = labels,
+            vertexshapes = :circle,
+            vertexshapesizes = 20,
+            edgefunction = (n, s, d, f, t) -> begin
+                move(f)
+                line(t)
+                strokepath()
+            end,
+            vertexlabelfontsizes = 15,
+            vertexlabelfontfaces = "Courier-Bold",
+            vertexlabeltextcolors = colorant"black")
+    fontface("Courier-Bold")
     fontsize(15)
     text(string(expression), boxbottomcenter() + (0, -20), halign=:center)
 end
@@ -99,7 +99,14 @@ end
 
 This example tries to draw a type hierarchy diagram. The Buchheim layout algorithm can take a list of “vertex widths” that are normalized and then used to assign sufficient space for each label.
 
-```@example
+
+```@raw html
+<details closed><summary>Code for this figure</summary>
+```
+
+This code generates the figure below:
+
+```@example treegraph
 using Karnak, Graphs, NetworkLayout, InteractiveUtils
 
 add_numbered_vertex!(g) = add_vertex!(g)
@@ -122,36 +129,60 @@ function manhattanline(pt1, pt2)
             Point(pt1.x, mp.y),
             Point(pt2.x, mp.y),
             Point(pt2.x, mp.y),
-            Point(pt2.x, pt2.y - get_fontsize())
+            Point(pt2.x, pt2.y),
+            pt2
         ], :stroke)
+    circle(pt2, 1, :fill)
 end
 
 g = DiGraph()
 labels = []
-build_type_tree(g, Real)
+build_type_tree(g, Number)
 labels = map(string, labels)
 
-@drawsvg begin
-    background("white")
-    sethue("black")
-
-    fontsize(9)
-
-    # adjust for centered labels
+dg = @drawsvg begin
+    background("grey20")
+    fontsize(8)
+    fontface("JuliaMono-Black")
+    setline(1)
+    sethue("gold")
     nodesizes = Float64[]
     for l in eachindex(labels)
-        push!(nodesizes, textextents(string(labels[l]))[3] +
-                         textextents(string(labels[mod1(l + 1, end)]))[3])
+        labelwidth = textextents(string(labels[l]))[3]
+        push!(nodesizes, labelwidth)
     end
     drawgraph(g, margin=50,
         layout=Buchheim(nodesize=nodesizes),
-        vertexfunction=(v, c) -> text(labels[v], c[v], halign=:center),
+        vertexfunction=(v, c) -> begin
+            w = nodesizes[v]
+            bbox  = BoundingBox(box(c[v] + (0.8w/2, 0), 0.8w, 12))
+            @layer begin
+                setopacity(0.8)
+                sethue("white")
+                box(bbox, 5, action=:fillpreserve)
+                sethue("gold")
+                strokepath()
+            end
+            @layer begin
+                sethue("black")
+                textfit(labels[v], bbox)
+            end
+        end,
         edgefunction=(n, s, d, f, t) -> manhattanline(f, t)
     )
-end 1200 550
+end 800 500
+nothing # hide
 ```
 
-It can be quite difficult to get the final output to look perfect.
+```@raw html
+</details>
+```
+
+```@example treegraph
+dg # hide
+```
+
+There are still a few problems with this visualization.
 
 # Simple dependency graph
 
@@ -225,19 +256,22 @@ function build_depgraph(pkgname)
     return g, pkglist
 end
 
-g, pkgnames = build_depgraph("Colors")
+g, pkgnames = build_depgraph("DataFrames")
 
-d = @drawsvg begin
-    background("black")
+d = @svg begin
+    background("grey5")
     sethue("gold")
     fontsize(10)
     fontface("Avenir-Black")
     drawgraph(
         g,
-        layout = Spring(iterations = 60),
-        edgegaps = 10,
+        margin=40,
+        layout = Stress(iterations = 100),
+        edgegaps = 13,
+        edgestrokeweights = 3,
         edgecurvature = 4,
-        vertexlabels = (vtx) -> begin
+        edgestrokecolors = [HSB(360rand(), 0.7, 0.8) for i in 1:ne(g)],
+        vertexlabels = (vtx) -> begin   
             string(pkgnames[vtx])
         end,
         vertexshapes = (v) -> begin
@@ -245,11 +279,11 @@ d = @drawsvg begin
             @layer begin
                 setopacity(0.8)
                 sethue("grey80")
-                box(O, 1.2tx[5], 1.5tx[4], :fill)
+                box(O, 1.2tx[5], 1.5tx[4], 5, :fill)
             end
         end,
     )
-end 800 700
+end
 nothing # hide
 ```
 
