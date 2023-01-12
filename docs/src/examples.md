@@ -258,7 +258,7 @@ end
 
 g, pkgnames = build_depgraph("DataFrames")
 
-d = @svg begin
+d = @drawsvg begin
     background("grey5")
     sethue("gold")
     fontsize(10)
@@ -283,7 +283,7 @@ d = @svg begin
             end
         end,
     )
-end
+end 800 700
 nothing # hide
 ```
 

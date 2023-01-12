@@ -86,9 +86,9 @@ function _drawedgelines(from, to, edgesrc, edgedest;
     end
 
     # set the stroke weight
+   currentdrawing().surfacetype == :png ? linewidth = 2 : linewidth = 1
 
-    Luxor.current_surface_type() == :png ? linewidth = 2 : linewidth = 1
-    if isnothing(edgestrokeweights)
+   if isnothing(edgestrokeweights)
         # by default, do nothing
     elseif edgestrokeweights isa Array
         if !isempty(edgestrokeweights)
@@ -501,7 +501,7 @@ function _drawvertexshapes(vertex, coordinates::Array{Point,1};
     end
 
     # set the stroke weight
-    Luxor.current_surface_type() == :png ? linewidth = 2 : linewidth = 1
+   currentdrawing().surfacetype == :png ? linewidth = 2 : linewidth = 1
 
     if isnothing(vertexstrokeweights)
         # by default, do nothing

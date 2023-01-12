@@ -1,6 +1,6 @@
 # Changelog
 
-## [v0.5.0] - 2022-12-??
+## [v0.5.0] - 2023-01-12
 
 ### Added
 
@@ -8,6 +8,7 @@
 
 - update docs, etc.
 - arrow widths
+- default linewidth calculation fixed (don't use Luxor internals ...)
 
 ### Removed
 
