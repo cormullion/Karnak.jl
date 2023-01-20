@@ -14,6 +14,27 @@ graph construction, and on
 [NetworkLayout.jl](https://juliagraphs.org/NetworkLayout.jl/)
 for graph layout.
 
+## Quick start
+
+```julia
+using Karnak
+using Graphs
+using NetworkLayout
+g = barabasi_albert(100, 1)
+@drawsvg begin
+    background("black")
+    sethue("white")
+        drawgraph(g, 
+        layout=stress, 
+        vertexlabels = 1:nv(g),
+        vertexfillcolors = 
+            [RGB(rand()/2, rand()/2, rand()/2) for i in 1:nv(g)]
+        )
+end
+```
+
+![karnak splash image](docs/src/assets/figures/barabasi.svg)
+
 ## See also
 
 There's a good selection of Julia packages for visualizing graphs:

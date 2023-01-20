@@ -45,20 +45,23 @@ d = @drawsvg begin
         layout=spring,
         margin=50,
         edgecurvature=0.2,
-        edgegaps=25,
+        edgegaps=30,
         edgestrokeweights=2,
         vertexlabels = (v) -> "thing $(v)",
         vertexshapes = :circle,
         vertexfillcolors = [RGB(Luxor.julia_red...), RGB(Luxor.julia_purple...), RGB(Luxor.julia_green...), RGB(Luxor.julia_blue...)],
         vertexshapesizes = 25,
         vertexlabeltextcolors = colorant"white",
-        edgelabels = (n, s, d, f, t) -> begin
-                θ = slope(f, t)
-                fontsize(15)
-                translate(midpoint(f, t))
-                rotate(θ)
-                label(["relationship", "relationship", "relationship", "relationship"][n], [:n, :n, :s, :n][n], O, offset=10)
-            end,
+        edgelabels=(n, s, d, f, t) -> begin
+            θ = slope(f, t)
+            fontsize(12)
+            translate(midpoint(f, t))
+            rotate(θ)
+            sethue("white")
+            label("$s and $d", [:n, :n, :s, :n][n], O, offset=10)
+            sethue("orange")
+            label("edge $n", [:n, :n, :s, :n][n], O, offset=-15)
+        end,
         )
 end 600 350
 nothing #hide
@@ -76,7 +79,7 @@ A typical graph consists of:
 
 - _vertices_, which represent the things or entities, and
 
-- _edges_, which describe how the things or entities connect and relate to each other
+- _edges_, which describe how two things or entities connect and relate to each other
 
 Vertices are also called _nodes_ in the world of graph theory.
 
@@ -748,7 +751,6 @@ julia> cycles = cycle_basis(pg)
     pg = smallgraph(:petersen)
 
     cycles = cycle_basis(pg)
-    @show length(cycles)
     table = Table(2, length(cycles) ÷ 2, 220, 160)
 
     for (n, cycle) in enumerate(cycles)
@@ -822,7 +824,7 @@ There can be a lot of cycles in a graph. For example, a `complete_digraph(10)` h
 
 ### Visiting every vertex once
 
-It's useful to know how to visit all vertices just once.
+It's useful to know how to visit every vertex just once.
 
 You can do this for DiGraphs if you can find a cycle that's the same length as the graph. However, there might be a lot of possibilities, since there could be many such cycles. This example uses `simplecycles()` to find all of them (there are over 400 for this graph), so only the first one with the right length is used.
 
@@ -851,7 +853,7 @@ end 800 400
 
 A tree is a connected graph with no cycles. A *rooted tree* is a tree graph in which one vertex has been designated as the root, or origin. Rooted tree graphs can be drawn using the Buchheim layout algorithm (named after the developer, Christoph Buchheim).
 
-In the next example, we start with a *binary tree*, in which each vertex has at most two vertices - but we add one more vertex so that it's no longer a binary tree. 
+In the next example, we start with a *binary tree*, in which each vertex is connected to no more than two others - but we'll add one more vertex so that it's no longer a binary tree. 
 
 ```@raw html
 <details closed><summary>Code for this figure</summary>
