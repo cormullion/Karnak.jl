@@ -20,20 +20,23 @@ for graph layout.
 using Karnak
 using Graphs
 using NetworkLayout
+using Colors
 g = barabasi_albert(100, 1)
 @drawsvg begin
     background("black")
-    sethue("white")
-        drawgraph(g, 
+    sethue("grey40")
+    fontsize(8)
+    drawgraph(g, 
         layout=stress, 
         vertexlabels = 1:nv(g),
         vertexfillcolors = 
-            [RGB(rand()/2, rand()/2, rand()/2) for i in 1:nv(g)]
-        )
-end
+            [RGB(rand()/2, rand()/2, rand()/2) 
+               for i in 1:nv(g)]
+    )
+end 600 400
 ```
 
-![karnak splash image](docs/src/assets/figures/barabasi.svg)
+![karnak quick start](docs/src/assets/figures/barabasi.svg)
 
 ## See also
 
