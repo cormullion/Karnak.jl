@@ -930,7 +930,8 @@ All keywords:
  edgelabels                  Vector                                                   
                              range                                                    
                              Dict{Int, Int}                                           
-                             f(edgenumber, edgesrc, edgedest, from::Point, to::Point) 
+                             f(edgenumber, edgesrc, edgedest, from::Point, to::Point)
+                               - this function should draw the required text 
                              :none                                                    
  edgelines                   Vector{Int}                                              
                              range                                                    
@@ -954,7 +955,8 @@ All keywords:
                              range                                                    
                              Real                                                     
                              :none
-                             f(vtx::Int, coord::Point[])       ************************                                             
+                             f(vtx::Int, coord::Point[])
+                               function should return a numeric value for fontsize
  vertexlabeloffsetangles     Vector                                                   
                              Range                                                    
                              Real                                                     
@@ -969,7 +971,8 @@ All keywords:
                              String                                                   
                              range[vtx::Int]                                          
                              :none                                                    
-                             f(vtx::Int)                                              
+                             f(vtx::Int)
+                              this function should return a string                                              
  vertexlabeltextcolors       Vector{Colorant}                                         
                              Colorant
                              f(vtx::Int)                                                 

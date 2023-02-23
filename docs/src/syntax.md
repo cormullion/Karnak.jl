@@ -314,7 +314,7 @@ In the following picture, the vertex positions were passed to a function that pl
 
 ![image vertices](assets/figures/karnakmap.png)
 
-It's also possible, for example, to draw a graph at a vertex point (ie recursive graphh drawing) if you use `vertexfunction`.
+It's also possible, for example, to draw a graph at a vertex point (ie recursive graph drawing) if you use `vertexfunction`.
 
 ```@example graphsection
 g = complete_graph(5)

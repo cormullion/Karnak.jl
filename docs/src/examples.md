@@ -184,6 +184,45 @@ dg # hide
 
 There are still a few problems with this visualization.
 
+## LayeredLayouts.jl
+
+[LayeredLayouts](https://github.com/oxinabox/LayeredLayouts.jl) is a package for working out how to layout graphs in a layered fashion: how to lay out directed acyclic graphs (DAGs), including trees, dependency graphs, and Sankey diagrams.
+
+The package offers the Zarate algorithm (David Cheng Zarate). Positions are returned as x and y vectors, and should be converted to Points when passed to `layout`.
+
+```julia
+using Graphs
+using LayeredLayouts
+using Karnak
+
+tree = SimpleDiGraph(Edge.(
+    [1 => 2, 2 => 3, 4 => 5, 4 => 6, 
+     4 => 7, 4 => 8, 4 => 9, 4 => 10, 
+     5 => 11, 5 => 12, 8 => 15, 8 => 16, 
+     8 => 17, 8 => 18, 8 => 19, 9 => 20, 
+     9 => 21, 10 => 22, 12 => 13, 13 => 14, 
+     23 => 4, 23 => 24, 23 => 25, 23 => 26, 
+     23 => 27, 23 => 28, 23 => 29, 23 => 30, 
+     23 => 31, 28 => 32, 28 => 33, 29 => 35, 
+     30 => 1, 30 => 38, 31 => 40, 33 => 34, 
+     35 => 36, 35 => 37, 38 => 39, 40 => 41, 41 => 42]))
+
+xs, ys, paths = solve_positions(Zarate(), tree)
+
+@draw begin
+    background("black")
+    sethue("gold")
+    drawgraph(tree, 
+        vertexlabels = 1:nv(tree),
+        edgestrokecolors = [Karnak.RGB(randomhue()...) for e in 1:ne(tree)],
+        layout= boxmiddleleft() .+ 
+            map(pt -> Point(90pt[1], 30pt[2]), zip(xs, ys))
+    )
+end 600 500
+```
+
+![layered layouts](assets/figures/ll_tree.svg)
+
 # Simple dependency graph
 
 You can draw a visual interpretation of a Julia package's dependencies easily enough by going through the TOML files.
