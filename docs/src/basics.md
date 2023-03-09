@@ -1056,7 +1056,7 @@ To create a new weighted graph:
 ```julia
 using Graphs, SimpleWeightedGraphs
 
-julia> wg = SimpleWeightedGraph()
+julia> g = SimpleWeightedGraph()
 ```
 
 This creates a new, empty, weighted, undirected, graph. Or we can pass an existing graph to this function:
@@ -1065,13 +1065,13 @@ This creates a new, empty, weighted, undirected, graph. Or we can pass an existi
 julia> wg = SimpleWeightedGraph(Graph(6, 15), 4.0)
 ```
 
-To get the weights of a vertex, use:
+To get the weights of the edge between two vertices, use `get_weight()`:
 
 ```julia
 julia> get_weight(wg, 1, 2)
 ```
 
-To change the weight of an edge:
+To change the weight of the edge between two vertices, use `add_edge()`:
 
 ```julia
 julia> add_edge!(graph, from, to, weight)

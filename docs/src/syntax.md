@@ -871,6 +871,24 @@ drawgraph(g,
 end 600 300
 ```
 
+For directed weighted graphs, each edge can have two weights. This makes it slightly more difficult to draw the labels automatically. You could write an edge labelling function that calculates the slope of the edge and positions the label accordingly:
+
+```julia
+function f(edgenumber, edgesrc, edgedest, from::Point, to::Point)
+    sl = slope(from, to)
+    wt = g.weights[edgesrc, edgedest]
+    if sl > π
+        label(string(wt), :e, midpoint(from, to))
+    else
+        label(string(wt), :w, midpoint(from, to))
+    end
+end 
+
+...
+    edgelabels=f,
+...
+```
+
 ### `edgelist`
 
 This example draws the graph more than once; once with all the edges, once with only the edges in `edgelist`, where `edgelist` is the path from vertex 15 to vertex 17, drawn in a pale translucent yellow, and once to draw the vertices on the path "X marks the spot" cyan-colored crosses.

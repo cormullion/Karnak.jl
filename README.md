@@ -5,14 +5,9 @@
 | [![][docs-stable-img]][docs-stable-url] | [![Build Status][ci-img]][ci-url]         |
 | [![][docs-development-img]][docs-development-url] |                                 |
 
-Karnak.jl is a small extension for the Luxor.jl package to
-help with visualizing graphs and networks.
+Karnak.jl is a package for drawing graphs and networks. It's built on top of [Luxor.jl](https://github.com/JuliaGraphics/Luxor.jl).
 
-Karnak also relies on
-[Graphs.jl](https://github.com/JuliaGraphs/Graphs.jl) for
-graph construction, and on
-[NetworkLayout.jl](https://juliagraphs.org/NetworkLayout.jl/)
-for graph layout.
+Karnak also uses [Graphs.jl](https://github.com/JuliaGraphs/Graphs.jl) for graph construction, and [NetworkLayout.jl](https://juliagraphs.org/NetworkLayout.jl/) for graph layout algorithms.
 
 ## Quick start
 
@@ -40,9 +35,7 @@ end 600 400
 
 ## See also
 
-There's a good selection of Julia packages for visualizing graphs:
-
-- [TikzGraphs.jl](https://github.com/sisl/TikzGraphs.jl): backend: Tikz/Latex
+There's a good selection of other Julia packages for visualizing graphs:
 
 - [GraphPlot.jl](https://juliagraphs.org/GraphPlot.jl/): backend: Compose.jl
 
@@ -52,6 +45,7 @@ There's a good selection of Julia packages for visualizing graphs:
 
 - [GraphMakie.jl](https://github.com/JuliaPlots/GraphMakie.jl): backend: Makie.jl
 
+- [TikzGraphs.jl](https://github.com/sisl/TikzGraphs.jl): backend: Tikz/Latex
 
 [docs-development-img]: https://img.shields.io/badge/docs-development-blue
 [docs-development-url]: http://cormullion.github.io/Karnak.jl/dev/

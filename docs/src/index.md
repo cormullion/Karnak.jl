@@ -2,14 +2,9 @@
 
 ![karnak splash image](assets/figures/karnak-social-media-preview.png)
 
-Karnak.jl is a small extension for the Luxor.jl package to
-help with visualizing graphs and networks.
+Karnak.jl is a package for drawing graphs and networks. It's built on top of [Luxor.jl](https://github.com/JuliaGraphics/Luxor.jl).
 
-Karnak also relies on
-[Graphs.jl](https://github.com/JuliaGraphs/Graphs.jl) for
-graph construction, and on
-[NetworkLayout.jl](https://juliagraphs.org/NetworkLayout.jl/)
-for graph layout.
+Karnak also uses [Graphs.jl](https://github.com/JuliaGraphs/Graphs.jl) for graph construction, and [NetworkLayout.jl](https://juliagraphs.org/NetworkLayout.jl/) for graph layout algorithms.
 
 !!! note
 
