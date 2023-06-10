@@ -404,8 +404,9 @@ There are lots of functions for obtaining information about a graph.
 How many vertices?
 
 ```julia
+julia> pg = smallgraph(:petersen)
 julia> nv(pg)
-6
+10
 ```
 
 How many edges?
@@ -421,13 +422,11 @@ Which vertices are connected with vertex 1? - ie what are the neighbors of a par
 julia> neighbors(pg, 1)
 5-element Vector{Int64}:
  2
- 3
- 4
  5
  6
 ```
 
-We can iterate over vertices and edges. To step through each vertex:
+We can iterate over vertices and edges. To step through each vertex, use the `vertices` iterator function:
 
 ```julia
 for e in vertices(pg)
@@ -440,15 +439,21 @@ end
 4
 5
 6
+7
+8
+9
+10
 ```
 
-Iterating over edges will give a value of type `Edge`. The `src()` and
-and `dst()` functions applied to an edge argument return the numbers of the source and destination vertices respectively.
+Iterating over edges with the `edges` iterator function will give a value of
+type `Edge`. The `src()` and and `dst()` functions applied to an edge argument
+return the numbers of the source and destination vertices respectively.
 
 ```julia
 for e in edges(pg)
     println(src(e), " => ", dst(e))
 end
+
 1 => 2
 1 => 5
 1 => 6
@@ -466,16 +471,24 @@ end
 8 => 10
 ```
 
-To add an edge, do:
+To add a vertex:
 
 ```julia
-add_edge!(df, 1, 2) # from vertex 1 to 2
+pg1 = smallgraph(:petersen)
+add_vertex!(pg1) # returns true if successful
+```
+
+To add an edge:
+
+```julia
+add_edge!(pg1, 10, 11) # join 10 to 11
 ```
 
 It's sometimes useful to be able to see these relationships between neighbors visually. This example looks for the neighbors of vertex 10:
 
 ```@example graphsection
 @drawsvg begin
+
 background("grey10")
 pg = smallgraph(:petersen)
 
@@ -500,7 +513,7 @@ drawgraph(pg,
 end 600 300
 ```
 
-Other useful functions in Graphs.jl include `has_vertex(g, v)` and `has_edge(g, s, d)`.
+Other useful functions include `has_vertex(g, v)` and `has_edge(g, s, d)`.
 
 ### Degree
 
@@ -533,7 +546,7 @@ Graphs can be represented as matrices - some say that graph theory is really the
 
 A graph `G` with `n` vertices can be represented by a square matrix `A` with `n` rows and columns. The matrix consists of 1s and 0s. A value of 1 means that there's a connection between two vertices with those indices. For example, if vertex 5 is connected with vertex 4, then `A[5, 4]` contains 1. The `adjacency_matrix()` function displays the matrix for a graph:
 
-```julia
+```julia-repl
 julia> adjacency_matrix(pg)
 10×10 SparseArrays.SparseMatrixCSC{Int64, Int64} with 30 stored entries:
  ⋅  1  ⋅  ⋅  1  1  ⋅  ⋅  ⋅  ⋅
@@ -582,7 +595,7 @@ end 800 400
 
 We can also represent a graph `G` with a matrix `M` consisting of 1s, -1s, and 0s, where the rows are vertices and the columns are edges. `M` is called an **incidence matrix**.
 
-```julia
+```julia-repl
 julia> incidence_matrix(pg)
 10×15 SparseArrays.SparseMatrixCSC{Int64, Int64} with 30 stored entries:
  1  1  1  ⋅  ⋅  ⋅  ⋅  ⋅  ⋅  ⋅  ⋅  ⋅  ⋅  ⋅  ⋅

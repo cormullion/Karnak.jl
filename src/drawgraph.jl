@@ -847,7 +847,9 @@ function drawvertex(vertex, coordinates::Array{Point,1};
 end
 """
 Draw a graph `g` using coordinates in `layout` to fit in a
-Luxor `boundingbox`.
+Luxor `boundingbox` (defaulting to the current drawing's extent).
+
+Returns a vector of Points, the location of the graph vertices as drawn.
 
 ## Keyword arguments
 
