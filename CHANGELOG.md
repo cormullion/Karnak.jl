@@ -1,12 +1,13 @@
 # Changelog
 
-## [v0.6.0] - 
+## [v0.6.0] - forthcoming
 
 ### Added
 
 ## Changed
 
 - Julia version 1.6
+- Documenter 1
 
 ### Removed
 

@@ -4,10 +4,11 @@ makedocs(
     # debug=true,
     modules = [Karnak],
     sitename = "Karnak",
+    warnonly = true,
     format = Documenter.HTML(
+        size_threshold = nothing,   
         prettyurls = get(ENV, "CI", nothing) == "true",
-        assets = ["assets/styles.css"],
-        warn_outdated = true,
+        assets = ["assets/karnak-docs.css"],
         collapselevel=3,
         ),
     pages    = [
@@ -15,7 +16,6 @@ makedocs(
         "Basic graphs"            =>  "basics.md",
         "Syntax"                  =>  "syntax.md",
         "Examples"                =>  "examples.md",
-        #"test"                    =>  "test.md",
         "Reference" => [
             "Alphabetical function list"   =>  "reference/functionindex.md"
             "Function reference"           =>  "reference/api.md"
