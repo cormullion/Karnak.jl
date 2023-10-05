@@ -168,6 +168,53 @@ end 600 300
 
 In this representation of our directed graph `gd`, we can now see the direction of the edges joining vertices.
 
+With the default drawing settings, the two edges connecting vertices 1 and 4 are drawn so that they overlap exactly, and you can't easily differentiate them. An easy way to see both edges at the same time is to specify a small amount of curvature with the `edgecurvature` keyword:
+
+```@example graphsection
+gd = DiGraph() # hide
+add_vertices!(gd, 4) # hide
+add_edge!(gd, 1, 2) # hide
+add_edge!(gd, 1, 3) # hide
+add_edge!(gd, 2, 3) # hide
+add_edge!(gd, 1, 4) # vertex 1 to vertex 4 # hide
+add_edge!(gd, 4, 1) # vertex 4 to vertex 1 # hide
+
+@drawsvg begin
+    background("grey10")
+    sethue("thistle1")
+    drawgraph(gd, vertexlabels = [1, 2, 3, 4], edgecurvature=5)
+end 600 300
+```
+
+Another option would be to make use of Luxor.jl’s `arrow()` functions, which would allow you to add all kinds of pointless graphics to edges, such as this hue-encoded `¾`-of-the-shaft-length version:
+
+```@example graphsection
+gd = DiGraph() # hide
+add_vertices!(gd, 4) # hide
+add_edge!(gd, 1, 2) # hide
+add_edge!(gd, 1, 3) # hide
+add_edge!(gd, 2, 3) # hide
+add_edge!(gd, 1, 4) # vertex 1 to vertex 4 # hide
+add_edge!(gd, 4, 1) # vertex 4 to vertex 1 # hide
+
+@drawsvg begin # hide
+    background("grey10") # hide
+    sethue("thistle1") # hide
+    drawgraph(gd, vertexlabels = [1, 2, 3, 4],  # hide
+        edgefunction = (n, s, d, f, t) -> begin # hide
+            arrow(f, t, [10, 10],  # hide
+            decoration = 0.75, # hide
+            decorate = () -> begin # hide
+                sethue(HSB(60n, 0.7, 0.8)) # hide
+                ngon(O, 10, 3, 0, :fill) # hide # hide
+            end, # hide
+            arrowheadfunction= (f, t, a) -> () # hide
+            )    # hide
+        end # hide
+    ) # hide
+end 600 300 # hide
+```
+
 ## Very simple graphs
 
 Creating graphs by typing the connections manually is tedious, so we can use functions such as the `Graph/SimpleGraph` and `DiGraph/SimpleDiGraph` constructor functions:
