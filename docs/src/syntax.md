@@ -742,7 +742,34 @@ drawgraph(g,
 end 600 300
 ```
 
-For more interesting arrows for edges, Luxor's arrows are available:
+For more interesting arrows for edges, Luxor's arrows are available, and you can define functions to create all kinds of graphical deatil:
+
+```@example graphsection
+gd = DiGraph() 
+add_vertices!(gd, 4) 
+add_edge!(gd, 1, 2) 
+add_edge!(gd, 1, 3) 
+add_edge!(gd, 2, 3) 
+add_edge!(gd, 1, 4) # vertex 1 to vertex 4 
+add_edge!(gd, 4, 1) # vertex 4 to vertex 1 
+
+@drawsvg begin 
+    background("grey10") 
+    sethue("thistle1") 
+    drawgraph(gd, vertexlabels = [1, 2, 3, 4],  
+        edgefunction = (n, s, d, f, t) -> begin 
+            arrow(f, t, [10, 10],  
+            decoration = 0.75, 
+            decorate = () -> begin 
+                sethue(HSB(60n, 0.7, 0.8)) 
+                ngon(O, 10, 3, 0, :fill)  
+            end, 
+            arrowheadfunction= (f, t, a) -> () 
+            )    
+        end 
+    ) 
+end 600 300 
+```
 
 ```@example graphsection
 @drawsvg begin
@@ -925,7 +952,7 @@ end 600 600
 
 ### `edgecurvature` and `edgecaps`
 
-`edgecurvature` determines the curvature of the edges, and `edgegaps` sets the distance between the tip of the arrowhead and the vertex position.
+`edgecurvature` determines the curvature of the edges, and `edgegaps` sets the distance between the tip of the arrowhead and the vertex position. Units, as everywhere in Karnak and Luxor, are points/pixels (1 point is 0.3527mm).
 
 ```@example graphsection
 g = grid((3, 3))

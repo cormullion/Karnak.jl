@@ -26,6 +26,100 @@ find(x::Int64) = stations[x]
 
 This chapter contains a few examples showing how to use `drawgraph()` to visualize a few graphs.
 
+## Julia type tree
+
+This example tries to draw a type hierarchy diagram. The Buchheim layout algorithm can take a list of “vertex widths” that are normalized and then used to assign sufficient space for each label.
+
+
+```@raw html
+<details closed><summary>Code for this figure</summary>
+```
+
+This code generates the figure below:
+
+```@example treegraph
+using Karnak, Graphs, NetworkLayout, InteractiveUtils
+
+add_numbered_vertex!(g) = add_vertex!(g)
+
+function build_type_tree(g, T, level=0)
+    add_numbered_vertex!(g)
+    push!(labels, T)
+    for t in subtypes(T)
+        if occursin(".",  string(t)) # only Base
+            continue
+        end
+        build_type_tree(g, t, level + 1)
+        add_edge!(g,
+            findfirst(isequal(T), labels),
+            findfirst(isequal(t), labels))
+    end
+end
+
+function manhattanline(pt1, pt2)
+    mp = midpoint(pt1, pt2)
+    poly([pt1,
+            Point(pt1.x, mp.y),
+            Point(pt1.x, mp.y),
+            Point(pt2.x, mp.y),
+            Point(pt2.x, mp.y),
+            Point(pt2.x, pt2.y),
+            pt2
+        ], :stroke)
+    circle(pt2, 1, :fill)
+end
+
+g = DiGraph()
+labels = []
+build_type_tree(g, Number)
+labels = map(string, labels)
+
+dg = @drawsvg begin
+    background("grey20")
+    fontsize(15)
+    fontface("JuliaMono-Bold")
+    setline(1)
+    sethue("gold")
+    nodesizes = Float64[]
+    for l in eachindex(labels)
+        tx = textextents(string(labels[l]))
+        labelwidth = tx[3]
+        push!(nodesizes, labelwidth)
+    end
+    drawgraph(g, margin=50,
+        layout=Buchheim(nodesize=nodesizes),
+        vertexfunction=(v, c) -> begin
+            w = nodesizes[v]
+            bbox  = BoundingBox(box(c[v], w/2, get_fontsize()))
+            # box
+            @layer begin
+                sethue("white")
+                box(bbox, 2, action=:fillpreserve)
+                sethue("gold")
+                strokepath()
+            end
+            #text
+            @layer begin
+                sethue("black")
+                textfit(labels[v], bbox)
+            end
+        end,
+        edgefunction=(n, s, d, f, t) -> manhattanline(f, t)
+    )
+end 1000 550
+nothing # hide
+```
+
+```@raw html
+</details>
+```
+
+```@example treegraph
+dg # hide
+```
+
+This graph could do with a bit more tweaking.
+
 ## Julia source tree
 
 This example takes a Julia expression and displays it as a tree.
@@ -87,102 +181,13 @@ g, labels = walk_tree(expression)
                 strokepath()
             end,
             vertexlabelfontsizes = 15,
-            vertexlabelfontfaces = "Courier-Bold",
+            vertexlabelfontfaces = "JuliaMono-Bold", # probably won't be available for docs
             vertexlabeltextcolors = colorant"black")
-    fontface("Courier-Bold")
+    fontface("JuliaMono-Bold")
     fontsize(15)
     text(string(expression), boxbottomcenter() + (0, -20), halign=:center)
 end
 ```
-
-## Julia type tree
-
-This example tries to draw a type hierarchy diagram. The Buchheim layout algorithm can take a list of “vertex widths” that are normalized and then used to assign sufficient space for each label.
-
-
-```@raw html
-<details closed><summary>Code for this figure</summary>
-```
-
-This code generates the figure below:
-
-```@example treegraph
-using Karnak, Graphs, NetworkLayout, InteractiveUtils
-
-add_numbered_vertex!(g) = add_vertex!(g)
-
-function build_type_tree(g, T, level=0)
-    add_numbered_vertex!(g)
-    push!(labels, T)
-    for t in subtypes(T)
-        build_type_tree(g, t, level + 1)
-        add_edge!(g,
-            findfirst(isequal(T), labels),
-            findfirst(isequal(t), labels))
-    end
-end
-
-function manhattanline(pt1, pt2)
-    mp = midpoint(pt1, pt2)
-    poly([pt1,
-            Point(pt1.x, mp.y),
-            Point(pt1.x, mp.y),
-            Point(pt2.x, mp.y),
-            Point(pt2.x, mp.y),
-            Point(pt2.x, pt2.y),
-            pt2
-        ], :stroke)
-    circle(pt2, 1, :fill)
-end
-
-g = DiGraph()
-labels = []
-build_type_tree(g, Number)
-labels = map(string, labels)
-
-dg = @drawsvg begin
-    background("grey20")
-    fontsize(8)
-    fontface("JuliaMono-Black")
-    setline(1)
-    sethue("gold")
-    nodesizes = Float64[]
-    for l in eachindex(labels)
-        labelwidth = textextents(string(labels[l]))[3]
-        push!(nodesizes, labelwidth)
-    end
-    drawgraph(g, margin=50,
-        layout=Buchheim(nodesize=nodesizes),
-        vertexfunction=(v, c) -> begin
-            w = nodesizes[v]
-            bbox  = BoundingBox(box(c[v] + (0.8w/2, 0), 0.8w, 12))
-            @layer begin
-                setopacity(0.8)
-                sethue("white")
-                box(bbox, 5, action=:fillpreserve)
-                sethue("gold")
-                strokepath()
-            end
-            @layer begin
-                sethue("black")
-                textfit(labels[v], bbox)
-            end
-        end,
-        edgefunction=(n, s, d, f, t) -> manhattanline(f, t)
-    )
-end 800 500
-nothing # hide
-```
-
-```@raw html
-</details>
-```
-
-```@example treegraph
-dg # hide
-```
-
-There are still a few problems with this visualization.
 
 ## LayeredLayouts.jl
 
@@ -691,9 +696,11 @@ and presented as part of the workshop: __Analyzing Graphs
 at Scale__, at JuliaCon 2020. You can watch the
 video on [YouTube](https://youtu.be/K3z0kUOBy2Y).
 
-The most important change is the renaming of LightGraphs.jl
-to Graphs.jl. Also, the way to access the list of packages
-might have changed between Julia v1.6 and v1.7.
+The most important changes since the video was made are:
+
+- the renaming of LightGraphs.jl to Graphs.jl
+
+- the way to access the list of packages has changed
 
 The code builds a dependency graph of the connections (ie
 which package depends on which package) for Julia packages
@@ -732,20 +739,20 @@ packages_info = registry_file["packages"];
 First we need the name and location of every package:
 
 ```julia
-# Julia v1.6?
+# Julia <= v1.6
 pkg_paths = map(values(packages_info)) do d
     (name = d["name"], path = d["path"])
 end
 ```
 
 ```julia
-# Julia v1.7?
+# Julia >= v1.7
 pkg_paths = map(values(Pkg.Registry.reachable_registries()[1].pkgs)) do d
     (name = d.name, path = d.path)
 end
 ```
 
-The result in `pkg_paths` is a vector of tuples, containing the name and location on disk of every package:
+The result in `pkg_paths` is a vector of tuples, containing the name and location of every package:
 
 ```julia
 7495-element Vector{NamedTuple{(:name, :path), Tuple{String, String}}}:
@@ -1281,7 +1288,7 @@ For that first cycle: ImageCore.jl's Project.toml file has MosaicViews.jl in its
 
 Visualizations of graphs are sometimes (often?) better at communicating vague ideas such as complexity and shape. But it's quite difficult to render graphs as rich as these to show the connections clearly while also showing all the labels such that they're easy to read.
 
-The solution may be to print out these graph representations and place them on a nearby wall, although, with Julia's General Registry changing every day, it would be out of date before it was installed.
+The solution may be to print out these graph representations and stick them on a nearby wall, although, with Julia's General Registry changing every day, it would be out of date before the glue dries.
 
 ![wall art office graph dependency](assets/figures/graph-dependency-wallart.png)
 

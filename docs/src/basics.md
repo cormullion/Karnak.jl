@@ -1,5 +1,5 @@
 ```@setup graphsection
-using Karnak, Luxor, Graphs, NetworkLayout, Colors, SimpleWeightedGraphs
+using Karnak, Graphs, NetworkLayout, Colors, SimpleWeightedGraphs
 ```
 
 # Graph theory
@@ -15,11 +15,8 @@ familiar with the basics of programming in Julia.
 
     All the figures in this manual are generated when the
     pages are built by Documenter.jl, and the code to draw
-    them is included here. SVG is used because it's good for
-    line drawings, but you can use Karnak.jl in any
-    Luxor environment, such as PNG - which is the
-    recommended format to use if the drawings get very
-    complex, since large SVGs can tax web browsers.
+    them is included here. To run the examples, you'll need the packages 
+    `Karnak`, `Graphs`, `NetworkLayout`, `Colors`, and possibly `SimpleWeightedGraphs`.
 
 ## Graphs, vertices, and edges
 
@@ -33,7 +30,7 @@ the relationships between things in the network.
 This code generates the figure below.
 
 ```@example graphsection
-using Karnak, Luxor, Graphs, NetworkLayout, Colors, SimpleWeightedGraphs
+using Karnak, Graphs, NetworkLayout, Colors, SimpleWeightedGraphs
 d = @drawsvg begin
     background("grey10")
     sethue("yellow")
@@ -126,7 +123,7 @@ It's time to see some kind of visual representation of the
 graph we've made.
 
 ```@example graphsection
-# using Karnak, Graphs, NetworkLayout, Colors
+using Karnak, Graphs
 
 g = Graph()
 add_vertices!(g, 4)
@@ -144,6 +141,14 @@ end 600 300
 
 This is just one of the many ways this graph can be represented visually. The locations of the vertices as drawn here are _not_ part of the graph's definition. The default styling uses the current Luxor color, with small circles marking the vertex positions. `drawgraph()` places the graphics for the graph on the current Luxor drawing.
 
+!!! note
+
+    SVG is used in this manual because it's a good format for
+    line drawings, but you can also use Karnak.jl to create PDF or PNG. 
+    See the [Luxor documentation](http://juliagraphics.github.io/Luxor.jl/stable/) for details. 
+    PNG is a good choice if the graphics get very
+    complex, since large SVGs can tax web browsers.
+
 ## Undirected and directed graphs
 
 We'll meet two main types of graph, **undirected** and **directed**. In our undirected graph `g` above, vertex 1 and vertex 2 are _neighbors_, connected with an edge, but there's no way to specify or see a direction for that connection. For example, if the graph was modelling people making financial transactions, we couldn't tell whether the person at vertex 1 sent money to the person at vertex 2, or received money from them.
@@ -151,33 +156,13 @@ We'll meet two main types of graph, **undirected** and **directed**. In our undi
 In Graphs.jl, we can create directed graphs with `DiGraph()` (also `SimpleDiGraph()`).
 
 ```@example graphsection
-gd = DiGraph()
-add_vertices!(gd, 4)
-add_edge!(gd, 1, 2)
-add_edge!(gd, 1, 3)
-add_edge!(gd, 2, 3)
-add_edge!(gd, 1, 4) # vertex 1 to vertex 4
-add_edge!(gd, 4, 1) # vertex 4 to vertex 1
-
-@drawsvg begin
-    background("grey10")
-    sethue("thistle1")
-    drawgraph(gd, vertexlabels = [1, 2, 3, 4])
-end 600 300
-```
-
-In this representation of our directed graph `gd`, we can now see the direction of the edges joining vertices.
-
-With the default drawing settings, the two edges connecting vertices 1 and 4 are drawn so that they overlap exactly, and you can't easily differentiate them. An easy way to see both edges at the same time is to specify a small amount of curvature with the `edgecurvature` keyword:
-
-```@example graphsection
-gd = DiGraph() # hide
-add_vertices!(gd, 4) # hide
-add_edge!(gd, 1, 2) # hide
-add_edge!(gd, 1, 3) # hide
-add_edge!(gd, 2, 3) # hide
-add_edge!(gd, 1, 4) # vertex 1 to vertex 4 # hide
-add_edge!(gd, 4, 1) # vertex 4 to vertex 1 # hide
+gd = DiGraph() 
+add_vertices!(gd, 4) 
+add_edge!(gd, 1, 2) 
+add_edge!(gd, 1, 3) 
+add_edge!(gd, 2, 3) 
+add_edge!(gd, 1, 4) # vertex 1 to vertex 4 
+add_edge!(gd, 4, 1) # vertex 4 to vertex 1 
 
 @drawsvg begin
     background("grey10")
@@ -186,34 +171,9 @@ add_edge!(gd, 4, 1) # vertex 4 to vertex 1 # hide
 end 600 300
 ```
 
-Another option would be to make use of Luxor.jl’s `arrow()` functions, which would allow you to add all kinds of pointless graphics to edges, such as this hue-encoded `¾`-of-the-shaft-length version:
+!!! note
 
-```@example graphsection
-gd = DiGraph() # hide
-add_vertices!(gd, 4) # hide
-add_edge!(gd, 1, 2) # hide
-add_edge!(gd, 1, 3) # hide
-add_edge!(gd, 2, 3) # hide
-add_edge!(gd, 1, 4) # vertex 1 to vertex 4 # hide
-add_edge!(gd, 4, 1) # vertex 4 to vertex 1 # hide
-
-@drawsvg begin # hide
-    background("grey10") # hide
-    sethue("thistle1") # hide
-    drawgraph(gd, vertexlabels = [1, 2, 3, 4],  # hide
-        edgefunction = (n, s, d, f, t) -> begin # hide
-            arrow(f, t, [10, 10],  # hide
-            decoration = 0.75, # hide
-            decorate = () -> begin # hide
-                sethue(HSB(60n, 0.7, 0.8)) # hide
-                ngon(O, 10, 3, 0, :fill) # hide # hide
-            end, # hide
-            arrowheadfunction= (f, t, a) -> () # hide
-            )    # hide
-        end # hide
-    ) # hide
-end 600 300 # hide
-```
+    In this representation of our directed graph `gd`, we can see the direction of the edges joining the vertices. The `edgecurvature` keyword has been used to specify a small amount of curvature for each edge. Otherwise, with the default drawing settings, the two edges connecting vertices 1 and 4 would have been drawn overlapping, and difficult to distiguish at a glance. 
 
 ## Very simple graphs
 
@@ -240,9 +200,9 @@ end 400 300
 hcat(d1, d2)
 ```
 
-Neither of these two graphs is **connected**. In a connected graph, every vertex is connected to every other via some path, a sequence of edges.
+Neither of these two graphs is a **connected** graph. In a connected graph, every vertex is connected to every other via some **path**, a sequence of edges.
 
-We can define how many vertices and edges the graph should have. An undirected graph with 10 vertices can have between 0 to 45 (`binomial(10, 2)`) edges, a directed graph up to 90.
+We can define how many vertices and edges the graph should have. An undirected graph with 10 vertices can have between 0 to 45 (`binomial(10, 2)`) edges, a directed graph up to 90 edges.
 
 ## Well-known graphs
 
@@ -270,7 +230,7 @@ g = complete_digraph(N)
     background("grey10")
     setline(0.5)
     sethue("orange")
-    drawgraph(g, vertexlabels = vertices(g))
+    drawgraph(g, vertexlabels = vertices(g), edgecurvature = 2)
 end 600 300
 ```
 
@@ -297,8 +257,7 @@ W = 550
 end 600 400
 ```
 
-We provided the required locations of the vertices on the
-drawing to the `layout` keyword.
+Here, we calculated the coordinates of the vertices and passed the resulting `pts` to the `layout` keyword.
 
 A **grid** graph doesn't need much explanation:
 
@@ -422,7 +381,7 @@ Some of the graphs in this figure would benefit from
 individual ‘tuning’ of the various layout parameters.
 
 Here's a larger view of the Petersen graph (named after
-Julius Petersen, who first described it in 1898).
+Danish mathematician Julius Petersen, who first described it in 1898).
 
 ```@example graphsection
 @drawsvg begin
@@ -531,7 +490,7 @@ To add an edge:
 add_edge!(pg1, 10, 11) # join 10 to 11
 ```
 
-It's sometimes useful to be able to see these relationships between neighbors visually. This example looks for the neighbors of vertex 10:
+It's sometimes useful to be able to see these relationships between neighbors visually. This example looks for the neighbors of vertex 10 and draws them in thick red lines:
 
 ```@example graphsection
 @drawsvg begin
@@ -541,21 +500,24 @@ pg = smallgraph(:petersen)
 
 vertexofinterest = 10
 
-E = []
+E = Int[]
 for (n, e) in enumerate(edges(pg))
     if dst(e) == vertexofinterest || src(e) == vertexofinterest
         push!(E, n)
     end
 end
 
+edgewts = [dst(e) ∈ E ? 4 : 1 for e in edges(pg)]
+
 drawgraph(pg,
     vertexlabels = 1:nv(pg),
     layout = Shell(nlist=[6:10,]),
     vertexfillcolors = (v) -> ((v == vertexofinterest) ||
-        v ∈ neighbors(pg, vertexofinterest)) && colorant"rebeccapurple",
+    v ∈ neighbors(pg, vertexofinterest)) && colorant"rebeccapurple",
     vertexshapesizes = [v == vertexofinterest ? 20 : 10 for v in 1:nv(pg)],
-    edgestrokecolors = (e, f, t, s, d) -> (e ∈ E) ?
-        colorant"firebrick" : colorant"thistle1"
+    edgestrokecolors = (e, f, t, s, d) -> (e ∈ E) ? 
+        colorant"red" : colorant"thistle1",
+    edgestrokeweights = edgewts
     )
 end 600 300
 ```
@@ -1319,9 +1281,9 @@ end 800 600
 
 ## Graph coloring
 
-A simple **graph coloring** is a way of coloring the vertices or edges of a graph so that no two adjacent vertices or edges are the same color. The `greedy_color()` function finds a random graph coloring for a graph. The total number of colors, and an array of integers representing the colors, are returned in fields of the returned value.
+A simple **graph coloring** is a way of coloring the vertices of a graph so that no two adjacent vertices are the same color. The `greedy_color()` function finds a random graph coloring for a graph. The total number of colors, and an array of integers representing the colors, are returned in fields `num_colors` and `colors` (as integers between 1 and `n`).
 
-In the following example, only three colors are needed such that no edge connects two vertices with the same color.
+In the following example, only three colors are needed such that no edge connects two vertices with the same color. Colors.jl has a `distinguishable_colors()` function that finds `n` colors which look sufficiently different:
 
 ```@example graphsection
 @drawsvg begin
@@ -1336,7 +1298,7 @@ In the following example, only three colors are needed such that no edge connect
 end 800 400
 ```
 
-whereas a complete graph might require many colors because there are so many connected vertices:
+Here `gc.num_colors` is 3. However, a complete graph might require many colors because there are so many connected vertices. For example, `gc.num_colors` is now 20:
 
 ```@example graphsection
 @drawsvg begin

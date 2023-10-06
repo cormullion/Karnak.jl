@@ -14,9 +14,13 @@ seven bridges. The problem was to devise a walk through the
 city that would cross each of those bridges once and only
 once.
 
-# I'm not sure I've set this up correctly yet...
+(wikipedia)
 
 =#
+
+# This code trys to find cycles that visit every island.
+
+# I'm not sure I've set this up correctly...
 
 konigsberg_al = [
     [2, 4],       # 1
@@ -85,7 +89,7 @@ for (pos, n) in tiles
             boundingbox=BoundingBox(box(O, tiles.tilewidth, tiles.tilewidth)),
             edgelist = vertexlist_to_edgelist(cycle),
             edgestrokeweights = 3,
-            edgestrokecolors = colorant"magenta",
+            edgestrokecolors = colorant"purple",
             edgegaps=0)
     end
 end

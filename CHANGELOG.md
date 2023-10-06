@@ -1,6 +1,6 @@
 # Changelog
 
-## [v0.6.0] - forthcoming
+## [v1.0.0] - 2023-10-06 12:23:14
 
 ### Added
 

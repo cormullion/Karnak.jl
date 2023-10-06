@@ -1,5 +1,7 @@
 using Luxor, Karnak, Graphs, Colors, NetworkLayout
 
+# this was the first test page
+
 function test1()
     Drawing(600, 600, :png)
     origin()
