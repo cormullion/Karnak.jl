@@ -1,11 +1,11 @@
-using Luxor, Karnak, Graphs, Colors, NetworkLayout
+using Karnak, Graphs, Colors, NetworkLayout
 
 function drawlittlegraph(pos, w)
     @layer begin
         translate(pos)
         drawgraph(star_graph(12),
             layout = stress,
-            vertexfillcolors = [RGB(Luxor.julia_purple...),RGB(Luxor.julia_green...),RGB(Luxor.julia_red...)],
+            vertexfillcolors = [RGB(Karnak.Luxor.julia_purple...),RGB(Karnak.Luxor.julia_green...),RGB(Karnak.Luxor.julia_red...)],
             vertexshapesizes = 8,
             boundingbox = BoundingBox(box(O, w, w)))
     end

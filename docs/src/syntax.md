@@ -1,5 +1,5 @@
 ```@setup graphsection
-using Karnak, Luxor, Graphs, NetworkLayout, Colors, SimpleWeightedGraphs
+using Karnak, Graphs, NetworkLayout, Colors, SimpleWeightedGraphs
 ```
 
 # Syntax
@@ -257,9 +257,9 @@ The calculated positions are returned by the `drawgraph()` function.
 
 ### Initial positions for the layout algorithms
 
-Some of the layout algorithms - the Spring and Stress ones, for example -  allow you to pass _initial_ vertex positions to be used by the algorithms as starting points. The algorithm will continually adjust them to make a better result. These initial positions should be supplied as xy pairs, rather than Luxor Points (which NetworkLayout doesn't know about).
+Some of the layout algorithms - the Spring and Stress ones, for example -  allow you to pass _initial_ vertex positions to be used by the algorithms as starting points. The algorithm will continually adjust them to make a better result. These initial positions should be supplied as xy pairs, rather than Points (which NetworkLayout doesn't know about).
 
-Here's an animation showing how the Stress algorithm gradually improves the layout on each iteration. The initial positions are just the "grid locations" of a Luxor Tiler.
+Here's an animation showing how the Stress algorithm gradually improves the layout on each iteration. The initial positions are just the "grid locations" of a Tiler iterator.
 
 ```julia
 using Karnak, Graphs, NetworkLayout, Colors
@@ -310,7 +310,7 @@ edgefunction = my_edgefunction(edgenumber, edgesrc, edgedest, from::Point, to::P
 
 These allow you to place graphics at `coordinates[vertex]`, and to draw edges from `from` to `to`, using any available tools for drawing.
 
-In the following picture, the vertex positions were passed to a function that placed clipped PNG images on the drawing (using `Luxor.readpng()` and `Luxor.placeimage()`), and the edges were drawn using sine curves. Refer to the Luxor documentation for more about putting colored things on drawings.
+In the following picture, the vertex positions were passed to a function that placed clipped PNG images on the drawing (using `readpng()` and `placeimage()`), and the edges were drawn using sine curves. Refer to the Luxor.jl documentation for more about putting colored things on drawings.
 
 ![image vertices](assets/figures/karnakmap.png)
 
@@ -503,7 +503,7 @@ drawgraph(g, layout=stress,
 end 600 300
 ```
 
-When circles and squares don't cut it, supply a function to `vertexshapes`. The single argument is the vertex number; any graphics you draw will be centered at the vertex location, Luxor's current origin, `Point(0, 0)`.
+When circles and squares don't cut it, supply a function to `vertexshapes`. The single argument is the vertex number; any graphics you draw will be centered at the vertex location, the current origin, `Point(0, 0)`.
 
 ```@example graphsection
 @drawsvg begin
@@ -562,7 +562,7 @@ sethue("yellow")
 setline(0.2)
 drawgraph(g,
     layout = stress,
-    vertexshapes = (v) -> drawball(O, 25, RGB([Luxor.julia_red,Luxor.julia_purple, Luxor.julia_green][rand(1:end)]...))
+    vertexshapes = (v) -> drawball(O, 25, RGB([Karnak.Luxor.julia_red,Karnak.Luxor.julia_purple, Karnak.Luxor.julia_green][rand(1:end)]...))
 )
 end 600 600
 ```
@@ -611,7 +611,7 @@ g = grid((15, 15))
 drawgraph(g,
     layout = squaregrid,
     vertexshapesizes = 15,
-    vertexfillcolors = [RGB([Luxor.julia_red, Luxor.julia_green,
+    vertexfillcolors = [RGB([Karnak.Luxor.julia_red, Luxor.julia_green,
         Luxor.julia_purple][rand(1:end)]...) for i in 1:nv(g)])
 end 600 600
 ```
@@ -680,7 +680,6 @@ drawgraph(g, layout=stress,
         push!(B, to)
         end)
 
-# Luxor takes over:
 setlinejoin("bevel")
 setline(0.25)
 
@@ -742,7 +741,7 @@ drawgraph(g,
 end 600 300
 ```
 
-For more interesting arrows for edges, Luxor's arrows are available, and you can define functions to create all kinds of graphical deatil:
+For more interesting arrows for edges, you can use arrows, and you can also define functions to create all kinds of graphical deatil:
 
 ```@example graphsection
 gd = DiGraph() 
@@ -952,7 +951,7 @@ end 600 600
 
 ### `edgecurvature` and `edgecaps`
 
-`edgecurvature` determines the curvature of the edges, and `edgegaps` sets the distance between the tip of the arrowhead and the vertex position. Units, as everywhere in Karnak and Luxor, are points/pixels (1 point is 0.3527mm).
+`edgecurvature` determines the curvature of the edges, and `edgegaps` sets the distance between the tip of the arrowhead and the vertex position. Units, as everywhere in Karnak, are points/pixels (1 point is 0.3527mm).
 
 ```@example graphsection
 g = grid((3, 3))

@@ -1,4 +1,4 @@
-using Luxor, Karnak, Graphs, Colors, NetworkLayout
+using Karnak, Graphs, Colors, NetworkLayout
 
 # this was the first test page
 
@@ -191,7 +191,7 @@ function test4()
         background("black")
         sethue("gold")
         # drawgraph(wheel_graph(12), layout=(g) -> spectral(adjacency_matrix(g), dim=2), margin=0)
-        drawgraph(smallgraph(:icosahedral), vertexshapesizes = collect(rand(10:30, 10)), vertexshapes=:circle, vertexfillcolors = [RGB(Luxor.julia_green...), RGB(Luxor.julia_purple...), RGB(Luxor.julia_red...)],
+        drawgraph(smallgraph(:icosahedral), vertexshapesizes = collect(rand(10:30, 10)), vertexshapes=:circle, vertexfillcolors = [RGB(Karnak.Luxor.julia_green...), RGB(Karnak.Luxor.julia_purple...), RGB(Karnak.Luxor.julia_red...)],
         edgestrokeweights = 3:-1:1, layout=stress, margin=10)
     end 600 600
 end

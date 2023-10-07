@@ -46,7 +46,7 @@ d = @drawsvg begin
         edgestrokeweights=2,
         vertexlabels = (v) -> "thing $(v)",
         vertexshapes = :circle,
-        vertexfillcolors = [RGB(Luxor.julia_red...), RGB(Luxor.julia_purple...), RGB(Luxor.julia_green...), RGB(Luxor.julia_blue...)],
+        vertexfillcolors = [RGB(Karnak.Luxor.julia_red...), RGB(Karnak.Luxor.julia_purple...), RGB(Karnak.Luxor.julia_green...), RGB(Karnak.Luxor.julia_blue...)],
         vertexshapesizes = 25,
         vertexlabeltextcolors = colorant"white",
         edgelabels=(n, s, d, f, t) -> begin
@@ -313,7 +313,7 @@ function. Supply one of the available symbols, such as
 This code generates the figure below.
 
 ```@example smallgraphs
-using Karnak, Luxor, Graphs, NetworkLayout
+using Karnak, Graphs, NetworkLayout
 smallgraphs = (
     (:bull, "bull"),
     (:chvatal, "chvatal"),
@@ -884,7 +884,7 @@ In the next example, we start with a *binary tree*, in which each vertex is conn
 This code generates the figure below.
 
 ```@example graphsection
-using Karnak, Luxor, Graphs, NetworkLayout, Colors
+using Karnak, Graphs, NetworkLayout, Colors
 
 d = @drawsvg begin
     background("grey10")
@@ -905,10 +905,10 @@ d = @drawsvg begin
         edgegaps=12, 
         vertexlabels = 1:nv(g),
         vertexshapes=:circle,
-        vertexfillcolors=[RGB(Luxor.julia_red...), 
-            RGB(Luxor.julia_purple...), 
-            RGB(Luxor.julia_green...), 
-            RGB(Luxor.julia_blue...)],
+        vertexfillcolors=[RGB(Karnak.Luxor.julia_red...), 
+            RGB(Karnak.Luxor.julia_purple...), 
+            RGB(Karnak.Luxor.julia_green...), 
+            RGB(Karnak.Luxor.julia_blue...)],
         vertexshapesizes=12,
         vertexlabeltextcolors=colorant"white",
     )

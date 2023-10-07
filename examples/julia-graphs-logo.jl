@@ -30,7 +30,7 @@ end
 outerpts = ngonside(O, 450, 4, π/4, vertices=true)
 innerpts = ngonside(O, 150, 4, π/2, vertices=true)
 pts = vcat(outerpts, innerpts)
-colors = map(c -> RGB(c...), [Luxor.julia_blue, Luxor.julia_red, Luxor.julia_green, Luxor.julia_purple])
+colors = map(c -> RGB(c...), [Karnak.Luxor.julia_blue, Karnak.Luxor.julia_red, Karnak.Luxor.julia_green, Karnak.Luxor.julia_purple])
 
 Drawing(600, 600, "/tmp/julia-graphs.svg")
     origin()

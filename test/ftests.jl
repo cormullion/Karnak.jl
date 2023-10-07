@@ -58,7 +58,7 @@ end 600 300
     drawgraph(g, layout=stress,
         vertexshapes = :none,
         edgestrokecolors = (n, s, d, from, to) -> begin
-                c = Luxor.get_current_color()
+                c = Karnak.Luxor.get_current_color()
                 if isodd(n)
                     RGB(c.g, c.b, c.r)
                 else

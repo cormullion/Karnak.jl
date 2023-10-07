@@ -1,4 +1,4 @@
-using Karnak, Luxor, Graphs, Colors, NetworkLayout, Random
+using Karnak, Graphs, Colors, NetworkLayout, Random
 
 #=
 The Seven Bridges of Königsberg is a historically notable

@@ -1,4 +1,4 @@
-using Karnak, Luxor, Graphs, NetworkLayout, Colors
+using Karnak, Graphs, NetworkLayout, Colors
 
 function whiten(col::Color, f=0.5)
     hsl = convert(HSL, col)
@@ -31,7 +31,7 @@ drawgraph(g,
     edgelines = 0,
     vertexshapes = (v) -> begin
             c = rand(1:3)
-            col = RGB([Luxor.julia_red,Luxor.julia_purple, Luxor.julia_green][c]...)
+            col = RGB([Karnak.Luxor.julia_red, Karnak.Luxor.julia_purple, Karnak.Luxor.julia_green][c]...)
             drawball(O, 25, col)
             c == 1 && push!(A, v)
         end

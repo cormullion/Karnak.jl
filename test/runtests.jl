@@ -1,6 +1,5 @@
 using Karnak
 using Test
-using Luxor
 using Graphs
 using NetworkLayout
 using Colors

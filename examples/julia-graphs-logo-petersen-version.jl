@@ -31,7 +31,7 @@ end
 
 colors = map(
     c -> RGB(c...),
-    [Luxor.julia_blue, Luxor.julia_red, Luxor.julia_green, Luxor.julia_purple],
+    [Karnak.Luxor.julia_blue, Karnak.Luxor.julia_red, Karnak.Luxor.julia_green, Karnak.Luxor.julia_purple],
 )
 
 Drawing(600, 600, "/tmp/julia-graphs.png")

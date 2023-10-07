@@ -1,5 +1,5 @@
 using DataFrames, CSV
-using Graphs, Karnak, Luxor, Colors, NetworkLayout
+using Graphs, Karnak, Colors, NetworkLayout
 
 cd(joinpath(@__DIR__))
 
@@ -14,7 +14,7 @@ g = Graph(amatrix)
 extrema_lat = extrema(tubedata.Latitude)
 extrema_long = extrema(tubedata.Longitude)
 
-# scale LatLong and flip in y to fit into current Luxor drawing
+# scale LatLong and flip in y to fit into current drawing
 positions = @. Point(rescale(tubedata.Longitude, extrema_long..., -280, 280), rescale(tubedata.Latitude, extrema_lat..., 280, -280))
 
 stations = tubedata[!,:Station]

@@ -1,5 +1,5 @@
 ```@setup tubesection
-using Karnak, Luxor, Graphs, NetworkLayout, Colors
+using Karnak, Graphs, NetworkLayout, Colors
 using DataFrames, CSV, DelimitedFiles
 
 # positions are in LatLong
@@ -13,7 +13,7 @@ g = Graph(amatrix)
 extrema_lat = extrema(tubedata.Latitude)
 extrema_long = extrema(tubedata.Longitude)
 
-# scale LatLong and flip in y to fit into current Luxor drawing
+# scale LatLong and flip in y to fit into current drawing
 positions = @. Point(rescale(tubedata.Longitude, extrema_long..., -280, 280), rescale(tubedata.Latitude, extrema_lat..., 280, -280))
 
 stations = tubedata[!,:Station]
@@ -355,7 +355,7 @@ station names, latitude and longitudes, and connectivity
 details.
 
 ```julia
-using Karnak, Luxor, Graphs, NetworkLayout, Colors
+using Karnak, Graphs, NetworkLayout, Colors
 using DataFrames, CSV
 
 # positions are in LatLong
@@ -367,7 +367,7 @@ amatrix = Matrix(tubedata[:, 4:270])
 extrema_lat = extrema(tubedata.Latitude)
 extrema_long = extrema(tubedata.Longitude)
 
-# scale LatLong and flip in y to fit into current Luxor drawing
+# scale LatLong and flip in y to fit into current drawing
 
 positions = @. Point(
     rescale(tubedata.Longitude, extrema_long..., -280, 280),
@@ -662,7 +662,7 @@ innerpts = ngonside(O, 150, 4, π/2, vertices=true)
 pts = vcat(outerpts, innerpts)
 
 colors = map(c -> RGB(c...),
-    [Luxor.julia_blue, Luxor.julia_red, Luxor.julia_green, Luxor.julia_purple])
+    [Karnak.Luxor.julia_blue, Karnak.Luxor.julia_red, Karnak.Luxor.julia_green, Karnak.Luxor.julia_purple])
 
 @drawsvg begin
     squircle(O, 294, 294, :clip, rt=0.2)

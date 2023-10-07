@@ -1,4 +1,4 @@
-using Karnak, Luxor, Graphs, NetworkLayout, Colors
+using Karnak, Graphs, NetworkLayout, Colors
 using Random
 
 Random.seed!(42)
