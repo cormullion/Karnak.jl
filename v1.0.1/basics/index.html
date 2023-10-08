@@ -1,0 +1,798 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/><title>Basic graphs · Karnak</title><meta name="title" content="Basic graphs · Karnak"/><meta property="og:title" content="Basic graphs · Karnak"/><meta property="twitter:title" content="Basic graphs · Karnak"/><meta name="description" content="Documentation for Karnak."/><meta property="og:description" content="Documentation for Karnak."/><meta property="twitter:description" content="Documentation for Karnak."/><script data-outdated-warner src="../assets/warner.js"></script><link href="https://cdnjs.cloudflare.com/ajax/libs/lato-font/3.0.0/css/lato-font.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/juliamono/0.050/juliamono.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/fontawesome.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/solid.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/brands.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.8/katex.min.css" rel="stylesheet" type="text/css"/><script>documenterBaseURL=".."</script><script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js" data-main="../assets/documenter.js"></script><script src="../search_index.js"></script><script src="../siteinfo.js"></script><script src="../../versions.js"></script><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../assets/themes/documenter-dark.css" data-theme-name="documenter-dark" data-theme-primary-dark/><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../assets/themes/documenter-light.css" data-theme-name="documenter-light" data-theme-primary/><script src="../assets/themeswap.js"></script><link href="../assets/karnak-docs.css" rel="stylesheet" type="text/css"/></head><body><div id="documenter"><nav class="docs-sidebar"><a class="docs-logo" href="../"><img src="../assets/logo.svg" alt="Karnak logo"/></a><div class="docs-package-name"><span class="docs-autofit"><a href="../">Karnak</a></span></div><button class="docs-search-query input is-rounded is-small is-clickable my-2 mx-auto py-1 px-2" id="documenter-search-query">Search docs (Ctrl + /)</button><ul class="docs-menu"><li><a class="tocitem" href="../">Introduction to Karnak</a></li><li class="is-active"><a class="tocitem" href>Basic graphs</a><ul class="internal"><li><a class="tocitem" href="#Graphs,-vertices,-and-edges"><span>Graphs, vertices, and edges</span></a></li><li><a class="tocitem" href="#Undirected-and-directed-graphs"><span>Undirected and directed graphs</span></a></li><li><a class="tocitem" href="#Very-simple-graphs"><span>Very simple graphs</span></a></li><li><a class="tocitem" href="#Well-known-graphs"><span>Well-known graphs</span></a></li><li><a class="tocitem" href="#Getting-some-information-about-the-graph"><span>Getting some information about the graph</span></a></li><li><a class="tocitem" href="#Graphs-as-matrices"><span>Graphs as matrices</span></a></li><li><a class="tocitem" href="#Paths,-cycles,-routes,-and-traversals"><span>Paths, cycles, routes, and traversals</span></a></li><li><a class="tocitem" href="#Trees"><span>Trees</span></a></li><li><a class="tocitem" href="#Shortest-paths:-the-A*-algorithm"><span>Shortest paths: the A* algorithm</span></a></li><li><a class="tocitem" href="#Shortest-paths:-Dijkstra&#39;s-algorithm"><span>Shortest paths: Dijkstra&#39;s algorithm</span></a></li><li><a class="tocitem" href="#Weighted-graphs"><span>Weighted graphs</span></a></li><li><a class="tocitem" href="#Spanning-trees"><span>Spanning trees</span></a></li><li><a class="tocitem" href="#Centrality"><span>Centrality</span></a></li><li><a class="tocitem" href="#Graph-coloring"><span>Graph coloring</span></a></li></ul></li><li><a class="tocitem" href="../syntax/">Syntax</a></li><li><a class="tocitem" href="../examples/">Examples</a></li><li><span class="tocitem">Reference</span><ul><li><a class="tocitem" href="../reference/functionindex/">Alphabetical function list</a></li><li><a class="tocitem" href="../reference/api/">Function reference</a></li></ul></li></ul><div class="docs-version-selector field has-addons"><div class="control"><span class="docs-label button is-static is-size-7">Version</span></div><div class="docs-selector control is-expanded"><div class="select is-fullwidth is-size-7"><select id="documenter-version-selector"></select></div></div></div></nav><div class="docs-main"><header class="docs-navbar"><a class="docs-sidebar-button docs-navbar-link fa-solid fa-bars is-hidden-desktop" id="documenter-sidebar-button" href="#"></a><nav class="breadcrumb"><ul class="is-hidden-mobile"><li class="is-active"><a href>Basic graphs</a></li></ul><ul class="is-hidden-tablet"><li class="is-active"><a href>Basic graphs</a></li></ul></nav><div class="docs-right"><a class="docs-navbar-link" href="https://github.com/cormullion/Karnak.jl" title="View the repository on GitHub"><span class="docs-icon fa-brands"></span><span class="docs-label is-hidden-touch">GitHub</span></a><a class="docs-navbar-link" href="https://github.com/cormullion/Karnak.jl/blob/master/docs/src/basics.md" title="Edit source on GitHub"><span class="docs-icon fa-solid"></span></a><a class="docs-settings-button docs-navbar-link fa-solid fa-gear" id="documenter-settings-button" href="#" title="Settings"></a><a class="docs-article-toggle-button fa-solid fa-chevron-up" id="documenter-article-toggle-button" href="javascript:;" title="Collapse all docstrings"></a></div></header><article class="content" id="documenter-page"><h1 id="Graph-theory"><a class="docs-heading-anchor" href="#Graph-theory">Graph theory</a><a id="Graph-theory-1"></a><a class="docs-heading-anchor-permalink" href="#Graph-theory" title="Permalink"></a></h1><p>This section contains an introduction to basic graph theory using the <a href="https://github.com/JuliaGraphs/Graphs.jl">Graphs.jl</a> package, illustrated with figures made with Karnak.jl. You don&#39;t need any prior knowledge of graphs, but you should be familiar with the basics of programming in Julia.</p><div class="admonition is-info"><header class="admonition-header">Note</header><div class="admonition-body"><p>All the figures in this manual are generated when the pages are built by Documenter.jl, and the code to draw them is included here. To run the examples, you&#39;ll need the packages  <code>Karnak</code>, <code>Graphs</code>, <code>NetworkLayout</code>, <code>Colors</code>, and possibly <code>SimpleWeightedGraphs</code>.</p></div></div><h2 id="Graphs,-vertices,-and-edges"><a class="docs-heading-anchor" href="#Graphs,-vertices,-and-edges">Graphs, vertices, and edges</a><a id="Graphs,-vertices,-and-edges-1"></a><a class="docs-heading-anchor-permalink" href="#Graphs,-vertices,-and-edges" title="Permalink"></a></h2><p>Graph theory is used for analysing networks and the relationships between things in the network.</p><details closed><summary>Code for this figure</summary><p>This code generates the figure below.</p><pre><code class="language-julia hljs">using Karnak, Graphs, NetworkLayout, Colors, SimpleWeightedGraphs
+d = @drawsvg begin
+    background(&quot;grey10&quot;)
+    sethue(&quot;yellow&quot;)
+    fontsize(12)
+    g = Graph(3, 3)
+    add_vertex!(g)
+    add_edge!(g, 3, 4)
+    drawgraph(g,
+        layout=spring,
+        margin=50,
+        edgecurvature=0.2,
+        edgegaps=30,
+        edgestrokeweights=2,
+        vertexlabels = (v) -&gt; &quot;thing $(v)&quot;,
+        vertexshapes = :circle,
+        vertexfillcolors = [RGB(Luxor.julia_red...), RGB(Luxor.julia_purple...), RGB(Luxor.julia_green...), RGB(Luxor.julia_blue...)],
+        vertexshapesizes = 25,
+        vertexlabeltextcolors = colorant&quot;white&quot;,
+        edgelabels=(n, s, d, f, t) -&gt; begin
+            θ = slope(f, t)
+            fontsize(12)
+            translate(midpoint(f, t))
+            rotate(θ)
+            sethue(&quot;white&quot;)
+            label(&quot;$s and $d&quot;, [:n, :n, :s, :n][n], O, offset=10)
+            sethue(&quot;orange&quot;)
+            label(&quot;edge $n&quot;, [:n, :n, :s, :n][n], O, offset=-15)
+        end,
+        )
+end 600 350</code></pre></details><img src="b6c8fa89.svg" alt="Example block output"/><p>A typical graph consists of:</p><ul><li><p><em>vertices</em>, which represent the things or entities, and</p></li><li><p><em>edges</em>, which describe how two things or entities connect and relate to each other</p></li></ul><p>Vertices are also called <em>nodes</em> in the world of graph theory.</p><p>The Graphs.jl package provides many ways to create graphs. We&#39;ll start off with this basic approach:</p><pre><code class="language-julia hljs">using Graphs
+g = Graph()</code></pre><p>The <code>Graph()</code> function creates a new empty graph and stores it in <code>g</code>. (<code>SimpleGraph()</code> is an alternative to <code>Graph()</code>.) Let&#39;s add a single vertex:</p><pre><code class="language-julia hljs">add_vertex!(g)</code></pre><p>We can easily add a number of new vertices:</p><pre><code class="language-julia hljs">add_vertices!(g, 3)</code></pre><p>The graph has four vertices now. We can refer to them as <code>1</code>, <code>2</code>, <code>3</code>, and <code>4</code>.</p><p>We&#39;ll join some pairs of vertices with an edge:</p><pre><code class="language-julia hljs">add_edge!(g, 1, 2)  # join vertex 1 with vertex 2
+add_edge!(g, 1, 3)
+add_edge!(g, 2, 3)
+add_edge!(g, 1, 4)</code></pre><p>In Graphs.jl, vertices are always numbered from 1 to <code>n</code>.</p><p><code>g</code> is now a <code>{4, 4} undirected simple Int64 graph}</code>.</p><p>It&#39;s time to see some kind of visual representation of the graph we&#39;ve made.</p><pre><code class="language-julia hljs">using Karnak, Graphs
+
+g = Graph()
+add_vertices!(g, 4)
+add_edge!(g, 1, 2)
+add_edge!(g, 1, 3)
+add_edge!(g, 2, 3)
+add_edge!(g, 1, 4)
+
+@drawsvg begin
+    background(&quot;grey10&quot;)
+    sethue(&quot;orange&quot;)
+    drawgraph(g, vertexlabels = [1, 2, 3, 4])
+end 600 300</code></pre><img src="29b5d4a9.svg" alt="Example block output"/><p>This is just one of the many ways this graph can be represented visually. The locations of the vertices as drawn here are <em>not</em> part of the graph&#39;s definition. The default styling uses the current Luxor color, with small circles marking the vertex positions. <code>drawgraph()</code> places the graphics for the graph on the current Luxor drawing.</p><div class="admonition is-info"><header class="admonition-header">Note</header><div class="admonition-body"><p>SVG is used in this manual because it&#39;s a good format for line drawings, but you can also use Karnak.jl to create PDF or PNG.  See the <a href="http://juliagraphics.github.io/Luxor.jl/stable/">Luxor documentation</a> for details.  PNG is a good choice if the graphics get very complex, since large SVGs can tax web browsers.</p></div></div><h2 id="Undirected-and-directed-graphs"><a class="docs-heading-anchor" href="#Undirected-and-directed-graphs">Undirected and directed graphs</a><a id="Undirected-and-directed-graphs-1"></a><a class="docs-heading-anchor-permalink" href="#Undirected-and-directed-graphs" title="Permalink"></a></h2><p>We&#39;ll meet two main types of graph, <strong>undirected</strong> and <strong>directed</strong>. In our undirected graph <code>g</code> above, vertex 1 and vertex 2 are <em>neighbors</em>, connected with an edge, but there&#39;s no way to specify or see a direction for that connection. For example, if the graph was modelling people making financial transactions, we couldn&#39;t tell whether the person at vertex 1 sent money to the person at vertex 2, or received money from them.</p><p>In Graphs.jl, we can create directed graphs with <code>DiGraph()</code> (also <code>SimpleDiGraph()</code>).</p><pre><code class="language-julia hljs">gd = DiGraph()
+add_vertices!(gd, 4)
+add_edge!(gd, 1, 2)
+add_edge!(gd, 1, 3)
+add_edge!(gd, 2, 3)
+add_edge!(gd, 1, 4) # vertex 1 to vertex 4
+add_edge!(gd, 4, 1) # vertex 4 to vertex 1
+
+@drawsvg begin
+    background(&quot;grey10&quot;)
+    sethue(&quot;thistle1&quot;)
+    drawgraph(gd, vertexlabels = [1, 2, 3, 4], edgecurvature=5)
+end 600 300</code></pre><img src="ae27ab09.svg" alt="Example block output"/><div class="admonition is-info"><header class="admonition-header">Note</header><div class="admonition-body"><p>In this representation of our directed graph <code>gd</code>, we can see the direction of the edges joining the vertices. The <code>edgecurvature</code> keyword has been used to specify a small amount of curvature for each edge. Otherwise, with the default drawing settings, the two edges connecting vertices 1 and 4 would have been drawn overlapping, and difficult to distiguish at a glance. </p></div></div><h2 id="Very-simple-graphs"><a class="docs-heading-anchor" href="#Very-simple-graphs">Very simple graphs</a><a id="Very-simple-graphs-1"></a><a class="docs-heading-anchor-permalink" href="#Very-simple-graphs" title="Permalink"></a></h2><p>Creating graphs by typing the connections manually is tedious, so we can use functions such as the <code>Graph/SimpleGraph</code> and <code>DiGraph/SimpleDiGraph</code> constructor functions:</p><pre><code class="language-julia hljs">g = Graph(10, 5) # 10 vertices, 5 edges
+
+d1 = @drawsvg begin
+    background(&quot;grey10&quot;)
+    sethue(&quot;gold&quot;)
+    drawgraph(g, vertexlabels = vertices(g))
+end 400 300
+
+gd = SimpleDiGraph(5, 3) # 5 vertices, 3, edges
+
+d2 = @drawsvg begin
+    background(&quot;grey10&quot;)
+    setline(0.5)
+    sethue(&quot;firebrick&quot;)
+    drawgraph(gd, vertexlabels = vertices(g))
+end 400 300
+
+hcat(d1, d2)</code></pre><img src="de3f3fc8.svg" alt="Example block output"/><p>Neither of these two graphs is a <strong>connected</strong> graph. In a connected graph, every vertex is connected to every other via some <strong>path</strong>, a sequence of edges.</p><p>We can define how many vertices and edges the graph should have. An undirected graph with 10 vertices can have between 0 to 45 (<code>binomial(10, 2)</code>) edges, a directed graph up to 90 edges.</p><h2 id="Well-known-graphs"><a class="docs-heading-anchor" href="#Well-known-graphs">Well-known graphs</a><a id="Well-known-graphs-1"></a><a class="docs-heading-anchor-permalink" href="#Well-known-graphs" title="Permalink"></a></h2><p>Graphs have been studied for a few centuries, so there are many familiar and well-known graphs and types of graph.</p><p>In a <strong>complete graph</strong>, every vertex is connected to every other vertex.</p><pre><code class="language-julia hljs">N = 10
+g = complete_graph(N)
+@drawsvg begin
+   background(&quot;grey10&quot;)
+   setline(0.5)
+   sethue(&quot;pink&quot;)
+   drawgraph(g, vertexlabels = vertices(g))
+end 600 300</code></pre><img src="d92aa913.svg" alt="Example block output"/><p>There&#39;s also a <code>complete_digraph()</code> function.</p><pre><code class="language-julia hljs">N = 7
+g = complete_digraph(N)
+@drawsvg begin
+    background(&quot;grey10&quot;)
+    setline(0.5)
+    sethue(&quot;orange&quot;)
+    drawgraph(g, vertexlabels = vertices(g), edgecurvature = 2)
+end 600 300</code></pre><img src="9ef74875.svg" alt="Example block output"/><p>In a <strong>bi-partite graph</strong>, every vertex belongs to one of two groups. Each vertex in the first group is connected to one or more vertices in the second group.</p><p>The next figure shows the <strong>complete</strong> version of a bi-partite graph. Each vertex is connected to every other vertex in the other group.</p><pre><code class="language-julia hljs">N = 10
+g = complete_bipartite_graph(N, N)
+H = 300
+W = 550
+@drawsvg begin
+    background(&quot;grey10&quot;)
+    pts = vcat(
+        between.(O + (-W/2, H/2), O + (W/2, H/2), range(0, 1, length=N)),
+        between.(O + (-W/2, -H/2), O + (W/2, -H/2), range(0, 1, length=N)))
+    sethue(&quot;aquamarine&quot;)
+    drawgraph(g, vertexlabels = 1:nv(g), layout = pts, edgestrokeweights=0.5)
+end 600 400</code></pre><img src="5262875d.svg" alt="Example block output"/><p>Here, we calculated the coordinates of the vertices and passed the resulting <code>pts</code> to the <code>layout</code> keyword.</p><p>A <strong>grid</strong> graph doesn&#39;t need much explanation:</p><pre><code class="language-julia hljs">M = 4
+N = 5
+g = Graphs.grid([M, N])
+@drawsvg begin
+    background(&quot;grey10&quot;)
+    setline(0.5)
+    sethue(&quot;greenyellow&quot;)
+    drawgraph(g, vertexlabels = 1:nv(g), layout=stress)
+end 600 300</code></pre><img src="65c6fb22.svg" alt="Example block output"/><p>Star graphs (<code>star_graph(n)</code>) and wheel graphs (<code>wheel_graph(n)</code>) deliver what their names promise.</p><pre><code class="language-julia hljs">g = star_graph(12)
+@drawsvg begin
+    background(&quot;grey10&quot;)
+    sethue(&quot;orange&quot;)
+    drawgraph(g, vertexlabels=1:nv(g), layout=stress)
+end 600 300</code></pre><img src="5f44f04e.svg" alt="Example block output"/><pre><code class="language-julia hljs">g = wheel_graph(12)
+@drawsvg begin
+    background(&quot;grey10&quot;)
+    sethue(&quot;palegreen&quot;)
+    drawgraph(g, vertexlabels=1:nv(g), layout=stress)
+end 600 300</code></pre><img src="077b08a9.svg" alt="Example block output"/><p>There are <code>star_digraph()</code> and <code>wheel_digraph()</code> DiGraph versions too.</p><h3 id="Even-more-well-known-graphs"><a class="docs-heading-anchor" href="#Even-more-well-known-graphs">Even more well-known graphs</a><a id="Even-more-well-known-graphs-1"></a><a class="docs-heading-anchor-permalink" href="#Even-more-well-known-graphs" title="Permalink"></a></h3><p>There are probably as many graphs as there are possible games of chess. In both fields, the more commonly-seen patterns have been studied extensively by enthusiasts for years.</p><p>Many well-known graphs are provided by the <code>smallgraph()</code> function. Supply one of the available symbols, such as <code>:bull</code>, or <code>:house</code>.</p><details closed><summary>Code for this figure</summary><p>This code generates the figure below.</p><pre><code class="language- hljs">using Karnak, Luxor, Graphs, NetworkLayout
+smallgraphs = (
+    (:bull, &quot;bull&quot;),
+    (:chvatal, &quot;chvatal&quot;),
+    (:cubical, &quot;cubical&quot;),
+    (:desargues, &quot;desargues&quot;),
+    (:diamond, &quot;diamond&quot;),
+    (:dodecahedral, &quot;dodecahedral&quot;),
+    (:frucht, &quot;frucht&quot;),
+    (:heawood, &quot;heawood&quot;),
+    (:house, &quot;house&quot;),
+    (:housex, &quot;housex&quot;),
+    (:icosahedral, &quot;icosahedral&quot;),
+    (:karate, &quot;karate&quot;),
+    (:krackhardtkite, &quot;krackhardtkite&quot;),
+    (:moebiuskantor, &quot;moebiusantor&quot;),
+    (:octahedral, &quot;octahedral&quot;),
+    (:pappus, &quot;pappus&quot;),
+    (:petersen, &quot;petersen&quot;),
+    (:sedgewickmaze, &quot;sedgewick&quot;),
+    (:tetrahedral, &quot;tetrahedral&quot;),
+    (:truncatedcube, &quot;truncatedcube&quot;),
+    (:truncatedtetrahedron, &quot;truncatedtetrahedron&quot;),
+    (:truncatedtetrahedron_dir, &quot;truncatedtetrahedron&quot;),
+    (:tutte, &quot;tutte&quot;))
+
+colors = [&quot;paleturquoise&quot;, &quot;chartreuse&quot;, &quot;thistle1&quot;, &quot;pink&quot;,
+&quot;gold&quot;, &quot;wheat&quot;, &quot;olivedrab1&quot;, &quot;palegreen&quot;, &quot;turquoise1&quot;,
+&quot;lightgreen&quot;, &quot;plum1&quot;, &quot;plum&quot;, &quot;violet&quot;, &quot;hotpink&quot;]
+
+smallgraphs = @drawsvg begin
+    background(&quot;grey10&quot;)
+    sethue(&quot;orange&quot;)
+    ng = length(smallgraphs)
+    N = convert(Int, ceil(sqrt(ng)))
+    tiles = Tiler(800, 800, N, N)
+    setline(0.5)
+    for (pos, n) in tiles
+        @layer begin
+            n &gt; ng &amp;&amp; break
+            translate(pos)
+            sethue(colors[mod1(n, end)])
+            bbox = BoundingBox(box(O, tiles.tilewidth, tiles.tileheight))
+            g = smallgraph(first(smallgraphs[n]))
+            drawgraph(g, boundingbox = bbox, vertexshapesizes = 2, layout = stress)
+            sethue(&quot;cyan&quot;)
+            text(string(last(smallgraphs[n])), halign = :center, boxbottomcenter(bbox))
+        end
+    end
+end 800 800
+nothing # hide</code></pre></details><pre><code class="language- hljs">smallgraphs # hide</code></pre><p>It&#39;s easy to find out more about these well-known graphs online, such as on the <a href="https://en.wikipedia.org/wiki/Gallery_of_named_graphs">wikipedia</a>. Some of the graphs in this figure would benefit from individual ‘tuning’ of the various layout parameters.</p><p>Here&#39;s a larger view of the Petersen graph (named after Danish mathematician Julius Petersen, who first described it in 1898).</p><pre><code class="language-julia hljs">@drawsvg begin
+    background(&quot;grey10&quot;)
+    pg = smallgraph(:petersen)
+    sethue(&quot;orange&quot;)
+    drawgraph(pg, vertexlabels = 1:nv(pg), layout = Shell(nlist=[6:10,]))
+end 600 300</code></pre><img src="0e457387.svg" alt="Example block output"/><p>Here&#39;s a cubical graph:</p><pre><code class="language-julia hljs">@drawsvg begin
+    background(&quot;grey10&quot;)
+    g = smallgraph(:cubical)
+    sethue(&quot;orange&quot;)
+    drawgraph(g, layout = spring)
+end 600 300</code></pre><img src='data:image/svg+xml;utf-8,<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="600pt" height="300pt" viewBox="0 0 600 300" version="1.1">
+<g id="surface66">
+<rect x="0" y="0" width="600" height="300" style="fill:rgb(10.196078%25,10.196078%25,10.196078%25);fill-opacity:1;stroke:none;"/>
+<path style="fill:none;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke:rgb(100%25,64.705882%25,0%25);stroke-opacity:1;stroke-miterlimit:10;" d="M 294.046875 181.546875 L 277.445312 270 "/>
+<path style="fill:none;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke:rgb(100%25,64.705882%25,0%25);stroke-opacity:1;stroke-miterlimit:10;" d="M 294.046875 181.546875 L 397.707031 116.375 "/>
+<path style="fill:none;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke:rgb(100%25,64.705882%25,0%25);stroke-opacity:1;stroke-miterlimit:10;" d="M 294.046875 181.546875 L 220.671875 83.605469 "/>
+<path style="fill:none;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke:rgb(100%25,64.705882%25,0%25);stroke-opacity:1;stroke-miterlimit:10;" d="M 277.445312 270 L 379.21875 215.523438 "/>
+<path style="fill:none;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke:rgb(100%25,64.705882%25,0%25);stroke-opacity:1;stroke-miterlimit:10;" d="M 277.445312 270 L 202.292969 182.308594 "/>
+<path style="fill:none;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke:rgb(100%25,64.705882%25,0%25);stroke-opacity:1;stroke-miterlimit:10;" d="M 379.21875 215.523438 L 397.707031 116.375 "/>
+<path style="fill:none;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke:rgb(100%25,64.705882%25,0%25);stroke-opacity:1;stroke-miterlimit:10;" d="M 379.21875 215.523438 L 305.871094 118.164062 "/>
+<path style="fill:none;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke:rgb(100%25,64.705882%25,0%25);stroke-opacity:1;stroke-miterlimit:10;" d="M 397.707031 116.375 L 322.171875 30 "/>
+<path style="fill:none;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke:rgb(100%25,64.705882%25,0%25);stroke-opacity:1;stroke-miterlimit:10;" d="M 220.671875 83.605469 L 322.171875 30 "/>
+<path style="fill:none;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke:rgb(100%25,64.705882%25,0%25);stroke-opacity:1;stroke-miterlimit:10;" d="M 220.671875 83.605469 L 202.292969 182.308594 "/>
+<path style="fill:none;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke:rgb(100%25,64.705882%25,0%25);stroke-opacity:1;stroke-miterlimit:10;" d="M 322.171875 30 L 305.871094 118.164062 "/>
+<path style="fill:none;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke:rgb(100%25,64.705882%25,0%25);stroke-opacity:1;stroke-miterlimit:10;" d="M 305.871094 118.164062 L 202.292969 182.308594 "/>
+<path style="fill-rule:nonzero;fill:rgb(100%25,64.705882%25,0%25);fill-opacity:1;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke:rgb(100%25,64.705882%25,0%25);stroke-opacity:1;stroke-miterlimit:10;" d="M 300.046875 181.546875 C 300.046875 184.859375 297.363281 187.546875 294.046875 187.546875 C 290.734375 187.546875 288.046875 184.859375 288.046875 181.546875 C 288.046875 178.230469 290.734375 175.546875 294.046875 175.546875 C 297.363281 175.546875 300.046875 178.230469 300.046875 181.546875 Z M 300.046875 181.546875 "/>
+<path style="fill-rule:nonzero;fill:rgb(100%25,64.705882%25,0%25);fill-opacity:1;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke:rgb(100%25,64.705882%25,0%25);stroke-opacity:1;stroke-miterlimit:10;" d="M 283.445312 270 C 283.445312 273.3125 280.757812 276 277.445312 276 C 274.132812 276 271.445312 273.3125 271.445312 270 C 271.445312 266.6875 274.132812 264 277.445312 264 C 280.757812 264 283.445312 266.6875 283.445312 270 Z M 283.445312 270 "/>
+<path style="fill-rule:nonzero;fill:rgb(100%25,64.705882%25,0%25);fill-opacity:1;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke:rgb(100%25,64.705882%25,0%25);stroke-opacity:1;stroke-miterlimit:10;" d="M 385.21875 215.523438 C 385.21875 218.835938 382.53125 221.523438 379.21875 221.523438 C 375.902344 221.523438 373.21875 218.835938 373.21875 215.523438 C 373.21875 212.210938 375.902344 209.523438 379.21875 209.523438 C 382.53125 209.523438 385.21875 212.210938 385.21875 215.523438 Z M 385.21875 215.523438 "/>
+<path style="fill-rule:nonzero;fill:rgb(100%25,64.705882%25,0%25);fill-opacity:1;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke:rgb(100%25,64.705882%25,0%25);stroke-opacity:1;stroke-miterlimit:10;" d="M 403.707031 116.375 C 403.707031 119.6875 401.019531 122.375 397.707031 122.375 C 394.394531 122.375 391.707031 119.6875 391.707031 116.375 C 391.707031 113.058594 394.394531 110.375 397.707031 110.375 C 401.019531 110.375 403.707031 113.058594 403.707031 116.375 Z M 403.707031 116.375 "/>
+<path style="fill-rule:nonzero;fill:rgb(100%25,64.705882%25,0%25);fill-opacity:1;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke:rgb(100%25,64.705882%25,0%25);stroke-opacity:1;stroke-miterlimit:10;" d="M 226.671875 83.605469 C 226.671875 86.921875 223.984375 89.605469 220.671875 89.605469 C 217.355469 89.605469 214.671875 86.921875 214.671875 83.605469 C 214.671875 80.292969 217.355469 77.605469 220.671875 77.605469 C 223.984375 77.605469 226.671875 80.292969 226.671875 83.605469 Z M 226.671875 83.605469 "/>
+<path style="fill-rule:nonzero;fill:rgb(100%25,64.705882%25,0%25);fill-opacity:1;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke:rgb(100%25,64.705882%25,0%25);stroke-opacity:1;stroke-miterlimit:10;" d="M 328.171875 30 C 328.171875 33.3125 325.488281 36 322.171875 36 C 318.859375 36 316.171875 33.3125 316.171875 30 C 316.171875 26.6875 318.859375 24 322.171875 24 C 325.488281 24 328.171875 26.6875 328.171875 30 Z M 328.171875 30 "/>
+<path style="fill-rule:nonzero;fill:rgb(100%25,64.705882%25,0%25);fill-opacity:1;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke:rgb(100%25,64.705882%25,0%25);stroke-opacity:1;stroke-miterlimit:10;" d="M 311.871094 118.164062 C 311.871094 121.476562 309.183594 124.164062 305.871094 124.164062 C 302.554688 124.164062 299.871094 121.476562 299.871094 118.164062 C 299.871094 114.851562 302.554688 112.164062 305.871094 112.164062 C 309.183594 112.164062 311.871094 114.851562 311.871094 118.164062 Z M 311.871094 118.164062 "/>
+<path style="fill-rule:nonzero;fill:rgb(100%25,64.705882%25,0%25);fill-opacity:1;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke:rgb(100%25,64.705882%25,0%25);stroke-opacity:1;stroke-miterlimit:10;" d="M 208.292969 182.308594 C 208.292969 185.621094 205.605469 188.308594 202.292969 188.308594 C 198.980469 188.308594 196.292969 185.621094 196.292969 182.308594 C 196.292969 178.996094 198.980469 176.308594 202.292969 176.308594 C 205.605469 176.308594 208.292969 178.996094 208.292969 182.308594 Z M 208.292969 182.308594 "/>
+</g>
+</svg>
+'/><h2 id="Getting-some-information-about-the-graph"><a class="docs-heading-anchor" href="#Getting-some-information-about-the-graph">Getting some information about the graph</a><a id="Getting-some-information-about-the-graph-1"></a><a class="docs-heading-anchor-permalink" href="#Getting-some-information-about-the-graph" title="Permalink"></a></h2><p>There are lots of functions for obtaining information about a graph.</p><p>How many vertices?</p><pre><code class="language-julia hljs">julia&gt; pg = smallgraph(:petersen)
+julia&gt; nv(pg)
+10</code></pre><p>How many edges?</p><pre><code class="language-julia hljs">julia&gt; ne(pg)
+15</code></pre><p>Which vertices are connected with vertex 1? - ie what are the neighbors of a particular vertex?</p><pre><code class="language-julia hljs">julia&gt; neighbors(pg, 1)
+5-element Vector{Int64}:
+ 2
+ 5
+ 6</code></pre><p>We can iterate over vertices and edges. To step through each vertex, use the <code>vertices</code> iterator function:</p><pre><code class="language-julia hljs">for e in vertices(pg)
+    println(e)
+end
+
+1
+2
+3
+4
+5
+6
+7
+8
+9
+10</code></pre><p>Iterating over edges with the <code>edges</code> iterator function will give a value of type <code>Edge</code>. The <code>src()</code> and and <code>dst()</code> functions applied to an edge argument return the numbers of the source and destination vertices respectively.</p><pre><code class="language-julia hljs">for e in edges(pg)
+    println(src(e), &quot; =&gt; &quot;, dst(e))
+end
+
+1 =&gt; 2
+1 =&gt; 5
+1 =&gt; 6
+2 =&gt; 3
+2 =&gt; 7
+3 =&gt; 4
+3 =&gt; 8
+4 =&gt; 5
+4 =&gt; 9
+5 =&gt; 10
+6 =&gt; 8
+6 =&gt; 9
+7 =&gt; 9
+7 =&gt; 10
+8 =&gt; 10</code></pre><p>To add a vertex:</p><pre><code class="language-julia hljs">pg1 = smallgraph(:petersen)
+add_vertex!(pg1) # returns true if successful</code></pre><p>To add an edge:</p><pre><code class="language-julia hljs">add_edge!(pg1, 10, 11) # join 10 to 11</code></pre><p>It&#39;s sometimes useful to be able to see these relationships between neighbors visually. This example looks for the neighbors of vertex 10 and draws them in thick red lines:</p><pre><code class="language-julia hljs">@drawsvg begin
+
+background(&quot;grey10&quot;)
+pg = smallgraph(:petersen)
+
+vertexofinterest = 10
+
+E = Int[]
+for (n, e) in enumerate(edges(pg))
+    if dst(e) == vertexofinterest || src(e) == vertexofinterest
+        push!(E, n)
+    end
+end
+
+edgewts = [dst(e) ∈ E ? 4 : 1 for e in edges(pg)]
+
+drawgraph(pg,
+    vertexlabels = 1:nv(pg),
+    layout = Shell(nlist=[6:10,]),
+    vertexfillcolors = (v) -&gt; ((v == vertexofinterest) ||
+    v ∈ neighbors(pg, vertexofinterest)) &amp;&amp; colorant&quot;rebeccapurple&quot;,
+    vertexshapesizes = [v == vertexofinterest ? 20 : 10 for v in 1:nv(pg)],
+    edgestrokecolors = (e, f, t, s, d) -&gt; (e ∈ E) ?
+        colorant&quot;red&quot; : colorant&quot;thistle1&quot;,
+    edgestrokeweights = edgewts
+    )
+end 600 300</code></pre><img src="9143b43e.svg" alt="Example block output"/><p>Other useful functions include <code>has_vertex(g, v)</code> and <code>has_edge(g, s, d)</code>.</p><h3 id="Degree"><a class="docs-heading-anchor" href="#Degree">Degree</a><a id="Degree-1"></a><a class="docs-heading-anchor-permalink" href="#Degree" title="Permalink"></a></h3><p>The <strong>degree</strong> of a vertex is the number of edges that meet at that vertex. This is shown in the figure below both in the vertex labels and also color-coded:</p><pre><code class="language-julia hljs">@drawsvg begin
+background(&quot;grey10&quot;)
+sethue(&quot;gold&quot;)
+g = smallgraph(:krackhardtkite)
+
+drawgraph(g, layout=spring,
+    vertexfillcolors = (vtx) -&gt; distinguishable_colors(nv(g), transform=tritanopic)[degree(g, vtx)],
+    vertexshapesizes = 20,
+    margin=40,
+    vertexlabels = (vtx) -&gt; string(degree(g, vtx)),
+    vertexlabelfontsizes = 20,
+    vertexlabeltextcolors = [colorant&quot;black&quot;, colorant&quot;white&quot;]
+    )
+end 600 300</code></pre><img src="b97b66d9.svg" alt="Example block output"/><h2 id="Graphs-as-matrices"><a class="docs-heading-anchor" href="#Graphs-as-matrices">Graphs as matrices</a><a id="Graphs-as-matrices-1"></a><a class="docs-heading-anchor-permalink" href="#Graphs-as-matrices" title="Permalink"></a></h2><p>Graphs can be represented as matrices - some say that graph theory is really the study of a particular set of matrices... We&#39;ll meet the adjacency matrix and the incidence matrix (and there&#39;s an array called the adjacency list too).</p><h3 id="Adjacency-matrix"><a class="docs-heading-anchor" href="#Adjacency-matrix">Adjacency matrix</a><a id="Adjacency-matrix-1"></a><a class="docs-heading-anchor-permalink" href="#Adjacency-matrix" title="Permalink"></a></h3><p>A graph <code>G</code> with <code>n</code> vertices can be represented by a square matrix <code>A</code> with <code>n</code> rows and columns. The matrix consists of 1s and 0s. A value of 1 means that there&#39;s a connection between two vertices with those indices. For example, if vertex 5 is connected with vertex 4, then <code>A[5, 4]</code> contains 1. The <code>adjacency_matrix()</code> function displays the matrix for a graph:</p><pre><code class="language-julia-repl hljs">julia&gt; adjacency_matrix(pg)
+10×10 SparseArrays.SparseMatrixCSC{Int64, Int64} with 30 stored entries:
+ ⋅  1  ⋅  ⋅  1  1  ⋅  ⋅  ⋅  ⋅
+ 1  ⋅  1  ⋅  ⋅  ⋅  1  ⋅  ⋅  ⋅
+ ⋅  1  ⋅  1  ⋅  ⋅  ⋅  1  ⋅  ⋅
+ ⋅  ⋅  1  ⋅  1  ⋅  ⋅  ⋅  1  ⋅
+ 1  ⋅  ⋅  1  ⋅  ⋅  ⋅  ⋅  ⋅  1
+ 1  ⋅  ⋅  ⋅  ⋅  ⋅  ⋅  1  1  ⋅
+ ⋅  1  ⋅  ⋅  ⋅  ⋅  ⋅  ⋅  1  1
+ ⋅  ⋅  1  ⋅  ⋅  1  ⋅  ⋅  ⋅  1
+ ⋅  ⋅  ⋅  1  ⋅  1  1  ⋅  ⋅  ⋅
+ ⋅  ⋅  ⋅  ⋅  1  ⋅  1  1  ⋅  ⋅</code></pre><p>(This one:)</p><pre><code class="language-julia hljs">@drawsvg begin
+background(&quot;grey10&quot;)
+pg = smallgraph(:petersen)
+sethue(&quot;orange&quot;)
+drawgraph(pg, vertexlabels = 1:nv(pg), layout = Shell(nlist=[6:10,]))
+end 600 400</code></pre><img src="3834a02d.svg" alt="Example block output"/><p>Notice that this matrix, for a Petersen graph, is symmetrical about the top-left/bottom-right diagonal, because, in an undirected graph, a connection from vertex 4 to vertex 5 is also a connection from vertex 5 to 4. The vertical sum of each column (and the horizontal sum of each row) is the number of edges shared by that vertex,</p><p>We can provide an adjacency matrix to the graph construction functions to create a graph. For example, this matrix recreates the House graph (aka <code>smallgraph(:house)</code>) from its adjacency matrix:</p><pre><code class="language-julia hljs">m = [0 1 1 0 0;
+     1 0 0 1 0;
+     1 0 0 1 1;
+     0 1 1 0 1;
+     0 0 1 1 0]
+
+@drawsvg begin
+    background(&quot;grey10&quot;)
+    hg = Graph(m)
+    sethue(&quot;palegreen&quot;)
+    drawgraph(hg, vertexlabels=1:nv(hg), layout=stress)
+end 800 400</code></pre><img src="53b8f737.svg" alt="Example block output"/><h3 id="Incidence-matrix"><a class="docs-heading-anchor" href="#Incidence-matrix">Incidence matrix</a><a id="Incidence-matrix-1"></a><a class="docs-heading-anchor-permalink" href="#Incidence-matrix" title="Permalink"></a></h3><p>We can also represent a graph <code>G</code> with a matrix <code>M</code> consisting of 1s, -1s, and 0s, where the rows are vertices and the columns are edges. <code>M</code> is called an <strong>incidence matrix</strong>.</p><pre><code class="language-julia-repl hljs">julia&gt; incidence_matrix(pg)
+10×15 SparseArrays.SparseMatrixCSC{Int64, Int64} with 30 stored entries:
+ 1  1  1  ⋅  ⋅  ⋅  ⋅  ⋅  ⋅  ⋅  ⋅  ⋅  ⋅  ⋅  ⋅
+ 1  ⋅  ⋅  1  1  ⋅  ⋅  ⋅  ⋅  ⋅  ⋅  ⋅  ⋅  ⋅  ⋅
+ ⋅  ⋅  ⋅  1  ⋅  1  1  ⋅  ⋅  ⋅  ⋅  ⋅  ⋅  ⋅  ⋅
+ ⋅  ⋅  ⋅  ⋅  ⋅  1  ⋅  1  1  ⋅  ⋅  ⋅  ⋅  ⋅  ⋅
+ ⋅  1  ⋅  ⋅  ⋅  ⋅  ⋅  1  ⋅  1  ⋅  ⋅  ⋅  ⋅  ⋅
+ ⋅  ⋅  1  ⋅  ⋅  ⋅  ⋅  ⋅  ⋅  ⋅  1  1  ⋅  ⋅  ⋅
+ ⋅  ⋅  ⋅  ⋅  1  ⋅  ⋅  ⋅  ⋅  ⋅  ⋅  ⋅  1  1  ⋅
+ ⋅  ⋅  ⋅  ⋅  ⋅  ⋅  1  ⋅  ⋅  ⋅  1  ⋅  ⋅  ⋅  1
+ ⋅  ⋅  ⋅  ⋅  ⋅  ⋅  ⋅  ⋅  1  ⋅  ⋅  1  1  ⋅  ⋅
+ ⋅  ⋅  ⋅  ⋅  ⋅  ⋅  ⋅  ⋅  ⋅  1  ⋅  ⋅  ⋅  1  1</code></pre><p>The first column of this matrix is an edge between vertex 1 and vertex 2, whereas the first column of the adjacency matrix defines the vertices that are connected with vertex 1.</p><p>For a directed graph:</p><pre><code class="language-julia hljs">julia&gt; dg = DiGraph(3, 3)
+
+julia&gt; incidence_matrix(dg)
+
+3×3 SparseArrays.SparseMatrixCSC{Int64, Int64} with 6 stored entries:
+ -1   1   1
+  1  -1   ⋅
+  ⋅   ⋅  -1</code></pre><p>Here, negative values are used, so 1 and -1 are used to indicate directions. The first column,<code>-1 1 0</code>, specifies that the first edge goes <strong>from</strong> 2 to 1.</p><p>An incidence matrix is another useful way of quickly defining a graph. That&#39;s why we can pass an incidence matrix to the <code>Graph()</code> and <code>DiGraph()</code> functions to create new graphs.</p><p>For example, here&#39;s a familiar image:</p><pre><code class="language-julia hljs">g = [0 1 1;
+     1 0 1;
+     1 1 0]
+
+@drawsvg begin
+background(&quot;grey20&quot;)
+drawgraph(Graph(g),
+    layout = ngon(O + (0, 20), 80, 3, π/6, vertices=true),
+    vertexshapes = :circle,
+    vertexshapesizes = 40,
+    edgestrokeweights = 15,
+    edgestrokecolors = colorant&quot;gold&quot;,
+    vertexfillcolors = [colorant&quot;#CB3C33&quot;,
+        colorant&quot;#389826&quot;, colorant&quot;#9558B2&quot;])
+end 600 250</code></pre><img src='data:image/svg+xml;utf-8,<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="600pt" height="250pt" viewBox="0 0 600 250" version="1.1">
+<g id="surface91">
+<rect x="0" y="0" width="600" height="250" style="fill:rgb(20%25,20%25,20%25);fill-opacity:1;stroke:none;"/>
+<path style="fill:none;stroke-width:15;stroke-linecap:butt;stroke-linejoin:miter;stroke:rgb(100%25,84.313725%25,0%25);stroke-opacity:1;stroke-miterlimit:10;" d="M 230.71875 185 L 300 65 "/>
+<path style="fill:none;stroke-width:15;stroke-linecap:butt;stroke-linejoin:miter;stroke:rgb(100%25,84.313725%25,0%25);stroke-opacity:1;stroke-miterlimit:10;" d="M 230.71875 185 L 369.28125 185 "/>
+<path style="fill:none;stroke-width:15;stroke-linecap:butt;stroke-linejoin:miter;stroke:rgb(100%25,84.313725%25,0%25);stroke-opacity:1;stroke-miterlimit:10;" d="M 300 65 L 369.28125 185 "/>
+<path style="fill-rule:nonzero;fill:rgb(79.607843%25,23.529412%25,20%25);fill-opacity:1;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke:rgb(0%25,0%25,0%25);stroke-opacity:1;stroke-miterlimit:10;" d="M 270.71875 185 C 270.71875 207.089844 252.808594 225 230.71875 225 C 208.625 225 190.71875 207.089844 190.71875 185 C 190.71875 162.910156 208.625 145 230.71875 145 C 252.808594 145 270.71875 162.910156 270.71875 185 Z M 270.71875 185 "/>
+<path style="fill-rule:nonzero;fill:rgb(21.960784%25,59.607843%25,14.901961%25);fill-opacity:1;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke:rgb(0%25,0%25,0%25);stroke-opacity:1;stroke-miterlimit:10;" d="M 340 65 C 340 87.089844 322.089844 105 300 105 C 277.910156 105 260 87.089844 260 65 C 260 42.910156 277.910156 25 300 25 C 322.089844 25 340 42.910156 340 65 Z M 340 65 "/>
+<path style="fill-rule:nonzero;fill:rgb(58.431373%25,34.509804%25,69.803922%25);fill-opacity:1;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke:rgb(0%25,0%25,0%25);stroke-opacity:1;stroke-miterlimit:10;" d="M 409.28125 185 C 409.28125 207.089844 391.375 225 369.28125 225 C 347.191406 225 329.28125 207.089844 329.28125 185 C 329.28125 162.910156 347.191406 145 369.28125 145 C 391.375 145 409.28125 162.910156 409.28125 185 Z M 409.28125 185 "/>
+</g>
+</svg>
+'/><h3 id="Adjacency-list"><a class="docs-heading-anchor" href="#Adjacency-list">Adjacency list</a><a id="Adjacency-list-1"></a><a class="docs-heading-anchor-permalink" href="#Adjacency-list" title="Permalink"></a></h3><p>Another way of representing a graph is by using an array of arrays in the form of an <strong>adjacency list</strong>. This array has <code>n</code> elements to represent a graph with <code>n</code> vertices. The first element of the array is an array of those vertex numbers that are connected with vertex 1, and similarly for elements 2 to <code>n</code>.</p><p>For example, this adjacency list:</p><pre><code class="language-julia hljs">[
+    [2, 5, 7],  # row 1: vertex 1 connects with 2, 5, and 7
+    [1, 3, 9],
+    [2, 4, 11],
+    [3, 5, 13],
+    [1, 4, 15],
+    [7, 15, 20],
+    [1, 6, 8],
+    [7, 9, 16],
+    [2, 8, 10],
+    [9, 11, 17],
+    [3, 10, 12],
+    [11, 13, 18],
+    [4, 12, 14],
+    [13, 15, 19],
+    [5, 6, 14],
+    [8, 17, 20],
+    [10, 16, 18],
+    [12, 17, 19],
+    [14, 18, 20],
+    [6, 16, 19]
+]</code></pre><p>defines a graph with 20 vertices, such that vertex 1 has edges joining it to vertices 2, 5, and 7, and so on for each element of the whole array.</p><p>The <code>Graph()</code> function accepts an adjacency list, preceded by the number of edges.</p><pre><code class="language-julia hljs">g = Graph(30, [
+    [2, 5, 7],
+    [1, 3, 9],
+    [2, 4, 11],
+    [3, 5, 13],
+    [1, 4, 15],
+    [7, 15, 20],
+    [1, 6, 8],
+    [7, 9, 16],
+    [2, 8, 10],
+    [9, 11, 17],
+    [3, 10, 12],
+    [11, 13, 18],
+    [4, 12, 14],
+    [13, 15, 19],
+    [5, 6, 14],
+    [8, 17, 20],
+    [10, 16, 18],
+    [12, 17, 19],
+    [14, 18, 20],
+    [6, 16, 19]])
+
+@drawsvg begin
+    background(&quot;grey10&quot;)
+    sethue(&quot;orange&quot;)
+    drawgraph(g, layout=stress)
+end 600 300</code></pre><img src="8da8a453.svg" alt="Example block output"/><p>Graphs.jl uses adjacency lists internally. If we peek inside a graph and look at its fields, we&#39;ll see something like this, for a Directed Graph:</p><pre><code class="nohighlight hljs">fieldnames(DiGraph)
+(:ne, :fadjlist, :badjlist)</code></pre><p>Here, <code>fadjlist</code> is a forward adjacency list which defines how each vertex connects <strong>to</strong> other vertices, and <code>badjlist</code> is a backward adjacency list which defines how each vertex receives connections <strong>from</strong> other vertices.</p><h2 id="Paths,-cycles,-routes,-and-traversals"><a class="docs-heading-anchor" href="#Paths,-cycles,-routes,-and-traversals">Paths, cycles, routes, and traversals</a><a id="Paths,-cycles,-routes,-and-traversals-1"></a><a class="docs-heading-anchor-permalink" href="#Paths,-cycles,-routes,-and-traversals" title="Permalink"></a></h2><p>Graphs help us answer questions about connectivity and relationships. For example, think of a railway network as a graph, with the stations as vertices, and the tracks as edges. We want to ask questions such as &quot;Can we get from A to B by train?&quot;, which therefore becomes the question &quot;Are there sufficient edges between vertices in the graph such that we can find a continuous path that joins them?&quot;.</p><p>Graphs.jl has many features for traversing graphs and finding paths. We can look at just a few of them here.</p><div class="admonition is-info"><header class="admonition-header">Note</header><div class="admonition-body"><p>The study of graphs uses a lot of terminology, and many of the terms also have informal and familiar meanings. Usually the informal meanings are reasonably accurate and appropriate, but note that the words also have more precise definitions in the literature.</p></div></div><h3 id="Paths-and-cycles"><a class="docs-heading-anchor" href="#Paths-and-cycles">Paths and cycles</a><a id="Paths-and-cycles-1"></a><a class="docs-heading-anchor-permalink" href="#Paths-and-cycles" title="Permalink"></a></h3><p>A <strong>path</strong> is a sequence of edges between some start vertex and some end vertex, such that a continuous unbroken route is available.</p><p>A <strong>cycle</strong> is a path where the start and end vertices are the same - a closed path. Other vertices in the path occur just once. These are also called circuits in some sources.</p><p>The <code>cycle_basis()</code> function finds all the cycles in a graph (at least, it finds a <strong>basis</strong> of an undirected graph, which is a minimal collection of cycles that can be added to make all the cycles). The result is an array of arrays of vertex numbers.</p><pre><code class="nohighlight hljs">julia&gt; pg = smallgraph(:petersen)
+julia&gt; cycles = cycle_basis(pg)
+6-element Vector{Vector{Int64}}:
+ [1, 6, 8, 10, 5]
+ [4, 9, 6, 8, 10, 5]
+ [7, 9, 6, 8, 10]
+ [4, 3, 8, 10, 5]
+ [1, 2, 3, 8, 10, 5]
+ [7, 2, 3, 8, 10]</code></pre><pre><code class="language-julia hljs">@drawsvg begin
+    background(&quot;grey10&quot;)
+    sethue(&quot;magenta&quot;)
+    pg = smallgraph(:petersen)
+
+    cycles = cycle_basis(pg)
+    table = Table(2, length(cycles) ÷ 2, 220, 160)
+
+    for (n, cycle) in enumerate(cycles)
+        cycleedges = [Edge(cycle[i], cycle[mod1(i + 1, end)]) for i in 1:length(cycle)]
+        @layer begin
+            translate(table[n])
+            bb = BoundingBox(box(O, table.colwidths[1], table.rowheights[1]))
+            sethue(&quot;grey60&quot;)
+            drawgraph(pg,
+                layout = stress,
+                vertexshapes = :none,
+                boundingbox = bb)
+            sethue(HSB(rescale(n, 1, length(cycles) + 1, 0, 360), 0.8, 0.6))
+            drawgraph(pg,
+                layout = stress,
+                boundingbox = bb,
+                vertexshapes = (v) -&gt; begin
+                    v ∈ cycle &amp;&amp; box(O, 12, 12, :fill)
+                end,
+                vertexshapesizes = 30,
+                vertexlabels = (v) -&gt; v ∈ cycle &amp;&amp; string(v),
+                edgestrokeweights = 5,
+                edgelist = cycleedges,
+            )
+        end
+    end
+end 600 300</code></pre><img src="c9d06ae3.svg" alt="Example block output"/><p>For digraphs, you can use <code>simplecycles()</code> to find every cycle.</p><p>This example shows every cycle of a complete digraph <code>{4, 12}</code>.</p><pre><code class="language-julia hljs">sdg = complete_digraph(4)
+
+cycles = simplecycles(sdg)
+
+@drawsvg begin
+    background(&quot;grey10&quot;)
+    sethue(&quot;orange&quot;)
+    tiles = Tiler(600, 600, 4, 4)
+    for (pos, n) in tiles
+        cycle = cycles[n]
+        cycle_path = [Edge(cycle[i], cycle[mod1(i + 1, end)]) for i in 1:length(cycle)]
+        @layer begin
+            translate(pos)
+            tilebox = BoundingBox(box(O, tiles.tilewidth, tiles.tileheight))
+            text(string(cycle), halign=:center, boxbottomcenter(tilebox))
+            sethue(HSV(rand(0:360), 0.6, 0.9))
+            drawgraph(sdg, layout=squaregrid,
+                boundingbox = tilebox,
+                edgelist = cycle_path,
+                vertexlabels = (v) -&gt; v ∈ cycle ? string(v) : &quot;&quot;,
+                vertexlabeltextcolors= colorant&quot;white&quot;,
+                vertexlabeloffsetdistances = 10,
+                vertexlabeloffsetangles = [π, 0],
+                vertexshapes = :none,
+                edgelines = (edgenumber, edgesrc, edgedest, from, to) -&gt;
+                    begin
+                        newpath()
+                        arc2sagitta(from, to, 5, :stroke)
+                    end)
+        end
+    end
+end 600 600</code></pre><img src="1b4e9b9d.svg" alt="Example block output"/><p>There can be a lot of cycles in a graph. For example, a <code>complete_digraph(10)</code> has 1,110,073 cycles. Graphs.jl has tools for working with cycles efficiently.</p><h3 id="Visiting-every-vertex-once"><a class="docs-heading-anchor" href="#Visiting-every-vertex-once">Visiting every vertex once</a><a id="Visiting-every-vertex-once-1"></a><a class="docs-heading-anchor-permalink" href="#Visiting-every-vertex-once" title="Permalink"></a></h3><p>It&#39;s useful to know how to visit every vertex just once.</p><p>You can do this for DiGraphs if you can find a cycle that&#39;s the same length as the graph. However, there might be a lot of possibilities, since there could be many such cycles. This example uses <code>simplecycles()</code> to find all of them (there are over 400 for this graph), so only the first one with the right length is used.</p><pre><code class="language-julia hljs">@drawsvg begin
+background(&quot;grey10&quot;)
+g = complete_digraph(6)
+
+tour = first(filter(cycle -&gt; length(cycle) == nv(g), simplecycles(g)))
+
+vertexlist_to_edgelist(vlist) = [Edge(p[1] =&gt; p[2]) for p in zip(vlist, circshift(vlist, -1))]
+
+sethue(&quot;grey50&quot;)
+
+drawgraph(g, layout = spring)
+
+sethue(&quot;orange&quot;)
+drawgraph(g, layout = spring,
+    edgelist = vertexlist_to_edgelist(tour),
+    edgestrokeweights = 10,
+    )
+end 800 400</code></pre><img src="a6ef3c36.svg" alt="Example block output"/><h2 id="Trees"><a class="docs-heading-anchor" href="#Trees">Trees</a><a id="Trees-1"></a><a class="docs-heading-anchor-permalink" href="#Trees" title="Permalink"></a></h2><p>A tree is a connected graph with no cycles. A <em>rooted tree</em> is a tree graph in which one vertex has been designated as the root, or origin. Rooted tree graphs can be drawn using the Buchheim layout algorithm (named after the developer, Christoph Buchheim).</p><p>In the next example, we start with a <em>binary tree</em>, in which each vertex is connected to no more than two others - but we&#39;ll add one more vertex so that it&#39;s no longer a binary tree. </p><details closed><summary>Code for this figure</summary><p>This code generates the figure below.</p><pre><code class="language- hljs">using Karnak, Luxor, Graphs, NetworkLayout, Colors
+
+d = @drawsvg begin
+    background(&quot;grey10&quot;)
+    sethue(&quot;purple&quot;)
+    fontsize(12)
+
+    bt = binary_tree(4)
+    g = SimpleDiGraph(collect(edges(bt)))
+
+    # add another vertex
+    add_vertex!(g)
+    add_edge!(g, 7, 16)
+
+    drawgraph(g,
+        layout=buchheim,
+        margin=20,
+        edgestrokeweights=2,
+        edgegaps=12, 
+        vertexlabels = 1:nv(g),
+        vertexshapes=:circle,
+        vertexfillcolors=[RGB(Luxor.julia_red...), 
+            RGB(Luxor.julia_purple...), 
+            RGB(Luxor.julia_green...), 
+            RGB(Luxor.julia_blue...)],
+        vertexshapesizes=12,
+        vertexlabeltextcolors=colorant&quot;white&quot;,
+    )
+end 600 350
+nothing # hide</code></pre></details><h2 id="Shortest-paths:-the-A*-algorithm"><a class="docs-heading-anchor" href="#Shortest-paths:-the-A*-algorithm">Shortest paths: the A* algorithm</a><a id="Shortest-paths:-the-A*-algorithm-1"></a><a class="docs-heading-anchor-permalink" href="#Shortest-paths:-the-A*-algorithm" title="Permalink"></a></h2><p>One way to find the shortest path between two vertices is to use the <code>a_star()</code> function, and provide the graph, the start vertex, and the end vertex. The function returns a list of edges.</p><p>(The unusual name of this function is just a reference to the name of the algorithm, <code>A*</code>, first published in 1968 by Peter Hart, Nils Nilsson, and Bertram Raphael.)</p><p>The function finds the shortest path and returns an array of edges that define the path.</p><pre><code class="language-julia hljs">@drawsvg begin
+background(&quot;grey10&quot;)
+sethue(&quot;lemonchiffon&quot;)
+g = binary_tree(5)
+dirg = SimpleDiGraph(collect(edges(g)))
+astar = a_star(dirg, 1, 21)
+drawgraph(dirg, layout=buchheim,
+    vertexlabels = 1:nv(g),
+    vertexshapes = (vtx) -&gt; box(O, 30, 20, :fill),
+    vertexlabelfontsizes = 16,
+    edgegaps=20,
+    edgestrokeweights= 5,
+    edgestrokecolors = (edgenumber, s, d, f, t) -&gt; (s ∈ src.(astar) &amp;&amp; d ∈ dst.(astar)) ?
+        colorant&quot;gold&quot; : colorant&quot;grey40&quot;,
+    vertexfillcolors = (vtx) -&gt; (vtx ∈ src.(astar) ||
+        vtx ∈ dst.(astar)) &amp;&amp; colorant&quot;gold&quot;
+    )
+end 800 400</code></pre><img src="44ba24e1.svg" alt="Example block output"/><p>One use for the A* algorithm is for finding paths through mazes. In the next example, a grid graph is subjected to some random vandalism, removing quite a few edges. Then a route through the maze was easily found by <code>a_star()</code>.</p><pre><code class="language-julia hljs">using Random
+Random.seed!(6)
+
+@drawsvg begin
+background(&quot;grey10&quot;)
+
+W, H = 20, 20
+g = grid((W, H))
+
+# vandalize the grid:
+let
+    c = 0
+    while c &lt; 200
+        v = rand(1:W*H)
+        rem_edge!(g, v, [v-1, v+1, v-W, v+H][rand(1:end)]) &amp;&amp; (c += 1)
+    end
+end
+
+# find a route
+astar = a_star(g, 1, W * H)
+
+sethue(&quot;grey60&quot;)
+setlinecap(&quot;square&quot;)
+drawgraph(g,
+    vertexshapesizes = 0,
+    layout=squaregrid,
+    edgestrokeweights = 12)
+
+sethue(&quot;red&quot;)
+drawgraph(g,
+    vertexshapes = :none,
+    layout=squaregrid,
+    edgelist=astar,
+    edgegaps=0,
+    edgestrokeweights=5)
+
+end 600 600</code></pre><img src="1eb82d55.svg" alt="Example block output"/><h2 id="Shortest-paths:-Dijkstra&#39;s-algorithm"><a class="docs-heading-anchor" href="#Shortest-paths:-Dijkstra&#39;s-algorithm">Shortest paths: Dijkstra&#39;s algorithm</a><a id="Shortest-paths:-Dijkstra&#39;s-algorithm-1"></a><a class="docs-heading-anchor-permalink" href="#Shortest-paths:-Dijkstra&#39;s-algorithm" title="Permalink"></a></h2><p>A well-known algorithm for finding the shortest path between graph vertices is named for its creator, Edsger W. Dijkstra. He wrote about his inspiration:</p><blockquote><p>&quot;I designed it in about twenty minutes. One morning I was shopping in Amsterdam with my young fiancée, and tired, we sat down on the café terrace to drink a cup of coffee and I was just thinking about whether I could do this, and I then designed the algorithm for the shortest path.</p></blockquote><p>In Graphs.jl, this algorithm is available with <code>dijkstra_shortest_paths()</code>. After running this function, the result is an object with various pieces of information about all the shortest paths: this is a <code>DijkstraState</code> object, with fields <code>parents</code>, <code>dists</code>, <code>predecessors</code>, <code>pathcounts</code>, <code>closest_vertices</code>. There&#39;s an <code>enumerate_paths()</code> function which can extract the vertex information for a specific path from the DijkstraState object.</p><p>The following code animates the results of examining a grid graph using Dijkstra&#39;s algorithm. The shortest paths between the first vertex and every other vertex are drawn in a series of frames, one by one.</p><pre><code class="language-julia hljs">function frame(scene, framenumber, g)
+    framenumber == 1 &amp;&amp; return
+
+    # run Dijkstra&#39;s algorithm
+
+    ds = dijkstra_shortest_paths(g, 1, allpaths=true, trackvertices=true)
+
+    # for which destination vertex?
+    destv = framenumber
+
+    # get the vertices on the path
+    _, ep = enumerate_paths(ds, [1, destv])
+
+    # convert to edges
+    vlist = [Edge(p[1] =&gt; p[2]) for p in zip(ep, circshift(ep, -1))]
+
+    # draw background graph
+    background(&quot;grey10&quot;)
+    sethue(&quot;grey40&quot;)
+    drawgraph(g, layout=squaregrid, vertexshapes=:none)
+    path = Point[]
+
+    # draw shortest path
+    drawgraph(g,
+        layout=squaregrid,
+        vertexlabelfontsizes=30,
+        vertexshapes=:none,
+        edgelist = vlist[1:end-1],
+        edgefunction = (n, s, d, f, t) -&gt; begin
+            push!(path, f)
+            push!(path, t)
+        end)
+    sethue(&quot;orange&quot;)
+    setline(10)
+    setlinejoin(&quot;bevel&quot;)
+    poly(path, :stroke, close=false)
+    sethue(&quot;red&quot;)
+    circle.(path[[1, end]], 10, :fill)
+end
+
+function main()
+    g = grid((20, 20))
+    amovie = Movie(600, 600, &quot;dijkstra&quot;)
+    animate(amovie,
+        Scene(amovie, (s, f) -&gt; frame(s, f, g), 1:400),
+        framerate=10)
+end
+
+main()</code></pre><p><img src="../assets/figures/dijkstra.gif" alt="animated dijkstra"/></p><h2 id="Weighted-graphs"><a class="docs-heading-anchor" href="#Weighted-graphs">Weighted graphs</a><a id="Weighted-graphs-1"></a><a class="docs-heading-anchor-permalink" href="#Weighted-graphs" title="Permalink"></a></h2><p>Up to now, our graphs have been like maps of train or metro networks, focusing on connections, rather than on, say, distances and journey times. Edges have been effectively always one unit long, and shortest path calculations can&#39;t take into account the true length of edges. But some systems modelled by graphs require this knowledge, which is where <strong>weighted graphs</strong> are useful.</p><p>A weighted graph, which can be either undirected or directed, has numeric values assigned to each edge. This value is called the &quot;weight&quot; of an edge, and it&#39;s usually a positive integer, but can be anything.</p><p>The word &quot;weight&quot; is interpreted according to context and the nature of the system modelled by the graph. For example, a higher value for the weight of an edge could mean a longer journey time or more expensive fuel costs, for map-style graphs, but it could signify high attraction levels for a social network graph.</p><p>To use weighted graphs, we must install a separate package, SimpleWeightedGraphs.jl, and load it alongside Graphs.jl.</p><p>To create a new weighted graph:</p><pre><code class="language-julia hljs">using Graphs, SimpleWeightedGraphs
+
+julia&gt; g = SimpleWeightedGraph()</code></pre><p>This creates a new, empty, weighted, undirected, graph. Or we can pass an existing graph to this function:</p><pre><code class="language-julia hljs">julia&gt; wg = SimpleWeightedGraph(Graph(6, 15), 4.0)</code></pre><p>To get the weights of the edge between two vertices, use <code>get_weight()</code>:</p><pre><code class="language-julia hljs">julia&gt; get_weight(wg, 1, 2)</code></pre><p>To change the weight of the edge between two vertices, use <code>add_edge()</code>:</p><pre><code class="language-julia hljs">julia&gt; add_edge!(graph, from, to, weight)</code></pre><p>You can provide a list of weights to the <code>edgelabels</code> keyword, which can accept a vector of edge weights.</p><pre><code class="language-julia hljs">g = SimpleWeightedGraph(3)
+add_edge!(g, 1, 2, 12)
+add_edge!(g, 1, 3, 13)
+add_edge!(g, 2, 3, 23)
+
+edgeweights = [g.weights[e.src, e.dst] for e in edges(g)]
+
+@drawsvg begin
+    background(&quot;black&quot;)
+    sethue(&quot;magenta&quot;)
+    fontsize(20)
+    drawgraph(
+        g,
+        vertexshapesizes = 15,
+        vertexlabels = 1:nv(g),
+        edgelabelfontsizes = 40,
+        edgelabels = edgeweights
+    )
+end</code></pre><img src="7e62c46f.svg" alt="Example block output"/><p>In this next example, we set the default weight of every edge to 4.0 when the graph is created, and changed just one edge&#39;s weight:</p><pre><code class="language-julia hljs">wg = SimpleWeightedGraph(Graph(6, 15), 4.0)
+add_edge!(wg, 1, 2, 10_000_000)
+@drawsvg begin
+background(&quot;grey10&quot;)
+sethue(&quot;gold&quot;)
+drawgraph(wg, edgecurvature=10,
+    vertexlabels = 1:nv(wg),
+    edgelabels = (k, s, d, f, t) -&gt; begin
+        weight = get_weight(wg, s, d)
+            if weight &gt; 10
+                sethue(&quot;white&quot;)
+                box(midpoint(f, t), 30, 16, :fill)
+                setcolor(&quot;magenta&quot;)
+            else
+                sethue(HSB(rescale(k, 1, ne(wg), 0, 360), 0.7, 0.6))
+            end
+            text(string(weight), midpoint(f,t), halign=:center, valign=:middle)
+        end,
+    edgegaps = 10
+    )
+end 600 300</code></pre><img src="ff54a16f.svg" alt="Example block output"/><p>A look at the graph&#39;s adjacency matrix shows that the weights have replaced the 1s:</p><pre><code class="language-julia hljs">julia&gt; adjacency_matrix(wg)
+6×6 SparseArrays.SparseMatrixCSC{Float64, Int64} with 30 stored entries:
+  ⋅     1.0e7  4.0  4.0  4.0  4.0
+ 1.0e7   ⋅     4.0  4.0  4.0  4.0
+ 4.0    4.0     ⋅   4.0  4.0  4.0
+ 4.0    4.0    4.0   ⋅   4.0  4.0
+ 4.0    4.0    4.0  4.0   ⋅   4.0
+ 4.0    4.0    4.0  4.0  4.0   ⋅</code></pre><p>For a directed graph, each edge can have two weights, one from <code>src</code> to <code>dst</code>, the other from <code>dst</code> to <code>src</code>.</p><h2 id="Spanning-trees"><a class="docs-heading-anchor" href="#Spanning-trees">Spanning trees</a><a id="Spanning-trees-1"></a><a class="docs-heading-anchor-permalink" href="#Spanning-trees" title="Permalink"></a></h2><p>A spanning tree is a set of edges that connect all the vertices of a graph together, without forming any cycles. There are various functions for finding spanning trees in Graphs.jl, including algorithms by Otakar Borůvka (<code>boruvka_mst()</code>), Joseph Kruskal (<code>kruskal_mst()</code>), and Robert Prim (<code>prim_mst()</code>). (Immortality can be attained by inventing a new graph-spanning algorithm.)</p><p>When used on a weighted graph, these functions find the minimum possible tree - the tree that scores the lowest when the weights of the edges are added up. (Some of these functions can also find the highest-scoring trees.)</p><pre><code class="language-julia hljs">@drawsvg begin
+background(&quot;grey10&quot;)
+
+g = SimpleWeightedGraph(smallgraph(:octahedral))
+
+for e in edges(g)
+    add_edge!(g, src(e), dst(e), rand(1:10))
+end
+add_edge!(g, 1, 4, 200)
+
+sethue(&quot;grey50&quot;)
+drawgraph(g, layout=spring, vertexshapesizes = 20, edgestrokeweights = 3,
+    edgelabels = (k, src, dest, f, t) -&gt;
+    (sethue(&quot;cyan&quot;); label(string(get_weight(g, src, dest)), :nw, midpoint(f, t))))
+
+mst, weights = boruvka_mst(g)
+sethue(&quot;gold&quot;)
+drawgraph(g, vertexshapes = :none, layout=spring, edgelist = mst, edgestrokeweights = 15)
+
+mst = kruskal_mst(g)
+sethue(&quot;green&quot;)
+drawgraph(g, layout=spring, vertexshapes = :none, edgelist = mst, edgestrokeweights = 10)
+
+mst = prim_mst(g)
+sethue(&quot;red&quot;)
+drawgraph(g, layout=spring, vertexshapes = :none, edgelist = mst, edgestrokeweights = 3)
+
+sethue(&quot;black&quot;)
+drawgraph(g, layout=spring, vertexlabels = 1:nv(g), edgelines=:none)
+
+end 600 400</code></pre><img src="f72da91d.svg" alt="Example block output"/><p>Notice how all the spanning trees found have avoided the edge joining 1 and 4, which has a weight of 200.0.</p><p>Next, here&#39;s <code>boruka_mst()</code> looking for the <strong>maximum</strong> spanning tree; <code>Edge(1 =&gt; 4)</code> is always included every time the function runs.</p><pre><code class="language- hljs">using Karnak, Luxor, Graphs, NetworkLayout, Colors, SimpleWeightedGraphs
+
+@drawsvg begin
+    background(&quot;grey10&quot;)
+    tiles = Tiler(600, 600, 2, 2)
+    let
+        g = SimpleWeightedGraph(smallgraph(:octahedral))
+        for (pos, n) in tiles
+            for e in edges(g)
+                add_edge!(g, src(e), dst(e), rand(1:10))
+            end
+            add_edge!(g, 1, 4, 200)
+            @layer begin
+                translate(pos)
+                bb = BoundingBox(box(O, tiles.tilewidth, tiles.tileheight))
+                sethue(&quot;grey50&quot;)
+                mst, weights = boruvka_mst(g, minimize=false)
+                drawgraph(g,
+                    boundingbox=bb,
+                    layout=spring,
+                    vertexshapesizes=10,
+                    edgestrokeweights=3,
+                    edgelabels=(k, src, dest, f, t) -&gt; begin
+                        sethue(&quot;orange&quot;)
+                        label(string(get_weight(g, src, dest)), :nw, midpoint(f, t))
+                        end,)
+
+                sethue(&quot;gold&quot;)
+                drawgraph(g,
+                    boundingbox=bb,
+                    layout=spring,
+                    vertexshapes=:none,
+                    edgelist=mst,
+                    edgestrokeweights=5,)
+
+                drawgraph(
+                    g,
+                    boundingbox=bb,
+                    layout=spring,
+                    vertexlabels=1:nv(g),
+                    vertexshapes=:circle,
+                    vertexshapesizes=7.5,
+                    edgegaps=0,
+                    edgelines=:none,)
+            end
+        end
+    end
+end 600 600</code></pre><h2 id="Centrality"><a class="docs-heading-anchor" href="#Centrality">Centrality</a><a id="Centrality-1"></a><a class="docs-heading-anchor-permalink" href="#Centrality" title="Permalink"></a></h2><p>Centrality is a measure of the importance of vertices in a graph. It might describe the importance of &quot;influencers&quot; in social networks, or the importance of certain key positions in a transport network. Graphs.jl offers a number of ways to measure the centrality of vertices in a graph. Refer to the manual&#39;s &quot;Centrality Measures&quot; section for details.</p><p>Here&#39;s <code>betweenness_centrality()</code> applied to the Karate Club network. The vertices are sized and colored using the vector of values returned in <code>bc</code>.</p><pre><code class="language-julia hljs">@drawsvg begin
+background(&quot;grey10&quot;)
+g = smallgraph(:karate)
+bc = betweenness_centrality(g)
+sethue(&quot;gold&quot;)
+drawgraph(g, layout = spring,
+    vertexlabels = string.(round.(100bc, digits = 1)),
+    vertexshapesizes = 15 .+ 30bc,
+    vertexfillcolors = HSB.(rescale.(bc, 0, maximum(bc), 150, 360), 0.7, 0.8),
+    )
+end 800 600</code></pre><img src="9154a20a.svg" alt="Example block output"/><h2 id="Graph-coloring"><a class="docs-heading-anchor" href="#Graph-coloring">Graph coloring</a><a id="Graph-coloring-1"></a><a class="docs-heading-anchor-permalink" href="#Graph-coloring" title="Permalink"></a></h2><p>A simple <strong>graph coloring</strong> is a way of coloring the vertices of a graph so that no two adjacent vertices are the same color. The <code>greedy_color()</code> function finds a random graph coloring for a graph. The total number of colors, and an array of integers representing the colors, are returned in fields <code>num_colors</code> and <code>colors</code> (as integers between 1 and <code>n</code>).</p><p>In the following example, only three colors are needed such that no edge connects two vertices with the same color. Colors.jl has a <code>distinguishable_colors()</code> function that finds <code>n</code> colors which look sufficiently different:</p><pre><code class="language-julia hljs">@drawsvg begin
+    background(&quot;grey10&quot;)
+    g = smallgraph(:octahedral)
+    gc = greedy_color(g)
+    dcolors = distinguishable_colors(gc.num_colors)
+    sethue(&quot;gold&quot;)
+    drawgraph(g, layout=stress,
+        vertexfillcolors = dcolors[gc.colors],
+        vertexshapesizes = 30)
+end 800 400</code></pre><img src='data:image/svg+xml;utf-8,<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="800pt" height="400pt" viewBox="0 0 800 400" version="1.1">
+<g id="surface146">
+<rect x="0" y="0" width="800" height="400" style="fill:rgb(10.196078%25,10.196078%25,10.196078%25);fill-opacity:1;stroke:none;"/>
+<path style="fill:none;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke:rgb(100%25,84.313725%25,0%25);stroke-opacity:1;stroke-miterlimit:10;" d="M 381.488281 370 L 242.335938 269.671875 "/>
+<path style="fill:none;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke:rgb(100%25,84.313725%25,0%25);stroke-opacity:1;stroke-miterlimit:10;" d="M 381.488281 370 L 261.023438 98.03125 "/>
+<path style="fill:none;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke:rgb(100%25,84.313725%25,0%25);stroke-opacity:1;stroke-miterlimit:10;" d="M 381.488281 370 L 538.976562 301.96875 "/>
+<path style="fill:none;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke:rgb(100%25,84.313725%25,0%25);stroke-opacity:1;stroke-miterlimit:10;" d="M 381.488281 370 L 557.664062 130.328125 "/>
+<path style="fill:none;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke:rgb(100%25,84.313725%25,0%25);stroke-opacity:1;stroke-miterlimit:10;" d="M 242.335938 269.671875 L 261.023438 98.03125 "/>
+<path style="fill:none;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke:rgb(100%25,84.313725%25,0%25);stroke-opacity:1;stroke-miterlimit:10;" d="M 242.335938 269.671875 L 538.976562 301.96875 "/>
+<path style="fill:none;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke:rgb(100%25,84.313725%25,0%25);stroke-opacity:1;stroke-miterlimit:10;" d="M 242.335938 269.671875 L 418.511719 30 "/>
+<path style="fill:none;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke:rgb(100%25,84.313725%25,0%25);stroke-opacity:1;stroke-miterlimit:10;" d="M 261.023438 98.03125 L 557.664062 130.328125 "/>
+<path style="fill:none;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke:rgb(100%25,84.313725%25,0%25);stroke-opacity:1;stroke-miterlimit:10;" d="M 261.023438 98.03125 L 418.511719 30 "/>
+<path style="fill:none;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke:rgb(100%25,84.313725%25,0%25);stroke-opacity:1;stroke-miterlimit:10;" d="M 538.976562 301.96875 L 557.664062 130.328125 "/>
+<path style="fill:none;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke:rgb(100%25,84.313725%25,0%25);stroke-opacity:1;stroke-miterlimit:10;" d="M 538.976562 301.96875 L 418.511719 30 "/>
+<path style="fill:none;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke:rgb(100%25,84.313725%25,0%25);stroke-opacity:1;stroke-miterlimit:10;" d="M 557.664062 130.328125 L 418.511719 30 "/>
+<path style="fill-rule:nonzero;fill:rgb(0%25,0%25,0%25);fill-opacity:1;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke:rgb(100%25,84.313725%25,0%25);stroke-opacity:1;stroke-miterlimit:10;" d="M 411.488281 370 C 411.488281 386.570312 398.058594 400 381.488281 400 C 364.921875 400 351.488281 386.570312 351.488281 370 C 351.488281 353.429688 364.921875 340 381.488281 340 C 398.058594 340 411.488281 353.429688 411.488281 370 Z M 411.488281 370 "/>
+<path style="fill-rule:nonzero;fill:rgb(100%25,60.784314%25,100%25);fill-opacity:1;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke:rgb(100%25,84.313725%25,0%25);stroke-opacity:1;stroke-miterlimit:10;" d="M 272.335938 269.671875 C 272.335938 286.238281 258.902344 299.671875 242.335938 299.671875 C 225.765625 299.671875 212.335938 286.238281 212.335938 269.671875 C 212.335938 253.101562 225.765625 239.671875 242.335938 239.671875 C 258.902344 239.671875 272.335938 253.101562 272.335938 269.671875 Z M 272.335938 269.671875 "/>
+<path style="fill-rule:nonzero;fill:rgb(100%25,100%25,45.490196%25);fill-opacity:1;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke:rgb(100%25,84.313725%25,0%25);stroke-opacity:1;stroke-miterlimit:10;" d="M 291.023438 98.03125 C 291.023438 114.597656 277.59375 128.03125 261.023438 128.03125 C 244.457031 128.03125 231.023438 114.597656 231.023438 98.03125 C 231.023438 81.460938 244.457031 68.03125 261.023438 68.03125 C 277.59375 68.03125 291.023438 81.460938 291.023438 98.03125 Z M 291.023438 98.03125 "/>
+<path style="fill-rule:nonzero;fill:rgb(100%25,100%25,45.490196%25);fill-opacity:1;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke:rgb(100%25,84.313725%25,0%25);stroke-opacity:1;stroke-miterlimit:10;" d="M 568.976562 301.96875 C 568.976562 318.539062 555.542969 331.96875 538.976562 331.96875 C 522.40625 331.96875 508.976562 318.539062 508.976562 301.96875 C 508.976562 285.402344 522.40625 271.96875 538.976562 271.96875 C 555.542969 271.96875 568.976562 285.402344 568.976562 301.96875 Z M 568.976562 301.96875 "/>
+<path style="fill-rule:nonzero;fill:rgb(100%25,60.784314%25,100%25);fill-opacity:1;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke:rgb(100%25,84.313725%25,0%25);stroke-opacity:1;stroke-miterlimit:10;" d="M 587.664062 130.328125 C 587.664062 146.898438 574.234375 160.328125 557.664062 160.328125 C 541.097656 160.328125 527.664062 146.898438 527.664062 130.328125 C 527.664062 113.761719 541.097656 100.328125 557.664062 100.328125 C 574.234375 100.328125 587.664062 113.761719 587.664062 130.328125 Z M 587.664062 130.328125 "/>
+<path style="fill-rule:nonzero;fill:rgb(0%25,0%25,0%25);fill-opacity:1;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke:rgb(100%25,84.313725%25,0%25);stroke-opacity:1;stroke-miterlimit:10;" d="M 448.511719 30 C 448.511719 46.570312 435.078125 60 418.511719 60 C 401.941406 60 388.511719 46.570312 388.511719 30 C 388.511719 13.429688 401.941406 0 418.511719 0 C 435.078125 0 448.511719 13.429688 448.511719 30 Z M 448.511719 30 "/>
+</g>
+</svg>
+'/><p>Here <code>gc.num_colors</code> is 3. However, a complete graph might require many colors because there are so many connected vertices. For example, <code>gc.num_colors</code> is now 20:</p><pre><code class="language-julia hljs">@drawsvg begin
+    background(&quot;grey10&quot;)
+    g = complete_graph(20)
+    gc = greedy_color(g)
+    dcolors = distinguishable_colors(gc.num_colors)
+    sethue(&quot;grey50&quot;)
+    drawgraph(g, layout=stress,
+        vertexfillcolors = dcolors[gc.colors],
+        vertexshapesizes = 20)
+end 600 300</code></pre><img src="0862c2a1.svg" alt="Example block output"/></article><nav class="docs-footer"><a class="docs-footer-prevpage" href="../">« Introduction to Karnak</a><a class="docs-footer-nextpage" href="../syntax/">Syntax »</a><div class="flexbox-break"></div><p class="footer-message">Powered by <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> and the <a href="https://julialang.org/">Julia Programming Language</a>.</p></nav></div><div class="modal" id="documenter-settings"><div class="modal-background"></div><div class="modal-card"><header class="modal-card-head"><p class="modal-card-title">Settings</p><button class="delete"></button></header><section class="modal-card-body"><p><label class="label">Theme</label><div class="select"><select id="documenter-themepicker"><option value="documenter-light">documenter-light</option><option value="documenter-dark">documenter-dark</option><option value="auto">Automatic (OS)</option></select></div></p><hr/><p>This document was generated with <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> version 1.1.0 on <span class="colophon-date" title="Friday 6 October 2023 13:27">Friday 6 October 2023</span>. Using Julia version 1.7.3.</p></section><footer class="modal-card-foot"></footer></div></div></div></body></html>
