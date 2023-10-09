@@ -51,7 +51,7 @@ There's a good selection of other Julia packages for visualizing graphs:
 [docs-development-url]: http://cormullion.github.io/Karnak.jl/dev/
 
 [docs-stable-img]: https://img.shields.io/badge/docs-stable-blue.svg
-[docs-stable-url]: http://cormullion.github.io/Karnak.jl/stable/
+[docs-stable-url]: http://cormullion.github.io/Karnak.jl/dev/
 
 [ci-img]: https://github.com/cormullion/Karnak.jl/workflows/CI/badge.svg
 [ci-url]: https://github.com/cormullion/Karnak.jl/actions?query=workflow%3ACI
