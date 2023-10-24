@@ -154,8 +154,7 @@ end
         fontsize(28)
         fontface("WorkSans-Bold")
         sethue("gold")
-        textwrap("Karnak.jl is a small utility package for Luxor.jl
- for drawing graphs and networks. It uses Graphs.jl and
+        textwrap("Karnak.jl is a Julia package for drawing graphs and networks. It uses Graphs.jl and
 NetworkLayout.jl.", 400, boxtopleft(BoundingBox(bx)) + (20, 0),
             leading = get_fontsize() + 30)
     end

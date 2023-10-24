@@ -452,7 +452,7 @@ end
 ```
 
 Iterating over edges with the `edges` iterator function will give a value of
-type `Edge`. The `src()` and and `dst()` functions applied to an edge argument
+type `Edge`. The `src()` and `dst()` functions applied to an edge argument
 return the numbers of the source and destination vertices respectively.
 
 ```julia
@@ -660,14 +660,14 @@ end 600 250
 
 ### Adjacency list
 
-Another way of representing a graph is by using an array of arrays in the form of an **adjacency list**. This array has `n` elements to represent a graph with `n` vertices. The first element of the array is an array of those vertex numbers that are connected with vertex 1, and similarly for elements 2 to `n`.
+Another way of representing a graph is by using an array of arrays in the form of an **adjacency list**. This array has `n` elements to represent a graph with `n` vertices. The first element of the array is an array of those vertex numbers that are connected with vertex 1. Element 2 holds the vertex numbers connected with vertex 2,and so on, up to element `n`.
 
 For example, this adjacency list:
 
 ```julia
 [
-    [2, 5, 7],  # row 1: vertex 1 connects with 2, 5, and 7
-    [1, 3, 9],
+    [2, 5, 7],  # vertex 1 connects with 2, 5, and 7
+    [1, 3, 9],  # vertex 2 connects with 1, 3, and 9
     [2, 4, 11],
     [3, 5, 13],
     [1, 4, 15],
@@ -689,9 +689,7 @@ For example, this adjacency list:
 ]
 ```
 
-defines a graph with 20 vertices, such that vertex 1 has edges joining it to vertices 2, 5, and 7, and so on for each element of the whole array.
-
-The `Graph()` function accepts an adjacency list, preceded by the number of edges.
+defines a graph with 20 vertices. The `Graph()` function accepts such an adjacency list, preceded by the number of edges.
 
 ```@example graphsection
 g = Graph(30, [
@@ -734,7 +732,7 @@ Here, `fadjlist` is a forward adjacency list which defines how each vertex conne
 
 ## Paths, cycles, routes, and traversals
 
-Graphs help us answer questions about connectivity and relationships. For example, think of a railway network as a graph, with the stations as vertices, and the tracks as edges. We want to ask questions such as "Can we get from A to B by train?", which therefore becomes the question "Are there sufficient edges between vertices in the graph such that we can find a continuous path that joins them?".
+Graphs help us answer questions about connectivity and relationships. For example, think of a railway network as a graph, with the stations as vertices, and the tracks as edges. We want to ask questions such as "Can we get from A to B by train?", which therefore becomes the question "Are there sufficient edges between vertices in the graph such that we can find a continuous path that goes from vertex A to vertex B?".
 
 Graphs.jl has many features for traversing graphs and finding paths. We can look at just a few of them here.
 
@@ -1123,7 +1121,7 @@ edgeweights = [g.weights[e.src, e.dst] for e in edges(g)]
 end
 ```
 
-In this next example, we set the default weight of every edge to 4.0 when the graph is created, and changed just one edge's weight:
+In the next example, we set the default weight of every edge to 4.0 when the graph is created, and changed just one edge's weight:
 
 ```@example graphsection
 wg = SimpleWeightedGraph(Graph(6, 15), 4.0)
@@ -1281,9 +1279,9 @@ end 800 600
 
 ## Graph coloring
 
-A simple **graph coloring** is a way of coloring the vertices of a graph so that no two adjacent vertices are the same color. The `greedy_color()` function finds a random graph coloring for a graph. The total number of colors, and an array of integers representing the colors, are returned in fields `num_colors` and `colors` (as integers between 1 and `n`).
+A simple **graph coloring** is a way of choosing colors for the vertices of a graph so that no adjacent vertices have the same color. The `greedy_color()` function finds a random graph coloring for a graph. The total number of colors, and an array of integers representing the colors, are returned in fields `num_colors` and `colors` (as integers between 1 and `n`).
 
-In the following example, only three colors are needed such that no edge connects two vertices with the same color. Colors.jl has a `distinguishable_colors()` function that finds `n` colors which look sufficiently different:
+In the following example, only three colors are needed such that no edge connects vertices with the same color. Colors.jl has a `distinguishable_colors()` function that finds `n` colors which look sufficiently different:
 
 ```@example graphsection
 @drawsvg begin
