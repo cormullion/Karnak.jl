@@ -132,6 +132,8 @@ function _drawedgelines(from, to, edgesrc, edgedest;
         edgegap = edgegaps[mod1(edgenumber, end)]
     elseif edgegaps isa AbstractRange
         edgegap = edgegaps[mod1(edgenumber, end)]
+    elseif edgegaps isa Function 
+        edgegap = edgegaps(edgenumber, edgesrc, edgedest, from, to)
     elseif edgegaps isa Real
         edgegap = edgegaps
     end
@@ -911,14 +913,15 @@ All keywords:
  layout                      Vector{Point}                                            
                              function from NetworkLayout.jl                           
                              f(g::Graph)                                              
- edgefunction                f(edgenumber::Int, edgesrc::Int, edgedest::Int, from::Poi
+ edgefunction                f(edgenumber::Int, edgesrc::Int, edgedest::Int, from::Point)
  vertexfunction              f(vtx::Int, coordinates::Vector{Point})                  
  edgecurvature               Float64                                                  
  edgedashpatterns            Vector{Vector}[number]                                   
                              Vector{Number}                                           
  edgegaps                    Vector                                                   
                              Range                                                    
-                             Real                                                     
+                             Real
+                             f(edgenumber::Int, edgesrc::Int, edgedest::Int, from::Point)                                                     
  edgelabelcolors             Vector{Colorant}                                         
                              Colorant                                                 
  edgelabelfontfaces          Vector{Strings}[edgenumber]                              
@@ -933,7 +936,7 @@ All keywords:
                              range                                                    
                              Dict{Int, Int}                                           
                              f(edgenumber, edgesrc, edgedest, from::Point, to::Point)
-                               - this function should draw the required text 
+                               - this function must draw the required text 
                              :none                                                    
  edgelines                   Vector{Int}                                              
                              range                                                    
@@ -958,7 +961,7 @@ All keywords:
                              Real                                                     
                              :none
                              f(vtx::Int, coord::Point[])
-                               function should return a numeric value for fontsize
+                              - function must return a numeric value for fontsize
  vertexlabeloffsetangles     Vector                                                   
                              Range                                                    
                              Real                                                     
@@ -974,7 +977,7 @@ All keywords:
                              range[vtx::Int]                                          
                              :none                                                    
                              f(vtx::Int)
-                              this function should return a string                                              
+                             - this function must return a string                                              
  vertexlabeltextcolors       Vector{Colorant}                                         
                              Colorant
                              f(vtx::Int)                                                 

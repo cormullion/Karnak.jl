@@ -949,9 +949,13 @@ This example draws the graph more than once; once with all the edges, once with 
 end 600 600
 ```
 
-### `edgecurvature` and `edgecaps`
+### `edgecurvature` and `edgegaps`
 
-`edgecurvature` determines the curvature of the edges, and `edgegaps` sets the distance between the tip of the arrowhead and the vertex position. Units, as everywhere in Karnak, are points/pixels (1 point is 0.3527mm).
+The `edgecurvature` keyword determines the curvature of the edges. 
+
+The `edgegaps` keyword sets the distances between the ends of the edges and the vertex positions. 
+
+Units, as everywhere in Karnak, are points/pixels (1 point is 0.3527mm).
 
 ```@example graphsection
 g = grid((3, 3))
@@ -977,6 +981,49 @@ end
     end
 end 600 500
 ```
+
+The value for the edge gap (either as supplied in vector, range, or scalar form, or calculated and returned by a function) applies to both ends of an edge. This is a minor issue for cases where, for example, the vertex shapes are different sizes, and the gaps need to be calculated independently for each end of a single edge. You'll have to calculate and draw the edges yourself, as shown in this unnecessarily animated example:
+
+```julia
+using Karnak, Graphs, Colors
+function frame(scene, framenumber, g, vertexsizes)
+    background("black")
+    eased_n = scene.easingfunction(framenumber - scene.framerange.start,
+        0, 1, (scene.framerange.stop + 1) - scene.framerange.start)
+    a = 10 + vertexsizes[1] * abs(sin(0 + rescale(eased_n, 0, 1, 0, π)))
+    b = 10 + vertexsizes[2] * abs(sin(π / 4 + rescale(eased_n, 0, 1, 0, π)))
+    c = 10 + vertexsizes[3] * abs(sin(π / 3 + rescale(eased_n, 0, 1, 0, π)))
+    d = 10 + vertexsizes[4] * abs(sin(rescale(eased_n, 0, 1, 0, π)))
+    newvertexsizes = [a, b, c, d]
+    sethue("gold")
+    drawgraph(g,
+        margin=80,
+        vertexshapesizes=newvertexsizes,
+        vertexfillcolors=[c for c in Colors.JULIA_LOGO_COLORS |> values],
+        edgefunction=(args...) -> begin
+            edgenumber, edgesrc, edgedest, from, to = args
+            d = distance(from, to)
+            startpoint = between(from, to, newvertexsizes[edgesrc] / d)
+            endpoint = between(from, to, 1 - newvertexsizes[edgedest] / d)
+            arrow(startpoint, endpoint)
+        end)
+end
+
+function main()
+    g = complete_digraph(4)
+    vertexsizes = [20, 35, 50, 60]
+    amovie = Movie(800, 600, "gap animation")
+    animate(amovie,
+        Scene(amovie, (s, f) -> frame(s, f, g, vertexsizes), 1:40),
+        framerate=15,
+        creategif=true,
+        pathname=joinpath(dirname(dirname(pathof(Karnak))) * "/docs/src/assets/figures/edgegapanimation.gif"))
+end
+
+main()
+```
+
+![edge gap animation](assets/figures/edgegapanimation.gif)
 
 ### `edgestrokecolors` and `edgestrokeweights`
 

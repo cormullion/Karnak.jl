@@ -1,8 +1,10 @@
 # Changelog
 
-## current master
+## [v1.1.0] current master
 
 ### Added
+
+- edgegap can be function
 
 ## Changed
 
