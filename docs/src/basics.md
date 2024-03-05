@@ -1207,7 +1207,7 @@ Notice how all the spanning trees found have avoided the edge joining 1 and 4, w
 Next, here's `boruka_mst()` looking for the **maximum** spanning tree; `Edge(1 => 4)` is always included every time the function runs.
 
 ```@example graphsection
-using Karnak, Luxor, Graphs, NetworkLayout, Colors, SimpleWeightedGraphs
+using Karnak, Graphs, NetworkLayout, Colors, SimpleWeightedGraphs
 
 @drawsvg begin
     background("grey10")
