@@ -8,6 +8,8 @@
 
 ## Changed
 
+- documentation uses DocumenterVitePress
+
 ### Removed
 
 ### Deprecated

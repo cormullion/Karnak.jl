@@ -1,16 +1,24 @@
-using Documenter, Karnak
+using Karnak
+using Documenter
+using DocumenterVitepress
+
+DocMeta.setdocmeta!(Karnak, :DocTestSetup, :(using Karnak); recursive = true)
 
 makedocs(
     # debug=true,
+    authors = "cormullion",
+    repo = Remotes.GitHub("Cormullion", "Karnak.jl"),
+    sitename = "Karnak.jl",
     modules = [Karnak],
-    sitename = "Karnak",
+    format = DocumenterVitepress.MarkdownVitepress( 
+        deploy_url = "github.com/cormullion/Karnak.jl",
+        repo = "github.com/cormullion/Karnak.jl",
+        devbranch = "master",
+        devurl = "dev"),
+    source = "src",
+    build = "build",
+    linkcheck = true,
     warnonly = true,
-    format = Documenter.HTML(
-        size_threshold = nothing,   
-        prettyurls = get(ENV, "CI", nothing) == "true",
-        assets = ["assets/karnak-docs.css"],
-        collapselevel=3,
-        ),
     pages    = [
         "Introduction to Karnak"  =>  "index.md",
         "Basic graphs"            =>  "basics.md",
@@ -26,5 +34,8 @@ makedocs(
 deploydocs(
     repo = "github.com/cormullion/Karnak.jl.git",
     target = "build",
+    branch = "gh-pages",
+    devbranch = "master",
+    push_preview = true,
     forcepush = true
 )
