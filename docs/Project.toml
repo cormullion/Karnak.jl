@@ -1,8 +1,6 @@
 [deps]
-CSV = "336ed68f-0bac-5ca0-87d4-7b16caf5d00b"
 Colors = "5ae59095-9a9b-59fe-a467-6f913c188581"
 DataFrames = "a93c6f00-e57d-5684-b7b6-d8193f3e46c0"
-DelimitedFiles = "8bb1440f-4735-579b-a4ab-409b98df4dab"
 Documenter = "e30172f5-a6a5-5a46-863b-614d45cd2de4"
 DocumenterVitepress = "4710194d-e776-4893-9690-8d956a29c365"
 Graphs = "86223c79-3864-5bf0-83f7-82e725a168b6"
@@ -11,12 +9,5 @@ NetworkLayout = "46757867-2c16-5918-afeb-47bfcb05e46a"
 SimpleWeightedGraphs = "47aef6b3-ad0c-573a-a1e2-d07658019622"
 
 [compat]
-CSV = "0.10"
 Colors = "0.10, 0.11, 0.12"
-DataFrames = "1.4, 1.5, 1.6"
-Documenter = "1"
-DocumenterVitepress = "0.0.11"
-Graphs = "1.7, 1.8, 1.9"
-NetworkLayout = "0.4.4, 0.4.5, 0.4.6"
-SimpleWeightedGraphs = "1.2"
 julia = "1.6"
