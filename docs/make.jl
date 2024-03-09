@@ -32,7 +32,7 @@ makedocs(
     )
 
 deploydocs(
-    repo = "github.com/cormullion/Karnak.jl.git",
+    repo = "github.com/cormullion/Karnak.jl",
     target = "build",
     branch = "gh-pages",
     devbranch = "master",
