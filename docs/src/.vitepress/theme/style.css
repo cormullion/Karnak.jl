@@ -13,31 +13,10 @@
 }
 
 @font-face {
-  font-family: JuliaMono-Medium;
-  src:
-    local('JuliaMono-Medium'),
-    url("https://cdn.jsdelivr.net/gh/cormullion/juliamono/webfonts/JuliaMono-Medium.woff2");
-}
-
-@font-face {
   font-family: JuliaMono-Bold;
   src:
     local('JuliaMono-Bold'),
     url("https://cdn.jsdelivr.net/gh/cormullion/juliamono/webfonts/JuliaMono-Bold.woff2");
-}
-
-@font-face {
-  font-family: JuliaMono-ExtraBold;
-  src:
-    local('JuliaMono-ExtraBold'),
-    url("https://cdn.jsdelivr.net/gh/cormullion/juliamono/webfonts/JuliaMono-ExtraBold.woff2");
-}
-
-@font-face {
-  font-family: JuliaMono-Black;
-  src:
-    local('JuliaMono-Black'),
-    url("https://cdn.jsdelivr.net/gh/cormullion/juliamono/webfonts/JuliaMono-Black.woff2");
 }
 
 @font-face {
@@ -55,31 +34,10 @@
 }
 
 @font-face {
-  font-family: JuliaMono-MediumItalic;
-  src:
-    local('JuliaMono-MediumItalic'),
-    url("https://cdn.jsdelivr.net/gh/cormullion/juliamono/webfonts/JuliaMono-MediumItalic.woff2");
-}
-
-@font-face {
   font-family: JuliaMono-BoldItalic;
   src:
     local('JuliaMono-BoldItalic'),
     url("https://cdn.jsdelivr.net/gh/cormullion/juliamono/webfonts/JuliaMono-BoldItalic.woff2");
-}
-
-@font-face {
-  font-family: JuliaMono-ExtraBoldItalic;
-  src:
-    local('JuliaMono-ExtraBoldItalic'),
-    url("https://cdn.jsdelivr.net/gh/cormullion/juliamono/webfonts/JuliaMono-ExtraBoldItalic.woff2");
-}
-
-@font-face {
-  font-family: JuliaMono-BlackItalic;
-  src:
-    local('JuliaMono-BlackItalic'),
-    url("https://cdn.jsdelivr.net/gh/cormullion/juliamono/webfonts/JuliaMono-BlackItalic.woff2");
 }
 
 /* Customize default theme styling by overriding CSS variables:
@@ -111,12 +69,7 @@ https://github.com/vuejs/vitepress/blob/main/src/client/theme-default/styles/var
 }
 
 .mono {
-  /* 
-  Disable contextual alternates (kind of like ligatures but different) in monospace, 
-  which turns `/>` to an up arrow and `|>` (the Julia pipe symbol) to an up arrow as well.  
-  This is pretty bad for Julia folks reading even though copy+paste retains the same text.
-  */
-  font-feature-settings: 'calt' 0;
+  font-feature-settings: 'calt' 1;
 }
 
 /* Colors */
