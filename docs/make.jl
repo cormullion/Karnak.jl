@@ -11,7 +11,7 @@ makedocs(
     sitename = "Karnak.jl",
     modules = [Karnak],
     format = DocumenterVitepress.MarkdownVitepress( 
-        deploy_url = "github.com/cormullion/Karnak.jl",
+        deploy_url = "cormullion.github.io/Karnak.jl", # you can also omit this if it's the default Github URL
         repo = "github.com/cormullion/Karnak.jl",
         devbranch = "master",
         devurl = "dev"),
