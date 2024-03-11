@@ -67,7 +67,7 @@ dg = @drawsvg begin
         end,
         edgefunction=(n, s, d, f, t) -&gt; manhattanline(f, t)
     )
-end 1000 550</code></pre></details><img src="4d712698.svg" alt="Example block output"/><p>This graph could do with a bit more tweaking.</p><h2 id="Julia-source-tree"><a class="docs-heading-anchor" href="#Julia-source-tree">Julia source tree</a><a id="Julia-source-tree-1"></a><a class="docs-heading-anchor-permalink" href="#Julia-source-tree" title="Permalink"></a></h2><p>This example takes a Julia expression and displays it as a tree.</p><pre><code class="language-julia hljs">using Karnak, Graphs, NetworkLayout, Colors
+end 1000 550</code></pre></details><img src="3c971c87.svg" alt="Example block output"/><p>This graph could do with a bit more tweaking.</p><h2 id="Julia-source-tree"><a class="docs-heading-anchor" href="#Julia-source-tree">Julia source tree</a><a id="Julia-source-tree-1"></a><a class="docs-heading-anchor-permalink" href="#Julia-source-tree" title="Permalink"></a></h2><p>This example takes a Julia expression and displays it as a tree.</p><pre><code class="language-julia hljs">using Karnak, Graphs, NetworkLayout, Colors
 
 # shamelessly stolen from Professor David Sanders&#39; Tree !
 
@@ -128,7 +128,7 @@ g, labels = walk_tree(expression)
     fontface(&quot;JuliaMono-Bold&quot;)
     fontsize(15)
     text(string(expression), boxbottomcenter() + (0, -20), halign=:center)
-end</code></pre><img src="6f860c5e.svg" alt="Example block output"/><h2 id="LayeredLayouts.jl"><a class="docs-heading-anchor" href="#LayeredLayouts.jl">LayeredLayouts.jl</a><a id="LayeredLayouts.jl-1"></a><a class="docs-heading-anchor-permalink" href="#LayeredLayouts.jl" title="Permalink"></a></h2><p><a href="https://github.com/oxinabox/LayeredLayouts.jl">LayeredLayouts</a> is a package for working out how to layout graphs in a layered fashion: how to lay out directed acyclic graphs (DAGs), including trees, dependency graphs, and Sankey diagrams.</p><p>The package offers the Zarate algorithm (David Cheng Zarate). Positions are returned as x and y vectors, and should be converted to Points when passed to <code>layout</code>.</p><pre><code class="language-julia hljs">using Graphs
+end</code></pre><img src="080aa786.svg" alt="Example block output"/><h2 id="LayeredLayouts.jl"><a class="docs-heading-anchor" href="#LayeredLayouts.jl">LayeredLayouts.jl</a><a id="LayeredLayouts.jl-1"></a><a class="docs-heading-anchor-permalink" href="#LayeredLayouts.jl" title="Permalink"></a></h2><p><a href="https://github.com/oxinabox/LayeredLayouts.jl">LayeredLayouts</a> is a package for working out how to layout graphs in a layered fashion: how to lay out directed acyclic graphs (DAGs), including trees, dependency graphs, and Sankey diagrams.</p><p>The package offers the Zarate algorithm (David Cheng Zarate). Positions are returned as x and y vectors, and should be converted to Points when passed to <code>layout</code>.</p><pre><code class="language-julia hljs">using Graphs
 using LayeredLayouts
 using Karnak
 
@@ -243,7 +243,7 @@ d = @drawsvg begin
             end
         end,
     )
-end 800 700</code></pre></details><img src="08dae63e.svg" alt="Example block output"/><p>There&#39;s an extended investigation of package dependencies later in this section.</p><h2 id="The-London-Tube"><a class="docs-heading-anchor" href="#The-London-Tube">The London Tube</a><a id="The-London-Tube-1"></a><a class="docs-heading-anchor-permalink" href="#The-London-Tube" title="Permalink"></a></h2><p>One real-world example of a small network is the London Underground, known as “the Tube”. The 250 or so stations in the network can be modelled using a simple graph.</p><h3 id="Setup"><a class="docs-heading-anchor" href="#Setup">Setup</a><a id="Setup-1"></a><a class="docs-heading-anchor-permalink" href="#Setup" title="Permalink"></a></h3><p>If you want to follow along, this is the setup required. The CSV file <code>examples/tubedata-modified.csv</code> contains the station names, latitude and longitudes, and connectivity details.</p><pre><code class="language-julia hljs">using Karnak, Graphs, NetworkLayout, Colors
+end 800 700</code></pre></details><img src="13f03d61.svg" alt="Example block output"/><p>There&#39;s an extended investigation of package dependencies later in this section.</p><h2 id="The-London-Tube"><a class="docs-heading-anchor" href="#The-London-Tube">The London Tube</a><a id="The-London-Tube-1"></a><a class="docs-heading-anchor-permalink" href="#The-London-Tube" title="Permalink"></a></h2><p>One real-world example of a small network is the London Underground, known as “the Tube”. The 250 or so stations in the network can be modelled using a simple graph.</p><h3 id="Setup"><a class="docs-heading-anchor" href="#Setup">Setup</a><a id="Setup-1"></a><a class="docs-heading-anchor-permalink" href="#Setup" title="Permalink"></a></h3><p>If you want to follow along, this is the setup required. The CSV file <code>examples/tubedata-modified.csv</code> contains the station names, latitude and longitudes, and connectivity details.</p><pre><code class="language-julia hljs">using Karnak, Graphs, NetworkLayout, Colors
 using DataFrames, CSV
 
 # positions are in LatLong
@@ -266,7 +266,7 @@ stations = tubedata[!,:Station]
 find(str) = findfirst(isequal(str), stations)
 find(x::Int64) = stations[x]
 
-g = Graph(amatrix)</code></pre><p>The tube “map” is stored in <code>g</code>, as a <code>{267, 308} undirected simple Int64 graph</code>.</p><p>The <code>find()</code> functions are just a quick way to convert between station names and ID numbers:</p><pre><code class="language-julia hljs">find(&quot;Waterloo&quot;)</code></pre><pre class="documenter-example-output"><code class="nohighlight hljs ansi">244</code></pre><pre><code class="language-julia hljs">find(244)</code></pre><pre class="documenter-example-output"><code class="nohighlight hljs ansi">&quot;Waterloo&quot;</code></pre><h3 id="Not-a-map"><a class="docs-heading-anchor" href="#Not-a-map">Not a map</a><a id="Not-a-map-1"></a><a class="docs-heading-anchor-permalink" href="#Not-a-map" title="Permalink"></a></h3><p>Most London residents and visitors are used to seeing the famous <a href="https://en.wikipedia.org/wiki/Tube_map">Tube Map</a>:</p><p><img src="../assets/figures/tubemap.png" alt="tube map"/></p><p>It’s a design classic, hand-drawn by Harry Beck in 1931, and updated regularly ever since. As an electrical engineer, Beck represented the sprawling London track network as a tidy circuit board. For Beck, the important thing about the map was to show the connections, rather than the accurate geography.</p><p>Our version looks very different, but it is at least geographically more accurate, because the latitude and longitude values of the stations are passed to <code>layout</code>.</p><pre><code class="language-julia hljs">@drawsvg begin
+g = Graph(amatrix)</code></pre><p>The tube “map” is stored in <code>g</code>, as a <code>{267, 308} undirected simple Int64 graph</code>.</p><p>The <code>find()</code> functions are just a quick way to convert between station names and ID numbers:</p><pre><code class="language- hljs">find(&quot;Waterloo&quot;)</code></pre><pre><code class="language- hljs">find(244)</code></pre><h3 id="Not-a-map"><a class="docs-heading-anchor" href="#Not-a-map">Not a map</a><a id="Not-a-map-1"></a><a class="docs-heading-anchor-permalink" href="#Not-a-map" title="Permalink"></a></h3><p>Most London residents and visitors are used to seeing the famous <a href="https://en.wikipedia.org/wiki/Tube_map">Tube Map</a>:</p><p><img src="../assets/figures/tubemap.png" alt="tube map"/></p><p>It’s a design classic, hand-drawn by Harry Beck in 1931, and updated regularly ever since. As an electrical engineer, Beck represented the sprawling London track network as a tidy circuit board. For Beck, the important thing about the map was to show the connections, rather than the accurate geography.</p><p>Our version looks very different, but it is at least geographically more accurate, because the latitude and longitude values of the stations are passed to <code>layout</code>.</p><pre><code class="language- hljs">@drawsvg begin
 background(&quot;grey10&quot;)
 sethue(&quot;grey50&quot;)
 drawgraph(g,
@@ -275,7 +275,7 @@ drawgraph(g,
     vertexlabeltextcolors = colorant&quot;white&quot;,
     vertexlabels = find.(1:nv(g)),
     vertexlabelfontsizes = 6)
-end</code></pre><img src="c06110a2.svg" alt="Example block output"/><p>The layout algorithms - <code>layout = spring</code> and <code>layout = stress</code> - do a reasonable job, but people like to see north at the top of maps, and south at the bottom, not mixed up in any direction, like these.</p><pre><code class="language-julia hljs">@drawsvg begin
+end</code></pre><p>The layout algorithms - <code>layout = spring</code> and <code>layout = stress</code> - do a reasonable job, but people like to see north at the top of maps, and south at the bottom, not mixed up in any direction, like these.</p><pre><code class="language- hljs">@drawsvg begin
 background(&quot;grey20&quot;)
 tiles = Tiler(800, 400, 1, 2)
 sethue(&quot;white&quot;)
@@ -304,7 +304,7 @@ end
         )
 end
 
-end 800 400</code></pre><img src="b2b47ddd.svg" alt="Example block output"/><h3 id="Train-terminates-here"><a class="docs-heading-anchor" href="#Train-terminates-here">Train terminates here</a><a id="Train-terminates-here-1"></a><a class="docs-heading-anchor-permalink" href="#Train-terminates-here" title="Permalink"></a></h3><p>Use the <code>degree()</code> function to show just the station names at the end of a line: a vertex with a degree of 1 is a terminus:</p><pre><code class="language-julia hljs">@drawsvg begin
+end 800 400</code></pre><h3 id="Train-terminates-here"><a class="docs-heading-anchor" href="#Train-terminates-here">Train terminates here</a><a id="Train-terminates-here-1"></a><a class="docs-heading-anchor-permalink" href="#Train-terminates-here" title="Permalink"></a></h3><p>Use the <code>degree()</code> function to show just the station names at the end of a line: a vertex with a degree of 1 is a terminus:</p><pre><code class="language- hljs">@drawsvg begin
 background(&quot;grey90&quot;)
 sethue(&quot;black&quot;)
 drawgraph(g, layout=positions,
@@ -313,14 +313,7 @@ drawgraph(g, layout=positions,
         for n in vertices(g)],
     vertexlabeltextcolors = colorant&quot;blue&quot;
     )
-end</code></pre><img src="5d86db6e.svg" alt="Example block output"/><p>These labels show names familiar to all Tube-riders - the ones shown on the front of trains and on platform indicators. (It&#39;s unusual to visit them all, unless you&#39;re like <a href="https://www.bbc.co.uk/news/uk-england-london-24203949">Geoff Marshall</a>, who holds the world record for the fastest time visiting every Tube station.)</p><h3 id="Neighbors"><a class="docs-heading-anchor" href="#Neighbors">Neighbors</a><a id="Neighbors-1"></a><a class="docs-heading-anchor-permalink" href="#Neighbors" title="Permalink"></a></h3><p>The best connected station is also one of the oldest, dating back to 1863:</p><pre><code class="language-julia hljs">find(argmax(degree(g, 1:nv(g))))</code></pre><pre class="documenter-example-output"><code class="nohighlight hljs ansi">&quot;Baker Street&quot;</code></pre><p>Its neighbors are:</p><pre><code class="language-julia hljs">find.(neighbors(g, find(&quot;Baker Street&quot;)))</code></pre><pre class="documenter-example-output"><code class="nohighlight hljs ansi">7-element Vector{InlineStrings.String31}:
- &quot;Bond Street&quot;
- &quot;Edgware Road (Cir)&quot;
- &quot;Finchley Road&quot;
- &quot;Great Portland Street&quot;
- &quot;Marylebone&quot;
- &quot;Regent&#39;s Park&quot;
- &quot;St John&#39;s Wood&quot;</code></pre><h3 id="Centrality"><a class="docs-heading-anchor" href="#Centrality">Centrality</a><a id="Centrality-1"></a><a class="docs-heading-anchor-permalink" href="#Centrality" title="Permalink"></a></h3><p>Using Graphs.jl&#39;s tools for measuring centrality, Baker Street is again at the top of the list, but Green Park (the Queen&#39;s nearest tube station), scores highly, despite not being in the top 20 busiest stations.</p><pre><code class="language-julia hljs">@drawsvg begin
+end</code></pre><p>These labels show names familiar to all Tube-riders - the ones shown on the front of trains and on platform indicators. (It&#39;s unusual to visit them all, unless you&#39;re like <a href="https://www.bbc.co.uk/news/uk-england-london-24203949">Geoff Marshall</a>, who holds the world record for the fastest time visiting every Tube station.)</p><h3 id="Neighbors"><a class="docs-heading-anchor" href="#Neighbors">Neighbors</a><a id="Neighbors-1"></a><a class="docs-heading-anchor-permalink" href="#Neighbors" title="Permalink"></a></h3><p>The best connected station is also one of the oldest, dating back to 1863:</p><pre><code class="language- hljs">find(argmax(degree(g, 1:nv(g))))</code></pre><p>Its neighbors are:</p><pre><code class="language- hljs">find.(neighbors(g, find(&quot;Baker Street&quot;)))</code></pre><h3 id="Centrality"><a class="docs-heading-anchor" href="#Centrality">Centrality</a><a id="Centrality-1"></a><a class="docs-heading-anchor-permalink" href="#Centrality" title="Permalink"></a></h3><p>Using Graphs.jl&#39;s tools for measuring centrality, Baker Street is again at the top of the list, but Green Park (the Queen&#39;s nearest tube station), scores highly, despite not being in the top 20 busiest stations.</p><pre><code class="language- hljs">@drawsvg begin
 background(&quot;grey10&quot;)
 translate(0, -200)
 scale(3)
@@ -334,7 +327,7 @@ drawgraph(g, layout = positions,
     vertexshapesizes = 1 .+ 10bc,
     vertexfillcolors = HSB.(rescale.(bc, 0, maximum(bc), 0, 300), 0.7, 0.8),
     )
-end 800 600</code></pre><img src="d42acecb.svg" alt="Example block output"/><h3 id="Mornington-Crescent"><a class="docs-heading-anchor" href="#Mornington-Crescent">Mornington Crescent</a><a id="Mornington-Crescent-1"></a><a class="docs-heading-anchor-permalink" href="#Mornington-Crescent" title="Permalink"></a></h3><p>A route from Heathrow Terminal 5 to <a href="https://en.wikipedia.org/wiki/Mornington_Crescent_(game)">Mornington Crescent</a> can be found using <code>a_star()</code>.</p><pre><code class="language-julia hljs">heathrow_to_morningtoncrescent = a_star(g,
+end 800 600</code></pre><h3 id="Mornington-Crescent"><a class="docs-heading-anchor" href="#Mornington-Crescent">Mornington Crescent</a><a id="Mornington-Crescent-1"></a><a class="docs-heading-anchor-permalink" href="#Mornington-Crescent" title="Permalink"></a></h3><p>A route from Heathrow Terminal 5 to <a href="https://en.wikipedia.org/wiki/Mornington_Crescent_(game)">Mornington Crescent</a> can be found using <code>a_star()</code>.</p><pre><code class="language- hljs">heathrow_to_morningtoncrescent = a_star(g,
     find(&quot;Heathrow Terminal 5&quot;),
     find(&quot;Mornington Crescent&quot;))
 
@@ -362,27 +355,7 @@ drawgraph(g,
              label(find(vtx), :e, positions[vtx])
         end
     end)
-end</code></pre><img src="6cfd28ec.svg" alt="Example block output"/><p>The route found by <code>a_star</code> is:</p><pre><code class="language-julia hljs">[find(dst(e)) for e in heathrow_to_morningtoncrescent]</code></pre><pre class="documenter-example-output"><code class="nohighlight hljs ansi">22-element Vector{InlineStrings.String31}:
- &quot;Heathrow Terminals 2 &amp; 3&quot;
- &quot;Hatton Cross&quot;
- &quot;Hounslow West&quot;
- &quot;Hounslow Central&quot;
- &quot;Hounslow East&quot;
- &quot;Osterley&quot;
- &quot;Boston Manor&quot;
- &quot;Northfields&quot;
- &quot;South Ealing&quot;
- &quot;Acton Town&quot;
- ⋮
- &quot;Gloucester Road&quot;
- &quot;South Kensington&quot;
- &quot;Sloane Square&quot;
- &quot;Victoria&quot;
- &quot;Green Park&quot;
- &quot;Oxford Circus&quot;
- &quot;Warren Street&quot;
- &quot;Euston&quot;
- &quot;Mornington Crescent&quot;</code></pre><p>Information about the required changes - at Victoria from the Piccadilly line to the Victoria Line, and at Warren Street from the Victoria Line to the Northern Line - is not part of the graph. Routes across the Tube network, like the trains, follow the tracks (edges). The concept of “lines” (Victoria, Circle, etc) isn’t part of the graph structure, but a colorful layer imposed on top of the track network.</p><h3 id="Pandemic"><a class="docs-heading-anchor" href="#Pandemic">Pandemic</a><a id="Pandemic-1"></a><a class="docs-heading-anchor-permalink" href="#Pandemic" title="Permalink"></a></h3><p>Graphs.jl provides many functions for analysing graph networks. The <code>diffusion()</code> function appears to simulate the diffusion of an infection from some starting vertices and the probability of spreading.</p><p>The function returns an array of arrays, where each one contains the vertex numbers of newly &quot;infected&quot; vertices. For example, in this result:</p><pre><code class="language-julia hljs">[[1], Int64[], [22, 15, 25], ...]</code></pre><p>the first stage showed vertex 1 &quot;infected&quot;; stage two was free of incident; but on stage 3 vertices 22, 15, and 25 have become &quot;infected&quot;.</p><p>So here, apparently, is a simulation of what might happen when an infection arrives at Heathrow Airport&#39;s Terminal 5 tube station, and starts spreading through the tube network.</p><pre><code class="language-julia hljs">function frame(scene, framenumber, diffresult)
+end</code></pre><p>The route found by <code>a_star</code> is:</p><pre><code class="language- hljs">[find(dst(e)) for e in heathrow_to_morningtoncrescent]</code></pre><p>Information about the required changes - at Victoria from the Piccadilly line to the Victoria Line, and at Warren Street from the Victoria Line to the Northern Line - is not part of the graph. Routes across the Tube network, like the trains, follow the tracks (edges). The concept of “lines” (Victoria, Circle, etc) isn’t part of the graph structure, but a colorful layer imposed on top of the track network.</p><h3 id="Pandemic"><a class="docs-heading-anchor" href="#Pandemic">Pandemic</a><a id="Pandemic-1"></a><a class="docs-heading-anchor-permalink" href="#Pandemic" title="Permalink"></a></h3><p>Graphs.jl provides many functions for analysing graph networks. The <code>diffusion()</code> function appears to simulate the diffusion of an infection from some starting vertices and the probability of spreading.</p><p>The function returns an array of arrays, where each one contains the vertex numbers of newly &quot;infected&quot; vertices. For example, in this result:</p><pre><code class="language-julia hljs">[[1], Int64[], [22, 15, 25], ...]</code></pre><p>the first stage showed vertex 1 &quot;infected&quot;; stage two was free of incident; but on stage 3 vertices 22, 15, and 25 have become &quot;infected&quot;.</p><p>So here, apparently, is a simulation of what might happen when an infection arrives at Heathrow Airport&#39;s Terminal 5 tube station, and starts spreading through the tube network.</p><pre><code class="language-julia hljs">function frame(scene, framenumber, diffresult)
     background(&quot;black&quot;)
     sethue(&quot;gold&quot;)
     text(string(framenumber), boxbottomleft() + (10, -10))
@@ -473,7 +446,7 @@ colors = map(c -&gt; RGB(c...),
         end,
         edgefunction = (k, s, d, f, t) -&gt; draw_edge(f, t)
         )
-end</code></pre><img src="c87c8ee5.svg" alt="Example block output"/><h2 id="Julia-Package-Dependencies"><a class="docs-heading-anchor" href="#Julia-Package-Dependencies">Julia Package Dependencies</a><a id="Julia-Package-Dependencies-1"></a><a class="docs-heading-anchor-permalink" href="#Julia-Package-Dependencies" title="Permalink"></a></h2><p>This example was originally developed by <a href="https://github.com/matbesancon/lightgraphs_workshop">Mathieu Besançon</a> and presented as part of the workshop: <strong>Analyzing Graphs at Scale</strong>, at JuliaCon 2020. You can watch the video on <a href="https://youtu.be/K3z0kUOBy2Y">YouTube</a>.</p><p>The most important changes since the video was made are:</p><ul><li><p>the renaming of LightGraphs.jl to Graphs.jl</p></li><li><p>the way to access the list of packages has changed</p></li></ul><p>The code builds a dependency graph of the connections (ie which package depends on which package) for Julia packages in the General registry.</p><p>Then it&#39;s possible draw some pictures, such as this chonky SVG file showing the dependencies for the Colors.jl package:</p><p><img src="../assets/figures/graph-dependencies-colors.svg" alt="package dependencies for Colors"/></p><p>Or this one, which attempts to highlight just the more connected packages in the Colors.jl dependency graph:</p><p><img src="../assets/figures/graph-dependencies-colors-2.svg" alt="package dependencies for Colors"/></p><p>Setup:</p><pre><code class="language-julia hljs">using Graphs
+end</code></pre><img src="17503b65.svg" alt="Example block output"/><h2 id="Julia-Package-Dependencies"><a class="docs-heading-anchor" href="#Julia-Package-Dependencies">Julia Package Dependencies</a><a id="Julia-Package-Dependencies-1"></a><a class="docs-heading-anchor-permalink" href="#Julia-Package-Dependencies" title="Permalink"></a></h2><p>This example was originally developed by <a href="https://github.com/matbesancon/lightgraphs_workshop">Mathieu Besançon</a> and presented as part of the workshop: <strong>Analyzing Graphs at Scale</strong>, at JuliaCon 2020. You can watch the video on <a href="https://youtu.be/K3z0kUOBy2Y">YouTube</a>.</p><p>The most important changes since the video was made are:</p><ul><li><p>the renaming of LightGraphs.jl to Graphs.jl</p></li><li><p>the way to access the list of packages has changed</p></li></ul><p>The code builds a dependency graph of the connections (ie which package depends on which package) for Julia packages in the General registry.</p><p>Then it&#39;s possible draw some pictures, such as this chonky SVG file showing the dependencies for the Colors.jl package:</p><p><img src="../assets/figures/graph-dependencies-colors.svg" alt="package dependencies for Colors"/></p><p>Or this one, which attempts to highlight just the more connected packages in the Colors.jl dependency graph:</p><p><img src="../assets/figures/graph-dependencies-colors-2.svg" alt="package dependencies for Colors"/></p><p>Setup:</p><pre><code class="language-julia hljs">using Graphs
 using MetaGraphs
 using TOML
 using Karnak
@@ -578,7 +551,7 @@ spath_result.dists
  6.0
  6.0
  7.0
- 7.0</code></pre><p>Or in a barchart:</p><pre><code class="language-julia hljs">scores = [count(==(i), spath_result.dists) for i in unique(spath_result.dists)]</code></pre><img src="52449c95.svg" alt="Example block output"/><p>The &quot;furthest&quot; packages from Colors.jl - the two seven steps away - are:</p><pre><code class="language-julia hljs">for idx in eachindex(spath_result.dists)
+ 7.0</code></pre><p>Or in a barchart:</p><pre><code class="language-julia hljs">scores = [count(==(i), spath_result.dists) for i in unique(spath_result.dists)]</code></pre><img src="173a89d2.svg" alt="Example block output"/><p>The &quot;furthest&quot; packages from Colors.jl - the two seven steps away - are:</p><pre><code class="language-julia hljs">for idx in eachindex(spath_result.dists)
     if spath_result.dists[idx] == 7
          println(get_prop(g, idx, :name))
     end
@@ -864,4 +837,4 @@ end 2500 2500 &quot;/tmp/graph-dependencies-colors.pdf&quot;</code></pre><pre><c
                 textoutlines(all_packages[v], c[v], halign=:center, valign=:bottom, :stroke)
             end
         end)
-end 1200 1200 &quot;/tmp/graph-dependencies-2.svg&quot;</code></pre></article><nav class="docs-footer"><a class="docs-footer-prevpage" href="../syntax/">« Syntax</a><a class="docs-footer-nextpage" href="../reference/functionindex/">Alphabetical function list »</a><div class="flexbox-break"></div><p class="footer-message">Powered by <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> and the <a href="https://julialang.org/">Julia Programming Language</a>.</p></nav></div><div class="modal" id="documenter-settings"><div class="modal-background"></div><div class="modal-card"><header class="modal-card-head"><p class="modal-card-title">Settings</p><button class="delete"></button></header><section class="modal-card-body"><p><label class="label">Theme</label><div class="select"><select id="documenter-themepicker"><option value="documenter-light">documenter-light</option><option value="documenter-dark">documenter-dark</option><option value="auto">Automatic (OS)</option></select></div></p><hr/><p>This document was generated with <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> version 1.1.0 on <span class="colophon-date" title="Sunday 8 October 2023 14:18">Sunday 8 October 2023</span>. Using Julia version 1.9.3.</p></section><footer class="modal-card-foot"></footer></div></div></div></body></html>
+end 1200 1200 &quot;/tmp/graph-dependencies-2.svg&quot;</code></pre></article><nav class="docs-footer"><a class="docs-footer-prevpage" href="../syntax/">« Syntax</a><a class="docs-footer-nextpage" href="../reference/functionindex/">Alphabetical function list »</a><div class="flexbox-break"></div><p class="footer-message">Powered by <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> and the <a href="https://julialang.org/">Julia Programming Language</a>.</p></nav></div><div class="modal" id="documenter-settings"><div class="modal-background"></div><div class="modal-card"><header class="modal-card-head"><p class="modal-card-title">Settings</p><button class="delete"></button></header><section class="modal-card-body"><p><label class="label">Theme</label><div class="select"><select id="documenter-themepicker"><option value="auto">Automatic (OS)</option><option value="documenter-light">documenter-light</option><option value="documenter-dark">documenter-dark</option></select></div></p><hr/><p>This document was generated with <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> version 1.3.0 on <span class="colophon-date" title="Monday 11 March 2024 15:54">Monday 11 March 2024</span>. Using Julia version 1.10.2.</p></section><footer class="modal-card-foot"></footer></div></div></div></body></html>

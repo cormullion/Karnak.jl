@@ -10,8 +10,9 @@ edgefunction(edgenumber, edgesrc, edgedest, from, to) -&gt; draw edges</code></p
 layout = shell
 
 layout = vcat(
-    between.(O + (-W/2, H), O + (W/2, H), range(0, 1, length=N)),
-    between.(O + (-W/2, -H), O + (W/2, -H), range(0, 1, length=N)))
+    [between(O + (-W / 2, -H / 2), O + (-W / 2, H / 2), i) for i in range(0, 1, length=N)], # left
+    [between(O + (W / 2, H / 2), O + (W / 2, -H / 2), i) for i in range(0, 1, length=N)] # right
+    )
 
 layout = stress
 
@@ -38,14 +39,15 @@ layout = Spring(iterations = 200, initialtemp = 2.5)</code></pre><p>Refer to the
  layout                      Vector{Point}                                            
                              function from NetworkLayout.jl                           
                              f(g::Graph)                                              
- edgefunction                f(edgenumber::Int, edgesrc::Int, edgedest::Int, from::Poi
+ edgefunction                f(edgenumber::Int, edgesrc::Int, edgedest::Int, from::Point)
  vertexfunction              f(vtx::Int, coordinates::Vector{Point})                  
  edgecurvature               Float64                                                  
  edgedashpatterns            Vector{Vector}[number]                                   
                              Vector{Number}                                           
  edgegaps                    Vector                                                   
                              Range                                                    
-                             Real                                                     
+                             Real
+                             f(edgenumber::Int, edgesrc::Int, edgedest::Int, from::Point)                                                     
  edgelabelcolors             Vector{Colorant}                                         
                              Colorant                                                 
  edgelabelfontfaces          Vector{Strings}[edgenumber]                              
@@ -60,7 +62,7 @@ layout = Spring(iterations = 200, initialtemp = 2.5)</code></pre><p>Refer to the
                              range                                                    
                              Dict{Int, Int}                                           
                              f(edgenumber, edgesrc, edgedest, from::Point, to::Point)
-                               - this function should draw the required text 
+                               - this function must draw the required text 
                              :none                                                    
  edgelines                   Vector{Int}                                              
                              range                                                    
@@ -85,7 +87,7 @@ layout = Spring(iterations = 200, initialtemp = 2.5)</code></pre><p>Refer to the
                              Real                                                     
                              :none
                              f(vtx::Int, coord::Point[])
-                               function should return a numeric value for fontsize
+                              - function must return a numeric value for fontsize
  vertexlabeloffsetangles     Vector                                                   
                              Range                                                    
                              Real                                                     
@@ -101,7 +103,7 @@ layout = Spring(iterations = 200, initialtemp = 2.5)</code></pre><p>Refer to the
                              range[vtx::Int]                                          
                              :none                                                    
                              f(vtx::Int)
-                              this function should return a string                                              
+                             - this function must return a string                                              
  vertexlabeltextcolors       Vector{Colorant}                                         
                              Colorant
                              f(vtx::Int)                                                 
@@ -124,4 +126,4 @@ layout = Spring(iterations = 200, initialtemp = 2.5)</code></pre><p>Refer to the
  vertexstrokeweights         Vector                                                   
                              range                                                    
                              :none                                                    
-                             f(vtx::Int)                                              </code></pre></div><a class="docs-sourcelink" target="_blank" href="https://github.com/cormullion/Karnak.jl/blob/c49c17cc36c212a012f1312f0c99d63369f1518f/src/drawgraph.jl#L848-L1002">source</a></section></article></article><nav class="docs-footer"><a class="docs-footer-prevpage" href="../functionindex/">« Alphabetical function list</a><div class="flexbox-break"></div><p class="footer-message">Powered by <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> and the <a href="https://julialang.org/">Julia Programming Language</a>.</p></nav></div><div class="modal" id="documenter-settings"><div class="modal-background"></div><div class="modal-card"><header class="modal-card-head"><p class="modal-card-title">Settings</p><button class="delete"></button></header><section class="modal-card-body"><p><label class="label">Theme</label><div class="select"><select id="documenter-themepicker"><option value="documenter-light">documenter-light</option><option value="documenter-dark">documenter-dark</option><option value="auto">Automatic (OS)</option></select></div></p><hr/><p>This document was generated with <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> version 1.1.0 on <span class="colophon-date" title="Sunday 8 October 2023 14:18">Sunday 8 October 2023</span>. Using Julia version 1.9.3.</p></section><footer class="modal-card-foot"></footer></div></div></div></body></html>
+                             f(vtx::Int)                                              </code></pre></div><a class="docs-sourcelink" target="_blank" href="https://github.com/cormullion/Karnak.jl/blob/0271945cec2d030120becc68bc2c8525e91e1238/src/drawgraph.jl#L850-L1006">source</a></section></article></article><nav class="docs-footer"><a class="docs-footer-prevpage" href="../functionindex/">« Alphabetical function list</a><div class="flexbox-break"></div><p class="footer-message">Powered by <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> and the <a href="https://julialang.org/">Julia Programming Language</a>.</p></nav></div><div class="modal" id="documenter-settings"><div class="modal-background"></div><div class="modal-card"><header class="modal-card-head"><p class="modal-card-title">Settings</p><button class="delete"></button></header><section class="modal-card-body"><p><label class="label">Theme</label><div class="select"><select id="documenter-themepicker"><option value="auto">Automatic (OS)</option><option value="documenter-light">documenter-light</option><option value="documenter-dark">documenter-dark</option></select></div></p><hr/><p>This document was generated with <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> version 1.3.0 on <span class="colophon-date" title="Monday 11 March 2024 15:54">Monday 11 March 2024</span>. Using Julia version 1.10.2.</p></section><footer class="modal-card-foot"></footer></div></div></div></body></html>
