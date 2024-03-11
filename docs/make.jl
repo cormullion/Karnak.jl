@@ -39,3 +39,6 @@ deploydocs(
     push_preview = true,
     forcepush = true
 )
+
+
+# run locally: npm run docs:dev 

@@ -17,7 +17,6 @@ jobs:
         julia-version:
           - "1.6"
           - "1"
-          - "nightly"
         os:
           - ubuntu-latest
           - macos-latest
@@ -27,7 +26,6 @@ jobs:
         exclude:
           - os: macOS-latest
             julia-arch: x86
-
     steps:
       - uses: actions/checkout@v2
       - uses: julia-actions/setup-julia@v1
@@ -50,25 +48,26 @@ jobs:
       - uses: codecov/codecov-action@v2
         with:
           file: lcov.info
-  docs:
-    name: Documentation
-    runs-on: macos-latest
-    steps:
-      - uses: actions/checkout@v2
-      - uses: julia-actions/setup-julia@v1
-        with:
-          version: '1'
-      - run: |
-          julia --project=docs -e '
-            using Pkg
-            Pkg.develop(PackageSpec(path=pwd()))
-            Pkg.instantiate()'
-      - run: |
-          julia --project=docs -e '
-            using Documenter: doctest
-            using Karnak
-            doctest(Karnak)'
-      - run: julia --project=docs docs/make.jl
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          DOCUMENTER_KEY: ${{ secrets.DOCUMENTER_KEY }}
+docs:
+  name: Documentation
+  runs-on: ubuntu-latest
+  permissions:
+    contents: write
+  steps:
+    - uses: actions/checkout@v2
+    - uses: julia-actions/setup-julia@v1
+      with:
+        version: '1'
+    - uses: julia-actions/julia-buildpkg@v1
+    - uses: julia-actions/julia-docdeploy@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    - run: |
+        julia --project=docs -e '
+          using Documenter: DocMeta, doctest
+          using Karnak
+          DocMeta.setdocmeta!(Karnak, :DocTestSetup, :(using Karnak); recursive=true)
+          doctest(Karnak)'
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        DOCUMENTER_KEY: ${{ secrets.DOCUMENTER_KEY }}
