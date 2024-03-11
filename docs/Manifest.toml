@@ -2,7 +2,7 @@
 
 julia_version = "1.10.2"
 manifest_format = "2.0"
-project_hash = "f2928be6d514cc44429c88826f9a6dc055d708d2"
+project_hash = "50223aec3bffa6c8f4ffe67ac31e32e6381b357a"
 
 [[deps.ANSIColoredPrinters]]
 git-tree-sha1 = "574baf8110975760d391c710b6341da1afa48d8c"
@@ -153,12 +153,6 @@ deps = ["ANSIColoredPrinters", "AbstractTrees", "Base64", "CodecZlib", "Dates", 
 git-tree-sha1 = "4a40af50e8b24333b9ec6892546d9ca5724228eb"
 uuid = "e30172f5-a6a5-5a46-863b-614d45cd2de4"
 version = "1.3.0"
-
-[[deps.DocumenterVitepress]]
-deps = ["ANSIColoredPrinters", "Base64", "DocStringExtensions", "Documenter", "IOCapture", "Markdown", "NodeJS_20_jll", "REPL"]
-git-tree-sha1 = "82f36e597cd333d3d08d19a2a0fd2c10b4596097"
-uuid = "4710194d-e776-4893-9690-8d956a29c365"
-version = "0.0.11"
 
 [[deps.Downloads]]
 deps = ["ArgTools", "FileWatching", "LibCURL", "NetworkOptions"]
@@ -544,12 +538,6 @@ weakdeps = ["Graphs"]
 [[deps.NetworkOptions]]
 uuid = "ca575930-c2e3-43a9-ace4-1e988b2c1908"
 version = "1.2.0"
-
-[[deps.NodeJS_20_jll]]
-deps = ["Artifacts", "JLLWrappers", "Libdl"]
-git-tree-sha1 = "e81a9cc8344600b8e3cc07c29444f4554816e1a2"
-uuid = "c7aee132-11e1-519c-8219-0a43005e73c2"
-version = "20.11.1+0"
 
 [[deps.Ogg_jll]]
 deps = ["Artifacts", "JLLWrappers", "Libdl", "Pkg"]

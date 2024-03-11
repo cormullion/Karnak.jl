@@ -1,4 +1,4 @@
-![karnak splash image](docs/src/assets/figures/karnak-social-media-preview.png)
+![karnak splash image](./assets/figures/karnak-social-media-preview.png)
 
 | **Documentation**                       | **Build Status**                          |
 |:---------------------------------------:|:-----------------------------------------:|

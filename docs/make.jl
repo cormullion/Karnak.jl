@@ -1,44 +1,30 @@
-using Karnak
-using Documenter
-using DocumenterVitepress
-
-DocMeta.setdocmeta!(Karnak, :DocTestSetup, :(using Karnak); recursive = true)
+using Documenter, Karnak
 
 makedocs(
     # debug=true,
-    authors = "cormullion",
-    repo = Remotes.GitHub("Cormullion", "Karnak.jl"),
-    sitename = "Karnak.jl",
-    modules = [Karnak],
-    format = DocumenterVitepress.MarkdownVitepress( 
-        deploy_url = "cormullion.github.io/Karnak.jl", # you can also omit this if it's the default Github URL
-        repo = "https://github.com/cormullion/Karnak.jl",
-        devbranch = "master",
-        devurl = "dev"),
-    source = "src",
-    build = "build",
-    linkcheck = true,
+    modules  = [Karnak],
+    sitename = "Karnak",
     warnonly = true,
+    format   = Documenter.HTML(
+    size_threshold = nothing,
+    prettyurls = get(ENV, "CI", nothing) == "true",
+    assets = ["assets/karnak-docs.css"],
+    collapselevel = 3
+    ),
     pages    = [
-        "Introduction to Karnak"  =>  "index.md",
-        "Basic graphs"            =>  "basics.md",
-        "Syntax"                  =>  "syntax.md",
-        "Examples"                =>  "examples.md",
-        "Reference" => [
-            "Alphabetical function list"   =>  "reference/functionindex.md"
-            "Function reference"           =>  "reference/api.md"
-            ],
-        ]
-    )
-
-deploydocs(
-    repo = "github.com/cormullion/Karnak.jl",
-    target = "build",
-    branch = "gh-pages",
-    devbranch = "master",
-    push_preview = true,
-    forcepush = true
+    "Introduction to Karnak" => "index.md",
+    "Basic graphs"           => "basics.md",
+    "Syntax"                 => "syntax.md",
+    "Examples"               => "examples.md",
+    "Reference"              => [
+    "Alphabetical function list" => "reference/functionindex.md"
+    "Function reference"         => "reference/api.md"
+    ]
+    ],
 )
 
-
-# run locally: npm run docs:dev 
+deploydocs(
+    repo = "github.com/cormullion/Karnak.jl.git",
+    target = "build",
+    forcepush = true,
+)
