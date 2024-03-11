@@ -245,8 +245,9 @@ background("grey10")
 N = 12; H = 250; W = 550
 g = complete_bipartite_graph(N, N)
 pts = vcat(
-    between.(O + (-W/2, -H/2),  O + (-W/2, H/2),  range(0, 1, length=N)), # left set
-    between.(O + (W/2, H/2),   O + (W/2, -H/2), range(0, 1, length=N)))   # right set
+    [between(O + (-W / 2, -H / 2), O + (-W / 2, H / 2), i) for i in range(0, 1, length=N)], # left
+    [between(O + (W / 2, H / 2), O + (W / 2, -H / 2), i) for i in range(0, 1, length=N)] # right
+    )
 circle.(pts, 1, :fill)
 drawgraph(g, vertexlabels = 1:nv(g), layout = pts,
     edgestrokeweights = 0.5,

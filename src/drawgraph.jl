@@ -875,8 +875,9 @@ layout = squaregrid
 layout = shell
 
 layout = vcat(
-    between.(O + (-W/2, H), O + (W/2, H), range(0, 1, length=N)),
-    between.(O + (-W/2, -H), O + (W/2, -H), range(0, 1, length=N)))
+    [between(O + (-W / 2, -H / 2), O + (-W / 2, H / 2), i) for i in range(0, 1, length=N)], # left
+    [between(O + (W / 2, H / 2), O + (W / 2, -H / 2), i) for i in range(0, 1, length=N)] # right
+    )
 
 layout = stress
 

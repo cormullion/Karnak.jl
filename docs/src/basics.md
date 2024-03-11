@@ -250,8 +250,9 @@ W = 550
 @drawsvg begin
     background("grey10")
     pts = vcat(
-        between.(O + (-W/2, H/2), O + (W/2, H/2), range(0, 1, length=N)),
-        between.(O + (-W/2, -H/2), O + (W/2, -H/2), range(0, 1, length=N)))
+        [between(O + (-W / 2, -H / 2), O + (-W / 2, H / 2), i) for i in range(0, 1, length=N)], # left
+        [between(O + (W / 2, H / 2), O + (W / 2, -H / 2), i) for i in range(0, 1, length=N)] # right
+    )
     sethue("aquamarine")
     drawgraph(g, vertexlabels = 1:nv(g), layout = pts, edgestrokeweights=0.5)
 end 600 400

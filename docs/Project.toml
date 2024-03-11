@@ -10,4 +10,10 @@ SimpleWeightedGraphs = "47aef6b3-ad0c-573a-a1e2-d07658019622"
 
 [compat]
 Colors = "0.10, 0.11, 0.12"
+DataFrames = "1.6"
+Documenter = "1.3"
+DocumenterVitepress = "0.0.11"
+Graphs = "1.9"
 julia = "1.6"
+NetworkLayout = "0.4.6"
+SimpleWeightedGraphs = "1.4"
