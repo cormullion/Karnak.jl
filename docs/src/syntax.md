@@ -98,12 +98,15 @@ graph in layers. Remember to use the same layout algorithm.
 | edgefunction               | f(edgenumber::Int, edgesrc::Int, edgedest::Int, from::Point, to::Point)                   | function that completely specifies the appearance of every edge. If present, none of the other edge- keyword arguments are used.         |
 | vertexfunction             | f(vtx::Int, coordinates::Vector{Point})                                                   | function that completely specifies the appearance of every vertex. If present, None of the other vertex- keyword arguments will be used. |
 | edgecurvature              | Float64                                                                                   | curviness of edge arrows                                                                                                                 |
+| edgearrows                 | Boolean                                                                                   | draw destination arrows for directed graphs only                                                                                                                 |
+|                            | Vector{Boolean}                                                                           |                                                                                                                 |
+|                            | f(edgenumber, edgesrc, edgedest, from::Point, to::Point)                                  | function to draw arrows for directed graphs only                                                                                                                |
 | edgedashpatterns           | Vector{Vector}[number]                                                                    | vector of dash patterns                                                                                                                  |
 |                            | Vector{Number}                                                                            | a dash pattern                                                                                                                           |
 | edgegaps                   | Vector                                                                                    | gaps from each vertex center to arrow tip                                                                                                |
 |                            | Range                                                                                     |                                                                                                                                          |
 |                            | Real                                                                                      | gaps from every vertex center to arrow tip                                                                                               |
-|                            | f(edgenumber, edgesrc, edgedest, from::Point, to::Point)                                                                                     | gaps from every vertex center to arrow tip                                                                                               |
+|                            | f(edgenumber, edgesrc, edgedest, from::Point, to::Point)                                  | gaps from every vertex center to arrow tip                                                                                               |
 | edgelabelcolors            | Vector{Colorant}                                                                          | colors of each vertex's label text                                                                                                       |
 |                            | Colorant                                                                                  | color of all vertex labels                                                                                                               |
 | edgelabelfontfaces         | Vector{Strings}[edgenumber]                                                               | font face for each edge                                                                                                                  |
@@ -306,6 +309,7 @@ The two keyword arguments `vertexfunction` and `edgefunction` allow you to pass 
     If you define these functions, all the other vertex/edge keywords are ignored.
 
 ```
+
 vertexfunction = my_vertexfunction(vertex, coordinates)
 edgefunction = my_edgefunction(edgenumber, edgesrc, edgedest, from::Point, to::Point)
 ```
@@ -1070,3 +1074,109 @@ g = grid((5, 5))
           )
 end 600 400
 ```
+
+### Arrow control for directed graphs: `edgearrows`
+
+For directed graphs only, edges are automatically drawn with an arrowhead at the destination point of the edge, to indicate the direction.
+
+To hide the arrows for directed graphs, use `edgearrows=false`. Or you can specify an array of Booleans to control each edge's destination arrow.
+
+```@example graphsection
+gd = DiGraph()
+add_vertices!(gd, 4)
+add_edge!(gd, 1, 2)
+add_edge!(gd, 1, 3)
+add_edge!(gd, 2, 3)
+add_edge!(gd, 1, 4) # vertex 1 to vertex 4
+add_edge!(gd, 4, 1) # vertex 4 to vertex 1
+
+@drawsvg begin
+    background("grey10")
+    sethue("thistle1")
+    tiles = Tiler(600, 600, 1, 2)
+    @layer begin
+        translate(first(tiles[1]))
+        scale(0.5)
+        drawgraph(gd,
+            vertexlabels=[1, 2, 3, 4],
+            edgearrows=false,
+            edgecurvature=50,
+            )
+        end
+    @layer begin
+        translate(first(tiles[2]))
+        drawgraph(gd,
+            edgearrows=[true, false, true, false, false],
+            edgelabels=(n, s, d, f, t) -> begin
+                l = string.([true, false, true, false, false])[n]
+                label(l, slope(f, t), offset=10, midpoint(f, t))
+                end,
+            vertexlabels=[1, 2, 3, 4],
+            edgecurvature=5,
+            margin=20
+        )
+    end
+end 600 300
+```
+
+If you pass a function to `edgearrows`, the arrow will be drawn by the function, rather than by the default arrow rendering.
+
+```@example graphsection
+using Luxor, Karnak, Graphs
+
+gd = DiGraph()
+add_vertices!(gd, 4)
+add_edge!(gd, 1, 2)
+add_edge!(gd, 1, 3)
+add_edge!(gd, 2, 3)
+add_edge!(gd, 1, 4) # vertex 1 to vertex 4
+add_edge!(gd, 4, 1) # vertex 4 to vertex 1
+
+function edgearrowfunc(edgenumber, edgesrc, edgedest, from, to)
+    sethue(Luxor.Colors.HSL(360rand(), 0.8, 0.7))
+    s = slope(from, to)
+    arrow(
+        between(from, to, 0.05),
+        between(from, to, 0.95),
+        [25 * s, -25 * s],
+        startarrow=false,
+        finisharrow=true, :stroke, linewidth=5, arrowheadlength=30)
+end
+
+@drawsvg begin
+    background("grey10")
+    sethue("thistle1")
+    cells = Table([300], [300, 300])
+    @show cells
+    @layer begin
+        translate(cells[1])
+        drawgraph(gd,
+            vertexlabels=[1, 2, 3, 4],
+            edgearrows=edgearrowfunc, # named function
+        )
+    end
+    @layer begin
+        translate(cells[2])
+        drawgraph(gd,
+            vertexlabels=[1, 2, 3, 4],
+            edgearrows= (n, s, d, f, t) -> begin # anon functino
+                adjusted_from = between(f, t, 0.05)
+                adjusted_to = between(f, t, 0.95)
+                # thicker lines for destination vertices with more neighbors
+                linewidth = rescale(length(neighbors(gd, d)), 0, 3, 0.5, 5)
+                arrow(adjusted_from, adjusted_to, [10, 15], linewidth=linewidth, arrowheadlength=20)
+            end,
+        )
+    end
+end 600 300
+```
+
+If you use this function, the `edgegaps` keyword information is not used.
+
+The `edgearrows` keyword is only for directed graphs. Use `edgefunction` to draw custom edges for all types of graph.
+
+`vertexfunction` and `edgefunction` allow you to pass control over the drawing process completely to these two functions.
+
+!!! note
+
+    If you use the `edgefunction` keyword to draw edges, all the other vertex/edge keywords are ignored.

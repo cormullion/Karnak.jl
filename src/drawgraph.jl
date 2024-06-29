@@ -36,12 +36,13 @@ function _drawedgelines(from, to, edgesrc, edgedest;
     edgestrokeweights = nothing,
     edgedashpatterns = nothing,
     edgegaps = nothing,
+    edgearrows=nothing,
     edgecurvature = 0.0,
     digraph = false)
 
     # decide whether or not to draw this edge
-    edgeline = nothing
 
+    edgeline = nothing
     if edgelines isa Vector
         # only draw edges that are in the vector
         if edgenumber in edgelines
@@ -86,6 +87,7 @@ function _drawedgelines(from, to, edgesrc, edgedest;
     end
 
     # set the stroke weight
+
    currentdrawing().surfacetype == :png ? linewidth = 2 : linewidth = 1
 
    if isnothing(edgestrokeweights)
@@ -127,18 +129,17 @@ function _drawedgelines(from, to, edgesrc, edgedest;
     # or defaultshaperadius for arrows
 
     edgegap = :none
-
     if edgegaps isa Vector
         edgegap = edgegaps[mod1(edgenumber, end)]
     elseif edgegaps isa AbstractRange
         edgegap = edgegaps[mod1(edgenumber, end)]
-    elseif edgegaps isa Function 
+    elseif edgegaps isa Function
         edgegap = edgegaps(edgenumber, edgesrc, edgedest, from, to)
     elseif edgegaps isa Real
         edgegap = edgegaps
     end
 
-    # finally time to draw the edge
+    # finally time to draw this edge
     # edgeline = nothing | true | function
 
     if edgeline == false || edgeline == nothing
@@ -161,6 +162,8 @@ function _drawedgelines(from, to, edgesrc, edgedest;
             edgeline(edgenumber, edgesrc, edgedest, from, to)
         else
             d = distance(from, to)
+
+            # self-loop, digraph, or un-digraph
             if isapprox(from, to)
                 # self loop, draw arrow in circle
                 @layer begin
@@ -188,21 +191,39 @@ function _drawedgelines(from, to, edgesrc, edgedest;
                         arrowheadlength = rescale(linewidth, 1, 10, 12, 25),
                     )
                 end
+
                 # digraph
             elseif digraph == true
+                # for digraphs, allow edgearrow to specify if/how arrows are drawn
+                edgearrowsettings = :none
+                edgearrows_draw = true # default to drawing for digraphs
+                if edgearrows isa Vector
+                    edgearrows_draw = edgearrows[mod1(edgenumber, end)] > 0 ? true : false
+                elseif edgearrows isa Function
+                    edgearrowsettings = edgearrows
+                elseif edgearrows isa Bool # draw the 'to' arrow?
+                    edgearrows_draw = edgearrows
+                end
+
                 if abs(edgecurvature) > 0.0
-                    # digraph _and_ curvey edges
+                    # digraph _and_ curved edges
                     # use default shape radius to allow for arrows, unless otherwise specified
                     if edgegap == :none
                         edgegap = defaultshaperadius
                     end
                     normalizedgap = edgegap / d
+                    if edgearrowsettings isa Function
+                        @layer begin
+                            edgearrowsettings(edgenumber, edgesrc, edgedest, from, to)
+                        end
+                    else
                     arrow(between(from, to, normalizedgap),
-                        linewidth = linewidth,
                         between(from, to, 1 - normalizedgap),
+                        linewidth=linewidth,
                         [edgecurvature, edgecurvature],
                         startarrow = false,
-                        finisharrow = true, :stroke, arrowheadlength = rescale(linewidth, 1, 10, 12, 25))
+                            finisharrow=edgearrows_draw, :stroke, arrowheadlength=rescale(linewidth, 1, 10, 12, 25))
+                    end
                 else
                     # digraph, straight edges
                     # default gap is at least the radius of default shape
@@ -210,15 +231,22 @@ function _drawedgelines(from, to, edgesrc, edgedest;
                     if edgegap == :none
                         edgegap = defaultshaperadius
                     end
+
+                    if edgearrowsettings isa Function
+                        @layer begin
+                            edgearrowsettings(edgenumber, edgesrc, edgedest, from, to)
+                        end
+                    else
                     normalizedgap = edgegap / d
                     arrow(between(from, to, normalizedgap),
                         between(from, to, 1 - normalizedgap),
                         [0, 0],
                         startarrow = false,
-                        finisharrow = true, :stroke, linewidth = linewidth,
+                        finisharrow=edgearrows_draw, :stroke, linewidth=linewidth,
                         arrowheadlength = rescale(linewidth, 1, 10, 12, 25))
                 end
-                # graph
+                end
+                # un-digraph
             elseif digraph == false
                 if edgegap == :none
                     normalizedgap = 0
@@ -767,6 +795,7 @@ function drawedge(from::Point, to::Point;
     edgenumber::Integer,
     edgesrc::Integer,
     edgedest::Integer,
+    edgearrows=nothing,
     edgefunction = nothing,
     edgelabels = nothing,
     edgelines = nothing,
@@ -794,7 +823,8 @@ function drawedge(from::Point, to::Point;
             edgedashpatterns,
             edgegaps,
             digraph = is_directed(graph),
-            edgecurvature = edgecurvature)
+            edgecurvature=edgecurvature,
+            edgearrows=edgearrows)
         _drawedgelabels(from, to;
             edgenumber,
             edgesrc,
@@ -909,99 +939,104 @@ Refer to the NetworkLayout.jl documentation for more.
 All keywords:
 
 ```plain
- boundingbox                 BoundingBox                                              
- margin                      Number                                                   
- layout                      Vector{Point}                                            
-                             function from NetworkLayout.jl                           
-                             f(g::Graph)                                              
+ boundingbox                 BoundingBox
+ margin                      Number
+ layout                      Vector{Point}
+                             function from NetworkLayout.jl
+                             f(g::Graph)
  edgefunction                f(edgenumber::Int, edgesrc::Int, edgedest::Int, from::Point)
- vertexfunction              f(vtx::Int, coordinates::Vector{Point})                  
- edgecurvature               Float64                                                  
- edgedashpatterns            Vector{Vector}[number]                                   
-                             Vector{Number}                                           
- edgegaps                    Vector                                                   
-                             Range                                                    
+ vertexfunction              f(vtx::Int, coordinates::Vector{Point})
+ edgearrows                  :none
+                             Boolean - draw end arrow
+                             Vector
+                             f(edgenumber::Int, edgesrc::Int, edgedest::Int, from::Point)
+                             - function overrides edgegaps
+ edgecurvature               Float64
+ edgedashpatterns            Vector{Vector}[number]
+                             Vector{Number}
+ edgegaps                    Vector
+                             Range
                              Real
-                             f(edgenumber::Int, edgesrc::Int, edgedest::Int, from::Point)                                                     
- edgelabelcolors             Vector{Colorant}                                         
-                             Colorant                                                 
- edgelabelfontfaces          Vector{Strings}[edgenumber]                              
-                             String                                                   
-                             :none                                                    
- edgelabelfontsizes          Vector{Number}                                           
-                             Number                                                   
- edgelabelrotations          Vector{angles}                                           
-                             angle::Float64                                           
-                             f(edgenumber, edges, edgedest, from, to)                 
- edgelabels                  Vector                                                   
-                             range                                                    
-                             Dict{Int, Int}                                           
+                             f(edgenumber::Int, edgesrc::Int, edgedest::Int, from::Point)
+ edgelabelcolors             Vector{Colorant}
+                             Colorant
+ edgelabelfontfaces          Vector{Strings}[edgenumber]
+                             String
+                             :none
+ edgelabelfontsizes          Vector{Number}
+                             Number
+ edgelabelrotations          Vector{angles}
+                             angle::Float64
+                             f(edgenumber, edges, edgedest, from, to)
+ edgelabels                  Vector
+                             range
+                             Dict{Int, Int}
                              f(edgenumber, edgesrc, edgedest, from::Point, to::Point)
-                               - this function must draw the required text 
-                             :none                                                    
- edgelines                   Vector{Int}                                              
-                             range                                                    
-                             Int                                                      
-                             f(edgenumber, edgesrc, edgedest, from::Point, to::Point) 
- edgelist                    Graphs.EdgeIterator                                      
- edgestrokecolors            Vector{Colorant}[edge::Int]                              
-                             Colorant                                                 
-                             f(edgenumber, edgesrc, edgedest, from::Point, to::Point) 
- edgestrokeweights           Vector{Number}[vtx]                                      
-                             range                                                    
-                             Real                                                     
-                             f(edgenumber, edgesrc, edgedest, from::Point, to::Point) 
- vertexfillcolors            Vector{Colorant}                                         
-                             Colorant                                                 
-                             :none                                                    
-                             f(vtx::Int)                                              
- vertexlabelfontfaces        Vector{Strings}                                          
-                             String                                                   
- vertexlabelfontsizes        Vector                                                   
-                             range                                                    
-                             Real                                                     
+                               - this function must draw the required text
+                             :none
+ edgelines                   Vector{Int}
+                             range
+                             Int
+                             f(edgenumber, edgesrc, edgedest, from::Point, to::Point)
+ edgelist                    Graphs.EdgeIterator
+ edgestrokecolors            Vector{Colorant}[edge::Int]
+                             Colorant
+                             f(edgenumber, edgesrc, edgedest, from::Point, to::Point)
+ edgestrokeweights           Vector{Number}[vtx]
+                             range
+                             Real
+                             f(edgenumber, edgesrc, edgedest, from::Point, to::Point)
+ vertexfillcolors            Vector{Colorant}
+                             Colorant
+                             :none
+                             f(vtx::Int)
+ vertexlabelfontfaces        Vector{Strings}
+                             String
+ vertexlabelfontsizes        Vector
+                             range
+                             Real
                              :none
                              f(vtx::Int, coord::Point[])
                               - function must return a numeric value for fontsize
- vertexlabeloffsetangles     Vector                                                   
-                             Range                                                    
-                             Real                                                     
- vertexlabeloffsetdistances  Vector                                                   
-                             range                                                    
-                             Real                                                     
- vertexlabelrotations        Vector                                                   
-                             range                                                    
-                             Real                                                     
-                             :none                                                    
- vertexlabels                Vector{String}                                           
-                             String                                                   
-                             range[vtx::Int]                                          
-                             :none                                                    
+ vertexlabeloffsetangles     Vector
+                             Range
+                             Real
+ vertexlabeloffsetdistances  Vector
+                             range
+                             Real
+ vertexlabelrotations        Vector
+                             range
+                             Real
+                             :none
+ vertexlabels                Vector{String}
+                             String
+                             range[vtx::Int]
+                             :none
                              f(vtx::Int)
-                             - this function must return a string                                              
- vertexlabeltextcolors       Vector{Colorant}                                         
+                             - this function must return a string
+ vertexlabeltextcolors       Vector{Colorant}
                              Colorant
-                             f(vtx::Int)                                                 
-                             :none                                                    
- vertexshaperotations        f(vtx::Int)                                              
-                             angle::Float64                                           
- vertexshapes                Vector of :circle :square :none                          
-                             range[vtx]                                               
-                             :circle :square :none                                    
-                             f(vtx::Int)                                              
- vertexshapesizes            Vector{Real}                                             
-                             range                                                    
-                             Real                                                     
-                             :none                                                    
-                             f(vtx::Int)                                              
- vertexstrokecolors          Vector                                                   
-                             Colorant                                                 
-                             :none                                                    
-                             f(vtx::Int)                                              
- vertexstrokeweights         Vector                                                   
-                             range                                                    
-                             :none                                                    
-                             f(vtx::Int)                                              
+                             f(vtx::Int)
+                             :none
+ vertexshaperotations        f(vtx::Int)
+                             angle::Float64
+ vertexshapes                Vector of :circle :square :none
+                             range[vtx]
+                             :circle :square :none
+                             f(vtx::Int)
+ vertexshapesizes            Vector{Real}
+                             range
+                             Real
+                             :none
+                             f(vtx::Int)
+ vertexstrokecolors          Vector
+                             Colorant
+                             :none
+                             f(vtx::Int)
+ vertexstrokeweights         Vector
+                             range
+                             :none
+                             f(vtx::Int)
 ```
 """
 function drawgraph(g::AbstractGraph;
@@ -1026,6 +1061,7 @@ function drawgraph(g::AbstractGraph;
     edgefunction = nothing,
     edgelabels = nothing,
     edgelines = nothing,
+    edgearrows=nothing,
     edgecurvature = 0.0,
     edgestrokecolors = nothing,
     edgelabelcolors = nothing,
@@ -1076,6 +1112,7 @@ function drawgraph(g::AbstractGraph;
                 edgelines,
                 edgedashpatterns,
                 edgegaps,
+                edgearrows,
                 edgecurvature,
                 edgestrokecolors,
                 edgelabelcolors,

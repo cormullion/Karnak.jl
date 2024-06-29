@@ -4,8 +4,8 @@
 
 ### Added
 
-- edgegap can be function
-- edgearrows added
+- `edgegap` can also be a function
+- `edgearrows` keyword added
 
 ## Changed
 

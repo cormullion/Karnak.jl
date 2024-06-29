@@ -7,6 +7,10 @@ on:
     branches:
       - master
     tags: '*'
+# needed for julia-actions/cache to delete old caches
+permissions:
+  actions: write
+  contents: read
 jobs:
   test:
     name: Julia ${{ matrix.julia-version }} - ${{ matrix.os }} - ${{ matrix.julia-arch }}
@@ -15,9 +19,9 @@ jobs:
       fail-fast: false
       matrix:
         julia-version:
-          - "1.6"
-          - "1"
-          - "nightly"
+          - 'lts' # long-term support release
+          - '1'   # latest stable 1.x release
+          - 'pre' # latest stable prerelease
         os:
           - ubuntu-latest
           - macos-latest
@@ -30,7 +34,7 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
-      - uses: julia-actions/setup-julia@v1
+      - uses: julia-actions/setup-julia@v2
         with:
           version: ${{ matrix.julia-version }}
           arch: ${{ matrix.julia-arch }}
