@@ -1,8 +1,6 @@
 # Introduction to Karnak
 
-```
 ![karnak splash image](assets/figures/karnak-social-media-preview.png)
-```
 
 Karnak.jl is a package for drawing graphs and networks. It's built on top of [Luxor.jl](https://github.com/JuliaGraphics/Luxor.jl).
 

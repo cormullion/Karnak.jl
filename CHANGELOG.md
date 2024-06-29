@@ -5,6 +5,7 @@
 ### Added
 
 - edgegap can be function
+- edgearrows added
 
 ## Changed
 

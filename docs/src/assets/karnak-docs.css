@@ -1,6 +1,57 @@
 /* change Bulma Dark styles  */
-
 /* disclaimer - I hate CSS */
+
+@font-face {
+	font-family: JuliaMono-Light;
+	src:
+		local('JuliaMono-Light'),
+		url("https://github.com/cormullion/juliamono/raw/master/webfonts/JuliaMono-Light.woff2");
+}
+
+pre,
+code {
+	font-family: JuliaMono-Light !important;
+	font-feature-settings: "calt" 1;
+}
+
+html.theme--documenter-dark p>a:after {
+	padding-left: 0.2rem;
+	font-family: "JuliaMono";
+	content: "⮻";
+	color: var(--signage);
+	background-color: inherit;
+	font-size: 120%;
+}
+
+html.theme--documenter-light p>a:after {
+	padding-left: 0.2rem;
+	font-family: "JuliaMono";
+	content: "⮻";
+	background-color: inherit;
+	font-size: 120%;
+}
+
+.schemename {
+	font-family: "JuliaMono-Light";
+}
+
+.swatch {}
+
+.category {
+	font-size: 0.8em;
+}
+
+html.theme--documenter-dark p>code {
+	color: #eff !important;
+}
+
+html.theme--documenter-dark li>code {
+	color: #eff !important;
+}
+
+html.theme--documenter-dark a>code {
+	color: #eff !important;
+}
 
 :root {
 	--signage: hsl(193, 46%, 60%);
@@ -21,8 +72,8 @@ html.theme--documenter-dark a {
 	color: var(--signage);
 }
 
-html.theme--documenter-dark p > a:after {
-	padding-left:0.2rem;
+html.theme--documenter-dark p>a:after {
+	padding-left: 0.2rem;
 	font-family: "JuliaMono";
 	content: "⮻";
 	color: var(--signage);
@@ -30,8 +81,8 @@ html.theme--documenter-dark p > a:after {
 	font-size: 120%;
 }
 
-html.theme--documenter-light p > a:after {
-	padding-left:0.2rem;
+html.theme--documenter-light p>a:after {
+	padding-left: 0.2rem;
 	font-family: "JuliaMono";
 	content: "⮻";
 	background-color: inherit;
@@ -39,32 +90,32 @@ html.theme--documenter-light p > a:after {
 }
 
 html.theme--documenter-dark .has-text-left,
-html.theme--documenter-dark body, 
-html.theme--documenter-dark #documenter .docs-sidebar, 
+html.theme--documenter-dark body,
+html.theme--documenter-dark #documenter .docs-sidebar,
 html.theme--documenter-dark .documenter-example-output,
 html.theme--documenter-dark #documenter .docs-sidebar ul.docs-menu .tocitem,
 html.theme--documenter-dark #documenter .docs-sidebar ul.docs-menu .tocitem:hover,
 html.theme--documenter-dark #documenter .docs-sidebar ul.docs-menu li.is-active .tocitem,
-html.theme--documenter-dark #documenter .docs-sidebar ul.docs-menu li.is-active .tocitem:hover, 
+html.theme--documenter-dark #documenter .docs-sidebar ul.docs-menu li.is-active .tocitem:hover,
 html.theme--documenter-dark #documenter .docs-main header.docs-navbar {
 	background-color: var(--verydark);
 	border: 0.5px solid hsla(237, 20%, 10%, 0.3) !important;
 }
 
-html.theme--documenter-dark .modal-card-body ,
-html.theme--documenter-dark .modal-card-head ,
-html.theme--documenter-dark .modal-card-foot ,
-html.theme--documenter-dark #documenter .docs-sidebar ul.docs-menu ,
+html.theme--documenter-dark .modal-card-body,
+html.theme--documenter-dark .modal-card-head,
+html.theme--documenter-dark .modal-card-foot,
+html.theme--documenter-dark #documenter .docs-sidebar ul.docs-menu,
 html.theme--documenter-dark #documenter .docs-sidebar ul.docs-menu li.is-active {
 	background-color: var(--verydark);
 }
 
-html.theme--documenter-dark .docstring ,
+html.theme--documenter-dark .docstring,
 html.theme--documenter-dark .docstring>header {
 	background-color: var(--lessdark);
 }
 
-html.theme--documenter-dark .content pre, 
+html.theme--documenter-dark .content pre,
 html.theme--documenter-dark pre {
 	background-color: var(--lessdark);
 	border: 0.5px solid hsla(237, 20%, 10%, 0.3) !important;
@@ -78,37 +129,32 @@ html.theme--documenter-dark .modal-card-head {
 	border: none;
 }
 
-
 .schemename {
-    font-family: "JuliaMono";
+	font-family: "JuliaMono";
 }
 
-.swatch {
-
-}
+.swatch {}
 
 .category {
 	font-family: "JuliaMono";
-    font-size: 0.8em;
+	font-size: 0.8em;
 }
 
-html.theme--documenter-dark p > code {
-	  	color: #eff !important;
-}
-
-
-html.theme--documenter-dark li > code {
+html.theme--documenter-dark p>code {
 	color: #eff !important;
 }
 
-
-html.theme--documenter-dark a > code {
+html.theme--documenter-dark li>code {
 	color: #eff !important;
 }
 
-html.theme--documenter-dark p > a {
-	  	color: #eff !important;
-	}
+html.theme--documenter-dark a>code {
+	color: #eff !important;
+}
+
+html.theme--documenter-dark p>a {
+	color: #eff !important;
+}
 
 html.theme--documenter-dark .select select:focus,
 html.theme--documenter-dark .textarea:focus,
