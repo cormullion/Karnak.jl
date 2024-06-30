@@ -304,23 +304,42 @@ main()
 
 The two keyword arguments `vertexfunction` and `edgefunction` allow you to pass control over the drawing process completely to these two functions.
 
-!!! note
+!!! warning
 
-    If you define these functions, all the other vertex/edge keywords are ignored.
+    If you specify these keywords, all the other vertex/edge keywords are ignored.
 
 ```
-
 vertexfunction = my_vertexfunction(vertex, coordinates)
 edgefunction = my_edgefunction(edgenumber, edgesrc, edgedest, from::Point, to::Point)
 ```
 
-These allow you to place graphics at `coordinates[vertex]`, and to draw edges from `from` to `to`, using any available tools for drawing.
+These allow you to draw graphics for the vertex `vertex` at the point `coordinates[vertex]`, and to draw graphics for each edge `edgenumber` joining from `from` to `to`.
 
-In the following picture, the vertex positions were passed to a function that placed clipped PNG images on the drawing (using `readpng()` and `placeimage()`), and the edges were drawn using sine curves. Refer to the Luxor.jl documentation for more about putting colored things on drawings.
+The arguments passed to a `vertexfunction` keyword are the current vertex number and an array of all vertex coordinates.
+
+```@example graphsection
+g = wheel_graph(30)
+@drawsvg begin
+    background("grey10")
+    sethue("gold")
+    drawgraph(g,
+        edgelines = [],
+        vertexfunction=(v, c) -> begin
+            @layer begin
+                sethue(HSB(rescale(v, 1, nv(g), 0, 360), 0.7, 0.8))
+                translate(c[v])
+                circle(O, 5, :fill)
+            end
+        end,
+    )
+end 800 200
+```
+
+The graphics can be any arbitrary Luxor graphics functions. In the following picture, the vertex positions were passed to a function that placed clipped PNG images on the drawing (using `readpng()` and `placeimage()`), and the edges were drawn using sine curves. Refer to the Luxor.jl documentation for more about putting colored things on drawings.
 
 ![image vertices](assets/figures/karnakmap.png)
 
-It's also possible, for example, to draw a graph at a vertex point (ie recursive graph drawing) if you use `vertexfunction`.
+It's also possible, for example, to draw another graph at each vertex point (ie recursive graph drawing) if you use `vertexfunction`.
 
 ```@example graphsection
 g = complete_graph(5)
@@ -349,6 +368,29 @@ end
     sethue("gold")
     rgraph(g)
 end 800 600
+```
+
+The arguments passed to a `edgefunction` keyword are the edge number, source vertex number, destination vertex number, `from` coordinate, and `to` coordinate. 
+
+```@example graphsection
+fstroke(x, θ) = begin
+    0.5 + 20sin(x * π)
+end
+g = complete_graph(4)
+@drawsvg begin
+    background("grey10")
+    sethue("gold")
+    border = box(BoundingBox())
+    drawgraph(g,
+        vertexshapes=:none,
+        edgefunction=(n, s, d, f, t) -> begin
+            sethue(HSL(60n, 0.9, 0.6))
+            poly(offsetpoly(
+                    polysample([f, t], include_first=true, closed=false, 30),
+                    fstroke), :fill)
+        end,
+    )
+end 800 400
 ```
 
 ## Functions as keyword arguments
@@ -747,7 +789,7 @@ drawgraph(g,
 end 600 300
 ```
 
-For more interesting arrows for edges, you can use arrows, and you can also define functions to create all kinds of graphical deatil:
+For more interesting edges, you can use Luxor arrows, and you can also define functions to create all kinds of graphical detail:
 
 ```@example graphsection
 gd = DiGraph() 
@@ -1159,7 +1201,7 @@ end
         translate(cells[2])
         drawgraph(gd,
             vertexlabels=[1, 2, 3, 4],
-            edgearrows= (n, s, d, f, t) -> begin # anon functino
+            edgearrows= (n, s, d, f, t) -> begin # anon function
                 adjusted_from = between(f, t, 0.05)
                 adjusted_to = between(f, t, 0.95)
                 # thicker lines for destination vertices with more neighbors
@@ -1179,4 +1221,4 @@ The `edgearrows` keyword is only for directed graphs. Use `edgefunction` to draw
 
 !!! note
 
-    If you use the `edgefunction` keyword to draw edges, all the other vertex/edge keywords are ignored.
+    If you use the `edgefunction` keyword to draw edges, all the other vertex/edge keywords including `edgearrows` are ignored.

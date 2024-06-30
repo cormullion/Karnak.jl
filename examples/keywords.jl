@@ -1,9 +1,10 @@
-using Karnak, Graphs, NetworkLayout
+using Karnak, Graphs
 
 # draw tree diagram of `drawgraph()`'s keywords
 
 l = [
 "edge",
+"edgearrows",
 "edgecurvature",
 "edgedashpatterns",
 "edgefunction",
@@ -107,4 +108,5 @@ end
                 text("[$(labels[v])]", c[v], angle=π/2, halign=:center)
             end
         end)
-end 600 600 "/tmp/drawgraphkeywords.svg"
+@show pwd()
+end 600 600 "docs/src/assets/figures/drawgraphkeywords.svg"

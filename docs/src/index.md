@@ -25,7 +25,6 @@ Karnak also uses [Graphs.jl](https://github.com/JuliaGraphs/Graphs.jl) for graph
 ```@example
 using Karnak
 using Graphs
-using NetworkLayout
 g = barabasi_albert(100, 1)
 @drawsvg begin
     background("black")

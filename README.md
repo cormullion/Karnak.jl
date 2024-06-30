@@ -14,7 +14,6 @@ Karnak also uses [Graphs.jl](https://github.com/JuliaGraphs/Graphs.jl) for graph
 ```julia
 using Karnak
 using Graphs
-using NetworkLayout
 using Colors
 g = barabasi_albert(100, 1)
 @drawsvg begin
