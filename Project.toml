@@ -13,7 +13,7 @@ Reexport = "189a3867-3050-52da-a836-e630ba90ab69"
 SimpleWeightedGraphs = "47aef6b3-ad0c-573a-a1e2-d07658019622"
 
 [compat]
-Colors = "0.10, 0.11, 0.12"
+Colors = "0.10, 0.11, 0.12, 0.13"
 Graphs = "1.9, 1.10"
 InteractiveUtils = "1.6"
 Luxor = "3, 4"
