@@ -40,3 +40,8 @@ end
     functions are from Luxor. See the [documentation of
     Luxor.jl](http://juliagraphics.github.io/Luxor.jl/stable/)
     for details.
+
+```@example
+using Dates # hide
+println("Documentation built $(Dates.now()) with Julia $(VERSION) on $(Sys.KERNEL)") # hide
+```
