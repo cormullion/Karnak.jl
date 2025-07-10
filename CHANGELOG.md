@@ -1,6 +1,20 @@
 # Changelog
 
-## [v1.1.0] current master
+## [v1.2.0] - 2025-07-13
+
+### Added
+
+## Changed
+
+- dependencies
+
+### Removed
+
+### Deprecated
+
+###################################################################
+
+## [v1.1.0] - 2024-06-30
 
 ### Added
 
