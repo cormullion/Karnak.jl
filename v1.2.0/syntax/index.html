@@ -1,0 +1,777 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/><title>Syntax · Karnak</title><meta name="title" content="Syntax · Karnak"/><meta property="og:title" content="Syntax · Karnak"/><meta property="twitter:title" content="Syntax · Karnak"/><meta name="description" content="Documentation for Karnak."/><meta property="og:description" content="Documentation for Karnak."/><meta property="twitter:description" content="Documentation for Karnak."/><script data-outdated-warner src="../assets/warner.js"></script><link href="https://cdnjs.cloudflare.com/ajax/libs/lato-font/3.0.0/css/lato-font.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/juliamono/0.050/juliamono.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/fontawesome.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/solid.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/brands.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.8/katex.min.css" rel="stylesheet" type="text/css"/><script>documenterBaseURL=".."</script><script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js" data-main="../assets/documenter.js"></script><script src="../search_index.js"></script><script src="../siteinfo.js"></script><script src="../../versions.js"></script><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../assets/themes/catppuccin-mocha.css" data-theme-name="catppuccin-mocha"/><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../assets/themes/catppuccin-macchiato.css" data-theme-name="catppuccin-macchiato"/><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../assets/themes/catppuccin-frappe.css" data-theme-name="catppuccin-frappe"/><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../assets/themes/catppuccin-latte.css" data-theme-name="catppuccin-latte"/><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../assets/themes/documenter-dark.css" data-theme-name="documenter-dark" data-theme-primary-dark/><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../assets/themes/documenter-light.css" data-theme-name="documenter-light" data-theme-primary/><script src="../assets/themeswap.js"></script><link href="../assets/karnak-docs.css" rel="stylesheet" type="text/css"/></head><body><div id="documenter"><nav class="docs-sidebar"><a class="docs-logo" href="../"><img src="../assets/logo.svg" alt="Karnak logo"/></a><div class="docs-package-name"><span class="docs-autofit"><a href="../">Karnak</a></span></div><button class="docs-search-query input is-rounded is-small is-clickable my-2 mx-auto py-1 px-2" id="documenter-search-query">Search docs (Ctrl + /)</button><ul class="docs-menu"><li><a class="tocitem" href="../">Introduction to Karnak</a></li><li><a class="tocitem" href="../basics/">Basic graphs</a></li><li class="is-active"><a class="tocitem" href>Syntax</a><ul class="internal"><li><a class="tocitem" href="#Overview"><span>Overview</span></a></li><li><a class="tocitem" href="#Summary-of-keywords"><span>Summary of keywords</span></a></li><li><a class="tocitem" href="#The-BoundingBox"><span>The BoundingBox</span></a></li><li><a class="tocitem" href="#Layout-algorithms"><span>Layout algorithms</span></a></li><li><a class="tocitem" href="#The-vertexfunction-and-edgefunction-arguments"><span>The <code>vertexfunction</code> and <code>edgefunction</code> arguments</span></a></li><li><a class="tocitem" href="#Functions-as-keyword-arguments"><span>Functions as keyword arguments</span></a></li><li><a class="tocitem" href="#Vertex-labels-and-shapes"><span>Vertex labels and shapes</span></a></li><li><a class="tocitem" href="#Edge-options"><span>Edge options</span></a></li></ul></li><li><a class="tocitem" href="../examples/">Examples</a></li><li><span class="tocitem">Reference</span><ul><li><a class="tocitem" href="../reference/functionindex/">Alphabetical function list</a></li><li><a class="tocitem" href="../reference/api/">Function reference</a></li></ul></li></ul><div class="docs-version-selector field has-addons"><div class="control"><span class="docs-label button is-static is-size-7">Version</span></div><div class="docs-selector control is-expanded"><div class="select is-fullwidth is-size-7"><select id="documenter-version-selector"></select></div></div></div></nav><div class="docs-main"><header class="docs-navbar"><a class="docs-sidebar-button docs-navbar-link fa-solid fa-bars is-hidden-desktop" id="documenter-sidebar-button" href="#"></a><nav class="breadcrumb"><ul class="is-hidden-mobile"><li class="is-active"><a href>Syntax</a></li></ul><ul class="is-hidden-tablet"><li class="is-active"><a href>Syntax</a></li></ul></nav><div class="docs-right"><a class="docs-navbar-link" href="https://github.com/cormullion/Karnak.jl" title="View the repository on GitHub"><span class="docs-icon fa-brands"></span><span class="docs-label is-hidden-touch">GitHub</span></a><a class="docs-navbar-link" href="https://github.com/cormullion/Karnak.jl/blob/master/docs/src/syntax.md" title="Edit source on GitHub"><span class="docs-icon fa-solid"></span></a><a class="docs-settings-button docs-navbar-link fa-solid fa-gear" id="documenter-settings-button" href="#" title="Settings"></a><a class="docs-article-toggle-button fa-solid fa-chevron-up" id="documenter-article-toggle-button" href="javascript:;" title="Collapse all docstrings"></a></div></header><article class="content" id="documenter-page"><h1 id="Syntax"><a class="docs-heading-anchor" href="#Syntax">Syntax</a><a id="Syntax-1"></a><a class="docs-heading-anchor-permalink" href="#Syntax" title="Permalink"></a></h1><h2 id="Overview"><a class="docs-heading-anchor" href="#Overview">Overview</a><a id="Overview-1"></a><a class="docs-heading-anchor-permalink" href="#Overview" title="Permalink"></a></h2><p>Karnak&#39;s function for drawing graphs is <code>drawgraph()</code>. This takes a single argument, a <code>Graph</code>, and tries to place representative graphics on the current Luxor drawing.</p><p>The default display for graphs is:</p><ul><li><p>current Luxor origin, scale and rotation</p></li><li><p>current Luxor color for edges</p></li><li><p>circles for all vertex shapes</p></li><li><p>no vertex labels</p></li><li><p>all edges drawn</p></li></ul><pre><code class="language-julia hljs">@drawsvg begin
+    background(&quot;grey10&quot;)
+    sethue(&quot;darkcyan&quot;)
+    g = complete_graph(10)
+    drawgraph(g)
+end 600 300</code></pre><img src="274e1dde.svg" alt="Example block output"/><p>To control the appearance of the graph, you supply values to the various keyword arguments. Apart from the general keywords <code>BoundingBox</code>, <code>layout</code>, and <code>margin</code>, the keywords can be grouped into two categories:</p><p><img src="../assets/figures/drawgraphkeywords.svg" alt="two groups of keyword"/></p><p>Most of these keyword arguments accept vectors, ranges, and scalar values, and some accept functions as well.</p><p>Here&#39;s a contrived (and consequently hideously ugly) example of the type of syntax available:</p><pre><code class="language-julia hljs">@drawsvg begin
+background(&quot;grey10&quot;)
+sethue(&quot;purple&quot;)
+g = smallgraph(:karate)
+drawgraph(g, layout=stress,
+    vertexshapes = [:square, :circle],
+    vertexfillcolors = (v) -&gt; v ∈ (1, 3, 6) ? colorant&quot;red&quot; : colorant&quot;grey40&quot;,
+    vertexstrokecolors = colorant&quot;orange&quot;,
+    vertexstrokeweights = range(0.5, 4, length=nv(g)),
+    vertexshapesizes = 2 .* [Graphs.outdegree(g, v) for v in Graphs.vertices(g)],
+    vertexlabelfontsizes = 2 .* [Graphs.outdegree(g, v) for v in Graphs.vertices(g)],
+    vertexlabels = 1:nv(g),
+    vertexlabelrotations = π/8,
+    vertexlabeltextcolors = distinguishable_colors(10)
+)
+end 600 300</code></pre><img src="b67af95c.svg" alt="Example block output"/><p>Here, the <strong>outdegree</strong> for each vertex (the number of edges leaving it) is used to control the size of the vertices and the font sizes too. <code>vertexshapes</code> flip-flops between squares and circles for each vertex shape, but the size of the shape is determined by a <code>vertexshapesizes</code> function, which receives a Vector of sizes, the outdegree values for each vertex. The font sizes of the labels are also set this way. A <code>vertexfillcolors</code> function lets you determine the shape&#39;s fill color for specific vertices, whereas the stroke color is always orange, with stroke weights gradually increasing. The colors of the labels are set by the <code>Colors.distinguishable_colors()</code> function passed to <code>vertexlabeltextcolors</code>. And all the labels are rotated, for no particularly good reason.</p><p>Usually, if a vector runs out before the vertices and edges have been drawn, some <code>mod1</code> magic means the values repeat from the beginning again.</p><p>Use <code>drawgraph()</code> more than once, if needed, to build up the graph in layers. Remember to use the same layout algorithm.</p><h2 id="Summary-of-keywords"><a class="docs-heading-anchor" href="#Summary-of-keywords">Summary of keywords</a><a id="Summary-of-keywords-1"></a><a class="docs-heading-anchor-permalink" href="#Summary-of-keywords" title="Permalink"></a></h2><table><tr><th style="text-align: right"></th><th style="text-align: left"></th><th style="text-align: left"></th></tr><tr><td style="text-align: right">boundingbox</td><td style="text-align: left">BoundingBox</td><td style="text-align: left">drawing will fit inside this bounding box</td></tr><tr><td style="text-align: right">margin</td><td style="text-align: left">Number</td><td style="text-align: left">margin in points/pixels</td></tr><tr><td style="text-align: right">layout</td><td style="text-align: left">Vector{Point}</td><td style="text-align: left">list of coordinates of each vertex</td></tr><tr><td style="text-align: right"></td><td style="text-align: left">function from NetworkLayout.jl</td><td style="text-align: left">squaregrid, shell, stress, etc</td></tr><tr><td style="text-align: right"></td><td style="text-align: left">f(g::Graph)</td><td style="text-align: left">(g) -&gt; spectral(adjacency_matrix(g), dim=2)</td></tr><tr><td style="text-align: right">edgefunction</td><td style="text-align: left">f(edgenumber::Int, edgesrc::Int, edgedest::Int, from::Point, to::Point)</td><td style="text-align: left">function that completely specifies the appearance of every edge. If present, none of the other edge- keyword arguments are used.</td></tr><tr><td style="text-align: right">vertexfunction</td><td style="text-align: left">f(vtx::Int, coordinates::Vector{Point})</td><td style="text-align: left">function that completely specifies the appearance of every vertex. If present, None of the other vertex- keyword arguments will be used.</td></tr><tr><td style="text-align: right">edgecurvature</td><td style="text-align: left">Float64</td><td style="text-align: left">curviness of edge arrows</td></tr><tr><td style="text-align: right">edgearrows</td><td style="text-align: left">Boolean</td><td style="text-align: left">draw destination arrows for directed graphs only</td></tr><tr><td style="text-align: right"></td><td style="text-align: left">Vector{Boolean}</td><td style="text-align: left"></td></tr><tr><td style="text-align: right"></td><td style="text-align: left">f(edgenumber, edgesrc, edgedest, from::Point, to::Point)</td><td style="text-align: left">function to draw arrows for directed graphs only</td></tr><tr><td style="text-align: right">edgedashpatterns</td><td style="text-align: left">Vector{Vector}[number]</td><td style="text-align: left">vector of dash patterns</td></tr><tr><td style="text-align: right"></td><td style="text-align: left">Vector{Number}</td><td style="text-align: left">a dash pattern</td></tr><tr><td style="text-align: right">edgegaps</td><td style="text-align: left">Vector</td><td style="text-align: left">gaps from each vertex center to arrow tip</td></tr><tr><td style="text-align: right"></td><td style="text-align: left">Range</td><td style="text-align: left"></td></tr><tr><td style="text-align: right"></td><td style="text-align: left">Real</td><td style="text-align: left">gaps from every vertex center to arrow tip</td></tr><tr><td style="text-align: right"></td><td style="text-align: left">f(edgenumber, edgesrc, edgedest, from::Point, to::Point)</td><td style="text-align: left">gaps from every vertex center to arrow tip</td></tr><tr><td style="text-align: right">edgelabelcolors</td><td style="text-align: left">Vector{Colorant}</td><td style="text-align: left">colors of each vertex&#39;s label text</td></tr><tr><td style="text-align: right"></td><td style="text-align: left">Colorant</td><td style="text-align: left">color of all vertex labels</td></tr><tr><td style="text-align: right">edgelabelfontfaces</td><td style="text-align: left">Vector{Strings}[edgenumber]</td><td style="text-align: left">font face for each edge</td></tr><tr><td style="text-align: right"></td><td style="text-align: left">String</td><td style="text-align: left">font face for every edge</td></tr><tr><td style="text-align: right"></td><td style="text-align: left">:none</td><td style="text-align: left"></td></tr><tr><td style="text-align: right">edgelabelfontsizes</td><td style="text-align: left">Vector{Number}</td><td style="text-align: left">the font size of each edge label</td></tr><tr><td style="text-align: right"></td><td style="text-align: left">Number</td><td style="text-align: left">the font size of every edge label</td></tr><tr><td style="text-align: right">edgelabelrotations</td><td style="text-align: left">Vector{angles}</td><td style="text-align: left">rotation of each label</td></tr><tr><td style="text-align: right"></td><td style="text-align: left">angle::Float64</td><td style="text-align: left">rotation of every label</td></tr><tr><td style="text-align: right"></td><td style="text-align: left">f(edgenumber, edges, edgedest, from, to)</td><td style="text-align: left">function returns angle for this edge</td></tr><tr><td style="text-align: right">edgelabels</td><td style="text-align: left">Vector</td><td style="text-align: left"></td></tr><tr><td style="text-align: right"></td><td style="text-align: left">range</td><td style="text-align: left"></td></tr><tr><td style="text-align: right"></td><td style="text-align: left">Dict{Int, Int}</td><td style="text-align: left">(src, dst) =&gt; &quot;labeltext&quot;</td></tr><tr><td style="text-align: right"></td><td style="text-align: left">f(edgenumber, edgesrc, edgedest, from::Point, to::Point)</td><td style="text-align: left"></td></tr><tr><td style="text-align: right"></td><td style="text-align: left">:none</td><td style="text-align: left"></td></tr><tr><td style="text-align: right">edgelines</td><td style="text-align: left">Vector{Int}</td><td style="text-align: left">numbers of edges to be drawn</td></tr><tr><td style="text-align: right"></td><td style="text-align: left">range</td><td style="text-align: left"></td></tr><tr><td style="text-align: right"></td><td style="text-align: left">Int</td><td style="text-align: left"></td></tr><tr><td style="text-align: right"></td><td style="text-align: left">f(edgenumber, edgesrc, edgedest, from::Point, to::Point)</td><td style="text-align: left"></td></tr><tr><td style="text-align: right">edgelist</td><td style="text-align: left">Graphs.EdgeIterator</td><td style="text-align: left">the edges to be drawn - takes prioity over edgelines</td></tr><tr><td style="text-align: right">edgestrokecolors</td><td style="text-align: left">Vector{Colorant}[edge::Int]</td><td style="text-align: left">colors for edges</td></tr><tr><td style="text-align: right"></td><td style="text-align: left">Colorant</td><td style="text-align: left">color for every edge</td></tr><tr><td style="text-align: right"></td><td style="text-align: left">f(edgenumber, edgesrc, edgedest, from::Point, to::Point)</td><td style="text-align: left">function to set color for this edge</td></tr><tr><td style="text-align: right">edgestrokeweights</td><td style="text-align: left">Vector{Number}[vtx]</td><td style="text-align: left"></td></tr><tr><td style="text-align: right"></td><td style="text-align: left">range</td><td style="text-align: left"></td></tr><tr><td style="text-align: right"></td><td style="text-align: left">Real</td><td style="text-align: left"></td></tr><tr><td style="text-align: right"></td><td style="text-align: left">f(edgenumber, edgesrc, edgedest, from::Point, to::Point)</td><td style="text-align: left">function that returns a value for line width</td></tr><tr><td style="text-align: right">vertexfillcolors</td><td style="text-align: left">Vector{Colorant}</td><td style="text-align: left"></td></tr><tr><td style="text-align: right"></td><td style="text-align: left">Colorant</td><td style="text-align: left"></td></tr><tr><td style="text-align: right"></td><td style="text-align: left">:none</td><td style="text-align: left"></td></tr><tr><td style="text-align: right"></td><td style="text-align: left">f(vtx::Int)</td><td style="text-align: left"></td></tr><tr><td style="text-align: right">vertexlabelfontfaces</td><td style="text-align: left">Vector{Strings}</td><td style="text-align: left">font face for each vertex</td></tr><tr><td style="text-align: right"></td><td style="text-align: left">String</td><td style="text-align: left">font face for every vertex</td></tr><tr><td style="text-align: right">vertexlabelfontsizes</td><td style="text-align: left">Vector</td><td style="text-align: left"></td></tr><tr><td style="text-align: right"></td><td style="text-align: left">range</td><td style="text-align: left"></td></tr><tr><td style="text-align: right"></td><td style="text-align: left">Real</td><td style="text-align: left"></td></tr><tr><td style="text-align: right"></td><td style="text-align: left">:none</td><td style="text-align: left"></td></tr><tr><td style="text-align: right"></td><td style="text-align: left">f(vtx::Int, coords::Point[])</td><td style="text-align: left">function returns the fontsize for this label</td></tr><tr><td style="text-align: right">vertexlabeloffsetangles</td><td style="text-align: left">Vector</td><td style="text-align: left"></td></tr><tr><td style="text-align: right"></td><td style="text-align: left">Range</td><td style="text-align: left"></td></tr><tr><td style="text-align: right"></td><td style="text-align: left">Real</td><td style="text-align: left"></td></tr><tr><td style="text-align: right">vertexlabeloffsetdistances</td><td style="text-align: left">Vector</td><td style="text-align: left"></td></tr><tr><td style="text-align: right"></td><td style="text-align: left">range</td><td style="text-align: left"></td></tr><tr><td style="text-align: right"></td><td style="text-align: left">Real</td><td style="text-align: left"></td></tr><tr><td style="text-align: right">vertexlabelrotations</td><td style="text-align: left">Vector</td><td style="text-align: left"></td></tr><tr><td style="text-align: right"></td><td style="text-align: left">range</td><td style="text-align: left"></td></tr><tr><td style="text-align: right"></td><td style="text-align: left">Real</td><td style="text-align: left"></td></tr><tr><td style="text-align: right"></td><td style="text-align: left">:none</td><td style="text-align: left"></td></tr><tr><td style="text-align: right">vertexlabels</td><td style="text-align: left">Vector{String}</td><td style="text-align: left">cycles</td></tr><tr><td style="text-align: right"></td><td style="text-align: left">String</td><td style="text-align: left">used for all vertices</td></tr><tr><td style="text-align: right"></td><td style="text-align: left">range[vtx::Int]</td><td style="text-align: left">string of the number in the range, cycles</td></tr><tr><td style="text-align: right"></td><td style="text-align: left">:none</td><td style="text-align: left"></td></tr><tr><td style="text-align: right"></td><td style="text-align: left">f(vtx::Int)</td><td style="text-align: left">function returns a string for the vertex label</td></tr><tr><td style="text-align: right">vertexlabeltextcolors</td><td style="text-align: left">Vector{Colorant}</td><td style="text-align: left">color for each text label</td></tr><tr><td style="text-align: right"></td><td style="text-align: left">Colorant</td><td style="text-align: left">color of all text labels</td></tr><tr><td style="text-align: right"></td><td style="text-align: left">:none</td><td style="text-align: left"></td></tr><tr><td style="text-align: right"></td><td style="text-align: left">f(vtx::Int)</td><td style="text-align: left">function returning a colorant</td></tr><tr><td style="text-align: right">vertexshaperotations</td><td style="text-align: left">f(vtx::Int)</td><td style="text-align: left"></td></tr><tr><td style="text-align: right"></td><td style="text-align: left">angle::Float64</td><td style="text-align: left"></td></tr><tr><td style="text-align: right">vertexshapes</td><td style="text-align: left">Vector of :circle :square :none</td><td style="text-align: left">shapes of each vertex</td></tr><tr><td style="text-align: right"></td><td style="text-align: left">range[vtx]</td><td style="text-align: left">draw default shape at this vertex</td></tr><tr><td style="text-align: right"></td><td style="text-align: left">:circle :square :none</td><td style="text-align: left">shape of every vertex</td></tr><tr><td style="text-align: right"></td><td style="text-align: left">f(vtx::Int)</td><td style="text-align: left">function draws shape at this vertex (which is Point(0, 0))</td></tr><tr><td style="text-align: right">vertexshapesizes</td><td style="text-align: left">Vector{Real}</td><td style="text-align: left"></td></tr><tr><td style="text-align: right"></td><td style="text-align: left">range</td><td style="text-align: left"></td></tr><tr><td style="text-align: right"></td><td style="text-align: left">Real</td><td style="text-align: left"></td></tr><tr><td style="text-align: right"></td><td style="text-align: left">:none</td><td style="text-align: left"></td></tr><tr><td style="text-align: right"></td><td style="text-align: left">f(vtx::Int)</td><td style="text-align: left"></td></tr><tr><td style="text-align: right">vertexstrokecolors</td><td style="text-align: left">Vector</td><td style="text-align: left"></td></tr><tr><td style="text-align: right"></td><td style="text-align: left">Colorant</td><td style="text-align: left"></td></tr><tr><td style="text-align: right"></td><td style="text-align: left">:none</td><td style="text-align: left"></td></tr><tr><td style="text-align: right"></td><td style="text-align: left">f(vtx::Int)</td><td style="text-align: left"></td></tr><tr><td style="text-align: right">vertexstrokeweights</td><td style="text-align: left">Vector</td><td style="text-align: left"></td></tr><tr><td style="text-align: right"></td><td style="text-align: left">range</td><td style="text-align: left"></td></tr><tr><td style="text-align: right"></td><td style="text-align: left">:none</td><td style="text-align: left"></td></tr></table><h2 id="The-BoundingBox"><a class="docs-heading-anchor" href="#The-BoundingBox">The BoundingBox</a><a id="The-BoundingBox-1"></a><a class="docs-heading-anchor-permalink" href="#The-BoundingBox" title="Permalink"></a></h2><p>The graphics for the graph are placed to fit inside the current BoundingBox (by default, the drawing), after allowing for the margin (the default is 30). Pass a different BoundingBox to the <code>boundingbox</code> keyword argument to control the graph layout&#39;s size.</p><h2 id="Layout-algorithms"><a class="docs-heading-anchor" href="#Layout-algorithms">Layout algorithms</a><a id="Layout-algorithms-1"></a><a class="docs-heading-anchor-permalink" href="#Layout-algorithms" title="Permalink"></a></h2><p>The only clever part of this package is provided by <a href="https://juliagraphs.org/NetworkLayout.jl/">NetworkLayout.jl</a>), which is where you should look for information about the various algorithms that determine where vertices are positioned.</p><p>You can choose a layout algorithm, or supply the vertex positions yourself.</p><p>The main layout algorithms available are:</p><ul><li><p>shell</p></li><li><p>spring</p></li><li><p>stress</p></li><li><p>squaregrid</p></li></ul><p>Here are some formulations which work as keywords in <code>drawgraph()</code>:</p><pre><code class="language-julia hljs">layout = squaregrid
+
+layout = shell
+
+layout = stress
+
+layout = spectral
+
+layout = (g) -&gt; spectral(adjacency_matrix(g), dim=2)
+
+layout = shell ∘ adjacency_matrix
+
+layout = (g) -&gt; sfdp(g, Ptype=Float64, dim=2, tol=0.05, C=0.4, K=2)
+
+layout = Shell(nlist=[6:10,])
+
+layout = Stress(iterations = 100, weights = M) # M is matrix of weights
+
+layout = Spring(iterations = 200, initialtemp = 2.5)</code></pre><p>Alternatively, you can pass a vector of points to the <code>layout</code> keyword argument. Vertices will be placed on these points (vertex 1 on point 1, etc...), rather than at points suggested by the NetworkLayout algorithms. For example, in this next drawing, the two sets of points for a bipartite graph are generated beforehand.</p><pre><code class="language-julia hljs">@drawsvg begin
+background(&quot;grey10&quot;)
+N = 12; H = 250; W = 550
+g = complete_bipartite_graph(N, N)
+pts = vcat(
+    [between(O + (-W / 2, -H / 2), O + (-W / 2, H / 2), i) for i in range(0, 1, length=N)], # left
+    [between(O + (W / 2, H / 2), O + (W / 2, -H / 2), i) for i in range(0, 1, length=N)] # right
+    )
+circle.(pts, 1, :fill)
+drawgraph(g, vertexlabels = 1:nv(g), layout = pts,
+    edgestrokeweights = 0.5,
+    edgestrokecolors = (n, f, t, s, d) -&gt; HSB(rescale(n, 1, ne(g), 0, 360), 0.6, 0.9))
+end 600 300</code></pre><img src="cfd3a773.svg" alt="Example block output"/><p>The calculated positions are returned by the <code>drawgraph()</code> function.</p><h3 id="Initial-positions-for-the-layout-algorithms"><a class="docs-heading-anchor" href="#Initial-positions-for-the-layout-algorithms">Initial positions for the layout algorithms</a><a id="Initial-positions-for-the-layout-algorithms-1"></a><a class="docs-heading-anchor-permalink" href="#Initial-positions-for-the-layout-algorithms" title="Permalink"></a></h3><p>Some of the layout algorithms - the Spring and Stress ones, for example -  allow you to pass <em>initial</em> vertex positions to be used by the algorithms as starting points. The algorithm will continually adjust them to make a better result. These initial positions should be supplied as xy pairs, rather than Points (which NetworkLayout doesn&#39;t know about).</p><p>Here&#39;s an animation showing how the Stress algorithm gradually improves the layout on each iteration. The initial positions are just the &quot;grid locations&quot; of a Tiler iterator.</p><pre><code class="language-julia hljs">using Karnak, Graphs, NetworkLayout, Colors
+
+function frame(scene, framenumber, G)
+
+    background(&quot;black&quot;)
+    initialpositions = [(pt.x, pt.y) for (pt, n) in Tiler(600, 600, 3, 3)]
+
+    sethue(&quot;grey50&quot;)
+    circle.(Point.(initialpositions), 3, :fill)
+
+    for i in 1:framenumber
+        setopacity(rescale(i, 1, scene.framerange.stop, 0, 0.6))
+        drawgraph(G,
+            layout=Stress(initialpos=initialpositions, iterations=i),
+            vertexfillcolors=(i == framenumber) ? colorant&quot;gold&quot; : :none
+        )
+    end
+
+end
+
+function main()
+    G = smallgraph(:petersen)
+    amovie = Movie(600, 600, &quot;layout&quot;)
+    animate(amovie,
+        Scene(amovie, (s, f) -&gt; frame(s, f, G), 1:60),
+        framerate=10, creategif=true)
+end
+
+main()</code></pre><p><img src="../assets/figures/stresslayout.gif" alt="animate stress algorithm"/></p><h2 id="The-vertexfunction-and-edgefunction-arguments"><a class="docs-heading-anchor" href="#The-vertexfunction-and-edgefunction-arguments">The <code>vertexfunction</code> and <code>edgefunction</code> arguments</a><a id="The-vertexfunction-and-edgefunction-arguments-1"></a><a class="docs-heading-anchor-permalink" href="#The-vertexfunction-and-edgefunction-arguments" title="Permalink"></a></h2><p>The two keyword arguments <code>vertexfunction</code> and <code>edgefunction</code> allow you to pass control over the drawing process completely to these two functions.</p><div class="admonition is-warning" id="Warning-847bb2ec47233e85"><header class="admonition-header">Warning<a class="admonition-anchor" href="#Warning-847bb2ec47233e85" title="Permalink"></a></header><div class="admonition-body"><p>If you specify these keywords, all the other vertex/edge keywords are ignored.</p></div></div><pre><code class="nohighlight hljs">vertexfunction = my_vertexfunction(vertex, coordinates)
+edgefunction = my_edgefunction(edgenumber, edgesrc, edgedest, from::Point, to::Point)</code></pre><p>These allow you to draw graphics for the vertex <code>vertex</code> at the point <code>coordinates[vertex]</code>, and to draw graphics for each edge <code>edgenumber</code> joining from <code>from</code> to <code>to</code>.</p><p>The arguments passed to a <code>vertexfunction</code> keyword are the current vertex number and an array of all vertex coordinates.</p><pre><code class="language-julia hljs">g = wheel_graph(30)
+@drawsvg begin
+    background(&quot;grey10&quot;)
+    sethue(&quot;gold&quot;)
+    drawgraph(g,
+        edgelines = [],
+        vertexfunction=(v, c) -&gt; begin
+            @layer begin
+                sethue(HSB(rescale(v, 1, nv(g), 0, 360), 0.7, 0.8))
+                translate(c[v])
+                circle(O, 5, :fill)
+            end
+        end,
+    )
+end 800 200</code></pre><img src="23339138.svg" alt="Example block output"/><p>The graphics can be any arbitrary Luxor graphics functions. In the following picture, the vertex positions were passed to a function that placed clipped PNG images on the drawing (using <code>readpng()</code> and <code>placeimage()</code>), and the edges were drawn using sine curves. Refer to the Luxor.jl documentation for more about putting colored things on drawings.</p><p><img src="../assets/figures/karnakmap.png" alt="image vertices"/></p><p>It&#39;s also possible, for example, to draw another graph at each vertex point (ie recursive graph drawing) if you use <code>vertexfunction</code>.</p><pre><code class="language-julia hljs">g = complete_graph(5)
+
+function rgraph(g, l=1)
+    if l &gt; 4
+        return
+    else
+        drawgraph(g,
+            layout=stress,
+            boundingbox=BoundingBox() / 2l,
+            vertexfunction=(v, c) -&gt; begin
+                @layer begin
+                    sethue(HSB(rescale(v, 1, 4, 0, 360), 0.7, 0.8))
+                    translate(c[v])
+                    #circle(c[v], 5, :fill)
+                    rgraph(g, l + 1)
+                end
+            end,
+            )
+    end
+end
+
+@drawsvg begin
+    background(&quot;grey10&quot;)
+    sethue(&quot;gold&quot;)
+    rgraph(g)
+end 800 600</code></pre><img src="e212f6f0.svg" alt="Example block output"/><p>The arguments passed to a <code>edgefunction</code> keyword are the edge number, source vertex number, destination vertex number, <code>from</code> coordinate, and <code>to</code> coordinate. </p><pre><code class="language-julia hljs">fstroke(x, θ) = begin
+    0.5 + 20sin(x * π)
+end
+g = complete_graph(4)
+@drawsvg begin
+    background(&quot;grey10&quot;)
+    sethue(&quot;gold&quot;)
+    border = box(BoundingBox())
+    drawgraph(g,
+        vertexshapes=:none,
+        edgefunction=(n, s, d, f, t) -&gt; begin
+            sethue(HSL(60n, 0.9, 0.6))
+            poly(offsetpoly(
+                    polysample([f, t], include_first=true, closed=false, 30),
+                    fstroke), :fill)
+        end,
+    )
+end 800 400</code></pre><img src="402862df.svg" alt="Example block output"/><h2 id="Functions-as-keyword-arguments"><a class="docs-heading-anchor" href="#Functions-as-keyword-arguments">Functions as keyword arguments</a><a id="Functions-as-keyword-arguments-1"></a><a class="docs-heading-anchor-permalink" href="#Functions-as-keyword-arguments" title="Permalink"></a></h2><p>The following keyword arguments accept functions:</p><ul><li><code>edgelabelrotations</code></li><li><code>edgelabels</code></li><li><code>edgelines</code></li><li><code>edgestrokecolors</code></li><li><code>edgestrokeweights</code></li><li><code>vertexfillcolors</code></li><li><code>vertexlabels</code></li><li><code>vertexlabeltextcolors</code></li><li><code>vertexshaperotations</code></li><li><code>vertexshapes</code></li><li><code>vertexshapesizes</code></li><li><code>vertexstrokecolors</code></li><li><code>vertexstrokeweights</code></li></ul><p>The <code>edge-</code> keywords accept functions with arguments <code>(edgenumber, sourcevertex, destinationvertex, frompoint, topoint)</code>. The <code>vertex-</code> keywords accept functions with arguments <code>(vertex)</code>.</p><p>These functions aren&#39;t used if you supply functions to <code>vertexfunction</code> or <code>edgefunction</code>.</p><h2 id="Vertex-labels-and-shapes"><a class="docs-heading-anchor" href="#Vertex-labels-and-shapes">Vertex labels and shapes</a><a id="Vertex-labels-and-shapes-1"></a><a class="docs-heading-anchor-permalink" href="#Vertex-labels-and-shapes" title="Permalink"></a></h2><h3 id="vertexlabels"><a class="docs-heading-anchor" href="#vertexlabels"><code>vertexlabels</code></a><a id="vertexlabels-1"></a><a class="docs-heading-anchor-permalink" href="#vertexlabels" title="Permalink"></a></h3><p>Use <code>vertexlabels</code> to choose the text to associate with each vertex. Supply a range, array of strings or numbers, a single string, or a function.</p><p>This example draws all vertices, and numbers them from 1 to 6.</p><div class="admonition is-info" id="Note-f54f71a040bacfc2"><header class="admonition-header">Note<a class="admonition-anchor" href="#Note-f54f71a040bacfc2" title="Permalink"></a></header><div class="admonition-body"><p>In Graphs.jl, vertices are always numbered from 1 to <code>n</code>. If you remove a vertex, vertices are effectively re-numbered.</p></div></div><pre><code class="language-julia hljs">@drawsvg begin
+    background(&quot;grey10&quot;)
+    g = smallgraph(:octahedral)
+    sethue(&quot;gold&quot;)
+    drawgraph(g, layout=stress,
+        vertexlabels = 1:nv(g),
+        vertexshapesizes = 10)
+end 600 300</code></pre><img src="bbfb3539.svg" alt="Example block output"/><p>A function can be passed to <code>vertexlabels</code> to display a vertex; it should accept a single numerical argument, the vertex number, and return a string to display. Labelling all of them isn&#39;t always necessary.</p><pre><code class="language-julia hljs">@drawsvg begin
+background(&quot;grey10&quot;)
+g = smallgraph(:octahedral)
+sethue(&quot;skyblue&quot;)
+drawgraph(g, layout=stress,
+    vertexlabels = (v) -&gt; v ∈ (1, 4, 6) &amp;&amp; string(v, &quot;/6&quot;),
+    vertexshapesizes = 15,
+    vertexlabelfontsizes = 20,
+    )
+end 600 300</code></pre><img src="0342e717.svg" alt="Example block output"/><h3 id="Using-LaTex-in-labels"><a class="docs-heading-anchor" href="#Using-LaTex-in-labels">Using LaTex in labels</a><a id="Using-LaTex-in-labels-1"></a><a class="docs-heading-anchor-permalink" href="#Using-LaTex-in-labels" title="Permalink"></a></h3><p>If you want to use <span>$\LaTeX$</span> in vertex labels, you can load <a href="https://github.com/Kolaru/MathTeXEngine.jl">MathTeXEngine.jl</a> to parse the <code>LaTeXString</code>s. Make sure the fonts in the MathTexEngine package are also available to the Operating System&#39;s font routines (so <strong>copying</strong> them to your local font folder is probably required).</p><pre><code class="language-julia hljs">using Karnak, Graphs, NetworkLayout, Colors
+using MathTeXEngine, LaTeXStrings
+
+g = complete_graph(4)
+@svg begin
+    background(&quot;grey10&quot;)
+    sethue(&quot;cyan&quot;)
+    fontsize(40)
+    drawgraph(g,
+        margin=30,
+        vertexlabels = [L&quot;v_%$(x)&quot; for x in 1:nv(g)],
+        vertexlabeloffsetdistances = [40, 40, -40, 40],
+        vertexlabeltextcolors = colorant&quot;white&quot;
+    )
+end 600 300</code></pre><p><img src="../assets/figures/latextext.svg" alt="latex tet"/></p><h3 id="vertexshapes-and-vertexshapesizes"><a class="docs-heading-anchor" href="#vertexshapes-and-vertexshapesizes"><code>vertexshapes</code> and <code>vertexshapesizes</code></a><a id="vertexshapes-and-vertexshapesizes-1"></a><a class="docs-heading-anchor-permalink" href="#vertexshapes-and-vertexshapesizes" title="Permalink"></a></h3><p>The default shape for a vertex is a filled circle.</p><p>Options for <code>vertexshapes</code> are <code>:circle</code> and <code>:square</code>. With just two in a vector, they will be used alternately.</p><pre><code class="language-julia hljs">@drawsvg begin
+background(&quot;grey10&quot;)
+g = smallgraph(:moebiuskantor)
+sethue(&quot;gold&quot;)
+drawgraph(g, layout=shell, vertexshapes = [:square, :circle])
+end 600 300</code></pre><img src="8fd79c9f.svg" alt="Example block output"/><p><code>vertexshapesizes</code> can set the sizes for the built-in vertex shapes.</p><pre><code class="language-julia hljs">@drawsvg begin
+background(&quot;grey10&quot;)
+g = smallgraph(:moebiuskantor)
+sethue(&quot;gold&quot;)
+drawgraph(g, layout=shell,
+    vertexshapes = [:square, :circle],
+    vertexshapesizes = [15, 5])
+end 600 300</code></pre><img src="565c5353.svg" alt="Example block output"/><pre><code class="language-julia hljs">@drawsvg begin
+background(&quot;grey10&quot;)
+g = smallgraph(:moebiuskantor)
+sethue(&quot;gold&quot;)
+drawgraph(g, layout=shell,
+    vertexshapesizes = (v) -&gt; rescale(v, 1, nv(g), 5, 25))
+end 600 300</code></pre><img src="490cdcc5.svg" alt="Example block output"/><p><code>vertexshaperotations</code> can set the rotations.</p><pre><code class="language-julia hljs">@drawsvg begin
+background(&quot;grey10&quot;)
+g = smallgraph(:moebiuskantor)
+sethue(&quot;gold&quot;)
+drawgraph(g, layout=shell,
+    vertexshapes = :square,
+    vertexshapesizes = [10, 20, 5],
+    vertexshaperotations = [π/2, π/3],
+    )
+end 600 300</code></pre><img src="53b65284.svg" alt="Example block output"/><p>To show every other vertex and label, you could use something like this:</p><pre><code class="language-julia hljs">@drawsvg begin
+background(&quot;grey10&quot;)
+g = smallgraph(:truncatedcube)
+sethue(&quot;darkturquoise&quot;)
+drawgraph(g, layout=stress,
+    vertexlabels = [&quot;1&quot;, &quot;&quot;],
+    vertexshapesizes = [10, 0])
+end 600 300</code></pre><img src="615dc0c1.svg" alt="Example block output"/><p>When circles and squares don&#39;t cut it, supply a function to <code>vertexshapes</code>. The single argument is the vertex number; any graphics you draw will be centered at the vertex location, the current origin, <code>Point(0, 0)</code>.</p><pre><code class="language-julia hljs">@drawsvg begin
+background(&quot;grey10&quot;)
+g = smallgraph(:moebiuskantor)
+sethue(&quot;hotpink&quot;)
+drawgraph(g, layout=shell,
+    vertexshapes = (v) -&gt; star(O, 15, v+2, 0.5, 0, :fill))
+end 600 300</code></pre><img src="f7d933ee.svg" alt="Example block output"/><p>Here, the vertex number is hinted at by the number of points on each star.</p><p>In the next example, the sizes of the labels and shapes are determined by the degree of each vertex, supplied in a vector.</p><pre><code class="language-julia hljs">@drawsvg begin
+background(&quot;grey10&quot;)
+g = smallgraph(:karate)
+sethue(&quot;slateblue&quot;)
+drawgraph(g, layout=stress,
+    vertexlabels = 1:nv(g),
+    vertexlabelfontsizes = [Graphs.outdegree(g, v) for v in Graphs.vertices(g)],
+    vertexshapesizes = [Graphs.outdegree(g, v) for v in Graphs.vertices(g)],
+    vertexfillcolors = (v) -&gt; v ∈ (1, 3, 6) &amp;&amp; colorant&quot;red&quot;,
+    )
+end 600 300</code></pre><img src="76d67b79.svg" alt="Example block output"/><p>One more example with <code>vertexshapes</code>.</p><pre><code class="language-julia hljs">function whiten(col::Color, f=0.5)
+    hsl = convert(HSL, col)
+    h, s, l = hsl.h, hsl.s, hsl.l
+    return convert(RGB, HSL(h, s, f))
+end
+
+function drawball(pos, ballradius, col::Color;
+        fromlum=0.2,
+        tolum=1.0)
+    gsave()
+    translate(pos)
+    for i in ballradius:-0.25:1
+        sethue(whiten(col, rescale(i, ballradius, 0.5, fromlum, tolum)))
+        offset = rescale(i, ballradius, 0.5, 0, -ballradius/2)
+        circle(O + (offset, offset), i, :fill)
+    end
+    grestore()
+end
+
+@drawsvg begin
+background(&quot;grey10&quot;)
+g = clique_graph(5, 6)
+sethue(&quot;yellow&quot;)
+setline(0.2)
+drawgraph(g,
+    layout = stress,
+    vertexshapes = (v) -&gt; drawball(O, 25, RGB([Karnak.Luxor.julia_red,Karnak.Luxor.julia_purple, Karnak.Luxor.julia_green][rand(1:end)]...))
+)
+end 600 600</code></pre><img src="6796bd87.svg" alt="Example block output"/><h3 id="vertexstrokecolors-and-vertexfillcolors"><a class="docs-heading-anchor" href="#vertexstrokecolors-and-vertexfillcolors"><code>vertexstrokecolors</code> and <code>vertexfillcolors</code></a><a id="vertexstrokecolors-and-vertexfillcolors-1"></a><a class="docs-heading-anchor-permalink" href="#vertexstrokecolors-and-vertexfillcolors" title="Permalink"></a></h3><p>These keywords accept a Colors.jl <code>colorant</code>, an array of them, or a function that generates a color.</p><pre><code class="language-julia hljs">@drawsvg begin
+background(&quot;grey10&quot;)
+g = smallgraph(:cubical)
+sethue(&quot;darkorange&quot;)
+drawgraph(g, layout=stress,
+    vertexshapes = :square,
+    vertexshapesizes =  20,
+    vertexfillcolors = [colorant&quot;red&quot;, colorant&quot;blue&quot;],
+    vertexstrokecolors = [colorant&quot;blue&quot;, colorant&quot;red&quot;])
+end 600 300</code></pre><img src='data:image/svg+xml;utf-8,<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="600" height="300" viewBox="0 0 600 300">
+<rect x="-60" y="-30" width="720" height="360" fill="rgb(10.196078%25, 10.196078%25, 10.196078%25)" fill-opacity="1"/>
+<path fill="none" stroke-width="1" stroke-linecap="butt" stroke-linejoin="miter" stroke="rgb(100%25, 54.901961%25, 0%25)" stroke-opacity="1" stroke-miterlimit="10" d="M 300.21875 124.605469 L 247.871094 270 "/>
+<path fill="none" stroke-width="1" stroke-linecap="butt" stroke-linejoin="miter" stroke="rgb(100%25, 54.901961%25, 0%25)" stroke-opacity="1" stroke-miterlimit="10" d="M 300.21875 124.605469 L 212.394531 34.667969 "/>
+<path fill="none" stroke-width="1" stroke-linecap="butt" stroke-linejoin="miter" stroke="rgb(100%25, 54.901961%25, 0%25)" stroke-opacity="1" stroke-miterlimit="10" d="M 300.21875 124.605469 L 438.167969 132.480469 "/>
+<path fill="none" stroke-width="1" stroke-linecap="butt" stroke-linejoin="miter" stroke="rgb(100%25, 54.901961%25, 0%25)" stroke-opacity="1" stroke-miterlimit="10" d="M 247.871094 270 L 161.832031 168.160156 "/>
+<path fill="none" stroke-width="1" stroke-linecap="butt" stroke-linejoin="miter" stroke="rgb(100%25, 54.901961%25, 0%25)" stroke-opacity="1" stroke-miterlimit="10" d="M 247.871094 270 L 387.191406 265.839844 "/>
+<path fill="none" stroke-width="1" stroke-linecap="butt" stroke-linejoin="miter" stroke="rgb(100%25, 54.901961%25, 0%25)" stroke-opacity="1" stroke-miterlimit="10" d="M 161.832031 168.160156 L 212.394531 34.667969 "/>
+<path fill="none" stroke-width="1" stroke-linecap="butt" stroke-linejoin="miter" stroke="rgb(100%25, 54.901961%25, 0%25)" stroke-opacity="1" stroke-miterlimit="10" d="M 161.832031 168.160156 L 299.972656 175.066406 "/>
+<path fill="none" stroke-width="1" stroke-linecap="butt" stroke-linejoin="miter" stroke="rgb(100%25, 54.901961%25, 0%25)" stroke-opacity="1" stroke-miterlimit="10" d="M 212.394531 34.667969 L 352.191406 30 "/>
+<path fill="none" stroke-width="1" stroke-linecap="butt" stroke-linejoin="miter" stroke="rgb(100%25, 54.901961%25, 0%25)" stroke-opacity="1" stroke-miterlimit="10" d="M 438.167969 132.480469 L 352.191406 30 "/>
+<path fill="none" stroke-width="1" stroke-linecap="butt" stroke-linejoin="miter" stroke="rgb(100%25, 54.901961%25, 0%25)" stroke-opacity="1" stroke-miterlimit="10" d="M 438.167969 132.480469 L 387.191406 265.839844 "/>
+<path fill="none" stroke-width="1" stroke-linecap="butt" stroke-linejoin="miter" stroke="rgb(100%25, 54.901961%25, 0%25)" stroke-opacity="1" stroke-miterlimit="10" d="M 352.191406 30 L 299.972656 175.066406 "/>
+<path fill="none" stroke-width="1" stroke-linecap="butt" stroke-linejoin="miter" stroke="rgb(100%25, 54.901961%25, 0%25)" stroke-opacity="1" stroke-miterlimit="10" d="M 299.972656 175.066406 L 387.191406 265.839844 "/>
+<path fill-rule="nonzero" fill="rgb(100%25, 0%25, 0%25)" fill-opacity="1" stroke-width="1" stroke-linecap="butt" stroke-linejoin="miter" stroke="rgb(0%25, 0%25, 100%25)" stroke-opacity="1" stroke-miterlimit="10" d="M 280.21875 144.605469 L 280.21875 104.605469 L 320.21875 104.605469 L 320.21875 144.605469 Z M 280.21875 144.605469 "/>
+<path fill-rule="nonzero" fill="rgb(0%25, 0%25, 100%25)" fill-opacity="1" stroke-width="1" stroke-linecap="butt" stroke-linejoin="miter" stroke="rgb(100%25, 0%25, 0%25)" stroke-opacity="1" stroke-miterlimit="10" d="M 227.871094 290 L 227.871094 250 L 267.871094 250 L 267.871094 290 Z M 227.871094 290 "/>
+<path fill-rule="nonzero" fill="rgb(100%25, 0%25, 0%25)" fill-opacity="1" stroke-width="1" stroke-linecap="butt" stroke-linejoin="miter" stroke="rgb(0%25, 0%25, 100%25)" stroke-opacity="1" stroke-miterlimit="10" d="M 141.832031 188.160156 L 141.832031 148.160156 L 181.832031 148.160156 L 181.832031 188.160156 Z M 141.832031 188.160156 "/>
+<path fill-rule="nonzero" fill="rgb(0%25, 0%25, 100%25)" fill-opacity="1" stroke-width="1" stroke-linecap="butt" stroke-linejoin="miter" stroke="rgb(100%25, 0%25, 0%25)" stroke-opacity="1" stroke-miterlimit="10" d="M 192.394531 54.667969 L 192.394531 14.667969 L 232.394531 14.667969 L 232.394531 54.667969 Z M 192.394531 54.667969 "/>
+<path fill-rule="nonzero" fill="rgb(100%25, 0%25, 0%25)" fill-opacity="1" stroke-width="1" stroke-linecap="butt" stroke-linejoin="miter" stroke="rgb(0%25, 0%25, 100%25)" stroke-opacity="1" stroke-miterlimit="10" d="M 418.167969 152.480469 L 418.167969 112.480469 L 458.167969 112.480469 L 458.167969 152.480469 Z M 418.167969 152.480469 "/>
+<path fill-rule="nonzero" fill="rgb(0%25, 0%25, 100%25)" fill-opacity="1" stroke-width="1" stroke-linecap="butt" stroke-linejoin="miter" stroke="rgb(100%25, 0%25, 0%25)" stroke-opacity="1" stroke-miterlimit="10" d="M 332.191406 50 L 332.191406 10 L 372.191406 10 L 372.191406 50 Z M 332.191406 50 "/>
+<path fill-rule="nonzero" fill="rgb(100%25, 0%25, 0%25)" fill-opacity="1" stroke-width="1" stroke-linecap="butt" stroke-linejoin="miter" stroke="rgb(0%25, 0%25, 100%25)" stroke-opacity="1" stroke-miterlimit="10" d="M 279.972656 195.066406 L 279.972656 155.066406 L 319.972656 155.066406 L 319.972656 195.066406 Z M 279.972656 195.066406 "/>
+<path fill-rule="nonzero" fill="rgb(0%25, 0%25, 100%25)" fill-opacity="1" stroke-width="1" stroke-linecap="butt" stroke-linejoin="miter" stroke="rgb(100%25, 0%25, 0%25)" stroke-opacity="1" stroke-miterlimit="10" d="M 367.191406 285.839844 L 367.191406 245.839844 L 407.191406 245.839844 L 407.191406 285.839844 Z M 367.191406 285.839844 "/>
+</svg>
+'/><p>The function should return a Colorant for a vertex:</p><pre><code class="language-julia hljs">@drawsvg begin
+background(&quot;grey10&quot;)
+g = smallgraph(:icosahedral)
+sethue(&quot;darkorange&quot;)
+drawgraph(g, layout=spring,
+    vertexshapes = :circle,
+    vertexshapesizes =  20,
+    vertexstrokeweights = 5,
+    vertexstrokecolors = (v) -&gt; HSB(rescale(v, 1, nv(g), 360, 0), 1, 1),
+    vertexfillcolors = (v)   -&gt; HSB(rescale(v, 1, nv(g), 0, 359), 1, 1),
+    )
+end 600 300</code></pre><img src="4c81d324.svg" alt="Example block output"/><p>or an array of colors:</p><pre><code class="language-julia hljs">@drawsvg begin
+background(&quot;grey10&quot;)
+sethue(&quot;orange&quot;)
+g = grid((15, 15))
+drawgraph(g,
+    layout = squaregrid,
+    vertexshapesizes = 15,
+    vertexfillcolors = [RGB([Karnak.Luxor.julia_red, Luxor.julia_green,
+        Luxor.julia_purple][rand(1:end)]...) for i in 1:nv(g)])
+end 600 600</code></pre><img src="e4dbad3a.svg" alt="Example block output"/><p>The following keyword arguments operate in a similar way:</p><ul><li><p><code>vertexstrokeweights</code> : Array | Range | :none</p></li><li><p><code>vertexlabeltextcolors</code> : Array | Range | colorant</p></li><li><p><code>vertexlabelfontsizes</code> : Array | Range | number</p></li><li><p><code>vertexlabelfontfaces</code> : Array  | string</p></li><li><p><code>vertexlabelrotations</code> : Array | Range | number</p></li><li><p><code>vertexlabeloffsetangles</code> : Array | Range | number</p></li><li><p><code>vertexlabeloffsetdistances</code> : Array | Range | number</p></li></ul><p>It&#39;s possible to specify the font faces for vertex labels, but it&#39;s difficult to demonstrate when the documentation is built on machines in the cloud with unknown typographical resources. But anyway:</p><pre><code class="language-julia hljs">@drawsvg begin
+background(&quot;grey10&quot;)
+g = smallgraph(:pappus)
+sethue(&quot;slateblue&quot;)
+drawgraph(g,
+    vertexlabels = 1:nv(g),
+    vertexshapes = 0,
+    vertexlabelfontfaces = [&quot;Times-Roman&quot;, &quot;Courier&quot;, &quot;Helvetica-Bold&quot;],
+    vertexlabelfontsizes = 30)
+end 600 300</code></pre><img src="4fedb3a9.svg" alt="Example block output"/><h2 id="Edge-options"><a class="docs-heading-anchor" href="#Edge-options">Edge options</a><a id="Edge-options-1"></a><a class="docs-heading-anchor-permalink" href="#Edge-options" title="Permalink"></a></h2><h3 id="edgefunction"><a class="docs-heading-anchor" href="#edgefunction"><code>edgefunction</code></a><a id="edgefunction-1"></a><a class="docs-heading-anchor-permalink" href="#edgefunction" title="Permalink"></a></h3><p>As with <code>vertexfunction</code>, the <code>edgefunction</code> keyword argument allows you to do anything you like when the edges are drawn, and overrides all other <code>edge-</code> keyword arguments. Here, the calculated coordinates of the graph and a path between two vertices aren&#39;t drawn at first, just extracted into vectors for further processing.</p><pre><code class="language-julia hljs">@drawsvg begin
+background(&quot;black&quot;)
+sethue(&quot;white&quot;)
+g = clique_graph(16, 4)
+
+A = Point[]
+B = Point[]
+
+drawgraph(g, layout=stress,
+    edgefunction = (edgenumber, edgesrc, edgedest, from, to) -&gt; begin
+        push!(A, from),
+        push!(A, to)
+        end,
+    vertexshapes = :none,
+    )
+
+route = a_star(g, 6, 29)
+
+drawgraph(g, layout=stress,
+    edgelist = route,
+    vertexshapes = :none,
+    edgefunction = (edgenumber, edgesrc, edgedest, from, to) -&gt; begin
+        push!(B, from),
+        push!(B, to)
+        end)
+
+setlinejoin(&quot;bevel&quot;)
+setline(0.25)
+
+sethue(&quot;grey60&quot;)
+@layer begin
+    poly(A, :stroke)
+end
+
+sethue(&quot;gold&quot;)
+setline(4)
+@layer begin
+    poly(B, :stroke)
+end
+circle.(B[[begin, end]], 5, :fill)
+end 600 400</code></pre><img src="590a908a.svg" alt="Example block output"/><div class="admonition is-info" id="Note-d5c6267af273128a"><header class="admonition-header">Note<a class="admonition-anchor" href="#Note-d5c6267af273128a" title="Permalink"></a></header><div class="admonition-body"><p>This keyword overrides the other <code>edge-</code> keywords.</p></div></div><h3 id="edgelist-and-edgelines"><a class="docs-heading-anchor" href="#edgelist-and-edgelines"><code>edgelist</code> and <code>edgelines</code></a><a id="edgelist-and-edgelines-1"></a><a class="docs-heading-anchor-permalink" href="#edgelist-and-edgelines" title="Permalink"></a></h3><p>A <code>Graphs.EdgeIterator</code> supplied to <code>edgelist</code> makes only the specified edges available for drawing. Otherwise, control which edges are to be drawn by supplying numbers (or a function) to <code>edgelines</code>.</p><pre><code class="language-julia hljs">@drawsvg begin
+background(&quot;grey10&quot;)
+sethue(&quot;orange&quot;)
+g = grid((15, 15))
+drawgraph(g,
+    layout = stress,
+    vertexshapes = :none,
+    edgelines = rand(1:ne(g), 30)
+)
+end 600 300</code></pre><img src='data:image/svg+xml;utf-8,<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="600" height="300" viewBox="0 0 600 300">
+<rect x="-60" y="-30" width="720" height="360" fill="rgb(10.196078%25, 10.196078%25, 10.196078%25)" fill-opacity="1"/>
+<path fill="none" stroke-width="1" stroke-linecap="butt" stroke-linejoin="miter" stroke="rgb(100%25, 64.705882%25, 0%25)" stroke-opacity="1" stroke-miterlimit="10" d="M 187.734375 147.863281 L 195.382812 157.113281 "/>
+<path fill="none" stroke-width="1" stroke-linecap="butt" stroke-linejoin="miter" stroke="rgb(100%25, 64.705882%25, 0%25)" stroke-opacity="1" stroke-miterlimit="10" d="M 218.464844 185.722656 L 226.277344 195.285156 "/>
+<path fill="none" stroke-width="1" stroke-linecap="butt" stroke-linejoin="miter" stroke="rgb(100%25, 64.705882%25, 0%25)" stroke-opacity="1" stroke-miterlimit="10" d="M 266.070312 242.308594 L 273.953125 251.539062 "/>
+<path fill="none" stroke-width="1" stroke-linecap="butt" stroke-linejoin="miter" stroke="rgb(100%25, 64.705882%25, 0%25)" stroke-opacity="1" stroke-miterlimit="10" d="M 220.082031 168.839844 L 227.769531 178.328125 "/>
+<path fill="none" stroke-width="1" stroke-linecap="butt" stroke-linejoin="miter" stroke="rgb(100%25, 64.705882%25, 0%25)" stroke-opacity="1" stroke-miterlimit="10" d="M 267.007812 225.171875 L 274.941406 234.40625 "/>
+<path fill="none" stroke-width="1" stroke-linecap="butt" stroke-linejoin="miter" stroke="rgb(100%25, 64.705882%25, 0%25)" stroke-opacity="1" stroke-miterlimit="10" d="M 221.832031 151.632812 L 231.171875 143.742188 "/>
+<path fill="none" stroke-width="1" stroke-linecap="butt" stroke-linejoin="miter" stroke="rgb(100%25, 64.705882%25, 0%25)" stroke-opacity="1" stroke-miterlimit="10" d="M 244.933594 180.007812 L 254.398438 172.128906 "/>
+<path fill="none" stroke-width="1" stroke-linecap="butt" stroke-linejoin="miter" stroke="rgb(100%25, 64.705882%25, 0%25)" stroke-opacity="1" stroke-miterlimit="10" d="M 207.585938 116.242188 L 216.875 108.207031 "/>
+<path fill="none" stroke-width="1" stroke-linecap="butt" stroke-linejoin="miter" stroke="rgb(100%25, 64.705882%25, 0%25)" stroke-opacity="1" stroke-miterlimit="10" d="M 223.402344 134.300781 L 232.660156 126.355469 "/>
+<path fill="none" stroke-width="1" stroke-linecap="butt" stroke-linejoin="miter" stroke="rgb(100%25, 64.705882%25, 0%25)" stroke-opacity="1" stroke-miterlimit="10" d="M 254.398438 172.128906 L 262.191406 181.527344 "/>
+<path fill="none" stroke-width="1" stroke-linecap="butt" stroke-linejoin="miter" stroke="rgb(100%25, 64.705882%25, 0%25)" stroke-opacity="1" stroke-miterlimit="10" d="M 270.03125 190.886719 L 279.53125 183.03125 "/>
+<path fill="none" stroke-width="1" stroke-linecap="butt" stroke-linejoin="miter" stroke="rgb(100%25, 64.705882%25, 0%25)" stroke-opacity="1" stroke-miterlimit="10" d="M 309.269531 237.667969 L 316.394531 247.117188 "/>
+<path fill="none" stroke-width="1" stroke-linecap="butt" stroke-linejoin="miter" stroke="rgb(100%25, 64.705882%25, 0%25)" stroke-opacity="1" stroke-miterlimit="10" d="M 234.054688 109.109375 L 243.378906 101.191406 "/>
+<path fill="none" stroke-width="1" stroke-linecap="butt" stroke-linejoin="miter" stroke="rgb(100%25, 64.705882%25, 0%25)" stroke-opacity="1" stroke-miterlimit="10" d="M 257.640625 137.375 L 267.011719 129.488281 "/>
+<path fill="none" stroke-width="1" stroke-linecap="butt" stroke-linejoin="miter" stroke="rgb(100%25, 64.705882%25, 0%25)" stroke-opacity="1" stroke-miterlimit="10" d="M 265.472656 146.859375 L 273.308594 156.320312 "/>
+<path fill="none" stroke-width="1" stroke-linecap="butt" stroke-linejoin="miter" stroke="rgb(100%25, 64.705882%25, 0%25)" stroke-opacity="1" stroke-miterlimit="10" d="M 337.804688 214.617188 L 347.242188 206.808594 "/>
+<path fill="none" stroke-width="1" stroke-linecap="butt" stroke-linejoin="miter" stroke="rgb(100%25, 64.705882%25, 0%25)" stroke-opacity="1" stroke-miterlimit="10" d="M 323.703125 178.421875 L 331.585938 187.914062 "/>
+<path fill="none" stroke-width="1" stroke-linecap="butt" stroke-linejoin="miter" stroke="rgb(100%25, 64.705882%25, 0%25)" stroke-opacity="1" stroke-miterlimit="10" d="M 347.242188 206.808594 L 356.628906 198.9375 "/>
+<path fill="none" stroke-width="1" stroke-linecap="butt" stroke-linejoin="miter" stroke="rgb(100%25, 64.705882%25, 0%25)" stroke-opacity="1" stroke-miterlimit="10" d="M 340.945312 180.074219 L 350.273438 172.1875 "/>
+<path fill="none" stroke-width="1" stroke-linecap="butt" stroke-linejoin="miter" stroke="rgb(100%25, 64.705882%25, 0%25)" stroke-opacity="1" stroke-miterlimit="10" d="M 318.972656 134.261719 L 328.4375 126.367188 "/>
+<path fill="none" stroke-width="1" stroke-linecap="butt" stroke-linejoin="miter" stroke="rgb(100%25, 64.705882%25, 0%25)" stroke-opacity="1" stroke-miterlimit="10" d="M 358.109375 181.667969 L 365.957031 191.015625 "/>
+<path fill="none" stroke-width="1" stroke-linecap="butt" stroke-linejoin="miter" stroke="rgb(100%25, 64.705882%25, 0%25)" stroke-opacity="1" stroke-miterlimit="10" d="M 296.800781 88.894531 L 306.285156 81.164062 "/>
+<path fill="none" stroke-width="1" stroke-linecap="butt" stroke-linejoin="miter" stroke="rgb(100%25, 64.705882%25, 0%25)" stroke-opacity="1" stroke-miterlimit="10" d="M 320.582031 116.976562 L 330.066406 109.105469 "/>
+<path fill="none" stroke-width="1" stroke-linecap="butt" stroke-linejoin="miter" stroke="rgb(100%25, 64.705882%25, 0%25)" stroke-opacity="1" stroke-miterlimit="10" d="M 306.285156 81.164062 L 314.234375 90.46875 "/>
+<path fill="none" stroke-width="1" stroke-linecap="butt" stroke-linejoin="miter" stroke="rgb(100%25, 64.705882%25, 0%25)" stroke-opacity="1" stroke-miterlimit="10" d="M 353.457031 137.320312 L 361.175781 146.808594 "/>
+<path fill="none" stroke-width="1" stroke-linecap="butt" stroke-linejoin="miter" stroke="rgb(100%25, 64.705882%25, 0%25)" stroke-opacity="1" stroke-miterlimit="10" d="M 300.074219 54.804688 L 307.808594 64.132812 "/>
+<path fill="none" stroke-width="1" stroke-linecap="butt" stroke-linejoin="miter" stroke="rgb(100%25, 64.705882%25, 0%25)" stroke-opacity="1" stroke-miterlimit="10" d="M 393.683594 167.167969 L 402.9375 159.4375 "/>
+<path fill="none" stroke-width="1" stroke-linecap="butt" stroke-linejoin="miter" stroke="rgb(100%25, 64.705882%25, 0%25)" stroke-opacity="1" stroke-miterlimit="10" d="M 356.75 102.75 L 364.558594 112.1875 "/>
+<path fill="none" stroke-width="1" stroke-linecap="butt" stroke-linejoin="miter" stroke="rgb(100%25, 64.705882%25, 0%25)" stroke-opacity="1" stroke-miterlimit="10" d="M 395.242188 150.152344 L 402.9375 159.4375 "/>
+<path fill="none" stroke-width="1" stroke-linecap="butt" stroke-linejoin="miter" stroke="rgb(100%25, 64.705882%25, 0%25)" stroke-opacity="1" stroke-miterlimit="10" d="M 373.769531 104.6875 L 381.59375 114.277344 "/>
+</svg>
+'/><p><code>edgelist</code> is useful for drawing paths - a sequence of edges. For example, if you use <code>a_star()</code> to find the shortest path between two vertices, you can draw the edges with this keyword. It&#39;s useful to draw the graph twice, once with all edges, once with selected edges.</p><pre><code class="language-julia hljs">@drawsvg begin
+background(&quot;grey10&quot;)
+g = grid((15, 15))
+
+astar = a_star(g, 1, nv(g))
+
+sethue(&quot;orange&quot;)
+drawgraph(g,
+    layout = stress,
+    vertexshapes = :none)
+
+sethue(&quot;cyan&quot;)
+drawgraph(g,
+    layout = stress,
+    vertexshapes = :none,
+    edgestrokeweights = 5,
+    edgelist = astar)
+end 600 300</code></pre><img src="1f6f7e8f.svg" alt="Example block output"/><p>For more interesting edges, you can use Luxor arrows, and you can also define functions to create all kinds of graphical detail:</p><pre><code class="language-julia hljs">gd = DiGraph()
+add_vertices!(gd, 4)
+add_edge!(gd, 1, 2)
+add_edge!(gd, 1, 3)
+add_edge!(gd, 2, 3)
+add_edge!(gd, 1, 4) # vertex 1 to vertex 4
+add_edge!(gd, 4, 1) # vertex 4 to vertex 1
+
+@drawsvg begin
+    background(&quot;grey10&quot;)
+    sethue(&quot;thistle1&quot;)
+    drawgraph(gd, vertexlabels = [1, 2, 3, 4],
+        edgefunction = (n, s, d, f, t) -&gt; begin
+            arrow(f, t, [10, 10],
+            decoration = 0.75,
+            decorate = () -&gt; begin
+                sethue(HSB(60n, 0.7, 0.8))
+                ngon(O, 10, 3, 0, :fill)
+            end,
+            arrowheadfunction= (f, t, a) -&gt; ()
+            )
+        end
+    )
+end 600 300</code></pre><img src='data:image/svg+xml;utf-8,<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="600" height="300" viewBox="0 0 600 300">
+<defs>
+<g>
+<g id="glyph-125525-0-0">
+<path d="M 1.234375 -0.828125 L 2.859375 -0.828125 L 2.859375 -6.390625 L 1.09375 -6.046875 L 1.09375 -6.9375 L 2.84375 -7.296875 L 3.828125 -7.296875 L 3.828125 -0.828125 L 5.4375 -0.828125 L 5.4375 0 L 1.234375 0 Z M 1.234375 -0.828125 "/>
+</g>
+<g id="glyph-125525-0-1">
+<path d="M 1.921875 -0.828125 L 5.359375 -0.828125 L 5.359375 0 L 0.734375 0 L 0.734375 -0.828125 C 1.109375 -1.210938 1.617188 -1.734375 2.265625 -2.390625 C 2.910156 -3.046875 3.316406 -3.46875 3.484375 -3.65625 C 3.796875 -4.007812 4.015625 -4.304688 4.140625 -4.546875 C 4.265625 -4.796875 4.328125 -5.039062 4.328125 -5.28125 C 4.328125 -5.664062 4.191406 -5.976562 3.921875 -6.21875 C 3.648438 -6.46875 3.296875 -6.59375 2.859375 -6.59375 C 2.546875 -6.59375 2.21875 -6.535156 1.875 -6.421875 C 1.539062 -6.316406 1.175781 -6.15625 0.78125 -5.9375 L 0.78125 -6.9375 C 1.175781 -7.09375 1.546875 -7.210938 1.890625 -7.296875 C 2.234375 -7.378906 2.550781 -7.421875 2.84375 -7.421875 C 3.59375 -7.421875 4.191406 -7.234375 4.640625 -6.859375 C 5.097656 -6.484375 5.328125 -5.976562 5.328125 -5.34375 C 5.328125 -5.039062 5.269531 -4.753906 5.15625 -4.484375 C 5.039062 -4.222656 4.835938 -3.910156 4.546875 -3.546875 C 4.460938 -3.453125 4.203125 -3.175781 3.765625 -2.71875 C 3.328125 -2.269531 2.710938 -1.640625 1.921875 -0.828125 Z M 1.921875 -0.828125 "/>
+</g>
+<g id="glyph-125525-0-2">
+<path d="M 4.0625 -3.9375 C 4.53125 -3.832031 4.894531 -3.617188 5.15625 -3.296875 C 5.425781 -2.984375 5.5625 -2.59375 5.5625 -2.125 C 5.5625 -1.40625 5.3125 -0.847656 4.8125 -0.453125 C 4.320312 -0.0546875 3.617188 0.140625 2.703125 0.140625 C 2.398438 0.140625 2.085938 0.109375 1.765625 0.046875 C 1.441406 -0.015625 1.109375 -0.101562 0.765625 -0.21875 L 0.765625 -1.171875 C 1.035156 -1.015625 1.332031 -0.894531 1.65625 -0.8125 C 1.988281 -0.726562 2.332031 -0.6875 2.6875 -0.6875 C 3.300781 -0.6875 3.769531 -0.804688 4.09375 -1.046875 C 4.414062 -1.296875 4.578125 -1.65625 4.578125 -2.125 C 4.578125 -2.550781 4.425781 -2.882812 4.125 -3.125 C 3.820312 -3.363281 3.40625 -3.484375 2.875 -3.484375 L 2.015625 -3.484375 L 2.015625 -4.296875 L 2.90625 -4.296875 C 3.394531 -4.296875 3.765625 -4.394531 4.015625 -4.59375 C 4.273438 -4.789062 4.40625 -5.070312 4.40625 -5.4375 C 4.40625 -5.800781 4.269531 -6.082031 4 -6.28125 C 3.738281 -6.488281 3.363281 -6.59375 2.875 -6.59375 C 2.601562 -6.59375 2.3125 -6.5625 2 -6.5 C 1.6875 -6.445312 1.347656 -6.359375 0.984375 -6.234375 L 0.984375 -7.109375 C 1.359375 -7.210938 1.707031 -7.289062 2.03125 -7.34375 C 2.363281 -7.394531 2.671875 -7.421875 2.953125 -7.421875 C 3.703125 -7.421875 4.296875 -7.25 4.734375 -6.90625 C 5.171875 -6.570312 5.390625 -6.113281 5.390625 -5.53125 C 5.390625 -5.125 5.273438 -4.78125 5.046875 -4.5 C 4.816406 -4.226562 4.488281 -4.039062 4.0625 -3.9375 Z M 4.0625 -3.9375 "/>
+</g>
+<g id="glyph-125525-0-3">
+<path d="M 3.78125 -6.4375 L 1.296875 -2.546875 L 3.78125 -2.546875 Z M 3.515625 -7.296875 L 4.765625 -7.296875 L 4.765625 -2.546875 L 5.796875 -2.546875 L 5.796875 -1.71875 L 4.765625 -1.71875 L 4.765625 0 L 3.78125 0 L 3.78125 -1.71875 L 0.484375 -1.71875 L 0.484375 -2.671875 Z M 3.515625 -7.296875 "/>
+</g>
+</g>
+</defs>
+<rect x="-60" y="-30" width="720" height="360" fill="rgb(10.196078%25, 10.196078%25, 10.196078%25)" fill-opacity="1"/>
+<path fill="none" stroke-width="1" stroke-linecap="butt" stroke-linejoin="miter" stroke="rgb(100%25, 88.235294%25, 100%25)" stroke-opacity="1" stroke-miterlimit="10" d="M 420 150 C 393.136719 197.355469 353.613281 237.070312 307.359375 265.589844 "/>
+<path fill-rule="nonzero" fill="rgb(80%25, 80%25, 24%25)" fill-opacity="1" d="M 334.320312 236.207031 L 344.859375 249.953125 L 327.683594 252.207031 Z M 334.320312 236.207031 "/>
+<path fill="none" stroke-width="1" stroke-linecap="butt" stroke-linejoin="miter" stroke="rgb(100%25, 88.235294%25, 100%25)" stroke-opacity="1" stroke-miterlimit="10" d="M 420 150 C 343.3125 164.816406 263.996094 164.636719 187.125 151.277344 "/>
+<path fill-rule="nonzero" fill="rgb(24%25, 80%25, 24%25)" fill-opacity="1" d="M 245.535156 150.15625 L 243.917969 167.402344 L 229.792969 157.378906 Z M 245.535156 150.15625 "/>
+<path fill="none" stroke-width="1" stroke-linecap="butt" stroke-linejoin="miter" stroke="rgb(100%25, 88.235294%25, 100%25)" stroke-opacity="1" stroke-miterlimit="10" d="M 420 150 C 372.644531 123.136719 332.929688 83.613281 304.410156 37.359375 "/>
+<path fill-rule="nonzero" fill="rgb(24%25, 80%25, 80%25)" fill-opacity="1" d="M 333.792969 64.320312 L 320.046875 74.859375 L 317.792969 57.683594 Z M 333.792969 64.320312 "/>
+<path fill="none" stroke-width="1" stroke-linecap="butt" stroke-linejoin="miter" stroke="rgb(100%25, 88.235294%25, 100%25)" stroke-opacity="1" stroke-miterlimit="10" d="M 300 270 C 252.644531 243.136719 212.929688 203.613281 184.410156 157.359375 "/>
+<path fill-rule="nonzero" fill="rgb(24%25, 24%25, 80%25)" fill-opacity="1" d="M 213.792969 184.320312 L 200.046875 194.859375 L 197.792969 177.683594 Z M 213.792969 184.320312 "/>
+<path fill="none" stroke-width="1" stroke-linecap="butt" stroke-linejoin="miter" stroke="rgb(100%25, 88.235294%25, 100%25)" stroke-opacity="1" stroke-miterlimit="10" d="M 300 30 C 347.355469 56.863281 387.070312 96.386719 415.589844 142.640625 "/>
+<path fill-rule="nonzero" fill="rgb(80%25, 24%25, 80%25)" fill-opacity="1" d="M 386.207031 115.679688 L 399.953125 105.140625 L 402.207031 122.316406 Z M 386.207031 115.679688 "/>
+<path fill-rule="nonzero" fill="rgb(100%25, 88.235294%25, 100%25)" fill-opacity="1" stroke-width="1" stroke-linecap="butt" stroke-linejoin="miter" stroke="rgb(100%25, 88.235294%25, 100%25)" stroke-opacity="1" stroke-miterlimit="10" d="M 426 150 C 426 153.3125 423.3125 156 420 156 C 416.6875 156 414 153.3125 414 150 C 414 146.6875 416.6875 144 420 144 C 423.3125 144 426 146.6875 426 150 Z M 426 150 "/>
+<g fill="rgb(0%25, 0%25, 0%25)" fill-opacity="1">
+<use xlink:href="%23glyph-125525-0-0" x="416.818848" y="153.64502"/>
+</g>
+<path fill-rule="nonzero" fill="rgb(100%25, 88.235294%25, 100%25)" fill-opacity="1" stroke-width="1" stroke-linecap="butt" stroke-linejoin="miter" stroke="rgb(100%25, 88.235294%25, 100%25)" stroke-opacity="1" stroke-miterlimit="10" d="M 306 270 C 306 273.3125 303.3125 276 300 276 C 296.6875 276 294 273.3125 294 270 C 294 266.6875 296.6875 264 300 264 C 303.3125 264 306 266.6875 306 270 Z M 306 270 "/>
+<g fill="rgb(0%25, 0%25, 0%25)" fill-opacity="1">
+<use xlink:href="%23glyph-125525-0-1" x="296.818848" y="273.710938"/>
+</g>
+<path fill-rule="nonzero" fill="rgb(100%25, 88.235294%25, 100%25)" fill-opacity="1" stroke-width="1" stroke-linecap="butt" stroke-linejoin="miter" stroke="rgb(100%25, 88.235294%25, 100%25)" stroke-opacity="1" stroke-miterlimit="10" d="M 186 150 C 186 153.3125 183.3125 156 180 156 C 176.6875 156 174 153.3125 174 150 C 174 146.6875 176.6875 144 180 144 C 183.3125 144 186 146.6875 186 150 Z M 186 150 "/>
+<g fill="rgb(0%25, 0%25, 0%25)" fill-opacity="1">
+<use xlink:href="%23glyph-125525-0-2" x="176.818848" y="153.710938"/>
+</g>
+<path fill-rule="nonzero" fill="rgb(100%25, 88.235294%25, 100%25)" fill-opacity="1" stroke-width="1" stroke-linecap="butt" stroke-linejoin="miter" stroke="rgb(100%25, 88.235294%25, 100%25)" stroke-opacity="1" stroke-miterlimit="10" d="M 306 30 C 306 33.3125 303.3125 36 300 36 C 296.6875 36 294 33.3125 294 30 C 294 26.6875 296.6875 24 300 24 C 303.3125 24 306 26.6875 306 30 Z M 306 30 "/>
+<g fill="rgb(0%25, 0%25, 0%25)" fill-opacity="1">
+<use xlink:href="%23glyph-125525-0-3" x="296.818848" y="33.64502"/>
+</g>
+</svg>
+'/><pre><code class="language-julia hljs">@drawsvg begin
+background(&quot;grey10&quot;)
+g = star_graph(12)
+fontsize(20)
+sethue(&quot;slateblue&quot;)
+drawgraph(g,
+    layout=spring,
+    vertexshapes = 0,
+    vertexlabels = 1:nv(g),
+    vertexlabelfontsizes = 12,
+    edgestrokecolors = distinguishable_colors(ne(g)),
+    edgelines = (k, s, d, f, t) -&gt;
+        arrow(f, between(f, t, .95), [20, -45],
+            linewidth = 5,
+            arrowheadlength = 15,
+            arrowheadangle = π/7,
+            decorate = () -&gt; begin
+                    sethue(&quot;purple&quot;)
+                    circle(O, 15, :fill)
+                    sethue(&quot;white&quot;)
+                    text(string(k), angle = -getrotation(), halign = :center, valign=:middle)
+                end,
+            decoration = .7))
+end 600 400</code></pre><img src="e3e9dbfe.svg" alt="Example block output"/><h3 id="Edge-labels"><a class="docs-heading-anchor" href="#Edge-labels">Edge labels</a><a id="Edge-labels-1"></a><a class="docs-heading-anchor-permalink" href="#Edge-labels" title="Permalink"></a></h3><p>Use <code>edgelabels</code>, <code>edgelabelcolors</code>, <code>edgelabelrotations</code>, etc. to control the appearance of the labels alongside edges.</p><pre><code class="language-julia hljs">@drawsvg begin
+background(&quot;grey10&quot;)
+g = smallgraph(:dodecahedral)
+g = complete_graph(5)
+sethue(&quot;orange&quot;)
+fontsize(20)
+drawgraph(g, layout=stress,
+    vertexshapes = :none,
+    vertexlabels = &quot;vertex&quot;,
+    vertexlabeltextcolors = colorant&quot;cyan&quot;,
+    edgelabels = [&quot;edge&quot;],
+    edgestrokecolors = colorant&quot;orange&quot;,
+    edgelabelcolors = colorant&quot;pink&quot;,
+    )
+end 600 500</code></pre><img src="dfad99cf.svg" alt="Example block output"/><p><code>edgelabels</code> can also be a dictionary, where the keys are tuples: <code>(src, dst)</code>, and the values are the text labels.</p><pre><code class="language-julia hljs">g = complete_graph(5)
+edgelabeldict = Dict()
+n = nv(g)
+for i in 1:n
+    for j in 1:n
+        edgelabeldict[(i, j)] = &quot;($i, $j)&quot;
+    end
+end
+
+@drawsvg begin
+    background(&quot;grey10&quot;)
+    drawgraph(g, layout=stress,
+        vertexshapes = :circle,
+        vertexlabels = 1:n,
+        edgestrokecolors = colorant&quot;orange&quot;,
+        edgelabelcolors = colorant&quot;white&quot;,
+        edgelabels = edgelabeldict)
+end 600 350</code></pre><img src="12c8b824.svg" alt="Example block output"/><p>The <code>edgelabels</code> keyword argument can also accept a function with five arguments: <code>edgenumber</code>, <code>source</code>, <code>destination</code>, <code>from</code> and <code>to</code>. In this example, the graphical distances between the two vertex positions provide the annotations for each edge.</p><pre><code class="language-julia hljs">@drawsvg begin
+background(&quot;grey10&quot;)
+g = smallgraph(:dodecahedral)
+g = complete_graph(5)
+fontsize(20)
+drawgraph(g, layout=stress,
+    vertexshapes = :none,
+    edgestrokecolors = colorant&quot;orange&quot;,
+    edgelabels = (k, src, dest, f, t) -&gt; begin
+        @layer begin
+            sethue(&quot;white&quot;)
+            θ = slope(f, t)
+            text(string(round(distance(f, t), digits=1)),
+                midpoint(f, t),
+                angle=θ,
+                halign=:center)
+        end
+    end)
+end 600 500</code></pre><img src="a07e9a61.svg" alt="Example block output"/><p>The more code you&#39;re prepared to write, the more elaborate your labels can be:</p><pre><code class="language-julia hljs">sources      = [1,2,1]
+destinations = [2,3,3]
+weights      = [0.5, 0.8, 2.0]
+g = SimpleWeightedGraph(sources, destinations, weights)
+@drawsvg begin
+background(&quot;grey10&quot;)
+sethue(&quot;gold&quot;)
+drawgraph(g,
+    vertexlabels = 1:nv(g),
+    vertexshapesizes = 20,
+    vertexlabelfontsizes = 30,
+    edgecurvature = 10,
+    edgegaps = 25,
+    edgelabels = (edgenumber, edgesrc, edgedest, from, to) -&gt; begin
+        @layer begin
+            sethue(&quot;black&quot;)
+            box(midpoint(from, to), 50, 30, :fill)
+        end
+        box(midpoint(from, to), 50, 30, :stroke)
+        fontsize(16)
+        text(string(get_weight(g, edgesrc, edgedest)),
+            midpoint(from, to),
+            halign=:center,
+            valign=:middle)
+    end)
+end 600 300</code></pre><img src="00ff2c08.svg" alt="Example block output"/><p>For directed weighted graphs, each edge can have two weights. This makes it slightly more difficult to draw the labels automatically. You could write an edge labelling function that calculates the slope of the edge and positions the label accordingly:</p><pre><code class="language-julia hljs">function f(edgenumber, edgesrc, edgedest, from::Point, to::Point)
+    sl = slope(from, to)
+    wt = g.weights[edgesrc, edgedest]
+    if sl &gt; π
+        label(string(wt), :e, midpoint(from, to))
+    else
+        label(string(wt), :w, midpoint(from, to))
+    end
+end 
+
+...
+    edgelabels=f,
+...</code></pre><h3 id="edgelist"><a class="docs-heading-anchor" href="#edgelist"><code>edgelist</code></a><a id="edgelist-1"></a><a class="docs-heading-anchor-permalink" href="#edgelist" title="Permalink"></a></h3><p>This example draws the graph more than once; once with all the edges, once with only the edges in <code>edgelist</code>, where <code>edgelist</code> is the path from vertex 15 to vertex 17, drawn in a pale translucent yellow, and once to draw the vertices on the path &quot;X marks the spot&quot; cyan-colored crosses.</p><pre><code class="language-julia hljs">@drawsvg begin
+    background(&quot;grey10&quot;)
+    g = smallgraph(:karate)
+    sethue(&quot;slateblue&quot;)
+
+    drawgraph(g, layout = stress,
+        vertexlabels = 1:nv(g),
+        vertexshapes = :circle,
+        vertexshapesizes = 10,
+        vertexlabelfontsizes = 10)
+
+    astar = a_star(g, 15, 17)
+
+    drawgraph(g,
+        layout=stress,
+        vertexshapes = :none,
+        edgelist = astar,
+        edgestrokecolors=RGBA(1, 1, 0, 0.5),
+        edgestrokeweights=10)
+
+    drawgraph(g,
+        layout=stress,
+        edgelines=0,
+        vertexshapes = (v) -&gt; v ∈ src.(astar) &amp;&amp; polycross(O, 20, 4, 0.5, π/4, :fill),
+             vertexfillcolors = (v) -&gt; v ∈ src.(astar) &amp;&amp; colorant&quot;cyan&quot;
+        )
+end 600 600</code></pre><img src="66bf6eb8.svg" alt="Example block output"/><h3 id="edgecurvature-and-edgegaps"><a class="docs-heading-anchor" href="#edgecurvature-and-edgegaps"><code>edgecurvature</code> and <code>edgegaps</code></a><a id="edgecurvature-and-edgegaps-1"></a><a class="docs-heading-anchor-permalink" href="#edgecurvature-and-edgegaps" title="Permalink"></a></h3><p>The <code>edgecurvature</code> keyword determines the curvature of the edges. </p><p>The <code>edgegaps</code> keyword sets the distances between the ends of the edges and the vertex positions. </p><p>Units, as everywhere in Karnak, are points/pixels (1 point is 0.3527mm).</p><pre><code class="language-julia hljs">g = grid((3, 3))
+
+# add some self-loops
+for e in edges(g)
+    add_edge!(g, src(e), src(e))
+    add_edge!(g, dst(e), dst(e))
+end
+
+@drawsvg begin
+    background(&quot;grey10&quot;)
+    sethue(&quot;white&quot;)
+    for c in 1:10
+        drawgraph(g,
+            margin=70,
+            vertexshapes = :none,
+            edgegaps = 3c,
+            edgecurvature = 3c,
+            edgestrokecolors = HSB(36c, .8, .8),
+            edgestrokeweights = 0.5,
+            layout=squaregrid)
+    end
+end 600 500</code></pre><img src="8460389f.svg" alt="Example block output"/><p>The value for the edge gap (either as supplied in vector, range, or scalar form, or calculated and returned by a function) applies to both ends of an edge. This is a minor issue for cases where, for example, the vertex shapes are different sizes, and the gaps need to be calculated independently for each end of a single edge. You&#39;ll have to calculate and draw the edges yourself, as shown in this unnecessarily animated example:</p><pre><code class="language-julia hljs">using Karnak, Graphs, Colors
+function frame(scene, framenumber, g, vertexsizes)
+    background(&quot;black&quot;)
+    eased_n = scene.easingfunction(framenumber - scene.framerange.start,
+        0, 1, (scene.framerange.stop + 1) - scene.framerange.start)
+    a = 10 + vertexsizes[1] * abs(sin(0 + rescale(eased_n, 0, 1, 0, π)))
+    b = 10 + vertexsizes[2] * abs(sin(π / 4 + rescale(eased_n, 0, 1, 0, π)))
+    c = 10 + vertexsizes[3] * abs(sin(π / 3 + rescale(eased_n, 0, 1, 0, π)))
+    d = 10 + vertexsizes[4] * abs(sin(rescale(eased_n, 0, 1, 0, π)))
+    newvertexsizes = [a, b, c, d]
+    sethue(&quot;gold&quot;)
+    drawgraph(g,
+        margin=80,
+        vertexshapesizes=newvertexsizes,
+        vertexfillcolors=[c for c in Colors.JULIA_LOGO_COLORS |&gt; values],
+        edgefunction=(args...) -&gt; begin
+            edgenumber, edgesrc, edgedest, from, to = args
+            d = distance(from, to)
+            startpoint = between(from, to, newvertexsizes[edgesrc] / d)
+            endpoint = between(from, to, 1 - newvertexsizes[edgedest] / d)
+            arrow(startpoint, endpoint)
+        end)
+end
+
+function main()
+    g = complete_digraph(4)
+    vertexsizes = [20, 35, 50, 60]
+    amovie = Movie(800, 600, &quot;gap animation&quot;)
+    animate(amovie,
+        Scene(amovie, (s, f) -&gt; frame(s, f, g, vertexsizes), 1:40),
+        framerate=15,
+        creategif=true,
+        pathname=joinpath(dirname(dirname(pathof(Karnak))) * &quot;/docs/src/assets/figures/edgegapanimation.gif&quot;))
+end
+
+main()</code></pre><p><img src="../assets/figures/edgegapanimation.gif" alt="edge gap animation"/></p><h3 id="edgestrokecolors-and-edgestrokeweights"><a class="docs-heading-anchor" href="#edgestrokecolors-and-edgestrokeweights"><code>edgestrokecolors</code> and <code>edgestrokeweights</code></a><a id="edgestrokecolors-and-edgestrokeweights-1"></a><a class="docs-heading-anchor-permalink" href="#edgestrokecolors-and-edgestrokeweights" title="Permalink"></a></h3><pre><code class="language-julia hljs">g = barbell_graph(3, 3)
+@drawsvg begin
+    background(&quot;grey10&quot;)
+    fontsize(30)
+    sethue(&quot;white&quot;)
+    drawgraph(g,
+        layout=stress,
+        edgelabels = 1:ne(g),
+        edgecurvature = 10,
+        edgestrokeweights = 2 * (1:ne(g)),
+        edgelabelcolors = colorant&quot;white&quot;,
+        edgestrokecolors= (n, from, to, edgesrc, edgedest) -&gt; HSB(rescale(n, 1, ne(g), 0, 359), .8, .8))
+end 600 500</code></pre><img src="3aea3aff.svg" alt="Example block output"/><h3 id="edgedashpatterns"><a class="docs-heading-anchor" href="#edgedashpatterns"><code>edgedashpatterns</code></a><a id="edgedashpatterns-1"></a><a class="docs-heading-anchor-permalink" href="#edgedashpatterns" title="Permalink"></a></h3><p>Line dashes work the same as in Luxor.jl, ie they&#39;re numbers in an array, with line length following by space length. If you want to alternate between dash patterns, supply an array of pattern arrays.</p><pre><code class="language-julia hljs">g = grid((5, 5))
+@drawsvg begin
+    background(&quot;grey10&quot;)
+    sethue(&quot;white&quot;)
+    drawgraph(g,
+        layout=squaregrid,
+        edgestrokeweights = 5,
+        edgelabels = (edgenumber, edgesrc, edgedest, from::Point, to::Point) -&gt;
+            begin
+                labeltext = [&quot;a&quot;, &quot;b&quot;, &quot;c&quot;][mod1(edgenumber, end)]
+                label(labeltext, :se, midpoint(from, to), offset=5)
+            end,
+        edgedashpatterns = [[20, 10, 1, 10], [20, 10], [0.5, 10]],
+        edgelabelfontsizes = 20,
+        vertexshapesizes = 2,
+        edgestrokecolors=(edgenumber, from, to, src, dst) -&gt;
+            HSB(rescale(edgenumber, 1, ne(g), 0, 359), .8, .8)
+          )
+end 600 400</code></pre><img src="8ea3548b.svg" alt="Example block output"/><h3 id="Arrow-control-for-directed-graphs:-edgearrows"><a class="docs-heading-anchor" href="#Arrow-control-for-directed-graphs:-edgearrows">Arrow control for directed graphs: <code>edgearrows</code></a><a id="Arrow-control-for-directed-graphs:-edgearrows-1"></a><a class="docs-heading-anchor-permalink" href="#Arrow-control-for-directed-graphs:-edgearrows" title="Permalink"></a></h3><p>For directed graphs only, edges are automatically drawn with an arrowhead at the destination point of the edge, to indicate the direction.</p><p>To hide the arrows for directed graphs, use <code>edgearrows=false</code>. Or you can specify an array of Booleans to control each edge&#39;s destination arrow.</p><pre><code class="language-julia hljs">gd = DiGraph()
+add_vertices!(gd, 4)
+add_edge!(gd, 1, 2)
+add_edge!(gd, 1, 3)
+add_edge!(gd, 2, 3)
+add_edge!(gd, 1, 4) # vertex 1 to vertex 4
+add_edge!(gd, 4, 1) # vertex 4 to vertex 1
+
+@drawsvg begin
+    background(&quot;grey10&quot;)
+    sethue(&quot;thistle1&quot;)
+    tiles = Tiler(600, 600, 1, 2)
+    @layer begin
+        translate(first(tiles[1]))
+        scale(0.5)
+        drawgraph(gd,
+            vertexlabels=[1, 2, 3, 4],
+            edgearrows=false,
+            edgecurvature=50,
+            )
+        end
+    @layer begin
+        translate(first(tiles[2]))
+        drawgraph(gd,
+            edgearrows=[true, false, true, false, false],
+            edgelabels=(n, s, d, f, t) -&gt; begin
+                l = string.([true, false, true, false, false])[n]
+                label(l, slope(f, t), offset=10, midpoint(f, t))
+                end,
+            vertexlabels=[1, 2, 3, 4],
+            edgecurvature=5,
+            margin=20
+        )
+    end
+end 600 300</code></pre><img src="d749c65b.svg" alt="Example block output"/><p>If you pass a function to <code>edgearrows</code>, the arrow will be drawn by the function, rather than by the default arrow rendering.</p><pre><code class="language- hljs">using Luxor, Karnak, Graphs
+
+gd = DiGraph()
+add_vertices!(gd, 4)
+add_edge!(gd, 1, 2)
+add_edge!(gd, 1, 3)
+add_edge!(gd, 2, 3)
+add_edge!(gd, 1, 4) # vertex 1 to vertex 4
+add_edge!(gd, 4, 1) # vertex 4 to vertex 1
+
+function edgearrowfunc(edgenumber, edgesrc, edgedest, from, to)
+    sethue(Luxor.Colors.HSL(360rand(), 0.8, 0.7))
+    s = slope(from, to)
+    arrow(
+        between(from, to, 0.05),
+        between(from, to, 0.95),
+        [25 * s, -25 * s],
+        startarrow=false,
+        finisharrow=true, :stroke, linewidth=5, arrowheadlength=30)
+end
+
+@drawsvg begin
+    background(&quot;grey10&quot;)
+    sethue(&quot;thistle1&quot;)
+    cells = Table([300], [300, 300])
+    @show cells
+    @layer begin
+        translate(cells[1])
+        drawgraph(gd,
+            vertexlabels=[1, 2, 3, 4],
+            edgearrows=edgearrowfunc, # named function
+        )
+    end
+    @layer begin
+        translate(cells[2])
+        drawgraph(gd,
+            vertexlabels=[1, 2, 3, 4],
+            edgearrows= (n, s, d, f, t) -&gt; begin # anon function
+                adjusted_from = between(f, t, 0.05)
+                adjusted_to = between(f, t, 0.95)
+                # thicker lines for destination vertices with more neighbors
+                linewidth = rescale(length(neighbors(gd, d)), 0, 3, 0.5, 5)
+                arrow(adjusted_from, adjusted_to, [10, 15], linewidth=linewidth, arrowheadlength=20)
+            end,
+        )
+    end
+end 600 300</code></pre><p>If you use this function, the <code>edgegaps</code> keyword information is not used.</p><p>The <code>edgearrows</code> keyword is only for directed graphs. Use <code>edgefunction</code> to draw custom edges for all types of graph.</p><p><code>vertexfunction</code> and <code>edgefunction</code> allow you to pass control over the drawing process completely to these two functions.</p><div class="admonition is-info" id="Note-a4f2ecf3b4dd6d56"><header class="admonition-header">Note<a class="admonition-anchor" href="#Note-a4f2ecf3b4dd6d56" title="Permalink"></a></header><div class="admonition-body"><p>If you use the <code>edgefunction</code> keyword to draw edges, all the other vertex/edge keywords including <code>edgearrows</code> are ignored.</p></div></div></article><nav class="docs-footer"><a class="docs-footer-prevpage" href="../basics/">« Basic graphs</a><a class="docs-footer-nextpage" href="../examples/">Examples »</a><div class="flexbox-break"></div><p class="footer-message">Powered by <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> and the <a href="https://julialang.org/">Julia Programming Language</a>.</p></nav></div><div class="modal" id="documenter-settings"><div class="modal-background"></div><div class="modal-card"><header class="modal-card-head"><p class="modal-card-title">Settings</p><button class="delete"></button></header><section class="modal-card-body"><p><label class="label">Theme</label><div class="select"><select id="documenter-themepicker"><option value="auto">Automatic (OS)</option><option value="documenter-light">documenter-light</option><option value="documenter-dark">documenter-dark</option><option value="catppuccin-latte">catppuccin-latte</option><option value="catppuccin-frappe">catppuccin-frappe</option><option value="catppuccin-macchiato">catppuccin-macchiato</option><option value="catppuccin-mocha">catppuccin-mocha</option></select></div></p><hr/><p>This document was generated with <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> version 1.14.1 on <span class="colophon-date" title="Thursday 10 July 2025 19:29">Thursday 10 July 2025</span>. Using Julia version 1.10.10.</p></section><footer class="modal-card-foot"></footer></div></div></div></body></html>

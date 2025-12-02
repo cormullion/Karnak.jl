@@ -1,0 +1,867 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/><title>Examples · Karnak</title><meta name="title" content="Examples · Karnak"/><meta property="og:title" content="Examples · Karnak"/><meta property="twitter:title" content="Examples · Karnak"/><meta name="description" content="Documentation for Karnak."/><meta property="og:description" content="Documentation for Karnak."/><meta property="twitter:description" content="Documentation for Karnak."/><script data-outdated-warner src="../assets/warner.js"></script><link href="https://cdnjs.cloudflare.com/ajax/libs/lato-font/3.0.0/css/lato-font.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/juliamono/0.050/juliamono.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/fontawesome.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/solid.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/brands.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.8/katex.min.css" rel="stylesheet" type="text/css"/><script>documenterBaseURL=".."</script><script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js" data-main="../assets/documenter.js"></script><script src="../search_index.js"></script><script src="../siteinfo.js"></script><script src="../../versions.js"></script><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../assets/themes/catppuccin-mocha.css" data-theme-name="catppuccin-mocha"/><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../assets/themes/catppuccin-macchiato.css" data-theme-name="catppuccin-macchiato"/><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../assets/themes/catppuccin-frappe.css" data-theme-name="catppuccin-frappe"/><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../assets/themes/catppuccin-latte.css" data-theme-name="catppuccin-latte"/><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../assets/themes/documenter-dark.css" data-theme-name="documenter-dark" data-theme-primary-dark/><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../assets/themes/documenter-light.css" data-theme-name="documenter-light" data-theme-primary/><script src="../assets/themeswap.js"></script><link href="../assets/karnak-docs.css" rel="stylesheet" type="text/css"/></head><body><div id="documenter"><nav class="docs-sidebar"><a class="docs-logo" href="../"><img src="../assets/logo.svg" alt="Karnak logo"/></a><div class="docs-package-name"><span class="docs-autofit"><a href="../">Karnak</a></span></div><button class="docs-search-query input is-rounded is-small is-clickable my-2 mx-auto py-1 px-2" id="documenter-search-query">Search docs (Ctrl + /)</button><ul class="docs-menu"><li><a class="tocitem" href="../">Introduction to Karnak</a></li><li><a class="tocitem" href="../basics/">Basic graphs</a></li><li><a class="tocitem" href="../syntax/">Syntax</a></li><li class="is-active"><a class="tocitem" href>Examples</a><ul class="internal"><li><a class="tocitem" href="#Julia-type-tree"><span>Julia type tree</span></a></li><li><a class="tocitem" href="#Julia-source-tree"><span>Julia source tree</span></a></li><li><a class="tocitem" href="#LayeredLayouts.jl"><span>LayeredLayouts.jl</span></a></li><li class="toplevel"><a class="tocitem" href="#Simple-dependency-graph"><span>Simple dependency graph</span></a></li><li><a class="tocitem" href="#The-London-Tube"><span>The London Tube</span></a></li><li><a class="tocitem" href="#The-JuliaGraphs-logo"><span>The JuliaGraphs logo</span></a></li><li><a class="tocitem" href="#Julia-Package-Dependencies"><span>Julia Package Dependencies</span></a></li></ul></li><li><span class="tocitem">Reference</span><ul><li><a class="tocitem" href="../reference/functionindex/">Alphabetical function list</a></li><li><a class="tocitem" href="../reference/api/">Function reference</a></li></ul></li></ul><div class="docs-version-selector field has-addons"><div class="control"><span class="docs-label button is-static is-size-7">Version</span></div><div class="docs-selector control is-expanded"><div class="select is-fullwidth is-size-7"><select id="documenter-version-selector"></select></div></div></div></nav><div class="docs-main"><header class="docs-navbar"><a class="docs-sidebar-button docs-navbar-link fa-solid fa-bars is-hidden-desktop" id="documenter-sidebar-button" href="#"></a><nav class="breadcrumb"><ul class="is-hidden-mobile"><li class="is-active"><a href>Examples</a></li></ul><ul class="is-hidden-tablet"><li class="is-active"><a href>Examples</a></li></ul></nav><div class="docs-right"><a class="docs-navbar-link" href="https://github.com/cormullion/Karnak.jl" title="View the repository on GitHub"><span class="docs-icon fa-brands"></span><span class="docs-label is-hidden-touch">GitHub</span></a><a class="docs-navbar-link" href="https://github.com/cormullion/Karnak.jl/blob/master/docs/src/examples.md" title="Edit source on GitHub"><span class="docs-icon fa-solid"></span></a><a class="docs-settings-button docs-navbar-link fa-solid fa-gear" id="documenter-settings-button" href="#" title="Settings"></a><a class="docs-article-toggle-button fa-solid fa-chevron-up" id="documenter-article-toggle-button" href="javascript:;" title="Collapse all docstrings"></a></div></header><article class="content" id="documenter-page"><h1 id="Examples"><a class="docs-heading-anchor" href="#Examples">Examples</a><a id="Examples-1"></a><a class="docs-heading-anchor-permalink" href="#Examples" title="Permalink"></a></h1><p>This chapter contains a few examples showing how to use <code>drawgraph()</code> to visualize a few graphs.</p><h2 id="Julia-type-tree"><a class="docs-heading-anchor" href="#Julia-type-tree">Julia type tree</a><a id="Julia-type-tree-1"></a><a class="docs-heading-anchor-permalink" href="#Julia-type-tree" title="Permalink"></a></h2><p>This example tries to draw a type hierarchy diagram. The Buchheim layout algorithm can take a list of “vertex widths” that are normalized and then used to assign sufficient space for each label.</p><details closed><summary>Code for this figure</summary><p>This code generates the figure below:</p><pre><code class="language-julia hljs">using Karnak, Graphs, NetworkLayout, InteractiveUtils
+
+add_numbered_vertex!(g) = add_vertex!(g)
+
+function build_type_tree(g, T, level=0)
+    add_numbered_vertex!(g)
+    push!(labels, T)
+    for t in subtypes(T)
+        if occursin(&quot;.&quot;,  string(t)) # only Base
+            continue
+        end
+        build_type_tree(g, t, level + 1)
+        add_edge!(g,
+            findfirst(isequal(T), labels),
+            findfirst(isequal(t), labels))
+    end
+end
+
+function manhattanline(pt1, pt2)
+    mp = midpoint(pt1, pt2)
+    poly([pt1,
+            Point(pt1.x, mp.y),
+            Point(pt1.x, mp.y),
+            Point(pt2.x, mp.y),
+            Point(pt2.x, mp.y),
+            Point(pt2.x, pt2.y),
+            pt2
+        ], :stroke)
+    circle(pt2, 1, :fill)
+end
+
+g = DiGraph()
+labels = []
+build_type_tree(g, Number)
+labels = map(string, labels)
+
+dg = @drawsvg begin
+    background(&quot;grey20&quot;)
+    fontsize(15)
+    fontface(&quot;JuliaMono-Bold&quot;)
+    setline(1)
+    sethue(&quot;gold&quot;)
+    nodesizes = Float64[]
+    for l in eachindex(labels)
+        tx = textextents(string(labels[l]))
+        labelwidth = tx[3]
+        push!(nodesizes, labelwidth)
+    end
+    drawgraph(g, margin=50,
+        layout=Buchheim(nodesize=nodesizes),
+        vertexfunction=(v, c) -&gt; begin
+            w = nodesizes[v]
+            bbox  = BoundingBox(box(c[v], w/2, get_fontsize()))
+            # box
+            @layer begin
+                sethue(&quot;white&quot;)
+                box(bbox, 2, action=:fillpreserve)
+                sethue(&quot;gold&quot;)
+                strokepath()
+            end
+            #text
+            @layer begin
+                sethue(&quot;black&quot;)
+                textfit(labels[v], bbox)
+            end
+        end,
+        edgefunction=(n, s, d, f, t) -&gt; manhattanline(f, t)
+    )
+end 1000 550</code></pre></details><img src="484700a6.svg" alt="Example block output"/><p>This graph could do with a bit more tweaking.</p><h2 id="Julia-source-tree"><a class="docs-heading-anchor" href="#Julia-source-tree">Julia source tree</a><a id="Julia-source-tree-1"></a><a class="docs-heading-anchor-permalink" href="#Julia-source-tree" title="Permalink"></a></h2><p>This example takes a Julia expression and displays it as a tree.</p><pre><code class="language-julia hljs">using Karnak, Graphs, NetworkLayout, Colors
+
+# shamelessly stolen from Professor David Sanders&#39; Tree !
+
+add_numbered_vertex!(g) = (add_vertex!(g); top = nv(g))
+
+function walk_tree!(g, labels, ex, show_call = true)
+    top_vertex = add_numbered_vertex!(g)
+    where_start = 1  # which argument to start with
+    if !(show_call) &amp;&amp; ex.head == :call
+        f = ex.args[1]   # the function name
+        push!(labels, f)
+        where_start = 2   # drop &quot;call&quot; from tree
+    else
+        push!(labels, ex.head)
+    end
+    for i in where_start:length(ex.args)
+        if isa(ex.args[i], Expr)
+            child = walk_tree!(g, labels, ex.args[i], show_call)
+            add_edge!(g, top_vertex, child)
+        else
+            n = add_numbered_vertex!(g)
+            add_edge!(g, top_vertex, n)
+            push!(labels, ex.args[i])
+        end
+    end
+    return top_vertex
+end
+
+function walk_tree(ex::Expr, show_call = false)
+    g = DiGraph()
+    labels = Any[]
+    walk_tree!(g, labels, ex, show_call)
+    return (g, labels)
+end
+
+# build graph and labels
+expression = :(2 + sin(30) * cos(15) / 2π - log(-1.02^exp(-1)))
+
+g, labels = walk_tree(expression)
+
+@drawsvg begin
+    background(&quot;grey10&quot;)
+    sethue(&quot;gold&quot;)
+    drawgraph(g,
+        margin=60,
+            layout = buchheim,
+            vertexlabels = labels,
+            vertexshapes = :circle,
+            vertexshapesizes = 20,
+            edgefunction = (n, s, d, f, t) -&gt; begin
+                move(f)
+                line(t)
+                strokepath()
+            end,
+            vertexlabelfontsizes = 15,
+            vertexlabelfontfaces = &quot;JuliaMono-Bold&quot;, # probably won&#39;t be available for docs
+            vertexlabeltextcolors = colorant&quot;black&quot;)
+    fontface(&quot;JuliaMono-Bold&quot;)
+    fontsize(15)
+    text(string(expression), boxbottomcenter() + (0, -20), halign=:center)
+end</code></pre><img src="34643dae.svg" alt="Example block output"/><h2 id="LayeredLayouts.jl"><a class="docs-heading-anchor" href="#LayeredLayouts.jl">LayeredLayouts.jl</a><a id="LayeredLayouts.jl-1"></a><a class="docs-heading-anchor-permalink" href="#LayeredLayouts.jl" title="Permalink"></a></h2><p><a href="https://github.com/oxinabox/LayeredLayouts.jl">LayeredLayouts</a> is a package for working out how to layout graphs in a layered fashion: how to lay out directed acyclic graphs (DAGs), including trees, dependency graphs, and Sankey diagrams.</p><p>The package offers the Zarate algorithm (David Cheng Zarate). Positions are returned as x and y vectors, and should be converted to Points when passed to <code>layout</code>.</p><pre><code class="language-julia hljs">using Graphs
+using LayeredLayouts
+using Karnak
+
+tree = SimpleDiGraph(Edge.(
+    [1 =&gt; 2, 2 =&gt; 3, 4 =&gt; 5, 4 =&gt; 6, 
+     4 =&gt; 7, 4 =&gt; 8, 4 =&gt; 9, 4 =&gt; 10, 
+     5 =&gt; 11, 5 =&gt; 12, 8 =&gt; 15, 8 =&gt; 16, 
+     8 =&gt; 17, 8 =&gt; 18, 8 =&gt; 19, 9 =&gt; 20, 
+     9 =&gt; 21, 10 =&gt; 22, 12 =&gt; 13, 13 =&gt; 14, 
+     23 =&gt; 4, 23 =&gt; 24, 23 =&gt; 25, 23 =&gt; 26, 
+     23 =&gt; 27, 23 =&gt; 28, 23 =&gt; 29, 23 =&gt; 30, 
+     23 =&gt; 31, 28 =&gt; 32, 28 =&gt; 33, 29 =&gt; 35, 
+     30 =&gt; 1, 30 =&gt; 38, 31 =&gt; 40, 33 =&gt; 34, 
+     35 =&gt; 36, 35 =&gt; 37, 38 =&gt; 39, 40 =&gt; 41, 41 =&gt; 42]))
+
+xs, ys, paths = solve_positions(Zarate(), tree)
+
+@draw begin
+    background(&quot;black&quot;)
+    sethue(&quot;gold&quot;)
+    drawgraph(tree, 
+        vertexlabels = 1:nv(tree),
+        edgestrokecolors = [Karnak.RGB(randomhue()...) for e in 1:ne(tree)],
+        layout= boxmiddleleft() .+ 
+            map(pt -&gt; Point(90pt[1], 30pt[2]), zip(xs, ys))
+    )
+end 600 500</code></pre><p><img src="../assets/figures/ll_tree.svg" alt="layered layouts"/></p><h1 id="Simple-dependency-graph"><a class="docs-heading-anchor" href="#Simple-dependency-graph">Simple dependency graph</a><a id="Simple-dependency-graph-1"></a><a class="docs-heading-anchor-permalink" href="#Simple-dependency-graph" title="Permalink"></a></h1><p>You can draw a visual interpretation of a Julia package&#39;s dependencies easily enough by going through the TOML files.</p><details closed><summary>Code for this figure</summary><p>This code generates the figure below:</p><pre><code class="language-julia hljs">using Karnak
+using Graphs
+using NetworkLayout
+using InteractiveUtils
+using Colors
+using TOML
+using Base: active_project
+
+# mostly stolen from PkgGraph.jl by tfiers!
+
+manifest(proj_path) = replace(proj_path, &quot;Project.toml&quot; =&gt; &quot;Manifest.toml&quot;)
+
+if VERSION ≥ v&quot;1.7&quot;
+    packages_in(manifest) = TOML.parsefile(manifest)[&quot;deps&quot;]
+else
+    packages_in(manifest) = TOML.parsefile(manifest)
+end
+
+packages_in_active_manifest() = packages_in(manifest(active_project()))
+
+function depgraph(pkgname)
+    rootpkg = string(pkgname)
+    packages = packages_in_active_manifest()
+    if rootpkg ∉ keys(packages)
+        error(&quot;&quot;&quot;
+        The given package ($pkgname) must be installed in the active project
+        (which is currently `$(active_project())`)&quot;&quot;&quot;)
+    end
+    deps = Vector{Pair{String,String}}()
+    add_deps_of(name) = begin
+        pkg_info = only(packages[name])
+        direct_deps = get(pkg_info, &quot;deps&quot;, [])
+        for dep in direct_deps
+            push!(deps, name =&gt; dep)
+            add_deps_of(dep)
+        end
+    end
+    add_deps_of(rootpkg)
+    return unique!(deps)
+end
+
+function build_depgraph(pkgname)
+    dgraphs = depgraph(pkgname)
+    pkglist = String[]
+    for (f, t) in dgraphs
+        if f ∉ pkglist
+            push!(pkglist, f)
+        end
+        if t ∉ pkglist
+            push!(pkglist, t)
+        end
+    end
+    g = DiGraph(length(pkglist))
+    for (f, t) in dgraphs
+        if f ∈ pkglist &amp;&amp; t ∈ pkglist
+            add_edge!(g, findfirst(isequal(f), pkglist), findfirst(isequal(t), pkglist))
+        end
+    end
+    return g, pkglist
+end
+
+g, pkgnames = build_depgraph(&quot;DataFrames&quot;)
+
+d = @drawsvg begin
+    background(&quot;grey5&quot;)
+    sethue(&quot;gold&quot;)
+    fontsize(10)
+    fontface(&quot;Avenir-Black&quot;)
+    drawgraph(
+        g,
+        margin=40,
+        layout = Stress(iterations = 100),
+        edgegaps = 13,
+        edgestrokeweights = 3,
+        edgecurvature = 4,
+        edgestrokecolors = [HSB(360rand(), 0.7, 0.8) for i in 1:ne(g)],
+        vertexlabels = (vtx) -&gt; begin
+            string(pkgnames[vtx])
+        end,
+        vertexshapes = (v) -&gt; begin
+            tx = textextents(pkgnames[v])
+            @layer begin
+                setopacity(0.8)
+                sethue(&quot;grey80&quot;)
+                box(O, 1.2tx[5], 1.5tx[4], 5, :fill)
+            end
+        end,
+    )
+end 800 700</code></pre></details><img src="3bb9e70a.svg" alt="Example block output"/><p>There&#39;s an extended investigation of package dependencies later in this section.</p><h2 id="The-London-Tube"><a class="docs-heading-anchor" href="#The-London-Tube">The London Tube</a><a id="The-London-Tube-1"></a><a class="docs-heading-anchor-permalink" href="#The-London-Tube" title="Permalink"></a></h2><p>One real-world example of a small network is the London Underground, known as “the Tube”. The 250 or so stations in the network can be modelled using a simple graph.</p><h3 id="Setup"><a class="docs-heading-anchor" href="#Setup">Setup</a><a id="Setup-1"></a><a class="docs-heading-anchor-permalink" href="#Setup" title="Permalink"></a></h3><p>If you want to follow along, this is the setup required. The CSV file <code>examples/tubedata-modified.csv</code> contains the station names, latitude and longitudes, and connectivity details.</p><pre><code class="language-julia hljs">using Karnak, Graphs, NetworkLayout, Colors
+using DataFrames, CSV
+
+# positions are in LatLong
+
+tubedata = CSV.File(&quot;examples/tubedata-modified.csv&quot;) |&gt; DataFrame
+
+amatrix = Matrix(tubedata[:, 4:270])
+
+extrema_lat = extrema(tubedata.Latitude)
+extrema_long = extrema(tubedata.Longitude)
+
+# scale LatLong and flip in y to fit into current drawing
+
+positions = @. Point(
+    rescale(tubedata.Longitude, extrema_long..., -280, 280),
+    rescale(tubedata.Latitude, extrema_lat..., 280, -280))
+
+stations = tubedata[!,:Station]
+
+find(str) = findfirst(isequal(str), stations)
+find(x::Int64) = stations[x]
+
+g = Graph(amatrix)</code></pre><p>The tube “map” is stored in <code>g</code>, as a <code>{267, 308} undirected simple Int64 graph</code>.</p><p>The <code>find()</code> functions are just a quick way to convert between station names and ID numbers:</p><pre><code class="language-julia hljs">find(&quot;Waterloo&quot;)</code></pre><pre class="documenter-example-output"><code class="nohighlight hljs ansi">244</code></pre><pre><code class="language-julia hljs">find(244)</code></pre><pre class="documenter-example-output"><code class="nohighlight hljs ansi">&quot;Waterloo&quot;</code></pre><h3 id="Not-a-map"><a class="docs-heading-anchor" href="#Not-a-map">Not a map</a><a id="Not-a-map-1"></a><a class="docs-heading-anchor-permalink" href="#Not-a-map" title="Permalink"></a></h3><p>Most London residents and visitors are used to seeing the famous <a href="https://en.wikipedia.org/wiki/Tube_map">Tube Map</a>:</p><p><img src="../assets/figures/tubemap.png" alt="tube map"/></p><p>It’s a design classic, hand-drawn by Harry Beck in 1931, and updated regularly ever since. As an electrical engineer, Beck represented the sprawling London track network as a tidy circuit board. For Beck, the important thing about the map was to show the connections, rather than the accurate geography.</p><p>Our version looks very different, but it is at least geographically more accurate, because the latitude and longitude values of the stations are passed to <code>layout</code>.</p><pre><code class="language-julia hljs">@drawsvg begin
+background(&quot;grey10&quot;)
+sethue(&quot;grey50&quot;)
+drawgraph(g,
+    layout = positions,
+    vertexshapes = :none,
+    vertexlabeltextcolors = colorant&quot;white&quot;,
+    vertexlabels = find.(1:nv(g)),
+    vertexlabelfontsizes = 6)
+end</code></pre><img src="afaab5d6.svg" alt="Example block output"/><p>The layout algorithms - <code>layout = spring</code> and <code>layout = stress</code> - do a reasonable job, but people like to see north at the top of maps, and south at the bottom, not mixed up in any direction, like these.</p><pre><code class="language-julia hljs">@drawsvg begin
+background(&quot;grey20&quot;)
+tiles = Tiler(800, 400, 1, 2)
+sethue(&quot;white&quot;)
+
+@layer begin
+    translate(first(tiles[1]))
+    drawgraph(g,
+        layout=spring,
+        boundingbox = BoundingBox(box(O, 400, 400)),
+        vertexshapes = :none,
+        vertexlabeltextcolors = colorant&quot;white&quot;,
+        vertexlabels = find.(1:nv(g)),
+        vertexlabelfontsizes = 6
+        )
+end
+
+@layer begin
+    translate(first(tiles[2]))
+    drawgraph(g,
+        layout=stress,
+        boundingbox = BoundingBox(box(O, 400, 400)),
+        vertexshapes = :none,
+        vertexlabeltextcolors = colorant&quot;white&quot;,
+        vertexlabels = find.(vertices(g)),
+        vertexlabelfontsizes = 6
+        )
+end
+
+end 800 400</code></pre><img src="c37d9d4b.svg" alt="Example block output"/><h3 id="Train-terminates-here"><a class="docs-heading-anchor" href="#Train-terminates-here">Train terminates here</a><a id="Train-terminates-here-1"></a><a class="docs-heading-anchor-permalink" href="#Train-terminates-here" title="Permalink"></a></h3><p>Use the <code>degree()</code> function to show just the station names at the end of a line: a vertex with a degree of 1 is a terminus:</p><pre><code class="language-julia hljs">@drawsvg begin
+background(&quot;grey90&quot;)
+sethue(&quot;black&quot;)
+drawgraph(g, layout=positions,
+    vertexshapesizes = 2,
+    vertexlabels = [(degree(g, n) == 1) ? find(n) : &quot;&quot;
+        for n in vertices(g)],
+    vertexlabeltextcolors = colorant&quot;blue&quot;
+    )
+end</code></pre><img src="60534e90.svg" alt="Example block output"/><p>These labels show names familiar to all Tube-riders - the ones shown on the front of trains and on platform indicators. (It&#39;s unusual to visit them all, unless you&#39;re like <a href="https://www.bbc.co.uk/news/uk-england-london-24203949">Geoff Marshall</a>, who holds the world record for the fastest time visiting every Tube station.)</p><h3 id="Neighbors"><a class="docs-heading-anchor" href="#Neighbors">Neighbors</a><a id="Neighbors-1"></a><a class="docs-heading-anchor-permalink" href="#Neighbors" title="Permalink"></a></h3><p>The best connected station is also one of the oldest, dating back to 1863:</p><pre><code class="language-julia hljs">find(argmax(degree(g, 1:nv(g))))</code></pre><pre class="documenter-example-output"><code class="nohighlight hljs ansi">&quot;Baker Street&quot;</code></pre><p>Its neighbors are:</p><pre><code class="language-julia hljs">find.(neighbors(g, find(&quot;Baker Street&quot;)))</code></pre><pre class="documenter-example-output"><code class="nohighlight hljs ansi">7-element Vector{InlineStrings.String31}:
+ &quot;Bond Street&quot;
+ &quot;Edgware Road (Cir)&quot;
+ &quot;Finchley Road&quot;
+ &quot;Great Portland Street&quot;
+ &quot;Marylebone&quot;
+ &quot;Regent&#39;s Park&quot;
+ &quot;St John&#39;s Wood&quot;</code></pre><h3 id="Centrality"><a class="docs-heading-anchor" href="#Centrality">Centrality</a><a id="Centrality-1"></a><a class="docs-heading-anchor-permalink" href="#Centrality" title="Permalink"></a></h3><p>Using Graphs.jl&#39;s tools for measuring centrality, Baker Street is again at the top of the list, but Green Park (the Queen&#39;s nearest tube station), scores highly, despite not being in the top 20 busiest stations.</p><pre><code class="language-julia hljs">@drawsvg begin
+background(&quot;grey10&quot;)
+translate(0, -200)
+scale(3)
+bc = betweenness_centrality(g)
+sethue(&quot;gold&quot;)
+_, maxbc = extrema(bc)
+drawgraph(g, layout = positions,
+    vertexlabels = (vtx) -&gt; bc[vtx] &gt; maxbc * 0.6 &amp;&amp; string(find(vtx)),
+    vertexlabeltextcolors = colorant&quot;cyan&quot;,
+    vertexlabelfontsizes = 6,
+    vertexshapesizes = 1 .+ 10bc,
+    vertexfillcolors = HSB.(rescale.(bc, 0, maximum(bc), 0, 300), 0.7, 0.8),
+    )
+end 800 600</code></pre><img src="f47c40e0.svg" alt="Example block output"/><h3 id="Mornington-Crescent"><a class="docs-heading-anchor" href="#Mornington-Crescent">Mornington Crescent</a><a id="Mornington-Crescent-1"></a><a class="docs-heading-anchor-permalink" href="#Mornington-Crescent" title="Permalink"></a></h3><p>A route from Heathrow Terminal 5 to <a href="https://en.wikipedia.org/wiki/Mornington_Crescent_(game)">Mornington Crescent</a> can be found using <code>a_star()</code>.</p><pre><code class="language-julia hljs">heathrow_to_morningtoncrescent = a_star(g,
+    find(&quot;Heathrow Terminal 5&quot;),
+    find(&quot;Mornington Crescent&quot;))
+
+@drawsvg begin
+background(&quot;grey70&quot;)
+translate(0, -100)
+scale(3)
+
+sethue(&quot;grey50&quot;)
+drawgraph(g,
+    layout = positions,
+    vertexshapesizes = 1)
+
+sethue(&quot;black&quot;)
+fontsize(4)
+drawgraph(g,
+    layout = positions,
+    vertexshapes = :none,
+    edgelist = heathrow_to_morningtoncrescent,
+    edgestrokeweights = 3,
+    vertexlabels = (vtx) -&gt; begin
+        if vtx ∈ src.(heathrow_to_morningtoncrescent) ||
+           vtx ∈ dst.(heathrow_to_morningtoncrescent)
+             circle(positions[vtx], 2, :fill)
+             label(find(vtx), :e, positions[vtx])
+        end
+    end)
+end</code></pre><img src="caec9b68.svg" alt="Example block output"/><p>The route found by <code>a_star</code> is:</p><pre><code class="language-julia hljs">[find(dst(e)) for e in heathrow_to_morningtoncrescent]</code></pre><pre class="documenter-example-output"><code class="nohighlight hljs ansi">22-element Vector{InlineStrings.String31}:
+ &quot;Heathrow Terminals 2 &amp; 3&quot;
+ &quot;Hatton Cross&quot;
+ &quot;Hounslow West&quot;
+ &quot;Hounslow Central&quot;
+ &quot;Hounslow East&quot;
+ &quot;Osterley&quot;
+ &quot;Boston Manor&quot;
+ &quot;Northfields&quot;
+ &quot;South Ealing&quot;
+ &quot;Acton Town&quot;
+ ⋮
+ &quot;Gloucester Road&quot;
+ &quot;South Kensington&quot;
+ &quot;Sloane Square&quot;
+ &quot;Victoria&quot;
+ &quot;Green Park&quot;
+ &quot;Oxford Circus&quot;
+ &quot;Warren Street&quot;
+ &quot;Euston&quot;
+ &quot;Mornington Crescent&quot;</code></pre><p>Information about the required changes - at Victoria from the Piccadilly line to the Victoria Line, and at Warren Street from the Victoria Line to the Northern Line - is not part of the graph. Routes across the Tube network, like the trains, follow the tracks (edges). The concept of “lines” (Victoria, Circle, etc) isn’t part of the graph structure, but a colorful layer imposed on top of the track network.</p><h3 id="Pandemic"><a class="docs-heading-anchor" href="#Pandemic">Pandemic</a><a id="Pandemic-1"></a><a class="docs-heading-anchor-permalink" href="#Pandemic" title="Permalink"></a></h3><p>Graphs.jl provides many functions for analysing graph networks. The <code>diffusion()</code> function appears to simulate the diffusion of an infection from some starting vertices and the probability of spreading.</p><p>The function returns an array of arrays, where each one contains the vertex numbers of newly &quot;infected&quot; vertices. For example, in this result:</p><pre><code class="language-julia hljs">[[1], Int64[], [22, 15, 25], ...]</code></pre><p>the first stage showed vertex 1 &quot;infected&quot;; stage two was free of incident; but on stage 3 vertices 22, 15, and 25 have become &quot;infected&quot;.</p><p>So here, apparently, is a simulation of what might happen when an infection arrives at Heathrow Airport&#39;s Terminal 5 tube station, and starts spreading through the tube network.</p><pre><code class="language-julia hljs">function frame(scene, framenumber, diffresult)
+    background(&quot;black&quot;)
+    sethue(&quot;gold&quot;)
+    text(string(framenumber), boxbottomleft() + (10, -10))
+    drawgraph(g, layout = positions, vertexshapesizes = 3)
+    for k in 1:framenumber
+        i = diffresult[k]
+        drawgraph(
+            g,
+            layout = positions,
+            edgelines = 0,
+            vertexfunction = (v, c) -&gt; begin
+                if !isempty(i)
+                    if v ∈ i
+                        sethue(&quot;red&quot;)
+                        circle(positions[v], 5, :fill)
+                    end
+                end
+            end,
+        )
+    end
+end
+
+function main()
+    amovie = Movie(600, 600, &quot;diff&quot;)
+    diffresult = diffusion(g, 0.2, 200, initial_infections=[find(&quot;Heathrow Terminal 5&quot;)])
+    animate(amovie,
+        Scene(amovie, (s, f) -&gt; frame(s, f, diffresult), 1:length(diffresult)),
+        framerate=10,
+        creategif=true,
+        pathname=&quot;/tmp/diff.gif&quot;)
+end
+main()</code></pre><p><img src="../assets/figures/diffusion.gif" alt="diffusion"/></p><h2 id="The-JuliaGraphs-logo"><a class="docs-heading-anchor" href="#The-JuliaGraphs-logo">The JuliaGraphs logo</a><a id="The-JuliaGraphs-logo-1"></a><a class="docs-heading-anchor-permalink" href="#The-JuliaGraphs-logo" title="Permalink"></a></h2><p>The current logo for the Graphs.jl package was easily drawn using Karnak.</p><p>I wanted to use the graph coloring feature (<code>greedy_color()</code>), but unfortunately it was <strong>too</strong> clever, managing to color the graph using only two colors instead of the four I was hoping to use.</p><pre><code class="language-julia hljs">using Graphs
+using Karnak
+using Colors
+
+function lighten(col::Colorant, f)
+    c = convert(RGB, col)
+    return RGB(f * c.r, f * c.g, f * c.b)
+end
+
+function julia_sphere(pt::Point, w, col::Colorant;
+        action = :none)
+    setmesh(mesh(
+        makebezierpath(box(pt, w * 1.5, w * 1.5)),
+        [lighten(col, .5),
+         lighten(col, 1.75),
+         lighten(col, 1.25),
+         lighten(col, .6)]))
+    circle(pt, w, action)
+end
+
+function draw_edge(pt1, pt2)
+    for k in 0:0.1:1
+        setline(rescale(k, 0, 1, 25, 1))
+        sethue(lighten(colorant&quot;grey50&quot;, rescale(k, 0, 1, 0.5, 1.5)))
+        setopacity(rescale(k, 0, 1, 0.5, 0.75))
+        line(pt1, pt2, :stroke)
+    end
+end
+
+# positions for vertices
+
+outerpts = ngonside(O, 450, 4, π/4, vertices=true)
+innerpts = ngonside(O, 150, 4, π/2, vertices=true)
+pts = vcat(outerpts, innerpts)
+
+colors = map(c -&gt; RGB(c...),
+    [Karnak.Luxor.julia_blue, Karnak.Luxor.julia_red, Karnak.Luxor.julia_green, Karnak.Luxor.julia_purple])
+
+@drawsvg begin
+    squircle(O, 294, 294, :clip, rt=0.2)
+    sethue(&quot;black&quot;)
+    paint()
+    g = SimpleGraph([
+        Edge(1,2), Edge(2,3), Edge(3,4), Edge(1,4),
+        Edge(5,6), Edge(6,7), Edge(7,8), Edge(5,8),
+        Edge(1,5), Edge(2,6), Edge(3,7), Edge(4,8),
+        ])
+
+    drawgraph(Graph(g),
+        layout=pts,
+        vertexfunction = (v, c) -&gt; begin
+            d = distance(O, c[v])
+            d &gt; 200 ? k = 0 : k = 1
+            julia_sphere(c[v],
+                 rescale(d, 0, 200, 52, 50), colors[mod1(v + k, 4)],
+                action=:fill)
+        end,
+        edgefunction = (k, s, d, f, t) -&gt; draw_edge(f, t)
+        )
+end</code></pre><img src="abca1b1b.svg" alt="Example block output"/><h2 id="Julia-Package-Dependencies"><a class="docs-heading-anchor" href="#Julia-Package-Dependencies">Julia Package Dependencies</a><a id="Julia-Package-Dependencies-1"></a><a class="docs-heading-anchor-permalink" href="#Julia-Package-Dependencies" title="Permalink"></a></h2><p>This example was originally developed by <a href="https://github.com/matbesancon/lightgraphs_workshop">Mathieu Besançon</a> and presented as part of the workshop: <strong>Analyzing Graphs at Scale</strong>, at JuliaCon 2020. You can watch the video on <a href="https://youtu.be/K3z0kUOBy2Y">YouTube</a>.</p><p>The most important changes since the video was made are:</p><ul><li><p>the renaming of LightGraphs.jl to Graphs.jl</p></li><li><p>the way to access the list of packages has changed</p></li></ul><p>The code builds a dependency graph of the connections (ie which package depends on which package) for Julia packages in the General registry.</p><p>Then it&#39;s possible draw some pictures, such as this chonky SVG file showing the dependencies for the Colors.jl package:</p><p><img src="../assets/figures/graph-dependencies-colors.svg" alt="package dependencies for Colors"/></p><p>Or this one, which attempts to highlight just the more connected packages in the Colors.jl dependency graph:</p><p><img src="../assets/figures/graph-dependencies-colors-2.svg" alt="package dependencies for Colors"/></p><p>Setup:</p><pre><code class="language-julia hljs">using Graphs
+using MetaGraphs
+using TOML
+using Karnak
+using Colors</code></pre><h3 id="Finding-the-general-registry"><a class="docs-heading-anchor" href="#Finding-the-general-registry">Finding the general registry</a><a id="Finding-the-general-registry-1"></a><a class="docs-heading-anchor-permalink" href="#Finding-the-general-registry" title="Permalink"></a></h3><p>On my computer, the registry is in its default location. You might need to modify these lines if yours is is another location:</p><pre><code class="language-julia hljs">path_to_general = expanduser(&quot;~/.julia/registries/General&quot;)
+registry_file = Pkg.TOML.parsefile(joinpath(path_to_general, &quot;Registry.toml&quot;))
+packages_info = registry_file[&quot;packages&quot;];</code></pre><p>First we need the name and location of every package:</p><pre><code class="language-julia hljs"># Julia &lt;= v1.6
+pkg_paths = map(values(packages_info)) do d
+    (name = d[&quot;name&quot;], path = d[&quot;path&quot;])
+end</code></pre><pre><code class="language-julia hljs"># Julia &gt;= v1.7
+pkg_paths = map(values(Pkg.Registry.reachable_registries()[1].pkgs)) do d
+    (name = d.name, path = d.path)
+end</code></pre><p>The result in <code>pkg_paths</code> is a vector of tuples, containing the name and location of every package:</p><pre><code class="language-julia hljs">7495-element Vector{NamedTuple{(:name, :path), Tuple{String, String}}}:
+ (name = &quot;COSMA_jll&quot;, path = &quot;C/COSMA_jll&quot;)
+ (name = &quot;CitableImage&quot;, path = &quot;C/CitableImage&quot;)
+ (name = &quot;Trixi2Img&quot;, path = &quot;T/Trixi2Img&quot;)
+ (name = &quot;ImPlot&quot;, path = &quot;I/ImPlot&quot;)</code></pre><h3 id="Find-packages-that-depend-on-a-specific-package"><a class="docs-heading-anchor" href="#Find-packages-that-depend-on-a-specific-package">Find packages that depend on a specific package</a><a id="Find-packages-that-depend-on-a-specific-package-1"></a><a class="docs-heading-anchor-permalink" href="#Find-packages-that-depend-on-a-specific-package" title="Permalink"></a></h3><p>The function <code>find_direct_deps()</code> finds all the packages (names and locations) that directly depend on a specific named package.</p><pre><code class="language-julia hljs">function find_direct_deps(registry_path, pkg_paths, source)
+    filter(pkg_paths) do pkg_path
+        deps_file = joinpath(registry_path, pkg_path.path, &quot;Deps.toml&quot;)
+        # some packages don&#39;t have Deps.toml file
+        isfile(deps_file) &amp;&amp; begin
+            deps_struct = Pkg.TOML.parsefile(deps_file)
+            any(values(deps_struct)) do d
+                source in keys(d)
+            end
+        end
+    end
+end</code></pre><p>We can now find out how many packages depend on a particular package. For example, how many packages depend on <code>Colors.jl</code> (my favourite)?</p><pre><code class="language-julia hljs">find_direct_deps(path_to_general, pkg_paths, &quot;Colors&quot;)</code></pre><p>giving this result:</p><pre><code class="language-julia hljs">227-element Vector{NamedTuple{(:name, :path), Tuple{String, String}}}:
+ (name = &quot;TopologyPreprocessing&quot;, path = &quot;T/TopologyPreprocessing&quot;)
+ (name = &quot;DynamicGrids&quot;, path = &quot;D/DynamicGrids&quot;)
+ (name = &quot;SimpleSDMLayers&quot;, path = &quot;S/SimpleSDMLayers&quot;)
+ (name = &quot;UnderwaterAcoustics&quot;, path = &quot;U/UnderwaterAcoustics&quot;)
+ (name = &quot;ColorSchemeTools&quot;, path = &quot;C/ColorSchemeTools&quot;)
+ (name = &quot;PrincipalMomentAnalysisApp&quot;, path = &quot;P/PrincipalMomentAnalysisApp&quot;)
+ ⋮
+ (name = &quot;SoilWater_ToolBox&quot;, path = &quot;S/SoilWater_ToolBox&quot;)
+ (name = &quot;Starlight&quot;, path = &quot;S/Starlight&quot;)
+ (name = &quot;Dojo&quot;, path = &quot;D/Dojo&quot;)
+ (name = &quot;OpticSim&quot;, path = &quot;O/OpticSim&quot;)
+ (name = &quot;LVServer&quot;, path = &quot;L/LVServer&quot;)</code></pre><p>Colors.jl has 227 packages that depend on it. When Mathieu ran this code in 2020 on &quot;LightGraphs&quot;, the vector had 92 elements. Today, in 2022, for &quot;Graphs&quot;, the vector has 115 elements.</p><h3 id="Build-a-directed-tree"><a class="docs-heading-anchor" href="#Build-a-directed-tree">Build a directed tree</a><a id="Build-a-directed-tree-1"></a><a class="docs-heading-anchor-permalink" href="#Build-a-directed-tree" title="Permalink"></a></h3><p>The next function, <code>build_tree()</code>, will build a directed graph of the dependencies on Colors.jl. Starting at the root package (Colors) the loop finds all its dependencies, then finds the dependencies of all of those dependent packages, and continues doing this until it reaches packages that have no dependencies. These are the &quot;leaves&quot; at the tip of the tree&#39;s branches.</p><pre><code class="language-julia hljs">function build_tree(registry_path, pkg_paths, root)
+    g = MetaDiGraph()
+    add_vertex!(g)
+    set_prop!(g, 1, :name, root)
+    i = 1
+    explored_nodes = Set{String}((root,))
+    while true
+        i % 50 == 0 &amp;&amp; print(i, &quot; &quot;)
+        current_node = get_prop(g, i, :name)
+        direct_deps = find_direct_deps(registry_path, pkg_paths, current_node)
+        filter!(d -&gt; d.name ∉ explored_nodes, direct_deps)
+        if isempty(direct_deps) &amp;&amp; i &gt;= nv(g)
+           break
+        end
+        for ddep in direct_deps
+           push!(explored_nodes, ddep.name)
+           add_vertex!(g)
+           set_prop!(g, nv(g), :name, ddep.name)
+           add_edge!(g, i, nv(g))
+        end
+        i += 1
+    end
+    return g
+end</code></pre><div class="admonition is-info" id="Note-e1632a3471968a92"><header class="admonition-header">Note<a class="admonition-anchor" href="#Note-e1632a3471968a92" title="Permalink"></a></header><div class="admonition-body"><p>This function takes some time to run - about 8 minutes for about 1400 iterations on my computer.</p></div></div><pre><code class="language-julia hljs">g = build_tree(path_to_general, pkg_paths, &quot;Colors&quot;)
+
+{1375, 1374} directed Int64 metagraph with Float64 weights defined by :weight (default weight 1.0)</code></pre><p>Notice that there are 1375 nodes, but one less edge. The Colors.jl package is the root of the tree, and doesn&#39;t connect to anything else, in this analysis.) Of course, it depends on quite a few, but that&#39;s another graph story.)</p><p>The result is a <em>directed metagraph</em>. In a metagraph, as implemented by MetaGraphs.jl, it&#39;s possible to add information to vertices using <code>set_prop()</code> and <code>get_prop()</code>.</p><p>To find all the package names in the graph that are directly connected to Colors.jl, we can broadcast <code>get_prop()</code> like this:</p><pre><code class="language-julia hljs">get_prop.(Ref(g), outneighbors(g, 1), :name)
+
+227-element Vector{String}:
+ &quot;SqState&quot;
+ &quot;InteractBase&quot;
+ &quot;ImageMetadata&quot;
+ &quot;PlantGeom&quot;
+ &quot;MicrobiomePlots&quot;
+ &quot;MeshViz&quot;
+ &quot;SGtSNEpi&quot;
+ &quot;ColorSchemes&quot;
+ &quot;CairoMakie&quot;
+ ⋮
+ &quot;GenomicMaps&quot;
+ &quot;ModiaPlot&quot;
+ &quot;Thebes&quot;
+ &quot;ConstrainedDynamics&quot;
+ &quot;AutomotiveVisualization&quot;
+ &quot;Flux&quot;</code></pre><p><code>outneighbors</code> returns a list of all neighbors connected to vertex <code>v</code> by an outgoing edge.</p><h3 id="Shortest-paths-and-lengths-of-branches"><a class="docs-heading-anchor" href="#Shortest-paths-and-lengths-of-branches">Shortest paths and lengths of branches</a><a id="Shortest-paths-and-lengths-of-branches-1"></a><a class="docs-heading-anchor-permalink" href="#Shortest-paths-and-lengths-of-branches" title="Permalink"></a></h3><p>The <code>dijkstra_shortest_paths()</code> function finds the paths between the designated package and all its dependencies.</p><p>The returned value is a DijkstraState object, with fields <code>parents</code>, <code>dists</code>, <code>predecessors</code>, <code>pathcounts</code>, and <code>closest_vertices</code>.</p><p>Looking at the <code>dists</code> (distances), we see that one package is very close indeed at 0.0 - that&#39;s Colors.jl itself.</p><pre><code class="language-julia hljs">spath_result = dijkstra_shortest_paths(g, 1)
+
+spath_result.dists
+
+1375-element Vector{Float64}:
+ 0.0
+ 1.0
+ 1.0
+ 1.0
+ 1.0
+ 1.0
+ 1.0
+ ⋮
+ 5.0
+ 5.0
+ 5.0
+ 6.0
+ 6.0
+ 6.0
+ 6.0
+ 6.0
+ 6.0
+ 7.0
+ 7.0</code></pre><p>Or in a barchart:</p><pre><code class="language-julia hljs">scores = [count(==(i), spath_result.dists) for i in unique(spath_result.dists)]</code></pre><img src="f2f237bd.svg" alt="Example block output"/><p>The &quot;furthest&quot; packages from Colors.jl - the two seven steps away - are:</p><pre><code class="language-julia hljs">for idx in eachindex(spath_result.dists)
+    if spath_result.dists[idx] == 7
+         println(get_prop(g, idx, :name))
+    end
+end
+
+QuantumESPRESSOExpress
+Recommenders</code></pre><h3 id="Computing-a-full-subgraph"><a class="docs-heading-anchor" href="#Computing-a-full-subgraph">Computing a full subgraph</a><a id="Computing-a-full-subgraph-1"></a><a class="docs-heading-anchor-permalink" href="#Computing-a-full-subgraph" title="Permalink"></a></h3><p>All the package names are obtained with:</p><pre><code class="language-julia hljs">all_packages = get_prop.(Ref(g), vertices(g), :name)
+
+Vector{String}:
+ &quot;Colors&quot;
+ &quot;TopologyPreprocessing&quot;
+ &quot;DynamicGrids&quot;
+ &quot;SimpleSDMLayers&quot;
+ &quot;UnderwaterAcoustics&quot;
+ &quot;ColorSchemeTools&quot;
+ ⋮
+ &quot;ReservoirComputing&quot;
+ &quot;TreeParzen&quot;
+ &quot;GeoStatsImages&quot;
+ &quot;StoppingInterface&quot;
+ &quot;QuantumESPRESSO&quot;
+ &quot;Recommenders&quot;
+ &quot;QuantumESPRESSOExpress&quot;</code></pre><p>These next commands build a metagraph, using the package names:</p><pre><code class="language-julia hljs">full_graph = MetaDiGraph(length(all_packages))
+
+{1375, 0} directed Int64 metagraph with Float64 weights defined by :weight (default weight 1.0)</code></pre><p>Assigning names to the vertices:</p><pre><code class="language-julia hljs">for v in vertices(full_graph)
+    set_prop!(full_graph, v, :name, all_packages[v])
+end</code></pre><p>Build the full graph:</p><pre><code class="language-julia hljs">for v in vertices(full_graph)
+    pkg_name = get_prop(full_graph, v, :name)
+    dependent_packages = find_direct_deps(path_to_general, pkg_paths, pkg_name)
+    for dep_pkg in dependent_packages
+        pkg_idx = findfirst(==(dep_pkg.name), all_packages)
+        # only packages in graph
+        if pkg_idx !== nothing
+            add_edge!(full_graph, pkg_idx, v)
+        end
+    end
+end</code></pre><p>It&#39;s useful to be able to save and load this graph:</p><pre><code class="language-julia hljs"># using Graphs, MetaGraphs
+# save:
+savegraph(&quot;examples/full_graph.lg&quot;, full_graph))
+
+# load:
+full_graph = loadgraph(&quot;examples/full_graph.lg&quot;, MGFormat())</code></pre><h3 id="All-roads-lead-to-home"><a class="docs-heading-anchor" href="#All-roads-lead-to-home">All roads lead to home</a><a id="All-roads-lead-to-home-1"></a><a class="docs-heading-anchor-permalink" href="#All-roads-lead-to-home" title="Permalink"></a></h3><p>The code in this next example draws the vertices as an impressionistic point cloud, and uses the <code>a_star()</code> function to find a path from some random package back to Colors.jl.</p><pre><code class="language-julia hljs">@drawsvg begin
+    background(&quot;black&quot;)
+    sethue(&quot;white&quot;)
+    fontface(&quot;BarlowCondensed-Bold&quot;)
+    random_package = rand(1:nv(full_graph))
+    astar = a_star(full_graph, random_package, 1)
+    astar_vertices = sort(unique(vcat([src(e) for e in astar], [dst(e) for e in astar])), rev=true)
+    drawgraph(g,
+        edgelist=astar,
+        layout=spring,
+        vertexlabels = (v) -&gt; v ∈ astar_vertices[[begin, end]] &amp;&amp; get_prop(full_graph, v, :name),
+        vertexlabeltextcolors = colorant&quot;white&quot;,
+        vertexlabelfontsizes = 20,
+        vertexlabelfontfaces = &quot;BarlowCondensed-Bold&quot;,
+        vertexshapesizes = .5,
+        vertexstrokecolors = :none)
+    textfit(string(join(get_prop.(Ref(full_graph), astar_vertices, :name), &quot; &gt; &quot;)),
+        BoundingBox(box(boxbottomcenter() + (0, -30), 600, 50)))
+end 800 800</code></pre><p><img src="../assets/figures/dep_chain.svg" alt="chain of deps"/></p><h3 id="Pagerank"><a class="docs-heading-anchor" href="#Pagerank">Pagerank</a><a id="Pagerank-1"></a><a class="docs-heading-anchor-permalink" href="#Pagerank" title="Permalink"></a></h3><p>This code computes the <em>pagerank</em> of the graph. It returns a long list of numbers, the centrality score for each vertex.</p><pre><code class="language-julia hljs">ranks = pagerank(full_graph)
+
+1375-element Vector{Float64}:
+ 0.15339826572024867
+ 0.00020384989099126913
+ 0.00043081071431843264
+ 0.0002471787754446367
+ 0.0005504809666182096
+ 0.00020384989099126913
+ 0.00020384989099126913
+ 0.00034105802509359976
+ 0.0012284800170342895
+ ⋮
+ 0.00020384989099126913
+ 0.00020384989099126913
+ 0.00042629607921470863
+ 0.00020384989099126913
+ 0.0002616217369290926</code></pre><pre><code class="language-julia hljs">@drawsvg begin
+    background(&quot;black&quot;)
+    sethue(&quot;white&quot;)
+    fontface(&quot;BarlowCondensed-Bold&quot;)
+    ranks = pagerank(full_graph)
+    drawgraph(g,
+        edgelist = [],
+        layout=spring,
+        vertexshapes = :none,
+        vertexlabels = (v) -&gt; ranks[v] &gt; 0.001 &amp;&amp; get_prop(full_graph, v, :name),
+        vertexlabelfontsizes = 500ranks,
+        vertexlabeltextcolors = colorant&quot;white&quot;)
+end 800 800</code></pre><p><img src="../assets/figures/pagerank.svg" alt="pagerank"/></p><p>The problem with this representation is one of overlapping labels. This isn&#39;t an issue we can fix easily in Karnak.</p><h3 id="Highly-ranked"><a class="docs-heading-anchor" href="#Highly-ranked">Highly ranked</a><a id="Highly-ranked-1"></a><a class="docs-heading-anchor-permalink" href="#Highly-ranked" title="Permalink"></a></h3><p>With some sorting, we can find the highest ranked packages in this part of the ecosystem.</p><pre><code class="language-julia hljs">sorted_indices = sort(eachindex(ranks), by=i-&gt;ranks[i], rev=true)
+
+1375-element Vector{Int64}:
+   1
+ 543
+ 137
+ 112
+ 144
+ 164
+   ⋮
+ 259
+ 258
+ 729
+ 730
+ 688</code></pre><pre><code class="language-julia hljs">get_prop.(Ref(full_graph), sorted_indices, :name)
+
+1375-element Vector{String}:
+ &quot;Colors&quot;
+ &quot;Plots&quot;
+ &quot;ImageCore&quot;
+ &quot;PlotUtils&quot;
+ &quot;ColorSchemes&quot;
+ &quot;ColorVectorSpace&quot;
+ ⋮
+ &quot;TopOptMakie&quot;
+ &quot;VTKDataIO&quot;
+ &quot;EFTfitter&quot;
+ &quot;SpmGrids&quot;
+ &quot;ElectronTests&quot;</code></pre><h3 id="Most-dependencies,-most-depended-on"><a class="docs-heading-anchor" href="#Most-dependencies,-most-depended-on">Most dependencies, most depended on</a><a id="Most-dependencies,-most-depended-on-1"></a><a class="docs-heading-anchor-permalink" href="#Most-dependencies,-most-depended-on" title="Permalink"></a></h3><p><code>indegree()</code> returns the number of edges which end at a vertex. For a package, this is another way of seeing how many other packages depend on it.  </p><pre><code class="language-julia hljs">in_sorted_indices = sort(vertices(full_graph),
+    by = i -&gt; indegree(full_graph, i), rev = true)
+
+1375-element Vector{Int64}:
+ 543
+   1
+  65
+  98
+ 133
+ 137
+   ⋮
+ 287
+ 743
+ 744
+ 285
+ 688</code></pre><pre><code class="language-julia hljs">get_prop.(Ref(full_graph), in_sorted_indices, :name)
+
+1375-element Vector{String}:
+ &quot;Plots&quot;
+ &quot;Colors&quot;
+ &quot;Flux&quot;
+ &quot;Images&quot;
+ &quot;PyPlot&quot;
+ &quot;ImageCore&quot;
+ ⋮
+ &quot;PolaronMobility&quot;
+ &quot;CineFiles&quot;
+ &quot;MadNLPGraph&quot;
+ &quot;MicroscopyLabels&quot;
+ &quot;ElectronTests&quot;</code></pre><p><code>outdegree()</code> finds the number of edges which start at a vertex.</p><pre><code class="language-julia hljs">out_sorted_indices = sort(vertices(full_graph),
+    by = i -&gt; outdegree(full_graph, i), rev=true)
+
+1375-element Vector{Int64}:
+ 372
+  98
+  35
+  24
+ 300
+ 153
+   ⋮
+ 776
+ 777
+ 778
+ 779
+   1</code></pre><pre><code class="language-julia hljs">get_prop.(Ref(full_graph), out_sorted_indices, :name)
+
+1375-element Vector{String}:
+ &quot;StatisticalRethinking&quot;
+ &quot;Images&quot;
+ &quot;Makie&quot;
+ &quot;MakieGallery&quot;
+ &quot;PredictMDExtra&quot;
+ &quot;GLMakie&quot;
+ ⋮
+ &quot;MimiPAGE2020&quot;
+ &quot;MimiSNEASY&quot;
+ &quot;OptiMimi&quot;
+ &quot;SyntheticNetworks&quot;
+ &quot;Colors&quot;</code></pre><pre><code class="language-julia hljs">ranks_betweenness = betweenness_centrality(full_graph)
+
+1375-element Vector{Float64}:
+ 0.0
+ 0.0
+ 3.1186467511475384e-5
+ 5.300816007616213e-7
+ 5.830897608377834e-5
+ 0.0
+ ⋮
+ 0.0
+ 0.0
+ 4.24065280609297e-6
+ 0.0
+ 1.0601632015232426e-6</code></pre><pre><code class="language-julia hljs">sorted_indices_betweenness = sort(vertices(full_graph),
+    by = i -&gt; ranks_betweenness[i], rev=true)
+
+1375-element Vector{Int64}:
+ 144
+  98
+ 112
+ 543
+ 461
+  35
+   ⋮
+ 562
+ 563
+ 564
+ 565
+   1</code></pre><pre><code class="language-julia hljs">get_prop.(Ref(full_graph), sorted_indices_betweenness, :name)
+
+1375-element Vector{String}:
+ &quot;ColorSchemes&quot;
+ &quot;Images&quot;
+ &quot;PlotUtils&quot;
+ &quot;Plots&quot;
+ &quot;ImageIO&quot;
+ &quot;Makie&quot;
+ ⋮
+ &quot;BridgeDiffEq&quot;
+ &quot;BridgeLandmarks&quot;
+ &quot;FCA&quot;
+ &quot;BEASTDataPrep&quot;
+ &quot;Colors&quot;</code></pre><h3 id="Is_cyclic"><a class="docs-heading-anchor" href="#Is_cyclic">Is_cyclic</a><a id="Is_cyclic-1"></a><a class="docs-heading-anchor-permalink" href="#Is_cyclic" title="Permalink"></a></h3><p><code>is_cyclic()</code> returns true if the graph contains a cycle.</p><pre><code class="language-julia hljs">is_cyclic(full_graph)
+
+true
+
+for cycle in simplecycles(full_graph)
+    names = get_prop.(Ref(full_graph), cycle, :name)
+    @info names
+end
+
+[&quot;ImageCore&quot;, &quot;MosaicViews&quot;]
+[&quot;Images&quot;, &quot;ImageSegmentation&quot;]
+[&quot;Makie&quot;, &quot;GLMakie&quot;]
+[&quot;POMDPPolicies&quot;, &quot;BeliefUpdaters&quot;, &quot;POMDPModels&quot;, &quot;POMDPSimulators&quot;]
+[&quot;BeliefUpdaters&quot;, &quot;POMDPModels&quot;]
+[&quot;BeliefUpdaters&quot;, &quot;POMDPModels&quot;, &quot;POMDPSimulators&quot;]
+[&quot;ReinforcementLearning&quot;, &quot;ReinforcementLearningEnvironmentDiscrete&quot;]
+[&quot;Modia3D&quot;, &quot;Modia&quot;]
+[&quot;RasterDataSources&quot;, &quot;GeoData&quot;]
+[&quot;DSGE&quot;, &quot;StateSpaceRoutines&quot;]</code></pre><p>For that first cycle: ImageCore.jl&#39;s Project.toml file has MosaicViews.jl in its <code>[deps]</code> section, and MosaicViews.jl has ImageCore.jl in the <code>[extras]</code> section of its Project.toml file.</p><h3 id="Draw-some-graphs"><a class="docs-heading-anchor" href="#Draw-some-graphs">Draw some graphs</a><a id="Draw-some-graphs-1"></a><a class="docs-heading-anchor-permalink" href="#Draw-some-graphs" title="Permalink"></a></h3><p>Visualizations of graphs are sometimes (often?) better at communicating vague ideas such as complexity and shape. But it&#39;s quite difficult to render graphs as rich as these to show the connections clearly while also showing all the labels such that they&#39;re easy to read.</p><p>The solution may be to print out these graph representations and stick them on a nearby wall, although, with Julia&#39;s General Registry changing every day, it would be out of date before the glue dries.</p><p><img src="../assets/figures/graph-dependency-wallart.png" alt="wall art office graph dependency"/></p><p>The images above were made with the following code.</p><pre><code class="language-julia hljs">@pdf begin
+    background(&quot;black&quot;)
+    sethue(&quot;gold&quot;)
+    setline(0.3)
+    drawgraph(g,
+        layout = stress,
+        edgefunction = (k, s, d, f, t) -&gt; begin
+            @layer begin
+                sl = slope(O, t)
+                sethue(HSVA(rescale(sl, 0, 2π, 0, 360), 0.7, 0.7, .9))
+                line(f, t, :stroke)
+            end
+        end,
+        vertexfunction = (v, c) -&gt; begin
+            @layer begin
+                t = get_prop(g, v, :name)
+                te = textextents(t)
+                setopacity(0.7)
+                sethue(&quot;grey10&quot;)
+                fontsize(3)
+                box(c[v], te[3]/2, te[4]/2, :fill)
+                setopacity(1)
+                sethue(&quot;white&quot;)
+                text(t, c[v], halign=:center, valign=:middle)
+            end
+        end)
+    @info &quot; finish drawing&quot;
+end 2500 2500 &quot;/tmp/graph-dependencies-colors.pdf&quot;</code></pre><pre><code class="language-julia hljs">using ColorSchemes
+
+@svg begin
+    background(&quot;black&quot;)
+    maxdeg = maximum(degree(full_graph))
+    drawgraph(full_graph,
+        layout = spring,
+        edgelines = 0,
+        vertexfunction = (v, c) -&gt; begin
+            d = degree(full_graph, v)
+            @layer begin
+                sethue(get(ColorSchemes.darkrainbow, rescale(d, 1, maxdeg)))
+                circle(c[v], rescale(d, 1, 270, 2, 20), :fill)
+            end
+            if d &gt; 20
+                fontsize(rescale(d, 1, maxdeg, 5, 20))
+                setcolor(&quot;white&quot;)
+                textoutlines(all_packages[v], c[v], halign=:center, valign=:bottom, :fill)
+                setline(rescale(d, 1, maxdeg, 0.25, 1))
+                sethue(&quot;black&quot;)
+                textoutlines(all_packages[v], c[v], halign=:center, valign=:bottom, :stroke)
+            end
+        end)
+end 1200 1200 &quot;/tmp/graph-dependencies-2.svg&quot;</code></pre></article><nav class="docs-footer"><a class="docs-footer-prevpage" href="../syntax/">« Syntax</a><a class="docs-footer-nextpage" href="../reference/functionindex/">Alphabetical function list »</a><div class="flexbox-break"></div><p class="footer-message">Powered by <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> and the <a href="https://julialang.org/">Julia Programming Language</a>.</p></nav></div><div class="modal" id="documenter-settings"><div class="modal-background"></div><div class="modal-card"><header class="modal-card-head"><p class="modal-card-title">Settings</p><button class="delete"></button></header><section class="modal-card-body"><p><label class="label">Theme</label><div class="select"><select id="documenter-themepicker"><option value="auto">Automatic (OS)</option><option value="documenter-light">documenter-light</option><option value="documenter-dark">documenter-dark</option><option value="catppuccin-latte">catppuccin-latte</option><option value="catppuccin-frappe">catppuccin-frappe</option><option value="catppuccin-macchiato">catppuccin-macchiato</option><option value="catppuccin-mocha">catppuccin-mocha</option></select></div></p><hr/><p>This document was generated with <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> version 1.14.1 on <span class="colophon-date" title="Thursday 10 July 2025 19:29">Thursday 10 July 2025</span>. Using Julia version 1.10.10.</p></section><footer class="modal-card-foot"></footer></div></div></div></body></html>
